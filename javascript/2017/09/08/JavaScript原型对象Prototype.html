@@ -1,0 +1,363 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>原型对象 Prototype - Someone's blog</title>
+<meta name="description" content="1. JavaScript 的原型对象 Prototype  1. JavaScript 的原型对象 Prototype          1.1. 什么是Prototype？      1.2. 原型链      1.3. 为什么使用Prototype更好？      1.4. 如何使用Prototype   ...">
+<link rel="canonical" href="http://localhost:4000/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html"><link rel="alternate" type="application/rss+xml" title="Someone's blog" href="http://localhost:4000/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="Someone's Blog
+" href="/">Someone's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/">Home</a></li><li><a href="/all.html">All</a></li><li><a href="/about.html">About</a></li><li><a type="application/rss+xml" href="/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">原型对象 Prototype</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Someone"/></meta><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-08T02:51:29+08:00"
+          itemprop="datePublished">Sep 08, 2017
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-javascript-的原型对象-prototype">1. JavaScript 的原型对象 Prototype</h1>
+<!-- TOC -->
+
+<ul>
+  <li><a href="#1-javascript-%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1-prototype">1. JavaScript 的原型对象 Prototype</a>
+    <ul>
+      <li><a href="#11-%E4%BB%80%E4%B9%88%E6%98%AFprototype%EF%BC%9F">1.1. 什么是Prototype？</a></li>
+      <li><a href="#12-%E5%8E%9F%E5%9E%8B%E9%93%BE">1.2. 原型链</a></li>
+      <li><a href="#13-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8prototype%E6%9B%B4%E5%A5%BD%EF%BC%9F">1.3. 为什么使用Prototype更好？</a></li>
+      <li><a href="#14-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8prototype">1.4. 如何使用Prototype</a></li>
+      <li><a href="#15-prototype-%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8A%A8%E6%80%81%E7%9A%84%E5%AF%B9%E8%B1%A1">1.5. Prototype 是一个动态的对象</a></li>
+      <li><a href="#16-prototype-%E7%9A%84%E5%85%B8%E5%9E%8B%E7%A4%BA%E4%BE%8B">1.6. Prototype 的典型示例</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- /TOC -->
+<p>当您在JavaScript中定义函数时，它会附带一些预定义的属性; 其中之一是虚幻的原型。 在本文中，我将详细说明它是什么，以及为什么要在项目中使用它。</p>
+<h2 id="11-什么是prototype">1.1. 什么是Prototype？</h2>
+<p><code class="highlighter-rouge">原型对象 prototype</code>最初是一个空对象，可以添加成员 - 就​​像其他对象一样。</p>
+
+<pre><code class="language-JavaScript">var myObject = function( name ) {
+	this.name = name;
+	return this;
+};
+ 
+console.log(typeof myObject.prototype); // object
+ 
+myObject.prototype.getName = function() {
+	return this.name;
+};
+</code></pre>
+
+<p>上面的代码创建了一个函数，然后赋值给 <code class="highlighter-rouge">myObject</code>。如果我调用 <code class="highlighter-rouge">myObject()</code>，它将返回 <code class="highlighter-rouge">window</code> 对象。因为它是在<code class="highlighter-rouge">全局作用域</code>内定义的，而且它还<code class="highlighter-rouge">没有被实例化</code>，所以 <code class="highlighter-rouge">this</code> 直接指向全局对象：</p>
+<pre><code class="language-JavaScript">console.log(myObject() === window); // true
+</code></pre>
+
+<h2 id="12-原型链">1.2. 原型链</h2>
+<p>JavaScript 中定义或实例化任何一个对象的时候，它都会被附加一个名为 <code class="highlighter-rouge">__proto__</code> 的隐藏属性，原型链正是依靠这个属性才得以形成。但是千万别直接访问 <code class="highlighter-rouge">__proto__</code> 属性，因为<code class="highlighter-rouge">有些浏览器并不支持直接访问它</code>。
+另外<code class="highlighter-rouge"> __proto__</code> 和 对象的 <code class="highlighter-rouge">prototype</code> 属性也不是一回事，它们各自有各自的用途。而且，他们是携手工作的！</p>
+
+<p>怎么理解呢？其实，当我们创建 <code class="highlighter-rouge">myObject</code> 函数时，实际上是创建了一个 <code class="highlighter-rouge">Function</code> 类型的对象：</p>
+<pre><code class="language-JavaScript">console.log(typeof myObject); // function
+</code></pre>
+<p>这里要说明一下，<code class="highlighter-rouge">Function 是 JavaScript 中预定义的一个对象</code>，所以它也有自己预定义的属性（如 length 和 arguments）和方法（如 call 和 apply），当然也有 <code class="highlighter-rouge">__proto__</code>，以此实现原型链。也就是说，JavaScript 引擎内可能有类似如下的代码片段：</p>
+<pre><code class="language-JavaScript">Function.prototype = {
+	arguments: null,
+	length: 0,
+	call: function() {
+		// secret code
+	},
+	apply: function(){
+		// secret code
+	},
+    ...
+};
+</code></pre>
+<p>事实上，JavaScript 引擎代码不可能这样简单，这里只是描述一下原型链是如何工作的。</p>
+
+<p>我们定义了一个函数 <code class="highlighter-rouge">myObject</code>，它还有一个参数 <code class="highlighter-rouge">name</code>，但是并没有给它任何其它属性，例如 length 或者其它方法，如 call。那么下面这段代码为啥能正常执行呢？</p>
+<pre><code class="language-JavaScript">console.log(myObject.length); // 结果：1，是参数的个数
+</code></pre>
+<p>这是因为我们定义 <code class="highlighter-rouge">myObject</code> 时，同时也给它定义了一个 <code class="highlighter-rouge">__proto__</code> 属性，并赋值为 Function.prototype（参考前面的代码片段），所以我们能够像访问其它属性一样访问 myObject.length，即使我们并没有定义这个属性，因为它会顺着<code class="highlighter-rouge">__proto__</code> 原型链往上去找 length，最终在 Function 里面找到了。</p>
+
+<p>那为什么找到的 <code class="highlighter-rouge">length</code> 属性的值是 <code class="highlighter-rouge">1</code>，而不是 <code class="highlighter-rouge">0</code> 呢，是什么时候给它赋值的呢？由于 myObject 是 Function 的一个实例：</p>
+<pre><code class="language-JavaScript">console.log(myObject instanceof Function); // true
+console.log(myObject === Function); // false
+</code></pre>
+<p>当实例化一个对象的时候，对象的 <code class="highlighter-rouge">__proto__</code> 属性会被赋值为其构造者的原型对象，在本示例中就是 Function，此时构造器回去计算参数的个数，改变 length 的值。</p>
+<pre><code class="language-JavaScript">console.log(myObject.__proto__ === Function.prototype); // true
+</code></pre>
+<p>而当我们用 <code class="highlighter-rouge">new</code> 关键字创建一个新的实例时，新对象的 <code class="highlighter-rouge">__proto__</code> 将会被赋值为 <code class="highlighter-rouge">myObject.prototype</code>，因为现在的构造函数为 <code class="highlighter-rouge">myObject</code>，而非 <code class="highlighter-rouge">Function</code>。</p>
+<pre><code class="language-JavaScript">var myInstance = new myObject('foo');
+console.log(myInstance.__proto__ === myObject.prototype); // true
+</code></pre>
+<p>新对象除了能访问 <code class="highlighter-rouge">Function.prototype</code> 中继承下来的 <code class="highlighter-rouge">call</code> 和 <code class="highlighter-rouge">apply</code> 外，还能访问从 <code class="highlighter-rouge">myObject</code> 中继承下来的 <code class="highlighter-rouge">getName</code> 方法：</p>
+<pre><code class="language-JavaScript">console.log(myInstance.getName()); // foo
+ 
+var mySecondInstance = new myObject('bar');
+ 
+console.log(mySecondInstance.getName()); // bar
+console.log(myInstance.getName()); // foo
+</code></pre>
+<p>其实这相当于把原型对象当做一个蓝本，然后可以根据这个蓝本创建 N 个新的对象。</p>
+
+<h2 id="13-为什么使用prototype更好">1.3. 为什么使用Prototype更好？</h2>
+<p>比方说，我们正在开发一个<code class="highlighter-rouge">canvas</code>游戏，同时在屏幕上需要几个（可能数百个）对象。每个对象都需要自己的属性，如<code class="highlighter-rouge">x</code>和<code class="highlighter-rouge">y</code>坐标，<code class="highlighter-rouge">宽度</code>，<code class="highlighter-rouge">高度</code>等等。</p>
+
+<p><strong>我们可能需要这么做</strong></p>
+<pre><code class="language-JavaScript">var GameObject1 = {
+    x: Math.floor((Math.random() * myCanvasWidth) + 1),
+    y: Math.floor((Math.random() * myCanvasHeight) + 1),
+    width: 10,
+    height: 10,
+    draw: function(){
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+   ...
+};
+ 
+var GameObject2 = {
+    x: Math.floor((Math.random() * myCanvasWidth) + 1),
+    y: Math.floor((Math.random() * myCanvasHeight) + 1),
+    width: 10,
+    height: 10,
+    draw: function(){
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+    //... do this 98 more times ...
+</code></pre>
+<p>这将创建内存中的所有这些对象 - 所有这些对象都使用单独的绘制和任何其他可能需要的方法定义。这当然是不理想的，因为JavaScript会消耗浏览器内存，并使其运行非常缓慢，甚至停止响应。
+虽然有时候可能不会有100个对象，但是仍然很致命的是，它将需要查找一百个不同的对象，而不仅仅是单个<code class="highlighter-rouge">Prototype</code>。</p>
+
+<h2 id="14-如何使用prototype">1.4. 如何使用Prototype</h2>
+<p>为了使应用程序运行得更快（并遵循最佳实践），我们可以（重新）定义<code class="highlighter-rouge">GameObject</code>的<code class="highlighter-rouge">Prototype</code>原型属性; <code class="highlighter-rouge">GameObject</code>的每个实例都将引用<code class="highlighter-rouge">GameObject.prototype</code>中的方法，就像它们是自己的方法一样。</p>
+
+<pre><code class="language-JavaScript">// define the GameObject constructor function
+var GameObject = function(width, height) {
+    this.x = Math.floor((Math.random() * myCanvasWidth) + 1);
+    this.y = Math.floor((Math.random() * myCanvasHeight) + 1);
+    this.width = width;
+    this.height = height;
+    return this;
+};
+ 
+// (re)define the GameObject prototype object
+GameObject.prototype = {
+    x: 0,
+    y: 0,
+    width: 5,
+    width: 5,
+    draw: function() {
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+};
+</code></pre>
+<p>然后我们可以把<code class="highlighter-rouge">GameObject</code>实例化100次</p>
+<pre><code class="language-JavaScript">var x = 100,
+arrayOfGameObjects = [];
+ 
+do {
+    arrayOfGameObjects.push(new GameObject(10, 10));
+} while(x--);
+</code></pre>
+<p>现在我们有一个100个<code class="highlighter-rouge">GameObjects</code>的数组，它们都共享了<code class="highlighter-rouge">draw</code>方法的相同Prototype和定义，它大大地节省了应用程序中的内存。
+当我们调用<code class="highlighter-rouge">draw</code>方法的时候，它将会指向一个相同的<code class="highlighter-rouge">Function</code></p>
+<pre><code class="language-JavaScript">var GameLoop = function() {
+    for(gameObject in arrayOfGameObjects) {
+        gameObject.draw();
+    }
+};
+</code></pre>
+<h2 id="15-prototype-是一个动态的对象">1.5. Prototype 是一个动态的对象</h2>
+<p>对象的原型是一个动态的对象，这意味着，如果在创建了所有的<code class="highlighter-rouge">GameObject</code>实例之后，我们决定，而不是绘制一个矩形，我们要绘制一个圆，我们可以相应地更新我们的<code class="highlighter-rouge">GameObject.prototype.draw</code>方法。</p>
+<pre><code class="language-JavaScript">GameObject.prototype.draw = function() {
+    myCanvasContext.arc(this.x, this.y, this.width, 0, Math.PI*2, true);
+}
+</code></pre>
+<p>而现在，所有以前的<code class="highlighter-rouge">GameObject</code>和任何未来的实例都会画一个圆。</p>
+
+<h2 id="16-prototype-的典型示例">1.6. Prototype 的典型示例</h2>
+
+<p>用过 <code class="highlighter-rouge">jQuery</code> 或者 <code class="highlighter-rouge">Prototype</code> 库的朋友可能知道，这些库中通常都会有 trim 这个方法。</p>
+
+<p><strong>示例</strong></p>
+<pre><code class="language-JavaScript">String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g, '');
+};
+</code></pre>
+<p><strong>trim 用法</strong></p>
+<pre><code class="language-JavaScript">' foo bar   '.trim(); // 'foo bar'
+</code></pre>
+<p>但是这样做又有一个缺点，因为比较新版本的浏览器中的 <code class="highlighter-rouge">JavaScript</code> 引擎在 <code class="highlighter-rouge">String</code> 对象中本身就提供了 <code class="highlighter-rouge">trim</code> 方法， 那么我们自己定义的 trim 就会覆写它自带的 <code class="highlighter-rouge">trim</code>。其实，我们在定义 <code class="highlighter-rouge">trim</code> 方法之前，可以做个简单的检测，看是否需要自己添加这个方法：</p>
+<pre><code class="language-JavaScript">if(!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+}
+</code></pre>
+<p>检查一下，如不存在 trim 这个方法，定义一个。</p>
+
+<p><a href="https://code.tutsplus.com/tutorials/prototypes-in-javascript--net-24949">原文地址</a></p>
+</div>
+				<footer><meta itemprop="dateModified" content="2017-09-08T02:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/assets/images/license-cc4.png" />
+    </a><p></p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Someone">
+    <link itemprop="url" href="http://localhost:4000/"></ul></div>
+</aside>
+    <footer class="site-info">
+      <p>© Someone's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

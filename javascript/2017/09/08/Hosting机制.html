@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>JavaScript 中的 Hoisting 机制 - Someone's blog</title>
+<meta name="description" content="JavaScript 中的 Hoisting 机制  JavaScript 中的 Hoisting 一般称之为变量声明提升机制。就是说，JavaScript 引擎在执行的时候，会把所有变量的声明都会被提升到当前作用域的最前面，注意，这里被提升的仅仅是声明。怎么理解呢，看下面例子：  var myval = "my...">
+<link rel="canonical" href="http://localhost:4000/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html"><link rel="alternate" type="application/rss+xml" title="Someone's blog" href="http://localhost:4000/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="Someone's Blog
+" href="/">Someone's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/">Home</a></li><li><a href="/all.html">All</a></li><li><a href="/about.html">About</a></li><li><a type="application/rss+xml" href="/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">JavaScript 中的 Hoisting 机制</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Someone"/></meta><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-08T22:51:29+08:00"
+          itemprop="datePublished">Sep 08, 2017
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="javascript-中的-hoisting-机制">JavaScript 中的 Hoisting 机制</h1>
+<blockquote>
+  <p>JavaScript 中的 <code class="highlighter-rouge">Hoisting</code> 一般称之为<code class="highlighter-rouge">变量声明提升机制</code>。就是说，<code class="highlighter-rouge">JavaScript 引擎</code>在执行的时候，<code class="highlighter-rouge">会把所有变量的声明都会被提升到当前作用域的最前面</code>，注意，<code class="highlighter-rouge">这里被提升的仅仅是声明</code>。怎么理解呢，看下面例子：</p>
+  <pre><code class="language-Javascript">var myval = "my global var";
+(function() {
+	console.log(myval); // log "my global var"
+})();
+</code></pre>
+  <p>以上代码很显然会输出 <code class="highlighter-rouge">"my global var"</code>，但是如果我们把以上代码按如下方式稍加修改：</p>
+  <pre><code class="language-Javascript">var myval = "my global var";
+(function() {
+	console.log(myval); // log "undefined"
+	var myval = "my local var";
+})();
+</code></pre>
+  <p>执行结果是输出了一个 <code class="highlighter-rouge">undefined</code>，出现这个结果的原因就是变量的声明被提升了，以上代码等同如下：</p>
+  <pre><code class="language-Javascript">var myval = "my global var";
+(function() {
+	var myval;
+	console.log(myval); // log "undefined"
+	myval = "my local var";
+})();
+</code></pre>
+  <p>被提升的仅仅是变量的声明部分，并<code class="highlighter-rouge">没有立即初始化</code>，所以会输出 <code class="highlighter-rouge">undefined</code>。</p>
+</blockquote>
+
+<blockquote>
+  <p>然而这种提升机制，不仅仅表现于在普通的变量，同时也表现在函数上。例如下面这段代码并不能被正确执行：</p>
+  <pre><code class="language-Javascript">(function() {
+	fun(); // Uncaught TypeError: undefined is not a function
+	var fun = function() {
+		console.log("Hello!");
+	}
+})();
+</code></pre>
+  <p>因为它等价于：</p>
+  <pre><code class="language-Javascript">(function() {
+	var fun;
+	fun(); // Uncaught TypeError: undefined is not a function
+	fun = function() {
+		console.log("Hello!");
+	}
+})();
+</code></pre>
+  <p>因为函数的声明同样被提升而没有立即初始化，所以会出错。</p>
+</blockquote>
+
+<blockquote>
+  <p>当然，这种定义函数的方式称之为<code class="highlighter-rouge">“函数表达式”</code>，会有提升机制，如果是如下的这种<code class="highlighter-rouge">“函数声明”</code>方式，则完全没有提升机制方面的问题：</p>
+  <pre><code class="language-Javascript">(function() {
+	fun();
+	function fun() {
+		console.log("Hello!");  // log "Hello!"
+	}
+})();
+</code></pre>
+  <p><strong>这也是函数声明与函数表达式的主要区别。</strong></p>
+</blockquote>
+</div>
+				<footer><meta itemprop="dateModified" content="2017-09-08T22:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/assets/images/license-cc4.png" />
+    </a><p></p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Someone">
+    <link itemprop="url" href="http://localhost:4000/"></ul></div>
+</aside>
+    <footer class="site-info">
+      <p>© Someone's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

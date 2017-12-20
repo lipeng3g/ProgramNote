@@ -1,0 +1,1135 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2017-12-20T15:01:31+08:00</updated><id>http://localhost:4000/</id><title type="html">Someone’s blog</title><subtitle>Someone's Blog
+</subtitle><author><name>Someone</name></author><entry><title type="html">Javascript过滤前后空格</title><link href="http://localhost:4000/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html" rel="alternate" type="text/html" title="Javascript过滤前后空格" /><published>2017-12-19T05:51:29+08:00</published><updated>2017-12-19T05:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC</id><content type="html" xml:base="http://localhost:4000/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html">&lt;h1 id=&quot;javascript过滤前后空格&quot;&gt;Javascript过滤前后空格&lt;/h1&gt;
+&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#javascript%E8%BF%87%E6%BB%A4%E5%89%8D%E5%90%8E%E7%A9%BA%E6%A0%BC&quot;&gt;Javascript过滤前后空格&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#%E5%BE%AA%E7%8E%AF%E6%A3%80%E6%9F%A5&quot;&gt;循环检查&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%9B%BF%E6%8D%A2&quot;&gt;正则表达式替换&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#jquery&quot;&gt;JQuery&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+&lt;h2 id=&quot;循环检查&quot;&gt;循环检查&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;//供使用者调用 
+function trim(s){ 
+  return trimRight(trimLeft(s)); 
+} 
+//去掉左边的空白 
+function trimLeft(s){ 
+  if(s == null) { 
+    return &quot;&quot;; 
+  } 
+  var whitespace = new String(&quot; \t\n\r&quot;); 
+  var str = new String(s); 
+  if (whitespace.indexOf(str.charAt(0)) != -1) { 
+    var j=0, i = str.length; 
+    while (j &amp;lt; i &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(j)) != -1){ 
+      j++; 
+    } 
+    str = str.substring(j, i); 
+  } 
+  return str; 
+} 
+
+//去掉右边的空白
+function trimRight(s){ 
+  if(s == null) return &quot;&quot;; 
+  var whitespace = new String(&quot; \t\n\r&quot;); 
+  var str = new String(s); 
+  if (whitespace.indexOf(str.charAt(str.length-1)) != -1){ 
+    var i = str.length - 1; 
+    while (i &amp;gt;= 0 &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(i)) != -1){ 
+      i--; 
+    } 
+    str = str.substring(0, i+1); 
+  } 
+  return str; 
+}    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;正则表达式替换&quot;&gt;正则表达式替换&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆☆&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;
+String.prototype.Trim = function() //去左右空格;
+{ 
+    return this.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); 
+} 
+String.prototype.LTrim = function() //去左空格;
+{ 
+    return this.replace(/(^\s*)/g, &quot;&quot;); 
+} 
+String.prototype.RTrim = function() //去右空格;
+{ 
+    return this.replace(/(\s*$)/g, &quot;&quot;); 
+} 
+
+//去左空格;
+function ltrim(s){
+    return s.replace(/(^\s*)/g, &quot;&quot;);
+}
+//去右空格;
+function rtrim(s){
+    return s.replace(/(\s*$)/g, &quot;&quot;);
+}
+//去左右空格;
+function trim(s){
+    return s.replace(/(^\s*)|(\s*$)/g, &quot;&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;jquery&quot;&gt;JQuery&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆☆☆&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;// 使用方法
+$.trim(str) 
+// Jquery实现方法
+function trim(str){  
+    return str.replace(/^(\s|\u00A0)+/,'').replace(/(\s|\u00A0)+$/,'');  
+}
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>Someone</name></author><summary type="html">Javascript过滤前后空格 Javascript过滤前后空格 循环检查 正则表达式替换 JQuery 循环检查 推荐 ☆☆☆ //供使用者调用 function trim(s){ return trimRight(trimLeft(s)); } //去掉左边的空白 function trimLeft(s){ if(s == null) { return &quot;&quot;; } var whitespace = new String(&quot; \t\n\r&quot;); var str = new String(s); if (whitespace.indexOf(str.charAt(0)) != -1) { var j=0, i = str.length; while (j &amp;lt; i &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(j)) != -1){ j++; } str = str.substring(j, i); } return str; } //去掉右边的空白 function trimRight(s){ if(s == null) return &quot;&quot;; var whitespace = new String(&quot; \t\n\r&quot;); var str = new String(s); if (whitespace.indexOf(str.charAt(str.length-1)) != -1){ var i = str.length - 1; while (i &amp;gt;= 0 &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(i)) != -1){ i--; } str = str.substring(0, i+1); } return str; } 正则表达式替换 推荐 ☆☆☆☆ String.prototype.Trim = function() //去左右空格; { return this.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); } String.prototype.LTrim = function() //去左空格; { return this.replace(/(^\s*)/g, &quot;&quot;); } String.prototype.RTrim = function() //去右空格; { return this.replace(/(\s*$)/g, &quot;&quot;); } //去左空格; function ltrim(s){ return s.replace(/(^\s*)/g, &quot;&quot;); } //去右空格; function rtrim(s){ return s.replace(/(\s*$)/g, &quot;&quot;); } //去左右空格; function trim(s){ return s.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); } JQuery 推荐 ☆☆☆☆☆ // 使用方法 $.trim(str) // Jquery实现方法 function trim(str){ return str.replace(/^(\s|\u00A0)+/,'').replace(/(\s|\u00A0)+$/,''); }</summary></entry><entry><title type="html">Function.apply and Function.call in JavaScript</title><link href="http://localhost:4000/javascript/2017/12/19/Function.apply&Function.call.html" rel="alternate" type="text/html" title="Function.apply and Function.call in JavaScript" /><published>2017-12-19T05:51:29+08:00</published><updated>2017-12-19T05:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/12/19/Function.apply&amp;Function.call</id><content type="html" xml:base="http://localhost:4000/javascript/2017/12/19/Function.apply&amp;Function.call.html">&lt;h1 id=&quot;functionapply-and-functioncall-in-javascript&quot;&gt;Function.apply and Function.call in JavaScript&lt;/h1&gt;
+&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#functionapply-and-functioncall-in-javascript&quot;&gt;Function.apply and Function.call in JavaScript&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#%E5%87%BD%E6%95%B0%E6%98%AF%E5%AF%B9%E8%B1%A1&quot;&gt;函数是对象&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#call&quot;&gt;Call()&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#apply&quot;&gt;Apply()&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#%E5%8F%82%E6%95%B0&quot;&gt;参数&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+&lt;h2 id=&quot;函数是对象&quot;&gt;函数是对象&lt;/h2&gt;
+&lt;p&gt;JavaScript中的每个函数都有许多附加的方法，包括toString()、call()和apply()。如果您觉得函数怎么可能有自己的方法，这听起来很奇怪，但是请记住，JavaScript中的每个函数都是一个对象。&lt;/p&gt;
+
+&lt;p&gt;您可能还想知道函数和方法之间的区别。我相信描述符的函数和方法只是一个JavaScript约定。&lt;/p&gt;
+
+&lt;p&gt;函数是独立的(例如，有一个alert()函数)，而方法在对象的字典中是函数，我们通过对象引用调用它们。&lt;/p&gt;
+
+&lt;p&gt;例如，每个JavaScript对象都有一个toString()方法，我们可以在函数对象上使用toString()方法来查看它的源代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;function foo()
+{
+    alert('x');
+}
+ 
+alert(foo.toString());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的执行结果是(请注意，这是一个字符串)
+&lt;code class=&quot;highlighter-rouge&quot;&gt;function foo()
+{
+    alert('x');
+}&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;call&quot;&gt;Call()&lt;/h2&gt;
+&lt;p&gt;因为函数是对象，它们可以有自己的属性和方法，我们可以像对待数据一样对待它们。
+“函数当做数据”是很重要的，但是现在我们将重点讨论函数的两个方法:apply()和它的对应函数:call()。&lt;/p&gt;
+
+&lt;p&gt;让我们从下面的代码开始：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var x = 10;
+ 
+function f()
+{
+    alert(this.x);
+}
+ 
+f();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这里，我们有一个名为f()的全局函数。f()使用&lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;这个关键字来引用x，但是注意我们不通过对象的实例调用函数。
+那么这个引用是什么对象呢? 这将引用全局对象。全局对象是我们定义变量x的地方，上面的代码是工作的，在对话框中显示值10。&lt;/p&gt;
+
+&lt;p&gt;call()和apply()都是我们可以用来在方法调用期间分配这个指针的方法。
+例如，下面是我们如何使用call()方法:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var x = 10;
+var o = { x: 15 };
+ 
+function f()
+{
+    alert(this.x);
+}
+ 
+f();
+f.call(o);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;f()的第一个调用将显示10的值，因为这引用了全局对象。
+但是，第二个调用(通过 call() 方法）)将显示值15。call()方法调用该函数，并将其第一个参数作为函数的主体内的这个指针。换句话说，我们已经告诉运行时，在函数f()内部执行时，要引用的对象是什么。&lt;/p&gt;
+
+&lt;p&gt;摆弄这个指针可能听起来很滑稽，甚至是有悖常理的，对c++、Java和c#程序员来说都是如此。&lt;/p&gt;
+
+&lt;p&gt;我们还可以通过call()将参数传递给目标函数:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var x = 10;
+var o = { x: 15 };
+function f(message)
+{
+    alert(message);
+    alert(this.x);
+}
+ 
+f(&quot;invoking f&quot;);
+f.call(o, &quot;invoking f via call&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;apply&quot;&gt;Apply()&lt;/h2&gt;
+&lt;p&gt;apply()方法与call()相同，但是apply()需要一个数组作为第二个参数。该数组表示目标方法的参数。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var x = 10;
+var o = { x: 15 };
+function f(message)
+{
+    alert(message);
+    alert(this.x);
+}
+ 
+f(&quot;invoking f&quot;);
+f.apply(o, [&quot;invoking f through apply&quot;]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;apply()方法是有用的，因为我们可以不关心目标方法的签名。可以使用apply()将所有额外参数通过数组传递给目标方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var o = { x: 15 };
+ 
+function f1(message1)
+{
+    alert(message1 + this.x);
+}
+ 
+function f2(message1, message2)
+{
+    alert(message1 + (this.x * this.x) + message2);
+}
+ 
+function g(object, func, args)
+{
+    func.apply(object, args);
+}
+ 
+g(o, f1, [&quot;the value of x = &quot;]);
+g(o, f2, [&quot;the value of x squared = &quot;, &quot;. Wow!&quot;]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;参数&quot;&gt;参数&lt;/h2&gt;
+&lt;p&gt;上面的方法是有效的，但是很笨拙，用户必须把参数输入到一个数组中。幸运的是，有一种方法可以简化语法，但是我们必须引入一个更重要的主题:参数标识符。&lt;/p&gt;
+
+&lt;p&gt;在JavaScript中，每个函数本质上都有一个可变长度参数列表。即使函数只使用一个参数，也可以将5个参数传递给函数。下面的操作没有错误，并显示“H”:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;function f(message)
+{
+    alert(message);
+}
+ 
+f(&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们确实想从f()中访问其他参数，我们可以使用参数关键字。参数引用一个参数对象，它有一个长度属性，感觉就像一个数组。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;function f(message)
+{
+    // message param is the same as arguments[0]    
+    // 注意，下面是从 1 开始拼接的，因为message和 下标为 0 的数据是相同的
+    for(var i = 1; i &amp;lt; arguments.length; i++)
+    {
+        message += arguments[i];
+    }
+     
+    alert(message); 
+}
+ 
+// this will say &quot;Hello&quot;
+f(&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你知道，从技术上讲，arguments 不是一个数组，即使它的特征非常像一个数组。arguments 有一个长度属性，但没有 split、 push 或 pop 方法。
+在我们之前的g（）函数中，我们可以做的是将参数[1]后面的传入参数复制到我们传递的数组对象中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var o = { x: 15 };
+ 
+function f(message1, message2)
+{
+    alert(message1 + (this.x * this.x) + message2);
+}
+ 
+function g(object, func)
+{           
+    // arguments[0] == object
+    // arguments[1] == func
+    
+    var args = []; // empty array
+    // copy all other arguments we want to &quot;pass through&quot; 
+    for(var i = 2; i &amp;lt; arguments.length; i++)
+    {
+        args.push(arguments[i]);
+    }
+ 
+    func.apply(object, args);
+}
+ 
+g(o, f, &quot;The value of x squared = &quot;, &quot;. Wow!&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当我们调用g()时，我们可以将附加的参数作为参数传递，而不是将参数填充到数组中。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://odetocode.com/blogs/scott/archive/2007/07/04/function-apply-and-function-call-in-javascript.aspx&quot;&gt;原文地址：https://odetocode.com/blogs/scott/archive/2007/07/04/function-apply-and-function-call-in-javascript.aspx&lt;/a&gt;&lt;/p&gt;</content><author><name>Someone</name></author><summary type="html">Function.apply and Function.call in JavaScript Function.apply and Function.call in JavaScript 函数是对象 Call() Apply() 参数 函数是对象 JavaScript中的每个函数都有许多附加的方法，包括toString()、call()和apply()。如果您觉得函数怎么可能有自己的方法，这听起来很奇怪，但是请记住，JavaScript中的每个函数都是一个对象。 您可能还想知道函数和方法之间的区别。我相信描述符的函数和方法只是一个JavaScript约定。 函数是独立的(例如，有一个alert()函数)，而方法在对象的字典中是函数，我们通过对象引用调用它们。 例如，每个JavaScript对象都有一个toString()方法，我们可以在函数对象上使用toString()方法来查看它的源代码： function foo() { alert('x'); } alert(foo.toString()); 上面的执行结果是(请注意，这是一个字符串) function foo() { alert('x'); } Call() 因为函数是对象，它们可以有自己的属性和方法，我们可以像对待数据一样对待它们。 “函数当做数据”是很重要的，但是现在我们将重点讨论函数的两个方法:apply()和它的对应函数:call()。 让我们从下面的代码开始： var x = 10; function f() { alert(this.x); } f(); 在这里，我们有一个名为f()的全局函数。f()使用this这个关键字来引用x，但是注意我们不通过对象的实例调用函数。 那么这个引用是什么对象呢? 这将引用全局对象。全局对象是我们定义变量x的地方，上面的代码是工作的，在对话框中显示值10。 call()和apply()都是我们可以用来在方法调用期间分配这个指针的方法。 例如，下面是我们如何使用call()方法: var x = 10; var o = { x: 15 }; function f() { alert(this.x); } f(); f.call(o); f()的第一个调用将显示10的值，因为这引用了全局对象。 但是，第二个调用(通过 call() 方法）)将显示值15。call()方法调用该函数，并将其第一个参数作为函数的主体内的这个指针。换句话说，我们已经告诉运行时，在函数f()内部执行时，要引用的对象是什么。 摆弄这个指针可能听起来很滑稽，甚至是有悖常理的，对c++、Java和c#程序员来说都是如此。 我们还可以通过call()将参数传递给目标函数: var x = 10; var o = { x: 15 }; function f(message) { alert(message); alert(this.x); } f(&quot;invoking f&quot;); f.call(o, &quot;invoking f via call&quot;); Apply() apply()方法与call()相同，但是apply()需要一个数组作为第二个参数。该数组表示目标方法的参数。 var x = 10; var o = { x: 15 }; function f(message) { alert(message); alert(this.x); } f(&quot;invoking f&quot;); f.apply(o, [&quot;invoking f through apply&quot;]); apply()方法是有用的，因为我们可以不关心目标方法的签名。可以使用apply()将所有额外参数通过数组传递给目标方法。 var o = { x: 15 }; function f1(message1) { alert(message1 + this.x); } function f2(message1, message2) { alert(message1 + (this.x * this.x) + message2); } function g(object, func, args) { func.apply(object, args); } g(o, f1, [&quot;the value of x = &quot;]); g(o, f2, [&quot;the value of x squared = &quot;, &quot;. Wow!&quot;]); 参数 上面的方法是有效的，但是很笨拙，用户必须把参数输入到一个数组中。幸运的是，有一种方法可以简化语法，但是我们必须引入一个更重要的主题:参数标识符。 在JavaScript中，每个函数本质上都有一个可变长度参数列表。即使函数只使用一个参数，也可以将5个参数传递给函数。下面的操作没有错误，并显示“H”: function f(message) { alert(message); } f(&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;); 如果我们确实想从f()中访问其他参数，我们可以使用参数关键字。参数引用一个参数对象，它有一个长度属性，感觉就像一个数组。 function f(message) { // message param is the same as arguments[0] // 注意，下面是从 1 开始拼接的，因为message和 下标为 0 的数据是相同的 for(var i = 1; i &amp;lt; arguments.length; i++) { message += arguments[i]; } alert(message); } // this will say &quot;Hello&quot; f(&quot;H&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;); 你知道，从技术上讲，arguments 不是一个数组，即使它的特征非常像一个数组。arguments 有一个长度属性，但没有 split、 push 或 pop 方法。 在我们之前的g（）函数中，我们可以做的是将参数[1]后面的传入参数复制到我们传递的数组对象中。 var o = { x: 15 }; function f(message1, message2) { alert(message1 + (this.x * this.x) + message2); } function g(object, func) { // arguments[0] == object // arguments[1] == func var args = []; // empty array // copy all other arguments we want to &quot;pass through&quot; for(var i = 2; i &amp;lt; arguments.length; i++) { args.push(arguments[i]); } func.apply(object, args); } g(o, f, &quot;The value of x squared = &quot;, &quot;. Wow!&quot;); 当我们调用g()时，我们可以将附加的参数作为参数传递，而不是将参数填充到数组中。 原文地址：https://odetocode.com/blogs/scott/archive/2007/07/04/function-apply-and-function-call-in-javascript.aspx</summary></entry><entry><title type="html">关于scrollHeight和scrollTop取值为0的问题</title><link href="http://localhost:4000/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="alternate" type="text/html" title="关于scrollHeight和scrollTop取值为0的问题" /><published>2017-11-07T05:51:29+08:00</published><updated>2017-11-07T05:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98</id><content type="html" xml:base="http://localhost:4000/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">&lt;h1 id=&quot;关于scrollheight和scrolltop取值为0的问题&quot;&gt;关于scrollHeight和scrollTop取值为0的问题&lt;/h1&gt;
+&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#%E5%85%B3%E4%BA%8Escrollheight%E5%92%8Cscrolltop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98&quot;&gt;关于scrollHeight和scrollTop取值为0的问题&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-%E5%9F%BA%E7%A1%80&quot;&gt;1. 基础&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#11-offsettop%E4%B8%8Estyletop%E7%9A%84%E5%8C%BA%E5%88%AB&quot;&gt;1.1. offsetTop与style.top的区别&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3&quot;&gt;2. 问题及解决&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-%E6%80%BB%E7%BB%93&quot;&gt;3. 总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.jianshu.com/p/46087c0ace05&quot;&gt;原文地址–简书&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;1-基础&quot;&gt;1. 基础&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.offsetTop&lt;/code&gt; 指 obj 距离上方或上层控件的位置，整型，单位像素。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.offsetLeft&lt;/code&gt; 指 obj 距离左方或上层控件的位置，整型，单位像素。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.offsetWidth&lt;/code&gt; 指 obj 控件自身的宽度，整型，单位像素。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.offsetHeight&lt;/code&gt; 指 obj 控件自身的高度，整型，单位像素。（&lt;code class=&quot;highlighter-rouge&quot;&gt;clientHeight&lt;/code&gt; + &lt;code class=&quot;highlighter-rouge&quot;&gt;滚动条&lt;/code&gt; + &lt;code class=&quot;highlighter-rouge&quot;&gt;边框&lt;/code&gt;）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.scrollHeight&lt;/code&gt; 网页内容的高度，最小值是&lt;code class=&quot;highlighter-rouge&quot;&gt;clientHeight&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;11-offsettop与styletop的区别&quot;&gt;1.1. offsetTop与style.top的区别&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;offsetTop&lt;/code&gt; 返回的是&lt;code class=&quot;highlighter-rouge&quot;&gt;数字&lt;/code&gt;，而 &lt;code class=&quot;highlighter-rouge&quot;&gt;style.top&lt;/code&gt; 返回的是&lt;code class=&quot;highlighter-rouge&quot;&gt;字符串&lt;/code&gt;，除了数字外还带有单位：px。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;offsetTop&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;只读&lt;/code&gt;， &lt;code class=&quot;highlighter-rouge&quot;&gt;style.top&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;可读写&lt;/code&gt;。&lt;/p&gt;
+
+    &lt;p&gt;如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（&lt;code class=&quot;highlighter-rouge&quot;&gt;也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx&lt;/code&gt;）&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;2-问题及解决&quot;&gt;2. 问题及解决&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;document.body.scrollHeight&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;document.documentElement.scrollHeight&lt;/code&gt;都是获取网页页面内容的高。&lt;/p&gt;
+
+&lt;p&gt;但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0&lt;/p&gt;
+
+&lt;p&gt;可以发现&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;chrome&lt;/code&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;document.documentElement.scrollHeight&lt;/code&gt;&amp;amp;&lt;code class=&quot;highlighter-rouge&quot;&gt;document.documentElement.scrollTop&lt;/code&gt;是不能识别的&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;firefox&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;IE11&lt;/code&gt;不能识别&lt;code class=&quot;highlighter-rouge&quot;&gt;document.body.scrollHeight&lt;/code&gt;&amp;amp;&lt;code class=&quot;highlighter-rouge&quot;&gt;document.body.scrollTop&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。&lt;/p&gt;
+
+&lt;p&gt;另外我也测试clientXxx，写在总结里吧。&lt;/p&gt;
+
+&lt;h1 id=&quot;3-总结&quot;&gt;3. 总结&lt;/h1&gt;
+
+&lt;p&gt;在js中需要取scrollHeight值和scrollTop值时，我们需要使用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关于scrollWidth(下面两种都可以)&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var oWidth=document.body.scrollWidth;
+var oWidth=document.documentElement.scrollWidth;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;取clientXxx值只能&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var wWidth=document.documentElement.clientXxx;
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>Someone</name></author><summary type="html">关于scrollHeight和scrollTop取值为0的问题 关于scrollHeight和scrollTop取值为0的问题 1. 基础 1.1. offsetTop与style.top的区别 2. 问题及解决 3. 总结 原文地址–简书 1. 基础 obj.offsetTop 指 obj 距离上方或上层控件的位置，整型，单位像素。 obj.offsetLeft 指 obj 距离左方或上层控件的位置，整型，单位像素。 obj.offsetWidth 指 obj 控件自身的宽度，整型，单位像素。 obj.offsetHeight 指 obj 控件自身的高度，整型，单位像素。（clientHeight + 滚动条 + 边框） obj.scrollHeight 网页内容的高度，最小值是clientHeight。 1.1. offsetTop与style.top的区别 offsetTop 返回的是数字，而 style.top 返回的是字符串，除了数字外还带有单位：px。 offsetTop 只读， style.top 可读写。 如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx） 2. 问题及解决 document.body.scrollHeight与document.documentElement.scrollHeight都是获取网页页面内容的高。 但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0 可以发现 chrome对document.documentElement.scrollHeight&amp;amp;document.documentElement.scrollTop是不能识别的 firefox和IE11不能识别document.body.scrollHeight&amp;amp;document.body.scrollTop 所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。 另外我也测试clientXxx，写在总结里吧。 3. 总结 在js中需要取scrollHeight值和scrollTop值时，我们需要使用： var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight; var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop; 关于scrollWidth(下面两种都可以) var oWidth=document.body.scrollWidth; var oWidth=document.documentElement.scrollWidth; 取clientXxx值只能 var wWidth=document.documentElement.clientXxx;</summary></entry><entry><title type="html">Form表单中回车后自动提交问题解决方案</title><link href="http://localhost:4000/javascript/2017/09/15/Form%E8%A1%A8%E5%8D%95%E5%9B%9E%E8%BD%A6%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98.html" rel="alternate" type="text/html" title="Form表单中回车后自动提交问题解决方案" /><published>2017-09-15T05:51:29+08:00</published><updated>2017-09-15T05:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/09/15/Form%E8%A1%A8%E5%8D%95%E5%9B%9E%E8%BD%A6%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98</id><content type="html" xml:base="http://localhost:4000/javascript/2017/09/15/Form%E8%A1%A8%E5%8D%95%E5%9B%9E%E8%BD%A6%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98.html">&lt;h1 id=&quot;1-form表单中回车后自动提交问题解决方案&quot;&gt;1. Form表单中回车后自动提交问题解决方案&lt;/h1&gt;
+&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-form%E8%A1%A8%E5%8D%95%E4%B8%AD%E5%9B%9E%E8%BD%A6%E5%90%8E%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88&quot;&gt;1. Form表单中回车后自动提交问题解决方案&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#11-%E9%97%AE%E9%A2%98%E6%9D%A5%E6%BA%90&quot;&gt;1.1. 问题来源&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#12-%E6%96%B9%E6%B3%95%E4%B8%80&quot;&gt;1.2. 方法一&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#13-%E6%96%B9%E6%B3%95%E4%BA%8C&quot;&gt;1.3. 方法二&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+&lt;h2 id=&quot;11-问题来源&quot;&gt;1.1. 问题来源&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;当form表单中只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;input type=&quot;text&quot; name=&quot;name&quot; /&amp;gt;&lt;/code&gt;时按&lt;code class=&quot;highlighter-rouge&quot;&gt;回车键&lt;/code&gt;将会自动将表单提交。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Html&quot;&gt;&amp;lt;form id=&quot;form1&quot; action=&quot;post.php&quot; method=&quot;post&quot;&amp;gt;   
+    &amp;lt;input type=&quot;text&quot; name=&quot;name&quot; /&amp;gt;   
+&amp;lt;/form&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;12-方法一&quot;&gt;1.2. 方法一&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;添加一个隐藏的&lt;code class=&quot;highlighter-rouge&quot;&gt;input&lt;/code&gt;标签&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Html&quot;&gt;&amp;lt;input style=&quot;display: none;&quot; type=&quot;text&quot; /&amp;gt;  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;13-方法二&quot;&gt;1.3. 方法二&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;添加一个&lt;code class=&quot;highlighter-rouge&quot;&gt;onkeydown&lt;/code&gt;事件，然后回车之后也不会显示
+```Html&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;form id=&quot;form1&quot; action=&quot;post.php&quot; method=&quot;post&quot;&gt;   
+    &lt;input type=&quot;text&quot; name=&quot;name&quot; onkeydown=&quot;if(event.keyCode==13) return false;&quot; /&gt;   
+&lt;/form&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&amp;gt; 但是有些时候，我们需要回车后提交表单，但是这个回车事件应该是可控的，那么可以按照下面的代码操作
+```Html
+&amp;lt;form id=&quot;form1&quot; action=&quot;post.php&quot; method=&quot;post&quot;&amp;gt;   
+    &amp;lt;input style=&quot;display:none&quot; /&amp;gt;   
+    &amp;lt;input type=&quot;text&quot; name=&quot;name&quot; onkeydown=&quot;if(event.keyCode==13){gosubmit();}&quot; /&amp;gt;   
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;gosubmit()&lt;/code&gt;中判断表单完整性，决定是否提交表单&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;我们有时候希望回车键敲在文本框（&lt;code class=&quot;highlighter-rouge&quot;&gt;input elemen&lt;/code&gt;t）里来提交&lt;code class=&quot;highlighter-rouge&quot;&gt;表单&lt;/code&gt;（&lt;code class=&quot;highlighter-rouge&quot;&gt;form&lt;/code&gt;），但有时候又不希望如此。比如搜索行为，希望输入完关键词之后直接按回车键立即提交表单，而有些复杂表单，可能要避免回车键误操作在未完成表单填写的时候就触发了表单提交。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;要控制这些行为，不需要借助JS，浏览器已经帮我们做了这些处理，这里总结几条&lt;code class=&quot;highlighter-rouge&quot;&gt;规则&lt;/code&gt;：&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果表单里有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;type=&quot;submit&quot;&lt;/code&gt;的按钮，&lt;code class=&quot;highlighter-rouge&quot;&gt;回车键生效&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;如果表单里只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;type=&quot;text&quot;&lt;/code&gt;的input，不管按钮是什么type，&lt;code class=&quot;highlighter-rouge&quot;&gt;回车键生效&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;如果按钮不是用&lt;code class=&quot;highlighter-rouge&quot;&gt;input&lt;/code&gt;，而是用&lt;code class=&quot;highlighter-rouge&quot;&gt;button&lt;/code&gt;，并且没有加&lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;IE下默认为type=button&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;FX默认为type=submit&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;其他表单元素如&lt;code class=&quot;highlighter-rouge&quot;&gt;textarea&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;不影响，&lt;code class=&quot;highlighter-rouge&quot;&gt;radio checkbox&lt;/code&gt;不影响触发规则，但本身在FX下会响应回车键，在IE下不响应。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;type=&quot;image&quot;&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;input&lt;/code&gt;，效果等同于&lt;code class=&quot;highlighter-rouge&quot;&gt;type=&quot;submit&quot;&lt;/code&gt;，不知道为什么会设计这样一种type，&lt;code class=&quot;highlighter-rouge&quot;&gt;不推荐使用&lt;/code&gt;，应该用CSS添加背景图合适些。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Someone</name></author><summary type="html">1. Form表单中回车后自动提交问题解决方案 1. Form表单中回车后自动提交问题解决方案 1.1. 问题来源 1.2. 方法一 1.3. 方法二 1.1. 问题来源 当form表单中只有一个&amp;lt;input type=&quot;text&quot; name=&quot;name&quot; /&amp;gt;时按回车键将会自动将表单提交。 &amp;lt;form id=&quot;form1&quot; action=&quot;post.php&quot; method=&quot;post&quot;&amp;gt; &amp;lt;input type=&quot;text&quot; name=&quot;name&quot; /&amp;gt; &amp;lt;/form&amp;gt; 1.2. 方法一 添加一个隐藏的input标签 &amp;lt;input style=&quot;display: none;&quot; type=&quot;text&quot; /&amp;gt; 1.3. 方法二 添加一个onkeydown事件，然后回车之后也不会显示 ```Html &amp;gt; 但是有些时候，我们需要回车后提交表单，但是这个回车事件应该是可控的，那么可以按照下面的代码操作 ```Html &amp;lt;form id=&quot;form1&quot; action=&quot;post.php&quot; method=&quot;post&quot;&amp;gt; &amp;lt;input style=&quot;display:none&quot; /&amp;gt; &amp;lt;input type=&quot;text&quot; name=&quot;name&quot; onkeydown=&quot;if(event.keyCode==13){gosubmit();}&quot; /&amp;gt; &amp;lt;/form&amp;gt; gosubmit()中判断表单完整性，决定是否提交表单 我们有时候希望回车键敲在文本框（input element）里来提交表单（form），但有时候又不希望如此。比如搜索行为，希望输入完关键词之后直接按回车键立即提交表单，而有些复杂表单，可能要避免回车键误操作在未完成表单填写的时候就触发了表单提交。 要控制这些行为，不需要借助JS，浏览器已经帮我们做了这些处理，这里总结几条规则： 如果表单里有一个type=&quot;submit&quot;的按钮，回车键生效。 如果表单里只有一个type=&quot;text&quot;的input，不管按钮是什么type，回车键生效。 如果按钮不是用input，而是用button，并且没有加type，IE下默认为type=button，FX默认为type=submit。 其他表单元素如textarea、select不影响，radio checkbox不影响触发规则，但本身在FX下会响应回车键，在IE下不响应。 type=&quot;image&quot;的input，效果等同于type=&quot;submit&quot;，不知道为什么会设计这样一种type，不推荐使用，应该用CSS添加背景图合适些。</summary></entry><entry><title type="html">JavaScript事件学习</title><link href="http://localhost:4000/javascript/2017/09/10/JavaScript%E4%BA%8B%E4%BB%B6%E5%AD%A6%E4%B9%A0.html" rel="alternate" type="text/html" title="JavaScript事件学习" /><published>2017-09-10T21:50:29+08:00</published><updated>2017-09-10T21:50:29+08:00</updated><id>http://localhost:4000/javascript/2017/09/10/JavaScript%E4%BA%8B%E4%BB%B6%E5%AD%A6%E4%B9%A0</id><content type="html" xml:base="http://localhost:4000/javascript/2017/09/10/JavaScript%E4%BA%8B%E4%BB%B6%E5%AD%A6%E4%B9%A0.html">&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-鼠标事件&quot;&gt;1. 鼠标事件&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-事件绑定&quot;&gt;2. 事件绑定&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#21-dom中直接绑定&quot;&gt;2.1. DOM中直接绑定&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#22-js事件绑定&quot;&gt;2.2. JS事件绑定&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-事件注册&quot;&gt;3. 事件注册&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#31-事件注册方式&quot;&gt;3.1. 事件注册方式&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#311-ie以外&quot;&gt;3.1.1. IE以外&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#312-ie&quot;&gt;3.1.2. IE&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#32-获取事件对象和事件源&quot;&gt;3.2. 获取事件对象和事件源&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#33-取消事件默认行为&quot;&gt;3.3. 取消事件默认行为&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#34-阻止事件冒泡&quot;&gt;3.4. 阻止事件冒泡&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#35-通用解决方案&quot;&gt;3.5. 通用解决方案&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-事件委托&quot;&gt;4. 事件委托&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-事件流&quot;&gt;5. 事件流&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#51-事件类型&quot;&gt;5.1. 事件类型&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+
+&lt;h1 id=&quot;1-鼠标事件&quot;&gt;1. 鼠标事件&lt;/h1&gt;
+&lt;p&gt;| 顺序        | 条件           | 事件  |
+| ————- |:————-| —–|
+| 1      | 鼠标移动到目标元素上 | 首先触发mouseover  |
+| 2      | 光标继续在元素上移动      |   不断触发mousemove  |
+| 3 | 按下鼠标上的设备(左键,右键,滚轮……)      |    触发mousedown |
+| 4 | 设备弹起的时候  | 触发mouseup   |
+| 5 | 目标元素的滚动条发生移动时(滚动滚轮/拖动滚动条。。)  | 触发scroll    |
+| 6 | 滚动滚轮  | 触发mousewheel   |
+| 7 | 鼠标移出元素  | 触发mouseout    |&lt;/p&gt;
+
+&lt;h1 id=&quot;2-事件绑定&quot;&gt;2. 事件绑定&lt;/h1&gt;
+&lt;h2 id=&quot;21-dom中直接绑定&quot;&gt;2.1. DOM中直接绑定&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;&amp;lt;input type=&quot;button&quot; value=&quot;click me&quot; onclick=&quot;hello()&quot;&amp;gt;
+
+&amp;lt;script&amp;gt;
+function hello(){
+ alert(&quot;hello world!&quot;);
+}
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;22-js事件绑定&quot;&gt;2.2. JS事件绑定&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;&amp;lt;input type=&quot;button&quot; value=&quot;click me&quot; id=&quot;btn&quot;&amp;gt;
+
+&amp;lt;script&amp;gt;
+document.getElementById(&quot;btn&quot;).onclick = function(){
+ alert(&quot;hello world!&quot;);
+}
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;传统绑定的&lt;code class=&quot;highlighter-rouge&quot;&gt;优点&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;非常简单和稳定，可以确保它在你使用的不同浏览器中运作一致&lt;/li&gt;
+  &lt;li&gt;处理事件时，this关键字引用的是当前元素，这很有帮组&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;传统绑定的&lt;code class=&quot;highlighter-rouge&quot;&gt;缺点 &lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;传统方法只会在事件冒泡中运行，而非捕获和冒泡&lt;/li&gt;
+  &lt;li&gt;一个元素一次只能绑定一个事件处理函数。新绑定的事件处理函数会覆盖旧的事件处理函数&lt;/li&gt;
+  &lt;li&gt;事件对象参数(e)仅非IE浏览器可用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;3-事件注册&quot;&gt;3. 事件注册&lt;/h1&gt;
+
+&lt;p&gt;平常我们绑定事件的时候用dom.onxxxx=function(){}的形式 
+这种方式是给元素的onxxxx属性赋值，只能绑定有一个处理句柄。 
+但很多时候我们需要绑定多个处理句柄到一个事件上，而且还可能要动态的增删某个处理句柄&lt;/p&gt;
+
+&lt;h2 id=&quot;31-事件注册方式&quot;&gt;3.1. 事件注册方式&lt;/h2&gt;
+&lt;h3 id=&quot;311-ie以外&quot;&gt;3.1.1. IE以外&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;target.addEventListener(type,listener,useCapture) 
+target.removeEventListener(type,listener,useCapture); 
+target ：文档节点、document、window 或 XMLHttpRequest。 
+type ：字符串，事件名称，不含“on”，比如“click”、“mouseover”、“keydown”等。 
+listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。 
+useCapture ：是否使用捕捉，一般用 false。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;312-ie&quot;&gt;3.1.2. IE&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;target.attachEvent(type, listener); 
+target.detachEvent(type, listener); 
+target ：文档节点、document、window 或 XMLHttpRequest。 
+type ：字符串，事件名称，含“on”，比如“onclick”、“onmouseover”、“onkeydown”等。 
+listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;两者使用的原理：可对执行的优先级不一样，实例讲解如下：&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.attachEvent(&quot;onclick&quot;,method1); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.attachEvent(&quot;onclick&quot;,method2); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.attachEvent(&quot;onclick&quot;,method3); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;执行顺序为&lt;code class=&quot;highlighter-rouge&quot;&gt;method3&lt;/code&gt;-&amp;gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;method2&lt;/code&gt;-&amp;gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;method1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.addEventListener(&quot;click&quot;,method1,false); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.addEventListener(&quot;click&quot;,method2,false); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ele.addEventListener(&quot;click&quot;,method3,false); &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;执行顺序为&lt;code class=&quot;highlighter-rouge&quot;&gt;method1&lt;/code&gt;-&amp;gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;method2&lt;/code&gt;-&amp;gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;method3&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;兼容后的方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var func = function() {};
+//例：addEvent(window,&quot;load&quot;,func) 
+function addEvent(elem, type, fn) {
+    if (elem.attachEvent) {
+        elem.attachEvent('on' + type, fn);
+        return;
+    }
+    if (elem.addEventListener) {
+        elem.addEventListener(type, fn, false);
+    }
+}
+//例：removeEvent(window,&quot;load&quot;,func) 
+function removeEvent(elem, type, fn) {
+    if (elem.detachEvent) {
+        elem.detachEvent('on' + type, fn);
+        return;
+    }
+    if (elem.removeEventListener) {
+        elem.removeEventListener(type, fn, false);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;32-获取事件对象和事件源&quot;&gt;3.2. 获取事件对象和事件源&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;function eventHandler(e){ 
+    //获取事件对象 
+    e = e || window.event;//IE和Chrome下是window.event FF下是e 
+    //获取事件源 
+    var target = e.target || e.srcElement;//IE和Chrome下是srcElement FF下是target 
+} 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;33-取消事件默认行为&quot;&gt;3.3. 取消事件默认行为&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;function eventHandler(e) {
+    e = e || window.event;
+    // 防止默认行为 
+    if (e.preventDefault) {
+        e.preventDefault(); //IE以外 
+    } else {
+        e.returnValue = false; //IE 
+        //注意：这个地方是无法用return false代替的 
+        //return false只能取消元素 
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;34-阻止事件冒泡&quot;&gt;3.4. 阻止事件冒泡&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;function myParagraphEventHandler(e) {
+    e = e || window.event;
+    if (e.stopPropagation) {
+        e.stopPropagation(); //IE以外 
+    } else {
+        e.cancelBubble = true; //IE 
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;35-通用解决方案&quot;&gt;3.5. 通用解决方案&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://dean.edwards.name/my/events.js&quot;&gt;传送门&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;function addEvent(element, type, handler) {
+  // assign each event handler a unique ID
+  if (!handler.$$guid) handler.$$guid = addEvent.guid++;
+  // create a hash table of event types for the element
+  if (!element.events) element.events = {};
+  // create a hash table of event handlers for each element/event pair
+  var handlers = element.events[type];
+  if (!handlers) {
+    handlers = element.events[type] = {};
+    // store the existing event handler (if there is one)
+    if (element[&quot;on&quot; + type]) {
+      handlers[0] = element[&quot;on&quot; + type];
+    }
+  }
+  // store the event handler in the hash table
+  handlers[handler.$$guid] = handler;
+  // assign a global event handler to do all the work
+  element[&quot;on&quot; + type] = handleEvent;
+};
+// a counter used to create unique IDs
+addEvent.guid = 1;
+
+function removeEvent(element, type, handler) {
+  // delete the event handler from the hash table
+  if (element.events &amp;amp;&amp;amp; element.events[type]) {
+    delete element.events[type][handler.$$guid];
+  }
+};
+
+function handleEvent(event) {
+  // grab the event object (IE uses a global event object)
+  event = event || window.event;
+  // get a reference to the hash table of event handlers
+  var handlers = this.events[event.type];
+  // execute each event handler
+  for (var i in handlers) {
+    this.$$handleEvent = handlers[i];
+    this.$$handleEvent(event);
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;4-事件委托&quot;&gt;4. 事件委托&lt;/h1&gt;
+&lt;p&gt;例如，你有一个很多行的大表格，在每个&amp;lt;tr&amp;gt;上绑定点击事件是个非常危险的想法，因为性能是个大问题。流行的做法是使用&lt;em&gt;事件委托&lt;/em&gt;。&lt;/p&gt;
+
+&lt;p&gt;事件委托描述的是将事件绑定在容器元素上，然后通过判断点击的target子元素的类型来触发相应的事件。&lt;/p&gt;
+
+&lt;p&gt;事件委托依赖于事件冒泡，如果事件冒泡到table之前被禁用的话，那以下代码就无法工作了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;myTable.onclick = function() {
+    e = e || window.event;
+    var targetNode = e.target || e.srcElement;
+    // 测试如果点击的是TR就触发 
+    if (targetNode.nodeName.toLowerCase() === 'tr') {
+        alert('You clicked a table row!');
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;List&lt;/code&gt;，需要动态添加&lt;code class=&quot;highlighter-rouge&quot;&gt;li标签&lt;/code&gt;，标签又需要绑定事件时，使用事件委托，可以避免每次添加&lt;code class=&quot;highlighter-rouge&quot;&gt;li&lt;/code&gt;后的动态绑定&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;&amp;lt;ul id=&quot;list&quot;&amp;gt;
+ &amp;lt;li id=&quot;item1&quot; &amp;gt;item1&amp;lt;/li&amp;gt;
+ &amp;lt;li id=&quot;item2&quot; &amp;gt;item2&amp;lt;/li&amp;gt;
+ &amp;lt;li id=&quot;item3&quot; &amp;gt;item3&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&amp;lt;script&amp;gt;
+var list = document.getElementById(&quot;list&quot;);
+
+document.addEventListener(&quot;click&quot;,function(event){
+ var target = event.target;
+ if(target.nodeName == &quot;LI&quot;){
+ alert(target.innerHTML);
+ }
+})
+
+var node=document.createElement(&quot;li&quot;);
+var textnode=document.createTextNode(&quot;item4&quot;);
+node.appendChild(textnode);
+list.appendChild(node);
+
+&amp;lt;/script&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当点击item4时，item4有事件响应。说明&lt;code class=&quot;highlighter-rouge&quot;&gt;事件委托可以为新添加的DOM元素动态的添加事件&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h1 id=&quot;5-事件流&quot;&gt;5. 事件流&lt;/h1&gt;
+
+&lt;h2 id=&quot;51-事件类型&quot;&gt;5.1. 事件类型&lt;/h2&gt;
+
+&lt;p&gt;DOM同时支持两种事件模型：&lt;strong&gt;捕获型事件&lt;/strong&gt;和&lt;strong&gt;冒泡型事件&lt;/strong&gt; 
+并且每当某一事件发生时，都会经过&lt;strong&gt;捕获阶段&lt;/strong&gt;-&amp;gt;&lt;strong&gt;处理阶段&lt;/strong&gt;-&amp;gt;&lt;strong&gt;冒泡阶段&lt;/strong&gt;(有些浏览器不支持捕获)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;捕获阶段是由上层元素到下层元素的顺序依次。而冒泡阶段则正相反。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Document&lt;/li&gt;
+  &lt;li&gt;Html&lt;/li&gt;
+  &lt;li&gt;Body&lt;/li&gt;
+  &lt;li&gt;Div&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;当事件触发时body会先得到有事件发生的信息，然后依次往下传递，直到到达最详细的元素。这就是事件捕获阶段。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;还记得事件注册方法ele.addEventListener(type,handler,flag)吧，&lt;strong&gt;Flag是一个Boolean值，true表示事件捕捉阶段执行，false表示事件冒泡阶段执行&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;接着就是事件冒泡阶段。从下往上 依次执行事件处理函数(当然前提是当前元素为该事件注册了事件句柄)。 
+在这个过程中，&lt;code class=&quot;highlighter-rouge&quot;&gt;可以阻止事件的冒泡，即停止向上的传递&lt;/code&gt;。 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;阻止冒泡有时是很有必要的&lt;/code&gt;，例如&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;&amp;lt;div onclick=funcA()&amp;gt; 
+    &amp;lt;button onclick=funcB()&amp;gt;Click&amp;lt;/button&amp;gt; 
+&amp;lt;/div&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;本意是如果点击div中按钮以外的位置时执行funcA,点击button时执行funcB。但是实际点击button时就会先后执行funcB,funcA。 
+而如果在button的事件句柄中阻止冒泡的话，div就不会执行事件句柄了。&lt;/code&gt;&lt;/p&gt;</content><author><name>Someone</name></author><summary type="html">1. 鼠标事件 2. 事件绑定 2.1. DOM中直接绑定 2.2. JS事件绑定 3. 事件注册 3.1. 事件注册方式 3.1.1. IE以外 3.1.2. IE 3.2. 获取事件对象和事件源 3.3. 取消事件默认行为 3.4. 阻止事件冒泡 3.5. 通用解决方案 4. 事件委托 5. 事件流 5.1. 事件类型 1. 鼠标事件 | 顺序 | 条件 | 事件 | | ————- |:————-| —–| | 1 | 鼠标移动到目标元素上 | 首先触发mouseover | | 2 | 光标继续在元素上移动 | 不断触发mousemove | | 3 | 按下鼠标上的设备(左键,右键,滚轮……) | 触发mousedown | | 4 | 设备弹起的时候 | 触发mouseup | | 5 | 目标元素的滚动条发生移动时(滚动滚轮/拖动滚动条。。) | 触发scroll | | 6 | 滚动滚轮 | 触发mousewheel | | 7 | 鼠标移出元素 | 触发mouseout | 2. 事件绑定 2.1. DOM中直接绑定 &amp;lt;input type=&quot;button&quot; value=&quot;click me&quot; onclick=&quot;hello()&quot;&amp;gt; &amp;lt;script&amp;gt; function hello(){ alert(&quot;hello world!&quot;); } &amp;lt;/script&amp;gt; 2.2. JS事件绑定 &amp;lt;input type=&quot;button&quot; value=&quot;click me&quot; id=&quot;btn&quot;&amp;gt; &amp;lt;script&amp;gt; document.getElementById(&quot;btn&quot;).onclick = function(){ alert(&quot;hello world!&quot;); } &amp;lt;/script&amp;gt; 传统绑定的优点 非常简单和稳定，可以确保它在你使用的不同浏览器中运作一致 处理事件时，this关键字引用的是当前元素，这很有帮组 传统绑定的缺点 传统方法只会在事件冒泡中运行，而非捕获和冒泡 一个元素一次只能绑定一个事件处理函数。新绑定的事件处理函数会覆盖旧的事件处理函数 事件对象参数(e)仅非IE浏览器可用 3. 事件注册 平常我们绑定事件的时候用dom.onxxxx=function(){}的形式 这种方式是给元素的onxxxx属性赋值，只能绑定有一个处理句柄。 但很多时候我们需要绑定多个处理句柄到一个事件上，而且还可能要动态的增删某个处理句柄 3.1. 事件注册方式 3.1.1. IE以外 target.addEventListener(type,listener,useCapture) target.removeEventListener(type,listener,useCapture); target ：文档节点、document、window 或 XMLHttpRequest。 type ：字符串，事件名称，不含“on”，比如“click”、“mouseover”、“keydown”等。 listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。 useCapture ：是否使用捕捉，一般用 false。 3.1.2. IE target.attachEvent(type, listener); target.detachEvent(type, listener); target ：文档节点、document、window 或 XMLHttpRequest。 type ：字符串，事件名称，含“on”，比如“onclick”、“onmouseover”、“onkeydown”等。 listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。 两者使用的原理：可对执行的优先级不一样，实例讲解如下： ele.attachEvent(&quot;onclick&quot;,method1); ele.attachEvent(&quot;onclick&quot;,method2); ele.attachEvent(&quot;onclick&quot;,method3); 执行顺序为method3-&amp;gt;method2-&amp;gt;method1 ele.addEventListener(&quot;click&quot;,method1,false); ele.addEventListener(&quot;click&quot;,method2,false); ele.addEventListener(&quot;click&quot;,method3,false); 执行顺序为method1-&amp;gt;method2-&amp;gt;method3 兼容后的方法 var func = function() {}; //例：addEvent(window,&quot;load&quot;,func) function addEvent(elem, type, fn) { if (elem.attachEvent) { elem.attachEvent('on' + type, fn); return; } if (elem.addEventListener) { elem.addEventListener(type, fn, false); } } //例：removeEvent(window,&quot;load&quot;,func) function removeEvent(elem, type, fn) { if (elem.detachEvent) { elem.detachEvent('on' + type, fn); return; } if (elem.removeEventListener) { elem.removeEventListener(type, fn, false); } } 3.2. 获取事件对象和事件源 function eventHandler(e){ //获取事件对象 e = e || window.event;//IE和Chrome下是window.event FF下是e //获取事件源 var target = e.target || e.srcElement;//IE和Chrome下是srcElement FF下是target } 3.3. 取消事件默认行为 function eventHandler(e) { e = e || window.event; // 防止默认行为 if (e.preventDefault) { e.preventDefault(); //IE以外 } else { e.returnValue = false; //IE //注意：这个地方是无法用return false代替的 //return false只能取消元素 } } 3.4. 阻止事件冒泡 function myParagraphEventHandler(e) { e = e || window.event; if (e.stopPropagation) { e.stopPropagation(); //IE以外 } else { e.cancelBubble = true; //IE } } 3.5. 通用解决方案 传送门 function addEvent(element, type, handler) { // assign each event handler a unique ID if (!handler.$$guid) handler.$$guid = addEvent.guid++; // create a hash table of event types for the element if (!element.events) element.events = {}; // create a hash table of event handlers for each element/event pair var handlers = element.events[type]; if (!handlers) { handlers = element.events[type] = {}; // store the existing event handler (if there is one) if (element[&quot;on&quot; + type]) { handlers[0] = element[&quot;on&quot; + type]; } } // store the event handler in the hash table handlers[handler.$$guid] = handler; // assign a global event handler to do all the work element[&quot;on&quot; + type] = handleEvent; }; // a counter used to create unique IDs addEvent.guid = 1; function removeEvent(element, type, handler) { // delete the event handler from the hash table if (element.events &amp;amp;&amp;amp; element.events[type]) { delete element.events[type][handler.$$guid]; } }; function handleEvent(event) { // grab the event object (IE uses a global event object) event = event || window.event; // get a reference to the hash table of event handlers var handlers = this.events[event.type]; // execute each event handler for (var i in handlers) { this.$$handleEvent = handlers[i]; this.$$handleEvent(event); } }; 4. 事件委托 例如，你有一个很多行的大表格，在每个&amp;lt;tr&amp;gt;上绑定点击事件是个非常危险的想法，因为性能是个大问题。流行的做法是使用事件委托。 事件委托描述的是将事件绑定在容器元素上，然后通过判断点击的target子元素的类型来触发相应的事件。 事件委托依赖于事件冒泡，如果事件冒泡到table之前被禁用的话，那以下代码就无法工作了。 myTable.onclick = function() { e = e || window.event; var targetNode = e.target || e.srcElement; // 测试如果点击的是TR就触发 if (targetNode.nodeName.toLowerCase() === 'tr') { alert('You clicked a table row!'); } } 当你有一个List，需要动态添加li标签，标签又需要绑定事件时，使用事件委托，可以避免每次添加li后的动态绑定 &amp;lt;ul id=&quot;list&quot;&amp;gt; &amp;lt;li id=&quot;item1&quot; &amp;gt;item1&amp;lt;/li&amp;gt; &amp;lt;li id=&quot;item2&quot; &amp;gt;item2&amp;lt;/li&amp;gt; &amp;lt;li id=&quot;item3&quot; &amp;gt;item3&amp;lt;/li&amp;gt; &amp;lt;/ul&amp;gt; &amp;lt;script&amp;gt; var list = document.getElementById(&quot;list&quot;); document.addEventListener(&quot;click&quot;,function(event){ var target = event.target; if(target.nodeName == &quot;LI&quot;){ alert(target.innerHTML); } }) var node=document.createElement(&quot;li&quot;); var textnode=document.createTextNode(&quot;item4&quot;); node.appendChild(textnode); list.appendChild(node); &amp;lt;/script&amp;gt; 当点击item4时，item4有事件响应。说明事件委托可以为新添加的DOM元素动态的添加事件。 5. 事件流 5.1. 事件类型 DOM同时支持两种事件模型：捕获型事件和冒泡型事件 并且每当某一事件发生时，都会经过捕获阶段-&amp;gt;处理阶段-&amp;gt;冒泡阶段(有些浏览器不支持捕获) 捕获阶段是由上层元素到下层元素的顺序依次。而冒泡阶段则正相反。 Document Html Body Div 当事件触发时body会先得到有事件发生的信息，然后依次往下传递，直到到达最详细的元素。这就是事件捕获阶段。 还记得事件注册方法ele.addEventListener(type,handler,flag)吧，Flag是一个Boolean值，true表示事件捕捉阶段执行，false表示事件冒泡阶段执行。 接着就是事件冒泡阶段。从下往上 依次执行事件处理函数(当然前提是当前元素为该事件注册了事件句柄)。 在这个过程中，可以阻止事件的冒泡，即停止向上的传递。 阻止冒泡有时是很有必要的，例如 代码如下: &amp;lt;div onclick=funcA()&amp;gt; &amp;lt;button onclick=funcB()&amp;gt;Click&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; 本意是如果点击div中按钮以外的位置时执行funcA,点击button时执行funcB。但是实际点击button时就会先后执行funcB,funcA。 而如果在button的事件句柄中阻止冒泡的话，div就不会执行事件句柄了。</summary></entry><entry><title type="html">JavaScript 中的 Hoisting 机制</title><link href="http://localhost:4000/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html" rel="alternate" type="text/html" title="JavaScript 中的 Hoisting 机制" /><published>2017-09-08T22:51:29+08:00</published><updated>2017-09-08T22:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6</id><content type="html" xml:base="http://localhost:4000/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">&lt;h1 id=&quot;javascript-中的-hoisting-机制&quot;&gt;JavaScript 中的 Hoisting 机制&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;JavaScript 中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Hoisting&lt;/code&gt; 一般称之为&lt;code class=&quot;highlighter-rouge&quot;&gt;变量声明提升机制&lt;/code&gt;。就是说，&lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript 引擎&lt;/code&gt;在执行的时候，&lt;code class=&quot;highlighter-rouge&quot;&gt;会把所有变量的声明都会被提升到当前作用域的最前面&lt;/code&gt;，注意，&lt;code class=&quot;highlighter-rouge&quot;&gt;这里被提升的仅仅是声明&lt;/code&gt;。怎么理解呢，看下面例子：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var myval = &quot;my global var&quot;;
+(function() {
+	console.log(myval); // log &quot;my global var&quot;
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;以上代码很显然会输出 &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;my global var&quot;&lt;/code&gt;，但是如果我们把以上代码按如下方式稍加修改：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var myval = &quot;my global var&quot;;
+(function() {
+	console.log(myval); // log &quot;undefined&quot;
+	var myval = &quot;my local var&quot;;
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;执行结果是输出了一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt;，出现这个结果的原因就是变量的声明被提升了，以上代码等同如下：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var myval = &quot;my global var&quot;;
+(function() {
+	var myval;
+	console.log(myval); // log &quot;undefined&quot;
+	myval = &quot;my local var&quot;;
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;被提升的仅仅是变量的声明部分，并&lt;code class=&quot;highlighter-rouge&quot;&gt;没有立即初始化&lt;/code&gt;，所以会输出 &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;然而这种提升机制，不仅仅表现于在普通的变量，同时也表现在函数上。例如下面这段代码并不能被正确执行：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;(function() {
+	fun(); // Uncaught TypeError: undefined is not a function
+	var fun = function() {
+		console.log(&quot;Hello!&quot;);
+	}
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;因为它等价于：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;(function() {
+	var fun;
+	fun(); // Uncaught TypeError: undefined is not a function
+	fun = function() {
+		console.log(&quot;Hello!&quot;);
+	}
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;因为函数的声明同样被提升而没有立即初始化，所以会出错。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;当然，这种定义函数的方式称之为&lt;code class=&quot;highlighter-rouge&quot;&gt;“函数表达式”&lt;/code&gt;，会有提升机制，如果是如下的这种&lt;code class=&quot;highlighter-rouge&quot;&gt;“函数声明”&lt;/code&gt;方式，则完全没有提升机制方面的问题：&lt;/p&gt;
+  &lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;(function() {
+	fun();
+	function fun() {
+		console.log(&quot;Hello!&quot;);  // log &quot;Hello!&quot;
+	}
+})();
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;p&gt;&lt;strong&gt;这也是函数声明与函数表达式的主要区别。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Someone</name></author><summary type="html">JavaScript 中的 Hoisting 机制 JavaScript 中的 Hoisting 一般称之为变量声明提升机制。就是说，JavaScript 引擎在执行的时候，会把所有变量的声明都会被提升到当前作用域的最前面，注意，这里被提升的仅仅是声明。怎么理解呢，看下面例子： var myval = &quot;my global var&quot;; (function() { console.log(myval); // log &quot;my global var&quot; })(); 以上代码很显然会输出 &quot;my global var&quot;，但是如果我们把以上代码按如下方式稍加修改： var myval = &quot;my global var&quot;; (function() { console.log(myval); // log &quot;undefined&quot; var myval = &quot;my local var&quot;; })(); 执行结果是输出了一个 undefined，出现这个结果的原因就是变量的声明被提升了，以上代码等同如下： var myval = &quot;my global var&quot;; (function() { var myval; console.log(myval); // log &quot;undefined&quot; myval = &quot;my local var&quot;; })(); 被提升的仅仅是变量的声明部分，并没有立即初始化，所以会输出 undefined。 然而这种提升机制，不仅仅表现于在普通的变量，同时也表现在函数上。例如下面这段代码并不能被正确执行： (function() { fun(); // Uncaught TypeError: undefined is not a function var fun = function() { console.log(&quot;Hello!&quot;); } })(); 因为它等价于： (function() { var fun; fun(); // Uncaught TypeError: undefined is not a function fun = function() { console.log(&quot;Hello!&quot;); } })(); 因为函数的声明同样被提升而没有立即初始化，所以会出错。 当然，这种定义函数的方式称之为“函数表达式”，会有提升机制，如果是如下的这种“函数声明”方式，则完全没有提升机制方面的问题： (function() { fun(); function fun() { console.log(&quot;Hello!&quot;); // log &quot;Hello!&quot; } })(); 这也是函数声明与函数表达式的主要区别。</summary></entry><entry><title type="html">IDEA关联SVN项目</title><link href="http://localhost:4000/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html" rel="alternate" type="text/html" title="IDEA关联SVN项目" /><published>2017-09-08T21:51:29+08:00</published><updated>2017-09-08T21:51:29+08:00</updated><id>http://localhost:4000/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE</id><content type="html" xml:base="http://localhost:4000/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html">&lt;h1 id=&quot;svn管理--cornerstone检出--idea关联&quot;&gt;SVN管理 + CornerStone检出 + IDEA关联&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CornerStone&lt;/code&gt; –&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;CheckOut项目完整目录&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;IDEA导入项目&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;IDEA &lt;/code&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;preferences --&amp;gt; Version Control --&amp;gt; Subversion --&amp;gt; Use Command line client 取消对勾（后面两个都取消）&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Someone</name></author><summary type="html">SVN管理 + CornerStone检出 + IDEA关联 CornerStone –&amp;gt; CheckOut项目完整目录 IDEA导入项目 IDEA preferences --&amp;gt; Version Control --&amp;gt; Subversion --&amp;gt; Use Command line client 取消对勾（后面两个都取消）</summary></entry><entry><title type="html">函数声明 VS 函数表达式</title><link href="http://localhost:4000/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html" rel="alternate" type="text/html" title="函数声明 VS 函数表达式" /><published>2017-09-08T07:51:29+08:00</published><updated>2017-09-08T07:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F</id><content type="html" xml:base="http://localhost:4000/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">&lt;h1 id=&quot;函数声明-vs-函数表达式&quot;&gt;函数声明 VS 函数表达式&lt;/h1&gt;
+&lt;p&gt;JavaScript 中需要创建函数的话，有两种方法：&lt;strong&gt;函数声明&lt;/strong&gt;、&lt;strong&gt;函数表达式&lt;/strong&gt;，各自写法如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;// 方法一：函数声明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;function foo() {}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;// 方法二：函数表达式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var foo = function () {};&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;另外还有一种&lt;code class=&quot;highlighter-rouge&quot;&gt;自执行函数表达式&lt;/code&gt;，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以&lt;strong&gt;匿名函数&lt;/strong&gt;方式存在，且&lt;code class=&quot;highlighter-rouge&quot;&gt;立即自动执行&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;(function () {
+    // var x = ...
+})();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。&lt;/p&gt;
+
+&lt;p&gt;方法一和方法二都创建了一个函数，且命名为 &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;，但是二者还是有区别的。JavaScript 解释器中存在一种变量声明被提升（&lt;code class=&quot;highlighter-rouge&quot;&gt;hoisting&lt;/code&gt;）的机制，也就是说&lt;code class=&quot;highlighter-rouge&quot;&gt;变量（函数）的声明&lt;/code&gt;会被提升到作用域的最前面，即使写代码的时候是写在最后面，也还是会被提升至最前面。&lt;/p&gt;
+
+&lt;p&gt;例如以下代码段：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;alert(foo); // function foo() {}
+alert(bar); // undefined
+function foo() {}
+var bar = function bar_fn() {};
+alert(foo); // function foo() {}
+alert(bar); // function bar_fn() {}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出结果分别是&lt;code class=&quot;highlighter-rouge&quot;&gt;function foo() {}&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;function foo() {}&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;function bar_fn() {}&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;可以看到 &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt; 的声明是写在 &lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt; 之后，仍然可以被正确调用，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript 解释器&lt;/code&gt;会将其提升到 &lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt; 前面，而以函数表达式创建的函数 &lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt; 则不享受此待遇。&lt;/p&gt;
+
+&lt;p&gt;那么&lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt; 究竟有没有被提升呢，其实用 &lt;code class=&quot;highlighter-rouge&quot;&gt;var&lt;/code&gt; 声明的变量都会被提升，只不过是被先赋值为 &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt; 罢了，所以第二个 &lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt; 弹出了 &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;所以，&lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript&lt;/code&gt; 引擎执行以上代码的顺序可能是这样的：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;创建变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt;，并将它们都赋值为 &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;创建函数 &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt; 的函数体，并将其赋值给变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;执行前面的两个 &lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;创建函数 &lt;code class=&quot;highlighter-rouge&quot;&gt;bar_fn&lt;/code&gt;，并将其赋值给 &lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;执行后面的两个 &lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;严格地说，再 JavaScript 中创建函数的话，还有另外一种方法，称为“函数构造法”：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;var foo = Function('alert(&quot;hi!&quot;);');
+var foo = new Function('alert(&quot;hi!&quot;);'); // 等同于上面一行
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;此方法以一个字符串作为参数形成函数体。但是用这种方法，执行效率方面会打折扣，且似乎无法传递参数，所以少用为妙。&lt;/p&gt;</content><author><name>Someone</name></author><summary type="html">函数声明 VS 函数表达式 JavaScript 中需要创建函数的话，有两种方法：函数声明、函数表达式，各自写法如下： // 方法一：函数声明 function foo() {} // 方法二：函数表达式 var foo = function () {}; 另外还有一种自执行函数表达式，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以匿名函数方式存在，且立即自动执行： (function () { // var x = ... })(); 此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。 方法一和方法二都创建了一个函数，且命名为 foo，但是二者还是有区别的。JavaScript 解释器中存在一种变量声明被提升（hoisting）的机制，也就是说变量（函数）的声明会被提升到作用域的最前面，即使写代码的时候是写在最后面，也还是会被提升至最前面。 例如以下代码段： alert(foo); // function foo() {} alert(bar); // undefined function foo() {} var bar = function bar_fn() {}; alert(foo); // function foo() {} alert(bar); // function bar_fn() {} 输出结果分别是function foo() {}、undefined、function foo() {}和function bar_fn() {}。 可以看到 foo 的声明是写在 alert 之后，仍然可以被正确调用，因为 JavaScript 解释器会将其提升到 alert 前面，而以函数表达式创建的函数 bar 则不享受此待遇。 那么bar 究竟有没有被提升呢，其实用 var 声明的变量都会被提升，只不过是被先赋值为 undefined 罢了，所以第二个 alert 弹出了 undefined。 所以，JavaScript 引擎执行以上代码的顺序可能是这样的： 创建变量 foo 和 bar，并将它们都赋值为 undefined。 创建函数 foo 的函数体，并将其赋值给变量 foo。 执行前面的两个 alert。 创建函数 bar_fn，并将其赋值给 bar。 执行后面的两个 alert。 注 严格地说，再 JavaScript 中创建函数的话，还有另外一种方法，称为“函数构造法”： var foo = Function('alert(&quot;hi!&quot;);'); var foo = new Function('alert(&quot;hi!&quot;);'); // 等同于上面一行 此方法以一个字符串作为参数形成函数体。但是用这种方法，执行效率方面会打折扣，且似乎无法传递参数，所以少用为妙。</summary></entry><entry><title type="html">原型对象 Prototype</title><link href="http://localhost:4000/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html" rel="alternate" type="text/html" title="原型对象 Prototype" /><published>2017-09-08T02:51:29+08:00</published><updated>2017-09-08T02:51:29+08:00</updated><id>http://localhost:4000/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype</id><content type="html" xml:base="http://localhost:4000/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html">&lt;h1 id=&quot;1-javascript-的原型对象-prototype&quot;&gt;1. JavaScript 的原型对象 Prototype&lt;/h1&gt;
+&lt;!-- TOC --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-javascript-%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1-prototype&quot;&gt;1. JavaScript 的原型对象 Prototype&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#11-%E4%BB%80%E4%B9%88%E6%98%AFprototype%EF%BC%9F&quot;&gt;1.1. 什么是Prototype？&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#12-%E5%8E%9F%E5%9E%8B%E9%93%BE&quot;&gt;1.2. 原型链&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#13-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8prototype%E6%9B%B4%E5%A5%BD%EF%BC%9F&quot;&gt;1.3. 为什么使用Prototype更好？&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#14-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8prototype&quot;&gt;1.4. 如何使用Prototype&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#15-prototype-%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8A%A8%E6%80%81%E7%9A%84%E5%AF%B9%E8%B1%A1&quot;&gt;1.5. Prototype 是一个动态的对象&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#16-prototype-%E7%9A%84%E5%85%B8%E5%9E%8B%E7%A4%BA%E4%BE%8B&quot;&gt;1.6. Prototype 的典型示例&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- /TOC --&gt;
+&lt;p&gt;当您在JavaScript中定义函数时，它会附带一些预定义的属性; 其中之一是虚幻的原型。 在本文中，我将详细说明它是什么，以及为什么要在项目中使用它。&lt;/p&gt;
+&lt;h2 id=&quot;11-什么是prototype&quot;&gt;1.1. 什么是Prototype？&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;原型对象 prototype&lt;/code&gt;最初是一个空对象，可以添加成员 - 就​​像其他对象一样。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var myObject = function( name ) {
+	this.name = name;
+	return this;
+};
+ 
+console.log(typeof myObject.prototype); // object
+ 
+myObject.prototype.getName = function() {
+	return this.name;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码创建了一个函数，然后赋值给 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt;。如果我调用 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject()&lt;/code&gt;，它将返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;window&lt;/code&gt; 对象。因为它是在&lt;code class=&quot;highlighter-rouge&quot;&gt;全局作用域&lt;/code&gt;内定义的，而且它还&lt;code class=&quot;highlighter-rouge&quot;&gt;没有被实例化&lt;/code&gt;，所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt; 直接指向全局对象：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(myObject() === window); // true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;12-原型链&quot;&gt;1.2. 原型链&lt;/h2&gt;
+&lt;p&gt;JavaScript 中定义或实例化任何一个对象的时候，它都会被附加一个名为 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 的隐藏属性，原型链正是依靠这个属性才得以形成。但是千万别直接访问 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 属性，因为&lt;code class=&quot;highlighter-rouge&quot;&gt;有些浏览器并不支持直接访问它&lt;/code&gt;。
+另外&lt;code class=&quot;highlighter-rouge&quot;&gt; __proto__&lt;/code&gt; 和 对象的 &lt;code class=&quot;highlighter-rouge&quot;&gt;prototype&lt;/code&gt; 属性也不是一回事，它们各自有各自的用途。而且，他们是携手工作的！&lt;/p&gt;
+
+&lt;p&gt;怎么理解呢？其实，当我们创建 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt; 函数时，实际上是创建了一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;Function&lt;/code&gt; 类型的对象：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(typeof myObject); // function
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这里要说明一下，&lt;code class=&quot;highlighter-rouge&quot;&gt;Function 是 JavaScript 中预定义的一个对象&lt;/code&gt;，所以它也有自己预定义的属性（如 length 和 arguments）和方法（如 call 和 apply），当然也有 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt;，以此实现原型链。也就是说，JavaScript 引擎内可能有类似如下的代码片段：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;Function.prototype = {
+	arguments: null,
+	length: 0,
+	call: function() {
+		// secret code
+	},
+	apply: function(){
+		// secret code
+	},
+    ...
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;事实上，JavaScript 引擎代码不可能这样简单，这里只是描述一下原型链是如何工作的。&lt;/p&gt;
+
+&lt;p&gt;我们定义了一个函数 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt;，它还有一个参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;，但是并没有给它任何其它属性，例如 length 或者其它方法，如 call。那么下面这段代码为啥能正常执行呢？&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(myObject.length); // 结果：1，是参数的个数
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这是因为我们定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt; 时，同时也给它定义了一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 属性，并赋值为 Function.prototype（参考前面的代码片段），所以我们能够像访问其它属性一样访问 myObject.length，即使我们并没有定义这个属性，因为它会顺着&lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 原型链往上去找 length，最终在 Function 里面找到了。&lt;/p&gt;
+
+&lt;p&gt;那为什么找到的 &lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt; 属性的值是 &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;，而不是 &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; 呢，是什么时候给它赋值的呢？由于 myObject 是 Function 的一个实例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(myObject instanceof Function); // true
+console.log(myObject === Function); // false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;当实例化一个对象的时候，对象的 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 属性会被赋值为其构造者的原型对象，在本示例中就是 Function，此时构造器回去计算参数的个数，改变 length 的值。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(myObject.__proto__ === Function.prototype); // true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而当我们用 &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; 关键字创建一个新的实例时，新对象的 &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; 将会被赋值为 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject.prototype&lt;/code&gt;，因为现在的构造函数为 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt;，而非 &lt;code class=&quot;highlighter-rouge&quot;&gt;Function&lt;/code&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var myInstance = new myObject('foo');
+console.log(myInstance.__proto__ === myObject.prototype); // true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;新对象除了能访问 &lt;code class=&quot;highlighter-rouge&quot;&gt;Function.prototype&lt;/code&gt; 中继承下来的 &lt;code class=&quot;highlighter-rouge&quot;&gt;call&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;apply&lt;/code&gt; 外，还能访问从 &lt;code class=&quot;highlighter-rouge&quot;&gt;myObject&lt;/code&gt; 中继承下来的 &lt;code class=&quot;highlighter-rouge&quot;&gt;getName&lt;/code&gt; 方法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;console.log(myInstance.getName()); // foo
+ 
+var mySecondInstance = new myObject('bar');
+ 
+console.log(mySecondInstance.getName()); // bar
+console.log(myInstance.getName()); // foo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其实这相当于把原型对象当做一个蓝本，然后可以根据这个蓝本创建 N 个新的对象。&lt;/p&gt;
+
+&lt;h2 id=&quot;13-为什么使用prototype更好&quot;&gt;1.3. 为什么使用Prototype更好？&lt;/h2&gt;
+&lt;p&gt;比方说，我们正在开发一个&lt;code class=&quot;highlighter-rouge&quot;&gt;canvas&lt;/code&gt;游戏，同时在屏幕上需要几个（可能数百个）对象。每个对象都需要自己的属性，如&lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt;坐标，&lt;code class=&quot;highlighter-rouge&quot;&gt;宽度&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;高度&lt;/code&gt;等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;我们可能需要这么做&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var GameObject1 = {
+    x: Math.floor((Math.random() * myCanvasWidth) + 1),
+    y: Math.floor((Math.random() * myCanvasHeight) + 1),
+    width: 10,
+    height: 10,
+    draw: function(){
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+   ...
+};
+ 
+var GameObject2 = {
+    x: Math.floor((Math.random() * myCanvasWidth) + 1),
+    y: Math.floor((Math.random() * myCanvasHeight) + 1),
+    width: 10,
+    height: 10,
+    draw: function(){
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+    //... do this 98 more times ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这将创建内存中的所有这些对象 - 所有这些对象都使用单独的绘制和任何其他可能需要的方法定义。这当然是不理想的，因为JavaScript会消耗浏览器内存，并使其运行非常缓慢，甚至停止响应。
+虽然有时候可能不会有100个对象，但是仍然很致命的是，它将需要查找一百个不同的对象，而不仅仅是单个&lt;code class=&quot;highlighter-rouge&quot;&gt;Prototype&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;14-如何使用prototype&quot;&gt;1.4. 如何使用Prototype&lt;/h2&gt;
+&lt;p&gt;为了使应用程序运行得更快（并遵循最佳实践），我们可以（重新）定义&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Prototype&lt;/code&gt;原型属性; &lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject&lt;/code&gt;的每个实例都将引用&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject.prototype&lt;/code&gt;中的方法，就像它们是自己的方法一样。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;// define the GameObject constructor function
+var GameObject = function(width, height) {
+    this.x = Math.floor((Math.random() * myCanvasWidth) + 1);
+    this.y = Math.floor((Math.random() * myCanvasHeight) + 1);
+    this.width = width;
+    this.height = height;
+    return this;
+};
+ 
+// (re)define the GameObject prototype object
+GameObject.prototype = {
+    x: 0,
+    y: 0,
+    width: 5,
+    width: 5,
+    draw: function() {
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后我们可以把&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject&lt;/code&gt;实例化100次&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var x = 100,
+arrayOfGameObjects = [];
+ 
+do {
+    arrayOfGameObjects.push(new GameObject(10, 10));
+} while(x--);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;现在我们有一个100个&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObjects&lt;/code&gt;的数组，它们都共享了&lt;code class=&quot;highlighter-rouge&quot;&gt;draw&lt;/code&gt;方法的相同Prototype和定义，它大大地节省了应用程序中的内存。
+当我们调用&lt;code class=&quot;highlighter-rouge&quot;&gt;draw&lt;/code&gt;方法的时候，它将会指向一个相同的&lt;code class=&quot;highlighter-rouge&quot;&gt;Function&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;var GameLoop = function() {
+    for(gameObject in arrayOfGameObjects) {
+        gameObject.draw();
+    }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;15-prototype-是一个动态的对象&quot;&gt;1.5. Prototype 是一个动态的对象&lt;/h2&gt;
+&lt;p&gt;对象的原型是一个动态的对象，这意味着，如果在创建了所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject&lt;/code&gt;实例之后，我们决定，而不是绘制一个矩形，我们要绘制一个圆，我们可以相应地更新我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject.prototype.draw&lt;/code&gt;方法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;GameObject.prototype.draw = function() {
+    myCanvasContext.arc(this.x, this.y, this.width, 0, Math.PI*2, true);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而现在，所有以前的&lt;code class=&quot;highlighter-rouge&quot;&gt;GameObject&lt;/code&gt;和任何未来的实例都会画一个圆。&lt;/p&gt;
+
+&lt;h2 id=&quot;16-prototype-的典型示例&quot;&gt;1.6. Prototype 的典型示例&lt;/h2&gt;
+
+&lt;p&gt;用过 &lt;code class=&quot;highlighter-rouge&quot;&gt;jQuery&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;Prototype&lt;/code&gt; 库的朋友可能知道，这些库中通常都会有 trim 这个方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;示例&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g, '');
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;trim 用法&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;' foo bar   '.trim(); // 'foo bar'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是这样做又有一个缺点，因为比较新版本的浏览器中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript&lt;/code&gt; 引擎在 &lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt; 对象中本身就提供了 &lt;code class=&quot;highlighter-rouge&quot;&gt;trim&lt;/code&gt; 方法， 那么我们自己定义的 trim 就会覆写它自带的 &lt;code class=&quot;highlighter-rouge&quot;&gt;trim&lt;/code&gt;。其实，我们在定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;trim&lt;/code&gt; 方法之前，可以做个简单的检测，看是否需要自己添加这个方法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;if(!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;检查一下，如不存在 trim 这个方法，定义一个。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://code.tutsplus.com/tutorials/prototypes-in-javascript--net-24949&quot;&gt;原文地址&lt;/a&gt;&lt;/p&gt;</content><author><name>Someone</name></author><summary type="html">1. JavaScript 的原型对象 Prototype 1. JavaScript 的原型对象 Prototype 1.1. 什么是Prototype？ 1.2. 原型链 1.3. 为什么使用Prototype更好？ 1.4. 如何使用Prototype 1.5. Prototype 是一个动态的对象 1.6. Prototype 的典型示例 当您在JavaScript中定义函数时，它会附带一些预定义的属性; 其中之一是虚幻的原型。 在本文中，我将详细说明它是什么，以及为什么要在项目中使用它。 1.1. 什么是Prototype？ 原型对象 prototype最初是一个空对象，可以添加成员 - 就​​像其他对象一样。 var myObject = function( name ) { this.name = name; return this; }; console.log(typeof myObject.prototype); // object myObject.prototype.getName = function() { return this.name; }; 上面的代码创建了一个函数，然后赋值给 myObject。如果我调用 myObject()，它将返回 window 对象。因为它是在全局作用域内定义的，而且它还没有被实例化，所以 this 直接指向全局对象： console.log(myObject() === window); // true 1.2. 原型链 JavaScript 中定义或实例化任何一个对象的时候，它都会被附加一个名为 __proto__ 的隐藏属性，原型链正是依靠这个属性才得以形成。但是千万别直接访问 __proto__ 属性，因为有些浏览器并不支持直接访问它。 另外 __proto__ 和 对象的 prototype 属性也不是一回事，它们各自有各自的用途。而且，他们是携手工作的！ 怎么理解呢？其实，当我们创建 myObject 函数时，实际上是创建了一个 Function 类型的对象： console.log(typeof myObject); // function 这里要说明一下，Function 是 JavaScript 中预定义的一个对象，所以它也有自己预定义的属性（如 length 和 arguments）和方法（如 call 和 apply），当然也有 __proto__，以此实现原型链。也就是说，JavaScript 引擎内可能有类似如下的代码片段： Function.prototype = { arguments: null, length: 0, call: function() { // secret code }, apply: function(){ // secret code }, ... }; 事实上，JavaScript 引擎代码不可能这样简单，这里只是描述一下原型链是如何工作的。 我们定义了一个函数 myObject，它还有一个参数 name，但是并没有给它任何其它属性，例如 length 或者其它方法，如 call。那么下面这段代码为啥能正常执行呢？ console.log(myObject.length); // 结果：1，是参数的个数 这是因为我们定义 myObject 时，同时也给它定义了一个 __proto__ 属性，并赋值为 Function.prototype（参考前面的代码片段），所以我们能够像访问其它属性一样访问 myObject.length，即使我们并没有定义这个属性，因为它会顺着__proto__ 原型链往上去找 length，最终在 Function 里面找到了。 那为什么找到的 length 属性的值是 1，而不是 0 呢，是什么时候给它赋值的呢？由于 myObject 是 Function 的一个实例： console.log(myObject instanceof Function); // true console.log(myObject === Function); // false 当实例化一个对象的时候，对象的 __proto__ 属性会被赋值为其构造者的原型对象，在本示例中就是 Function，此时构造器回去计算参数的个数，改变 length 的值。 console.log(myObject.__proto__ === Function.prototype); // true 而当我们用 new 关键字创建一个新的实例时，新对象的 __proto__ 将会被赋值为 myObject.prototype，因为现在的构造函数为 myObject，而非 Function。 var myInstance = new myObject('foo'); console.log(myInstance.__proto__ === myObject.prototype); // true 新对象除了能访问 Function.prototype 中继承下来的 call 和 apply 外，还能访问从 myObject 中继承下来的 getName 方法： console.log(myInstance.getName()); // foo var mySecondInstance = new myObject('bar'); console.log(mySecondInstance.getName()); // bar console.log(myInstance.getName()); // foo 其实这相当于把原型对象当做一个蓝本，然后可以根据这个蓝本创建 N 个新的对象。 1.3. 为什么使用Prototype更好？ 比方说，我们正在开发一个canvas游戏，同时在屏幕上需要几个（可能数百个）对象。每个对象都需要自己的属性，如x和y坐标，宽度，高度等等。 我们可能需要这么做 var GameObject1 = { x: Math.floor((Math.random() * myCanvasWidth) + 1), y: Math.floor((Math.random() * myCanvasHeight) + 1), width: 10, height: 10, draw: function(){ myCanvasContext.fillRect(this.x, this.y, this.width, this.height); } ... }; var GameObject2 = { x: Math.floor((Math.random() * myCanvasWidth) + 1), y: Math.floor((Math.random() * myCanvasHeight) + 1), width: 10, height: 10, draw: function(){ myCanvasContext.fillRect(this.x, this.y, this.width, this.height); } //... do this 98 more times ... 这将创建内存中的所有这些对象 - 所有这些对象都使用单独的绘制和任何其他可能需要的方法定义。这当然是不理想的，因为JavaScript会消耗浏览器内存，并使其运行非常缓慢，甚至停止响应。 虽然有时候可能不会有100个对象，但是仍然很致命的是，它将需要查找一百个不同的对象，而不仅仅是单个Prototype。 1.4. 如何使用Prototype 为了使应用程序运行得更快（并遵循最佳实践），我们可以（重新）定义GameObject的Prototype原型属性; GameObject的每个实例都将引用GameObject.prototype中的方法，就像它们是自己的方法一样。 // define the GameObject constructor function var GameObject = function(width, height) { this.x = Math.floor((Math.random() * myCanvasWidth) + 1); this.y = Math.floor((Math.random() * myCanvasHeight) + 1); this.width = width; this.height = height; return this; }; // (re)define the GameObject prototype object GameObject.prototype = { x: 0, y: 0, width: 5, width: 5, draw: function() { myCanvasContext.fillRect(this.x, this.y, this.width, this.height); } }; 然后我们可以把GameObject实例化100次 var x = 100, arrayOfGameObjects = []; do { arrayOfGameObjects.push(new GameObject(10, 10)); } while(x--); 现在我们有一个100个GameObjects的数组，它们都共享了draw方法的相同Prototype和定义，它大大地节省了应用程序中的内存。 当我们调用draw方法的时候，它将会指向一个相同的Function var GameLoop = function() { for(gameObject in arrayOfGameObjects) { gameObject.draw(); } }; 1.5. Prototype 是一个动态的对象 对象的原型是一个动态的对象，这意味着，如果在创建了所有的GameObject实例之后，我们决定，而不是绘制一个矩形，我们要绘制一个圆，我们可以相应地更新我们的GameObject.prototype.draw方法。 GameObject.prototype.draw = function() { myCanvasContext.arc(this.x, this.y, this.width, 0, Math.PI*2, true); } 而现在，所有以前的GameObject和任何未来的实例都会画一个圆。 1.6. Prototype 的典型示例 用过 jQuery 或者 Prototype 库的朋友可能知道，这些库中通常都会有 trim 这个方法。 示例 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ''); }; trim 用法 ' foo bar '.trim(); // 'foo bar' 但是这样做又有一个缺点，因为比较新版本的浏览器中的 JavaScript 引擎在 String 对象中本身就提供了 trim 方法， 那么我们自己定义的 trim 就会覆写它自带的 trim。其实，我们在定义 trim 方法之前，可以做个简单的检测，看是否需要自己添加这个方法： if(!String.prototype.trim) { String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ''); }; } 检查一下，如不存在 trim 这个方法，定义一个。 原文地址</summary></entry><entry><title type="html">H2O theme for Jekyll</title><link href="http://localhost:4000/%E6%8A%80%E6%9C%AF/2017/04/18/new-theme-h2o.html" rel="alternate" type="text/html" title="H2O theme for Jekyll" /><published>2017-04-18T00:00:00+08:00</published><updated>2017-04-18T00:00:00+08:00</updated><id>http://localhost:4000/%E6%8A%80%E6%9C%AF/2017/04/18/new-theme-h2o</id><content type="html" xml:base="http://localhost:4000/%E6%8A%80%E6%9C%AF/2017/04/18/new-theme-h2o.html">&lt;p&gt;正如我在&lt;a href=&quot;http://weibo.com/1374146504/profile?topnav=1&amp;amp;wvr=6&quot;&gt;微博&lt;/a&gt;上所说的，使用&lt;a href=&quot;http://jekyll.com.cn/&quot;&gt;Jekyll&lt;/a&gt;半年以来一直没有令我满意的主题模板，所以开始计划自己写一套好看又好用的主题模板。设计之初就明确了极简主义，风格采用扁平化了，通过卡片式设计来进行区块分明的布局，参考了Medium的ui样式和知乎专栏的视觉风格。&lt;/p&gt;
+
+&lt;h2 id=&quot;h2o&quot;&gt;H2O&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/kaeyleo/jekyll-theme-H2O&quot;&gt;源码及使用文档 →&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-realhome.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新主题名叫”H2O”，基于Jekyll 3.0.x（使用&lt;code class=&quot;highlighter-rouge&quot;&gt;gem update jekyll&lt;/code&gt;升级Jekyll），Markdown的代码高亮不再支持pygments转而使用rouge，咱已经默认配置了 &lt;code class=&quot;highlighter-rouge&quot;&gt;highlighter: rouge&lt;/code&gt; 。用到的技术栈也很简单：引入jQuery类库，使用Sass编写样式，使用Gulp来编译Sass、合并压缩css、js，开源在&lt;a href=&quot;https://github.com/kaeyleo/jekyll-theme-H2O&quot;&gt;Github&lt;/a&gt;上，稍作配置即可用于你的Jekyll博客上。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-sketchdesign.png&quot; alt=&quot;Design with Sketch&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;使用Sketch完成H2O主题的原型设计&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-vs.jpg&quot; alt=&quot;My Jekyll themes&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;比之前漂亮不少吧，下面聊聊H2O的新特性。&lt;/p&gt;
+
+&lt;h2 id=&quot;新特性&quot;&gt;新特性&lt;/h2&gt;
+
+&lt;h3 id=&quot;主题配色&quot;&gt;主题配色&lt;/h3&gt;
+
+&lt;p&gt;支持两种主题配色——蓝色和粉色。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/kaeyleo/jekyll-theme-H2O/blob/master/screenshot/jekyll-theme-h2o-themecolor.jpg?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;侧边栏&quot;&gt;侧边栏&lt;/h3&gt;
+
+&lt;p&gt;相比自己上一个版本的博客主题，首页增加了侧边栏，方便展示博主的个人信息和文章标签。&lt;/p&gt;
+
+&lt;h3 id=&quot;社交图标&quot;&gt;社交图标&lt;/h3&gt;
+
+&lt;p&gt;使用阿里的图标管理平台&lt;a href=&quot;http://iconfont.cn/&quot;&gt;Iconfont&lt;/a&gt;整理了一套&lt;strike&gt;墙内外&lt;/strike&gt;常用的社交图标，包括微博、知乎、掘金、简书、Github等十多个网站，鼠标悬停会显示该站的主题色。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-snstext.jpg&quot; alt=&quot;social iconfont&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;前后文导航&quot;&gt;前后文导航&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-nextpostnav.png&quot; alt=&quot;Next post navigator&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;自定义文章封面&quot;&gt;自定义文章封面&lt;/h3&gt;
+
+&lt;p&gt;在Markdown的&lt;a href=&quot;http://jekyll.com.cn/docs/frontmatter/&quot;&gt;文章头信息&lt;/a&gt;里添加cover参数来配置文章的封面图片，如果没有配置封面，则默认【主题色+底纹】的组合作为文章封面。值得一提的是，H2O有两种（粉、蓝）主题色和六种底纹（电路板、食物、云海、钻石等等）供你选择。&lt;/p&gt;
+
+&lt;h3 id=&quot;头图个性化底纹&quot;&gt;头图个性化底纹&lt;/h3&gt;
+
+&lt;p&gt;在没有图片的情况下单纯显示颜色会不会太无趣了点？于是想到了加入底纹元素，底纹素材是SVG格式的（保存在css样式里），加载比图片快很多。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-headerpatterns.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;代码高亮&quot;&gt;代码高亮&lt;/h3&gt;
+
+&lt;p&gt;模板引入了&lt;a href=&quot;http://prismjs.com&quot;&gt;Prism.js&lt;/a&gt;，一款轻量、可扩展的代码语法高亮库。&lt;/p&gt;
+
+&lt;p&gt;很多知名网站如&lt;a href=&quot;https://developer.mozilla.org/&quot;&gt;MDN&lt;/a&gt;、&lt;a href=&quot;https://css-tricks.com/&quot;&gt;css-tricks&lt;/a&gt;也在用它，JavaScript 之父 &lt;a href=&quot;https://brendaneich.com/&quot;&gt;Brendan Eich&lt;/a&gt; 也在个人博客上使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-highlight.png&quot; alt=&quot;代码高亮&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;遵循 &lt;a href=&quot;https://www.w3.org/TR/html5/grouping-content.html#the-pre-element&quot;&gt;HTML5&lt;/a&gt; 标准，Prism 使用语义化的 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt; 元素和 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 元素来标记代码区块：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;pre&amp;gt;&amp;lt;code class=&quot;language-css&quot;&amp;gt;p { color: red }&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在Markdown中你可以这样写：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ```css
+	p { color: red }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;支持语言：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;Sass&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+  &lt;li&gt;CoffeeScript&lt;/li&gt;
+  &lt;li&gt;Java&lt;/li&gt;
+  &lt;li&gt;C-like&lt;/li&gt;
+  &lt;li&gt;Swift&lt;/li&gt;
+  &lt;li&gt;PHP&lt;/li&gt;
+  &lt;li&gt;Go&lt;/li&gt;
+  &lt;li&gt;Python&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;第三方评论&quot;&gt;第三方评论&lt;/h3&gt;
+
+&lt;p&gt;由于多说关闭，又对国内其他第三方评论插件无感，所以将&lt;a href=&quot;https://disqus.com/&quot;&gt;Disqus&lt;/a&gt;列为首选（目前模板也只提供了这个），请自备梯子。&lt;/p&gt;
+
+&lt;h3 id=&quot;移动端优化&quot;&gt;移动端优化&lt;/h3&gt;
+
+&lt;p&gt;响应式设计，对手机和平板等移动设备做了优化。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on2171g4d.bkt.clouddn.com/jekyll-theme-h2o-realm.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;关于阅读体验&quot;&gt;关于阅读体验&lt;/h3&gt;
+
+&lt;p&gt;我认为在内容质量相同的情况下，出色的沉浸式阅读体验是博客的核心。&lt;/p&gt;
+
+&lt;p&gt;H2O在这方面还有很多需要完善的地方，比如：&lt;strike&gt;代码高亮&lt;/strike&gt;、夜间模式、查看大图…&lt;/p&gt;
+
+&lt;h3 id=&quot;其他特性&quot;&gt;其他特性：&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;网页标题SEO优化&lt;/li&gt;
+  &lt;li&gt;标签索引，点击标签跳转到标签目录，即可查看对应的全部文章&lt;/li&gt;
+  &lt;li&gt;漂亮&lt;/li&gt;
+  &lt;li&gt;好看&lt;/li&gt;
+  &lt;li&gt;美&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;最后&quot;&gt;最后&lt;/h2&gt;
+
+&lt;p&gt;本想趁这次机会将整站https化的，但折腾了半天发现弹性web托管并不支持，所以暂时搁置https的想法。另外，博客统计工具一直使用的是&lt;a href=&quot;https://tongji.baidu.com&quot;&gt;百度统计&lt;/a&gt;，这次新增了Google Analytics。&lt;/p&gt;
+
+&lt;p&gt;这次从0到1，独自设计、开发再到发布大约用了一周时间，也算完成一个小小的开源项目了，后续也将持续完善和更新，欢迎&lt;a href=&quot;https://github.com/kaeyleo/jekyll-theme-H2O&quot;&gt;Star&lt;/a&gt;。&lt;/p&gt;</content><author><name>Someone</name></author><category term="jekyll" /><category term="前端开发" /><category term="设计" /><summary type="html">正如我在微博上所说的，使用Jekyll半年以来一直没有令我满意的主题模板，所以开始计划自己写一套好看又好用的主题模板。设计之初就明确了极简主义，风格采用扁平化了，通过卡片式设计来进行区块分明的布局，参考了Medium的ui样式和知乎专栏的视觉风格。 H2O 源码及使用文档 → 新主题名叫”H2O”，基于Jekyll 3.0.x（使用gem update jekyll升级Jekyll），Markdown的代码高亮不再支持pygments转而使用rouge，咱已经默认配置了 highlighter: rouge 。用到的技术栈也很简单：引入jQuery类库，使用Sass编写样式，使用Gulp来编译Sass、合并压缩css、js，开源在Github上，稍作配置即可用于你的Jekyll博客上。 使用Sketch完成H2O主题的原型设计 比之前漂亮不少吧，下面聊聊H2O的新特性。 新特性 主题配色 支持两种主题配色——蓝色和粉色。 侧边栏 相比自己上一个版本的博客主题，首页增加了侧边栏，方便展示博主的个人信息和文章标签。 社交图标 使用阿里的图标管理平台Iconfont整理了一套墙内外常用的社交图标，包括微博、知乎、掘金、简书、Github等十多个网站，鼠标悬停会显示该站的主题色。 前后文导航 自定义文章封面 在Markdown的文章头信息里添加cover参数来配置文章的封面图片，如果没有配置封面，则默认【主题色+底纹】的组合作为文章封面。值得一提的是，H2O有两种（粉、蓝）主题色和六种底纹（电路板、食物、云海、钻石等等）供你选择。 头图个性化底纹 在没有图片的情况下单纯显示颜色会不会太无趣了点？于是想到了加入底纹元素，底纹素材是SVG格式的（保存在css样式里），加载比图片快很多。 代码高亮 模板引入了Prism.js，一款轻量、可扩展的代码语法高亮库。 很多知名网站如MDN、css-tricks也在用它，JavaScript 之父 Brendan Eich 也在个人博客上使用。 遵循 HTML5 标准，Prism 使用语义化的 &amp;lt;pre&amp;gt; 元素和 &amp;lt;code&amp;gt; 元素来标记代码区块： &amp;lt;pre&amp;gt;&amp;lt;code class=&quot;language-css&quot;&amp;gt;p { color: red }&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt; 在Markdown中你可以这样写： ```css p { color: red } ``` 支持语言： HTML CSS Sass JavaScript CoffeeScript Java C-like Swift PHP Go Python 第三方评论 由于多说关闭，又对国内其他第三方评论插件无感，所以将Disqus列为首选（目前模板也只提供了这个），请自备梯子。 移动端优化 响应式设计，对手机和平板等移动设备做了优化。 关于阅读体验 我认为在内容质量相同的情况下，出色的沉浸式阅读体验是博客的核心。 H2O在这方面还有很多需要完善的地方，比如：代码高亮、夜间模式、查看大图… 其他特性： 网页标题SEO优化 标签索引，点击标签跳转到标签目录，即可查看对应的全部文章 漂亮 好看 美 最后 本想趁这次机会将整站https化的，但折腾了半天发现弹性web托管并不支持，所以暂时搁置https的想法。另外，博客统计工具一直使用的是百度统计，这次新增了Google Analytics。 这次从0到1，独自设计、开发再到发布大约用了一周时间，也算完成一个小小的开源项目了，后续也将持续完善和更新，欢迎Star。</summary></entry></feed>

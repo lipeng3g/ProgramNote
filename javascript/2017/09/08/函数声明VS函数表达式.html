@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>函数声明 VS 函数表达式 - Someone's blog</title>
+<meta name="description" content="函数声明 VS 函数表达式JavaScript 中需要创建函数的话，有两种方法：函数声明、函数表达式，各自写法如下：// 方法一：函数声明function foo() {}// 方法二：函数表达式var foo = function () {};另外还有一种自执行函数表达式，主要用于创建一个新的作用域，在此作用域...">
+<link rel="canonical" href="http://localhost:4000/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html"><link rel="alternate" type="application/rss+xml" title="Someone's blog" href="http://localhost:4000/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="Someone's Blog
+" href="/">Someone's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/">Home</a></li><li><a href="/all.html">All</a></li><li><a href="/about.html">About</a></li><li><a type="application/rss+xml" href="/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">函数声明 VS 函数表达式</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Someone"/></meta><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-08T07:51:29+08:00"
+          itemprop="datePublished">Sep 08, 2017
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="函数声明-vs-函数表达式">函数声明 VS 函数表达式</h1>
+<p>JavaScript 中需要创建函数的话，有两种方法：<strong>函数声明</strong>、<strong>函数表达式</strong>，各自写法如下：</p>
+
+<p><strong>// 方法一：函数声明</strong></p>
+
+<p><code class="highlighter-rouge">function foo() {}</code></p>
+
+<p><strong>// 方法二：函数表达式</strong></p>
+
+<p><code class="highlighter-rouge">var foo = function () {};</code></p>
+
+<p>另外还有一种<code class="highlighter-rouge">自执行函数表达式</code>，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以<strong>匿名函数</strong>方式存在，且<code class="highlighter-rouge">立即自动执行</code>：</p>
+<pre><code class="language-Javascript">(function () {
+    // var x = ...
+})();
+</code></pre>
+<p>此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。</p>
+
+<p>方法一和方法二都创建了一个函数，且命名为 <code class="highlighter-rouge">foo</code>，但是二者还是有区别的。JavaScript 解释器中存在一种变量声明被提升（<code class="highlighter-rouge">hoisting</code>）的机制，也就是说<code class="highlighter-rouge">变量（函数）的声明</code>会被提升到作用域的最前面，即使写代码的时候是写在最后面，也还是会被提升至最前面。</p>
+
+<p>例如以下代码段：</p>
+<pre><code class="language-Javascript">alert(foo); // function foo() {}
+alert(bar); // undefined
+function foo() {}
+var bar = function bar_fn() {};
+alert(foo); // function foo() {}
+alert(bar); // function bar_fn() {}
+</code></pre>
+<p>输出结果分别是<code class="highlighter-rouge">function foo() {}</code>、<code class="highlighter-rouge">undefined</code>、<code class="highlighter-rouge">function foo() {}</code>和<code class="highlighter-rouge">function bar_fn() {}</code>。</p>
+
+<p>可以看到 <code class="highlighter-rouge">foo</code> 的声明是写在 <code class="highlighter-rouge">alert</code> 之后，仍然可以被正确调用，因为 <code class="highlighter-rouge">JavaScript 解释器</code>会将其提升到 <code class="highlighter-rouge">alert</code> 前面，而以函数表达式创建的函数 <code class="highlighter-rouge">bar</code> 则不享受此待遇。</p>
+
+<p>那么<code class="highlighter-rouge">bar</code> 究竟有没有被提升呢，其实用 <code class="highlighter-rouge">var</code> 声明的变量都会被提升，只不过是被先赋值为 <code class="highlighter-rouge">undefined</code> 罢了，所以第二个 <code class="highlighter-rouge">alert</code> 弹出了 <code class="highlighter-rouge">undefined</code>。</p>
+
+<p>所以，<code class="highlighter-rouge">JavaScript</code> 引擎执行以上代码的顺序可能是这样的：</p>
+
+<ul>
+  <li>创建变量 <code class="highlighter-rouge">foo</code> 和 <code class="highlighter-rouge">bar</code>，并将它们都赋值为 <code class="highlighter-rouge">undefined</code>。</li>
+  <li>创建函数 <code class="highlighter-rouge">foo</code> 的函数体，并将其赋值给变量 <code class="highlighter-rouge">foo</code>。</li>
+  <li>执行前面的两个 <code class="highlighter-rouge">alert</code>。</li>
+  <li>创建函数 <code class="highlighter-rouge">bar_fn</code>，并将其赋值给 <code class="highlighter-rouge">bar</code>。</li>
+  <li>执行后面的两个 <code class="highlighter-rouge">alert</code>。</li>
+</ul>
+
+<p><strong>注</strong></p>
+
+<p>严格地说，再 JavaScript 中创建函数的话，还有另外一种方法，称为“函数构造法”：</p>
+<pre><code class="language-Javascript">var foo = Function('alert("hi!");');
+var foo = new Function('alert("hi!");'); // 等同于上面一行
+</code></pre>
+<p>此方法以一个字符串作为参数形成函数体。但是用这种方法，执行效率方面会打折扣，且似乎无法传递参数，所以少用为妙。</p>
+
+</div>
+				<footer><meta itemprop="dateModified" content="2017-09-08T07:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/assets/images/license-cc4.png" />
+    </a><p></p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Someone">
+    <link itemprop="url" href="http://localhost:4000/"></ul></div>
+</aside>
+    <footer class="site-info">
+      <p>© Someone's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>
