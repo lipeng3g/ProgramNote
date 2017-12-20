@@ -1,0 +1,426 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>DispatcherServlet探究 - lipeng's blog</title>
+<meta name="description" content="DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中配置如下  &lt;servlet&gt;    &lt;servlet-name&gt;spring&lt;/servlet-...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">Home</a></li><li><a href="/ProgramNote/all.html">All</a></li><li><a href="/ProgramNote/about.html">About</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">DispatcherServlet探究</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringMVC">SpringMVC</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-14T00:00:00+08:00"
+          itemprop="datePublished">Dec 14, 2017
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><p><code class="highlighter-rouge">DispatcherServlet</code>是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。</p>
+
+<p><img src="/Image/spring/01.png" alt="分析图" title="分析图" /></p>
+
+<p>当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中</p>
+
+<p>配置如下</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>spring<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+    <span class="nt">&lt;init-param&gt;</span>
+      <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+      <span class="nt">&lt;param-value&gt;</span>classpath:spring-mvc.xml<span class="nt">&lt;/param-value&gt;</span>
+    <span class="nt">&lt;/init-param&gt;</span>
+    <span class="c">&lt;!-- 启动优先级 --&gt;</span>
+    <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;async-supported&gt;</span>true<span class="nt">&lt;/async-supported&gt;</span>
+  <span class="nt">&lt;/servlet&gt;</span>
+  <span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>spring<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+  <span class="nt">&lt;/servlet-mapping&gt;</span>
+</code></pre></div></div>
+
+<p><strong>请注意，DispatcherServlet可以配置多个，有自己的上下文容器。</strong></p>
+
+<ol>
+  <li>PropertyValues初始化 ServletConfigPropertyValues是一个内部类</li>
+  <li>封装了bean的行为，提供了设置和获取属性值</li>
+  <li>加载资源文件</li>
+  <li>注册属性编辑</li>
+  <li>初始化beanWrapper</li>
+</ol>
+
+<p>项目启动</p>
+
+<p>DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法</p>
+
+<pre><code class="language-Java">
+    public final void init() throws ServletException {
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Initializing servlet '" + this.getServletName() + "'");
+        }
+
+        try {
+            // 1、PropertyValues初始化 ServletConfigPropertyValues是一个内部类
+            PropertyValues pvs = new HttpServletBean.ServletConfigPropertyValues(this.getServletConfig(), this.requiredProperties);
+            // 2、封装了bean的行为，提供了设置和获取属性值
+            BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
+            // 3、加载资源文件
+            ResourceLoader resourceLoader = new ServletContextResourceLoader(this.getServletContext());
+            // 4、注册属性编辑
+            bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, this.getEnvironment()));
+            // 5、初始化beanWrapper
+            this.initBeanWrapper(bw);
+            bw.setPropertyValues(pvs, true);
+        } catch (BeansException var4) {
+            if (this.logger.isErrorEnabled()) {
+                this.logger.error("Failed to set bean properties on servlet '" + this.getServletName() + "'", var4);
+            }
+
+            throw var4;
+        }
+        //让子类做任何他们想要的初始化。
+        this.initServletBean();
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Servlet '" + this.getServletName() + "' configured successfully");
+        }
+
+    }
+
+</code></pre>
+
+<p>PropertyValues初始化</p>
+<pre><code class="language-Java">    private static class ServletConfigPropertyValues extends MutablePropertyValues {
+        public ServletConfigPropertyValues(ServletConfig config, Set&lt;String&gt; requiredProperties) throws ServletException {
+            Set&lt;String&gt; missingProps = requiredProperties != null &amp;&amp; !requiredProperties.isEmpty() ? new HashSet(requiredProperties) : null;
+            //获取init-param中的数值对
+            Enumeration paramNames = config.getInitParameterNames();
+
+            while(paramNames.hasMoreElements()) {
+                String property = (String)paramNames.nextElement();
+                Object value = config.getInitParameter(property);
+                this.addPropertyValue(new PropertyValue(property, value));
+                if (missingProps != null) {
+                    missingProps.remove(property);
+                }
+            }
+
+            if (!CollectionUtils.isEmpty(missingProps)) {
+                throw new ServletException("Initialization from ServletConfig for servlet '" + config.getServletName() + "' failed; the following required properties were missing: " + StringUtils.collectionToDelimitedString(missingProps, ", "));
+            }
+        }
+    }
+</code></pre>
+<p>如下图所示，获取init-param中的配置参数，写入PropertyValues
+<img src="/Image/spring/02.png" alt="分析图" title="分析图" /></p>
+
+<p>BeanWrapper实现对bean行为的封装</p>
+
+<p><a href="http://blog.csdn.net/zhiweianran/article/details/7919129">待学习</a></p>
+
+<p>ResourceLoader加载资源文件比较简单</p>
+<pre><code class="language-Java">public class ServletContextResourceLoader extends DefaultResourceLoader {
+
+	private final ServletContext servletContext;
+
+
+	/**
+	 * Create a new ServletContextResourceLoader.
+	 * @param servletContext the ServletContext to load resources with
+	 */
+	public ServletContextResourceLoader(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
+
+	/**
+	 * This implementation supports file paths beneath the root of the web application.
+	 * @see ServletContextResource
+	 */
+	@Override
+	protected Resource getResourceByPath(String path) {
+		return new ServletContextResource(this.servletContext, path);
+	}
+
+}
+</code></pre>
+
+<p>initServletBean的介绍</p>
+
+<pre><code class="language-Java">	/**
+	 * 子类可以重写这个以执行自定义初始化。此servlet的所有bean属性将在调用此方法之前设置。
+	 * &lt;p&gt;这个方法的默认实现是空的
+	 * @throws ServletException if subclass initialization fails
+	 */
+	protected void initServletBean() throws ServletException {
+	}
+</code></pre>
+
+<p>上面说的很清楚，这里只是提供一个方法让bean自己初始化，具体的实现在<strong>FrameworkServlet</strong>中</p>
+
+<pre><code class="language-Java">
+	/**
+	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
+	 * have been set. Creates this servlet's WebApplicationContext.
+	 */
+	@Override
+	protected final void initServletBean() throws ServletException {
+		getServletContext().log("Initializing Spring FrameworkServlet '" + getServletName() + "'");
+		if (this.logger.isInfoEnabled()) {
+			this.logger.info("FrameworkServlet '" + getServletName() + "': initialization started");
+		}
+		long startTime = System.currentTimeMillis();
+
+		try {
+            //这里是主要的动作，创建应用程序上下文
+			this.webApplicationContext = initWebApplicationContext();
+			initFrameworkServlet();
+		}
+		catch (ServletException ex) {
+			this.logger.error("Context initialization failed", ex);
+			throw ex;
+		}
+		catch (RuntimeException ex) {
+			this.logger.error("Context initialization failed", ex);
+			throw ex;
+		}
+
+		if (this.logger.isInfoEnabled()) {
+			long elapsedTime = System.currentTimeMillis() - startTime;
+			this.logger.info("FrameworkServlet '" + getServletName() + "': initialization completed in " +
+					elapsedTime + " ms");
+		}
+	}
+
+</code></pre>
+<pre><code class="language-Java">
+
+	/**
+	 * 初始化并发布此servlet的Web应用程序上下文。
+	 * &lt;p&gt;Delegates to {@link #createWebApplicationContext} for actual creation
+	 * of the context. Can be overridden in subclasses.
+	 * @return the WebApplicationContext instance
+	 * @see #FrameworkServlet(WebApplicationContext)
+	 * @see #setContextClass
+	 * @see #setContextConfigLocation
+	 */
+	protected WebApplicationContext initWebApplicationContext() {
+		WebApplicationContext rootContext =
+				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		WebApplicationContext wac = null;
+
+		if (this.webApplicationContext != null) {
+            //根节点上下文，是通过ContextLoaderListener加载的，服务器启动时，最先加载的  
+			wac = this.webApplicationContext;
+			if (wac instanceof ConfigurableWebApplicationContext) {
+				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
+				if (!cwac.isActive()) {
+					//上下文还没有被刷新——&gt;提供诸如设置父上下文、设置应用程序上下文id等服务
+					if (cwac.getParent() == null) {
+						//在没有显式parent的情况下注入上下文实例,设置根应用程序上下文(如果有的话, 不过也可能是null)作为父元素
+						cwac.setParent(rootContext);
+					}
+					configureAndRefreshWebApplicationContext(cwac);
+				}
+			}
+		}
+		if (wac == null) {
+			//在构建时没有注入上下文实例——&gt;查看是否在servlet上下文中注册了
+			wac = findWebApplicationContext();
+		}
+		if (wac == null) {
+			//没有的话就定义一个
+			wac = createWebApplicationContext(rootContext);
+		}
+
+		if (!this.refreshEventReceived) {
+			// 在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息  
+			onRefresh(wac);
+		}
+
+		if (this.publishContext) {
+			// 对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中  
+			String attrName = getServletContextAttributeName();
+			getServletContext().setAttribute(attrName, wac);
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("Published WebApplicationContext of servlet '" + getServletName() +
+						"' as ServletContext attribute with name [" + attrName + "]");
+			}
+		}
+
+		return wac;
+	}
+</code></pre>
+<p>本文地址：
+http://blog.csdn.net/congcong68/article/details/40451233</p>
+
+<p>需要学的
+http://blog.csdn.net/congcong68/article/details/40650143</p>
+
+</div>
+				<footer><meta itemprop="dateModified" content="2017-12-14T00:00:00+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p></p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"></ul></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>
