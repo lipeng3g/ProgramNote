@@ -1,0 +1,745 @@
+<p>对于ORM框架而言，数据源的组织是一个非常重要的一部分，这直接影响到框架的性能问题。
+<!-- TOC --></p>
+
+<ul>
+  <li><a href="#1-mybatis%E6%95%B0%E6%8D%AE%E6%BA%90datasource%E5%88%86%E7%B1%BB">1. MyBatis数据源DataSource分类</a></li>
+  <li><a href="#2-datasource%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B">2. DataSource的创建过程</a>
+    <ul>
+      <li><a href="#21-%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90">2.1. 文件解析</a></li>
+      <li><a href="#22-%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%BC%8F">2.2. 创建模式</a></li>
+      <li><a href="#23-%E5%AD%98%E5%82%A8">2.3. 存储</a></li>
+    </ul>
+  </li>
+  <li><a href="#3-datasource%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9B%E5%BB%BAconnection%E5%AF%B9%E8%B1%A1">3. DataSource什么时候创建Connection对象</a></li>
+  <li><a href="#4-unpooleddatasource">4. UnpooledDataSource</a>
+    <ul>
+      <li><a href="#41-%E5%88%9B%E5%BB%BAconnection%E8%BF%87%E7%A8%8B">4.1. 创建Connection过程</a></li>
+    </ul>
+  </li>
+  <li><a href="#5-%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E6%B1%A0">5. 使用连接池</a>
+    <ul>
+      <li><a href="#51-%E5%88%86%E6%9E%90">5.1. 分析</a></li>
+    </ul>
+  </li>
+  <li><a href="#6-pooleddatasource">6. PooledDataSource</a>
+    <ul>
+      <li><a href="#61-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">6.1. 基本原理</a></li>
+      <li><a href="#62-%E8%8E%B7%E5%8F%96javasqlconnection%E5%AF%B9%E8%B1%A1">6.2. 获取java.sql.Connection对象</a></li>
+      <li><a href="#63-javasqlconnection%E5%AF%B9%E8%B1%A1%E5%9B%9E%E6%94%B6">6.3. java.sql.Connection对象回收</a></li>
+      <li><a href="#64-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E5%9B%9E%E6%94%B6connection">6.4. 代理模式回收Connection</a></li>
+    </ul>
+  </li>
+  <li><a href="#7-jndi%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90datasource">7. JNDI类型的数据源DataSource</a>
+    <ul>
+      <li><a href="#71-mybatis-jndi%E6%95%B0%E6%8D%AE%E6%BA%90%E5%AE%9E%E7%8E%B0">7.1. Mybatis JNDI数据源实现</a></li>
+      <li><a href="#72-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8jndi">7.2. 为什么使用JNDI</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- /TOC -->
+<h1 id="1-mybatis数据源datasource分类">1. MyBatis数据源DataSource分类</h1>
+
+<p><strong>MyBatis数据源</strong>实现是在以下四个包中</p>
+<ul>
+  <li>org.apache.ibatis.datasource</li>
+  <li>org.apache.ibatis.datasource.jndi</li>
+  <li>org.apache.ibatis.datasource.pooled</li>
+  <li>org.apache.ibatis.datasource.unpooled</li>
+</ul>
+
+<p><strong>数据源</strong>分类三类</p>
+<table>
+<tr><th>数据源分类</th><th>说明</th></tr>
+<tr><td>UNPOOLED</td><td>不使用连接池的数据源</td></tr>
+<tr><td>POOLED</td><td>使用连接池的数据源</td></tr>
+<tr><td>JNDI</td><td>使用JNDI实现的数据源</td></tr>
+</table>
+
+<p>Mybatis 内部定义了<code class="highlighter-rouge">java.sql.DataSource</code>接口
+<code class="highlighter-rouge">UnpooledDataSource 和 PooledDataSource实现了DataSource接口</code>
+<img src="/Image/mybatis/8.png" alt="alt text" title="Title" /></p>
+
+<p>JNDI类型的数据源DataSource，通过JNDI上下文取值。（<strong>What it means？</strong>）</p>
+
+<h1 id="2-datasource的创建过程">2. DataSource的创建过程</h1>
+
+<p>Mybatis数据源DataSource的创建发生在Mybatis初始化的过程中。</p>
+
+<p>Mybatis配置</p>
+<pre><code class="language-XML">&lt;dataSource type="POOLED"&gt;
+  &lt;property name="driver" value="${driver}"/&gt;
+  &lt;property name="url" value="${url}"/&gt;
+  &lt;property name="username" value="${username}"/&gt;
+  &lt;property name="password" value="${password}"/&gt;
+&lt;/dataSource&gt;
+</code></pre>
+
+<h2 id="21-文件解析">2.1. 文件解析</h2>
+<p>DataSource类型通过type决定</p>
+<ul>
+  <li>type=”POOLED”  ：MyBatis会创建PooledDataSource实例</li>
+  <li>type=”UNPOOLED” ：MyBatis会创建UnpooledDataSource实例</li>
+  <li>type=”JNDI”     ：MyBatis会从JNDI服务上查找DataSource实例，然后返回使用</li>
+</ul>
+
+<h2 id="22-创建模式">2.2. 创建模式</h2>
+<p>Mybatis通过工厂模式来创建DataSource对象，Mybatis定义了<code class="highlighter-rouge">org.apache.ibatis.datasource.DataSourceFactory</code>接口，通过<code class="highlighter-rouge">getDataSource()</code> 方法返回数据源。</p>
+<pre><code class="language-Java">public interface DataSourceFactory {
+
+  void setProperties(Properties props);
+
+  DataSource getDataSource();
+
+}
+</code></pre>
+
+<p>针对三种类型的Type，对应有三种实现工厂</p>
+<ul>
+  <li>POOLED        PooledDataSourceFactory</li>
+  <li>UNPOOLED     UnpooledDataSourceFactory</li>
+  <li>9JNDI          JndiDataSourceFactory</li>
+</ul>
+
+<p><img src="/Image/mybatis/9.png" alt="alt text" title="Title" /></p>
+
+<h2 id="23-存储">2.3. 存储</h2>
+<p>Mybatis创建<code class="highlighter-rouge">DataSource</code>实例以后，放置到<code class="highlighter-rouge">Configuration</code>的<code class="highlighter-rouge">Environment</code>对象中，供调用。</p>
+
+<h1 id="3-datasource什么时候创建connection对象">3. DataSource什么时候创建Connection对象</h1>
+<p>当需要创建SqlSession对象并且需要执行SQL语句的时候，Mybatis才会调用DataSource对象创建Connection对象。</p>
+
+<pre><code class="language-Java">String resource = "mybatis-config.xml";  
+InputStream inputStream = Resources.getResourceAsStream(resource);  
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);  
+SqlSession sqlSession = sqlSessionFactory.openSession();  
+sqlSession.selectList("SELECT * FROM STUDENTS");  
+</code></pre>
+<p>上面的代码一直到了<code class="highlighter-rouge">sqlSession.selectList("SELECT * FROM STUDENTS");</code>才会创建Connection。</p>
+
+<pre><code class="language-Java">  protected void openConnection() throws SQLException {
+    if (log.isDebugEnabled()) {
+      log.debug("Opening JDBC Connection");
+    }
+    connection = dataSource.getConnection();
+    if (level != null) {
+      connection.setTransactionIsolation(level.getLevel());
+    }
+    setDesiredAutoCommit(autoCommmit);
+  }
+</code></pre>
+
+<h1 id="4-unpooleddatasource">4. UnpooledDataSource</h1>
+<p>当DataSource的type属性配置成<strong>UNPOOLED</strong>，MyBatis首先会实例化一个<strong>UnpooledDataSourceFactory</strong>工厂实例，然后通过.getDataSource()方法返回一个UnpooledDataSource实例对象引用，我们假定为dataSource。
+使用UnpooledDataSource的getConnection(),每调用一次就会产生一个新的Connection实例对象。</p>
+
+<pre><code class="language-Java">
+  @Override
+  public Connection getConnection() throws SQLException {
+    return doGetConnection(username, password);
+  }
+
+  @Override
+  public Connection getConnection(String username, String password) throws SQLException {
+    return doGetConnection(username, password);
+  }
+
+  private Connection doGetConnection(String username, String password) throws SQLException {
+    Properties props = new Properties();
+    if (driverProperties != null) {
+      props.putAll(driverProperties);
+    }
+    if (username != null) {
+      props.setProperty("user", username);
+    }
+    if (password != null) {
+      props.setProperty("password", password);
+    }
+    return doGetConnection(props);
+  }
+
+  private Connection doGetConnection(Properties properties) throws SQLException {
+    //初始化驱动
+    initializeDriver();
+    //获取连接，获取新的Connection对象
+    Connection connection = DriverManager.getConnection(url, properties);
+    //配置Connection
+    configureConnection(connection);
+    return connection;
+  }
+
+  private void configureConnection(Connection conn) throws SQLException {
+    if (autoCommit != null &amp;&amp; autoCommit != conn.getAutoCommit()) {
+      conn.setAutoCommit(autoCommit);
+    }
+    if (defaultTransactionIsolationLevel != null) {
+      conn.setTransactionIsolation(defaultTransactionIsolationLevel);
+    }
+  }
+</code></pre>
+
+<h2 id="41-创建connection过程">4.1. 创建Connection过程</h2>
+<ol>
+  <li><code class="highlighter-rouge">初始化驱动</code>：判断driver驱动是否已经加载到内存中，如果还没有加载，则会动态地加载driver类，并实例化一个Driver对象，使用DriverManager.registerDriver()方法将其注册到内存中，以供后续使用。</li>
+  <li><code class="highlighter-rouge">创建Connection对象</code>：使用DriverManager.getConnection()方法创建连接。</li>
+  <li><code class="highlighter-rouge">配置Connection对象</code>：设置是否自动提交autoCommit和隔离级别isolationLevel。</li>
+  <li><code class="highlighter-rouge">返回Connection对象</code>。</li>
+</ol>
+
+<p><img src="/Image/mybatis/10.png" alt="alt text" title="Title" /></p>
+
+<p><strong>总结：每调用一次getConnection()都会返回一个新的java.sql.Connection实例。</strong></p>
+
+<h1 id="5-使用连接池">5. 使用连接池</h1>
+
+<pre><code class="language-Java">public static void main(String[] args) throws Exception
+{
+
+    String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
+    PreparedStatement st = null;
+    ResultSet rs = null;
+
+    long beforeTimeOffset = -1L; //创建Connection对象前时间
+    long afterTimeOffset = -1L; //创建Connection对象后时间
+    long executeTimeOffset = -1L; //创建Connection对象后时间
+
+    Connection con = null;
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+
+    beforeTimeOffset = new Date().getTime();
+    System.out.println("before:\t" + beforeTimeOffset);
+
+    con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
+
+    afterTimeOffset = new Date().getTime();
+    System.out.println("after:\t\t" + afterTimeOffset);
+    System.out.println("Create Costs:\t\t" + (afterTimeOffset - beforeTimeOffset) + " ms");
+
+    st = con.prepareStatement(sql);
+    //设置参数
+    st.setInt(1, 101);
+    st.setInt(2, 0);
+    //查询，得出结果集
+    rs = st.executeQuery();
+    executeTimeOffset = new Date().getTime();
+    System.out.println("Exec Costs:\t\t" + (executeTimeOffset - afterTimeOffset) + " ms");
+
+}
+
+</code></pre>
+
+<p>执行结果：</p>
+
+<p>before：1404363138126</p>
+
+<p>after：1404363138376</p>
+
+<p>Create Costs：250ms</p>
+
+<p>Exec Costs：170ms</p>
+
+<p>结果显示：创建一个Connection对象需要250ms，执行sql需要170ms。</p>
+
+<h2 id="51-分析">5.1. 分析</h2>
+<p>创建Connection对象代价巨大，仅仅建立通讯连接就消耗了非常多的时间。</p>
+
+<p>对于需要频繁地跟数据库交互的应用程序，可以在创建了Connection对象，并操作完数据库后，可以不释放掉资源，而是将它放到内存中，当下次需要操作数据库时，可以直接从内存中取出Connection对象，不需要再创建了，这样就极大地节省了创建Connection对象的资源消耗。</p>
+
+<p>同时，由于内存也是有限和宝贵的，这又对我们对内存中的Connection对象怎么有效地维护提出了很高的要求。</p>
+
+<p>我们将在内存中存放Connection对象的容器称之为 <code class="highlighter-rouge">连接池（Connection Pool）</code>。</p>
+
+<h1 id="6-pooleddatasource">6. PooledDataSource</h1>
+<h2 id="61-基本原理">6.1. 基本原理</h2>
+<p><code class="highlighter-rouge">PooledDataSource</code>将<code class="highlighter-rouge">java.sql.Connection</code>对象包裹成<code class="highlighter-rouge">PooledConnection</code>对象放到了<code class="highlighter-rouge">PoolState</code>类型的容器中维护。</p>
+
+<p>MyBatis将连接池中的<code class="highlighter-rouge">PooledConnection分为两种状态</code>： <code class="highlighter-rouge">空闲状态（idle）</code>和<code class="highlighter-rouge">活动状态(active)</code>，这两种状态的PooledConnection对象分别被存储到PoolState容器内的<code class="highlighter-rouge">idleConnections</code>和<code class="highlighter-rouge">activeConnections</code>两个List集合中</p>
+
+<ul>
+  <li>
+    <p>idleConnections:空闲(idle)状态PooledConnection对象被放置到此集合中，表示当前闲置的没有被使用的PooledConnection集合，调用PooledDataSource的getConnection()方法时，<code class="highlighter-rouge">会优先从此集合中取PooledConnection对象</code>。当用完一个java.sql.Connection对象时，MyBatis会将其包裹成PooledConnection对象放到此集合中。</p>
+  </li>
+  <li>
+    <p>activeConnections:活动(active)状态的PooledConnection对象被放置到名为activeConnections的ArrayList中，表示当前正在被使用的PooledConnection集合，调用PooledDataSource的getConnection()方法时，会优先从idleConnections集合中取PooledConnection对象,如果没有，则看此集合是否已满，<code class="highlighter-rouge">如果未满，PooledDataSource会创建出一个PooledConnection</code>，添加到此集合中，并返回。(先获取空闲的，没有空闲的而且活动的未满，就创造一个新的，放到活动中)</p>
+  </li>
+</ul>
+
+<p>PoolState连接池的大致结构：
+![连接池](/Image/mybatis/11.png ‘’)</p>
+
+<h2 id="62-获取javasqlconnection对象">6.2. 获取java.sql.Connection对象</h2>
+<p>获取Connection的实现代码：</p>
+<pre><code class="language-Java">  @Override
+  public Connection getConnection() throws SQLException {
+    return popConnection(dataSource.getUsername(), dataSource.getPassword()).getProxyConnection();
+  }
+
+  @Override
+  public Connection getConnection(String username, String password) throws SQLException {
+    return popConnection(username, password).getProxyConnection();
+  }
+</code></pre>
+
+<p>上面的popConnection()会从连接池返回一个PooledConnection对象，然后调用getProxyConnection()获取最终的Connection对象。（getProxyConnection()稍后在介绍）</p>
+
+<p><strong>popConnection()方法到底做了什么</strong></p>
+<ol>
+  <li>先看是否有空闲(idle)状态下的PooledConnection对象，如果有，就直接返回一个可用的PooledConnection对象；否则进行第2步。</li>
+  <li>查看活动状态的PooledConnection池activeConnections是否已满；如果没有满，则创建一个新的PooledConnection对象，然后放到activeConnections池中，然后返回此PooledConnection对象；否则进行第三步；</li>
+  <li>看最先进入activeConnections池中的PooledConnection对象是否已经过期：如果已经过期，从activeConnections池中移除此对象，然后创建一个新的PooledConnection对象，添加到activeConnections中，然后将此对象返回；否则进行第4步。</li>
+  <li>线程等待，循环2步</li>
+</ol>
+
+<pre><code class="language-Java">  private final PoolState state = new PoolState(this);
+
+  private final UnpooledDataSource dataSource;
+  
+  private PooledConnection popConnection(String username, String password) throws SQLException {
+    boolean countedWait = false;
+    PooledConnection conn = null;
+    long t = System.currentTimeMillis();
+    int localBadConnectionCount = 0;
+
+    while (conn == null) {
+      synchronized (state) {
+        if (!state.idleConnections.isEmpty()) {
+          // idelConnections中有空闲的Connection对象，直接取出使用
+          conn = state.idleConnections.remove(0);
+          if (log.isDebugEnabled()) {
+            log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");
+          }
+        } else {
+          // idelConnections中没有空闲的Connection对象，但是activeConnections还没有达到最大活动上限
+          if (state.activeConnections.size() &lt; poolMaximumActiveConnections) {
+            // 创建一个新的Connection
+            conn = new PooledConnection(dataSource.getConnection(), this);
+            if (log.isDebugEnabled()) {
+              log.debug("Created connection " + conn.getRealHashCode() + ".");
+            }
+          } else {
+            // activeConnections已经达到最大活动上限，不能创建新的
+            // 获取最老的活动连接，检查超时
+            PooledConnection oldestActiveConnection = state.activeConnections.get(0);
+            long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
+            if (longestCheckoutTime &gt; poolMaximumCheckoutTime) {
+              // 最老的活动连接判定超时
+              state.claimedOverdueConnectionCount++;
+              state.accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
+              state.accumulatedCheckoutTime += longestCheckoutTime;
+              state.activeConnections.remove(oldestActiveConnection);
+              if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {
+                try {
+                  oldestActiveConnection.getRealConnection().rollback();
+                } catch (SQLException e) {
+                  /*
+                     只需为debug记录一条消息，并继续执行下面的语句，就像没有发生任何事情一样。
+                     用一个新的Pooled连接包装the bad connection，这将有助于不影响当前的执行线程，
+                     并给当前线程一个机会，使其能够与另一个valid/good database
+                     connection一起参加下一个竞争。在这个循环结束时，bad {@link @conn}将被设置为null。
+                   */
+                  log.debug("Bad connection. Could not roll back");
+                }  
+              }
+              conn = new PooledConnection(oldestActiveConnection.getRealConnection(), this);
+              conn.setCreatedTimestamp(oldestActiveConnection.getCreatedTimestamp());
+              conn.setLastUsedTimestamp(oldestActiveConnection.getLastUsedTimestamp());
+              oldestActiveConnection.invalidate();
+              if (log.isDebugEnabled()) {
+                log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
+              }
+            } else {
+              // 上面的条件都不符合，需要循环等待
+              try {
+                if (!countedWait) {
+                  state.hadToWaitCount++;
+                  countedWait = true;
+                }
+                if (log.isDebugEnabled()) {
+                  log.debug("Waiting as long as " + poolTimeToWait + " milliseconds for connection.");
+                }
+                long wt = System.currentTimeMillis();
+                state.wait(poolTimeToWait);
+                state.accumulatedWaitTime += System.currentTimeMillis() - wt;
+              } catch (InterruptedException e) {
+                break;
+              }
+            }
+          }
+        }
+        if (conn != null) {
+          // ping to server and 检查Connection是否有效，无效的话badConnectionCount加一个
+          if (conn.isValid()) {
+            if (!conn.getRealConnection().getAutoCommit()) {//我的理解：如果连接不是自动提交，那么连接中可能有未完成的操作，需要手动回滚，如果自动提交，那么这个操作就没有意义了，所以不需要执行
+              conn.getRealConnection().rollback();
+            }
+            conn.setConnectionTypeCode(assembleConnectionTypeCode(dataSource.getUrl(), username, password));
+            conn.setCheckoutTimestamp(System.currentTimeMillis());
+            conn.setLastUsedTimestamp(System.currentTimeMillis());
+            state.activeConnections.add(conn);
+            state.requestCount++;
+            state.accumulatedRequestTime += System.currentTimeMillis() - t;
+          } else {
+            if (log.isDebugEnabled()) {
+              log.debug("A bad connection (" + conn.getRealHashCode() + ") was returned from the pool, getting another connection.");
+            }
+            state.badConnectionCount++;
+            localBadConnectionCount++;
+            conn = null;
+            if (localBadConnectionCount &gt; (poolMaximumIdleConnections + poolMaximumLocalBadConnectionTolerance)) {
+              if (log.isDebugEnabled()) {
+                log.debug("PooledDataSource: Could not get a good connection to the database.");
+              }
+              throw new SQLException("PooledDataSource: Could not get a good connection to the database.");
+            }
+          }
+        }
+      }
+
+    }
+
+    if (conn == null) {
+      if (log.isDebugEnabled()) {
+        log.debug("PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
+      }
+      throw new SQLException("PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
+    }
+
+    return conn;
+  }12
+
+</code></pre>
+<p>流程图
+<img src="/Image/mybatis/12.png" alt="流程图" title="流程图" /></p>
+
+<h2 id="63-javasqlconnection对象回收">6.3. java.sql.Connection对象回收</h2>
+
+<p>通常情况下释放Connection连接使用的是connection.close()，关闭Connection，释放资源。</p>
+<pre><code class="language-Java">private void test() throws ClassNotFoundException, SQLException
+{
+    String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
+    PreparedStatement st = null;
+    ResultSet rs = null;
+
+    Connection con = null;
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    try
+    {
+        con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
+        st = con.prepareStatement(sql);
+        //设置参数
+        st.setInt(1, 101);
+        st.setInt(2, 0);
+        //查询，得出结果集
+        rs = st.executeQuery();
+        //取数据，省略
+        //关闭，释放资源
+        con.close();
+    }
+    catch (SQLException e)
+    {
+        con.close();
+        e.printStackTrace();
+    }
+}
+
+</code></pre>
+<p><strong>调用了Connection的Close()方法以后，对象资源被释放，对象也就无法使用了，但是使用连接池以后需要放到连接池以后供后续使用，该怎么做呢？</strong></p>
+
+<p>先使用下面的代码实现一个简单的连接池</p>
+
+<pre><code class="language-Java">
+package com.foo.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Vector;
+
+/**
+ * 
+ * 一个线程安全的简易连接池实现，此连接池是单例的
+ *  putConnection()将Connection添加到连接池中
+ *  getConnection()返回一个Connection对象
+ */
+public class Pool {
+
+    private static Vector&lt;Connection&gt; pool = new Vector&lt;Connection&gt;();
+    
+    private static int MAX_CONNECTION =100;
+    
+    private static String DRIVER="oracle.jdbc.driver.OracleDriver";
+    private static String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+    private static String USERNAME = "louluan";
+    private static String PASSWROD = "123456";
+    
+    static {
+        try {
+            Class.forName(DRIVER);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 将一个Connection对象放置到连接池中 
+     */
+    public static  void putConnection(Connection connection){
+        
+        synchronized(pool)
+        {
+            if(pool.size()&lt;MAX_CONNECTION)
+            {
+                pool.add(connection);       
+            }
+        }
+    }
+    
+    
+    /**
+     * 返回一个Connection对象，如果连接池内有元素，则pop出第一个元素；
+     * 如果连接池Pool中没有元素，则创建一个connection对象，然后添加到pool中
+     * @return Connection
+     */
+    public static Connection getConnection(){
+        Connection connection = null;
+        synchronized(pool)
+        {
+            if(pool.size()&gt;0)
+            {
+                connection = pool.get(0);
+                pool.remove(0);
+            }
+            else
+            {
+                connection = createConnection();
+                pool.add(connection);
+            }
+        }
+        return connection;
+    }
+    
+    /**
+     * 创建一个新的Connection对象
+     */
+    private static Connection createConnection()
+    {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(URL, USERNAME,PASSWROD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+    
+}
+
+package com.foo.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+public class PoolTest
+{
+
+    private void test() throws ClassNotFoundException, SQLException
+    {
+        String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        Connection con = null;
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        try
+        {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
+            st = con.prepareStatement(sql);
+            //设置参数
+            st.setInt(1, 101);
+            st.setInt(2, 0);
+            //查询，得出结果集
+            rs = st.executeQuery();
+            //取数据，省略
+            //将不再使用的Connection对象放到连接池中，供以后使用
+            Pool.putConnection(con);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
+
+</code></pre>
+
+<p><strong>上述代码可以实现使用完成一个Connection以后放到Pool中，但是不优雅，通常我们调用的都是Close释放资源，为了保持一致，代理机制就顺理成章的出现了。</strong></p>
+
+<h2 id="64-代理模式回收connection">6.4. 代理模式回收Connection</h2>
+
+<p><code class="highlighter-rouge">使用代理模式</code>，为真正的Connection对象创建一个代理对象，代理对象所有的方法都是调用相应的真正Connection对象的方法实现。当代理对象执行close()方法时，要特殊处理，不调用真正Connection对象的close()方法，而是将Connection对象添加到连接池中。</p>
+
+<p>MyBatis的PooledDataSource的PoolState内部维护的对象是PooledConnection类型的对象，而PooledConnection则是对真正的数据库连接java.sql.Connection实例对象的包裹器。</p>
+
+<p>PooledConnection对象内持有一个真正的数据库连接java.sql.Connection实例对象和一个java.sql.Connection的代理.</p>
+
+<pre><code class="language-Java">
+/**
+ * @author Clinton Begin
+ */
+class PooledConnection implements InvocationHandler {
+
+  private static final String CLOSE = "close";
+  private static final Class&lt;?&gt;[] IFACES = new Class&lt;?&gt;[] { Connection.class };
+
+  private final int hashCode;
+  private final PooledDataSource dataSource;
+  private final Connection realConnection;
+  private final Connection proxyConnection;
+  private long checkoutTimestamp;
+  private long createdTimestamp;
+  private long lastUsedTimestamp;
+  private int connectionTypeCode;
+  private boolean valid;
+
+  /*
+   * Constructor for SimplePooledConnection that uses the Connection and PooledDataSource passed in
+   *
+   * @param connection - the connection that is to be presented as a pooled connection
+   * @param dataSource - the dataSource that the connection is from
+   */
+  public PooledConnection(Connection connection, PooledDataSource dataSource) {
+    this.hashCode = connection.hashCode();
+    this.realConnection = connection;
+    this.dataSource = dataSource;
+    this.createdTimestamp = System.currentTimeMillis();
+    this.lastUsedTimestamp = System.currentTimeMillis();
+    this.valid = true;
+    this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);
+  }
+
+  ...
+}
+</code></pre>
+
+<p>PooledConenction实现了InvocationHandler接口，并且，proxyConnection对象也是根据这个它来生成的代理对象</p>
+
+<pre><code class="language-Java">    this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);  
+
+</code></pre>
+<p>当我们调用此proxyConnection对象上的任何方法时，都会调用PooledConnection对象内invoke()方法。</p>
+
+<pre><code class="language-Java">  /*
+   * Required for InvocationHandler implementation.
+   *
+   * @param proxy  - not used
+   * @param method - the method to be executed
+   * @param args   - the parameters to be passed to the method
+   * @see java.lang.reflect.InvocationHandler#invoke(Object, java.lang.reflect.Method, Object[])
+   */
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    String methodName = method.getName();
+    if (CLOSE.hashCode() == methodName.hashCode() &amp;&amp; CLOSE.equals(methodName)) {
+      dataSource.pushConnection(this);
+      return null;
+    } else {
+      try {
+        if (!Object.class.equals(method.getDeclaringClass())) {
+          // issue #579 toString() should never fail
+          // throw an SQLException instead of a Runtime
+          checkConnection();
+        }
+        return method.invoke(realConnection, args);
+      } catch (Throwable t) {
+        throw ExceptionUtil.unwrapThrowable(t);
+      }
+    }
+  }
+</code></pre>
+
+<h1 id="7-jndi类型的数据源datasource">7. JNDI类型的数据源DataSource</h1>
+
+<h2 id="71-mybatis-jndi数据源实现">7.1. Mybatis JNDI数据源实现</h2>
+<p>对于JNDI类型的数据源DataSource的获取就比较简单，MyBatis定义了一个JndiDataSourceFactory工厂来创建通过JNDI形式生成的DataSource。</p>
+
+<pre><code class="language-Java">/**
+ * @author Clinton Begin
+ */
+public class JndiDataSourceFactory implements DataSourceFactory {
+
+  public static final String INITIAL_CONTEXT = "initial_context";
+  public static final String DATA_SOURCE = "data_source";
+  public static final String ENV_PREFIX = "env.";
+
+  private DataSource dataSource;
+
+  @Override
+  public void setProperties(Properties properties) {
+    try {
+      InitialContext initCtx;
+      Properties env = getEnvProperties(properties);
+      if (env == null) {
+        initCtx = new InitialContext();
+      } else {
+        initCtx = new InitialContext(env);
+      }
+
+      if (properties.containsKey(INITIAL_CONTEXT)
+          &amp;&amp; properties.containsKey(DATA_SOURCE)) {
+        Context ctx = (Context) initCtx.lookup(properties.getProperty(INITIAL_CONTEXT));
+        dataSource = (DataSource) ctx.lookup(properties.getProperty(DATA_SOURCE));
+      } else if (properties.containsKey(DATA_SOURCE)) {
+        dataSource = (DataSource) initCtx.lookup(properties.getProperty(DATA_SOURCE));
+      }
+
+    } catch (NamingException e) {
+      throw new DataSourceException("There was an error configuring JndiDataSourceTransactionPool. Cause: " + e, e);
+    }
+  }
+
+  @Override
+  public DataSource getDataSource() {
+    return dataSource;
+  }
+
+  private static Properties getEnvProperties(Properties allProps) {
+    final String PREFIX = ENV_PREFIX;
+    Properties contextProperties = null;
+    for (Entry&lt;Object, Object&gt; entry : allProps.entrySet()) {
+      String key = (String) entry.getKey();
+      String value = (String) entry.getValue();
+      if (key.startsWith(PREFIX)) {
+        if (contextProperties == null) {
+          contextProperties = new Properties();
+        }
+        contextProperties.put(key.substring(PREFIX.length()), value);
+      }
+    }
+    return contextProperties;
+  }
+
+}
+
+</code></pre>
+
+<h2 id="72-为什么使用jndi">7.2. 为什么使用JNDI</h2>
+
+<p>没有JNDI的做法存在的问题： <br />
+1、数据库服务器名称MyDBServer 、用户名和口令都可能需要改变，由此引发JDBC URL需要修改； <br />
+2、数据库可能改用别的产品，如改用DB2或者Oracle，引发JDBC驱动程序包和类名需要修改； <br />
+3、随着实际使用终端的增加，原配置的连接池参数可能需要调整；<br />
+4、…… <br />
+ 解决办法： <br />
+ 程序员应该不需要关心“具体的数据库后台是什么？JDBC驱动程序是什么？JDBC URL格式是什么？访问数据库的用户名和口令是什么？”等等这些问题，程序员编写的程序应该没有对 JDBC 驱动程序的引用，没有服务器名称，没有用户名称或口令 —— 甚至没有数据库池或连接管理。而是把这些问题交给J2EE容器来配置和管理，程序员只需要对这些配置和管理进行引用即可。</p>
+
+<p>由此，就有了JNDI。</p>
+
+<p>JNDI避免了程序与数据库之间的紧耦合，使应用更加易于配置、易于部署。</p>
+
+<p><a href="http://blog.csdn.net/luanlouis/article/details/37671851">原文地址http://blog.csdn.net/luanlouis/article/details/37671851</a></p>
+
+<p><a href="https://wenku.baidu.com/view/1ac6a181964bcf84b8d57b21.html">参考文章https://wenku.baidu.com/view/1ac6a181964bcf84b8d57b21.html</a></p>

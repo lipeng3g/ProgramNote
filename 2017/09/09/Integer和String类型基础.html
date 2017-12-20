@@ -1,0 +1,126 @@
+<!-- TOC -->
+
+<ul>
+  <li><a href="#1-integer比较">1. Integer比较</a></li>
+  <li><a href="#2-string比较">2. String比较</a></li>
+  <li><a href="#3-integer与int比较">3. Integer与int比较</a></li>
+</ul>
+
+<!-- /TOC -->
+<h1 id="1-integer比较">1. Integer比较</h1>
+<pre><code class="language-Java">public static void main(String[] args) {
+        Integer a = 128,b=128;  
+        Integer c = 127,d=127;
+              
+        System.out.println(a==b);  
+        System.out.println(c==d);
+}
+</code></pre>
+<blockquote>
+  <p><code class="highlighter-rouge">a==b</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">c==d</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong></p>
+
+<p>其实当我们给一个Integer对象赋一个int值的时候，会调用Integer类的静态方法valueOf，让我们看下源代码是怎么实现的。</p>
+
+<p>IntegerCache方法有明确的注释，缓存范围，如何修改等等。</p>
+<pre><code class="language-Java">/**
+     * Cache to support the object identity semantics of autoboxing for values between
+     * -128 and 127 (inclusive) as required by JLS.
+     *
+     * The cache is initialized on first usage.  The size of the cache
+     * may be controlled by the -XX:AutoBoxCacheMax=&lt;size&gt; option.
+     * During VM initialization, java.lang.Integer.IntegerCache.high property
+     * may be set and saved in the private system properties in the
+     * sun.misc.VM class.
+     */
+
+    private static class IntegerCache {
+        static final int low = -128;
+        static final int high;
+        static final Integer cache[];
+
+        static {
+            // high value may be configured by property
+            int h = 127;
+            String integerCacheHighPropValue =
+                sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+            if (integerCacheHighPropValue != null) {
+                int i = parseInt(integerCacheHighPropValue);
+                i = Math.max(i, 127);
+                // Maximum array size is Integer.MAX_VALUE
+                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+            }
+            high = h;
+
+            cache = new Integer[(high - low) + 1];
+            int j = low;
+            for(int k = 0; k &lt; cache.length; k++)
+                cache[k] = new Integer(j++);
+        }
+
+        private IntegerCache() {}
+    }
+</code></pre>
+
+<pre><code class="language-Java">    public static Integer valueOf(int i) {
+            assert IntegerCache.high &gt;= 127;
+            if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
+                return IntegerCache.cache[i + (-IntegerCache.low)];
+            return new Integer(i);
+    }
+</code></pre>
+<p>代码描述的很清晰，如果整型字面量的值介于-128到127之间，就不会new一个新的Integer对象，而是直接引用常量池中的Integer对象，所以上面的运行结果是a==b=false，而c==d=true。</p>
+
+<h1 id="2-string比较">2. String比较</h1>
+
+<pre><code class="language-Java">public static void main(String[] args) {
+    String s1 = "abc";  
+    String s2 = "abc"; 
+    String s3 = new String("abc"); 
+    System.out.println(s1 == s2); 
+    System.out.println(s1 == s3);
+}
+</code></pre>
+<blockquote>
+  <p><code class="highlighter-rouge">s1 == s2</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">s1 == s3</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong>
+String s1 = “abc”；这样申明的字符串对象，其值就是存储在常量池中。当我们创建String s1 = “abc”这样一个对象之后，”abc”就存储到了常量池（也可叫做字符串池）中。</p>
+
+<p>当我们创建引用String s2 = “abc” 的时候，Java底层会优先在常量池中查找是否存在”abc”，如果存在则让s2指向这个值，不会重新创建，如果常量池中没有则创建并添加的池中。这就是为什么答案是true 和false的原因。</p>
+
+<h1 id="3-integer与int比较">3. Integer与int比较</h1>
+<pre><code class="language-Java">    public static void main(String[] args) {
+        Integer a = new Integer(128);  
+        int b = 128; 
+        Integer c = new Integer(6); 
+        Integer d = new Integer(6); 
+        System.out.println(a == b); 
+        System.out.println(c == d); 
+    }
+</code></pre>
+
+<blockquote>
+  <p><code class="highlighter-rouge">a == b</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">c == d</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong></p>
+
+<p>c == d=false，我们这里的Integer是new出来的，并不是用的缓存，所以结果是false。</p>
+
+<p>a == b=true，注意一下这里的b是int类型，当int和Integer做==比较的时候，Integer类型会自动拆箱，也就是把Integer转成int类型，所以这里进行比较的是int类型的值，所以结果即为true。</p>

@@ -84,86 +84,102 @@ JavaScript中的每个函数都有许多附加的方法，包括toString()、cal
 函数是独立的(例如，有一个alert...</div><a href="/ProgramNote/javascript/2017/12/19/Function.apply&Function.call.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 19, 2017</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
-          <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
+</article><article><h1><a href="/ProgramNote/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
+          <div class="m-article-content">
 
 
 
-当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中
-
-配置如下
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;spring&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;contextConfigLocation&lt;/pa...</div><a href="/ProgramNote/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringMVC">SpringMVC</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 14, 2017</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">关于scrollHeight和scrollTop取值为0的问题</a></h1>
-          <div class="m-article-content">关于scrollHeight和scrollTop取值为0的问题
-
-
-
-  关于scrollHeight和scrollTop取值为0的问题
-  1. 基础
+  1. Mybatis缓存机制整体设计
+  2. 二级缓存的基本原理
+  3. 二级缓存的划分
     
-      1.1. offsetTop与style.top的区别
+      3.1. 为每一个Mapper分配一个Cache缓存对象（使用&lt;cache&gt;节点配置）
+      3.2. 多个Mapper共用一个Cache缓存对象（使用&lt;cache-ref&gt;节点配置）
     
   
-  2. 问题及解决
-  3. 总结
+  4. 开启二级缓存的条件
+  5. 缓存使用顺序
+  6. 二级缓存的实现方式
+  7. Mybatis自身提供的二级缓存实现
 
 
 
-
-原文地址–简书
-
-1. 基础
+1. Mybatis缓存机制整体设计
 
 
-  obj.offsetTop 指 obj 距离上方或上层控件的位置，整型，单位像素。
-  obj.offsetLeft 指 obj 距离左方或上层控件的位置，整型，单位像素。
-  obj.offsetWidth 指 obj 控件自身的宽度，整型，单位像素。
-  obj.offsetHeight 指 obj 控件自身的高度，整型，单位像素。（clientHeigh...</div><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Nov 07, 2017</span></div>
+
+  当开一个会话时，一个SqlSession对象会使用一个Executor对象来完成会话操作，MyBatis的二级缓存机制的关键就是对这个Executo...</div><a href="/ProgramNote/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 19, 2017</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/09/15/Form%E8%A1%A8%E5%8D%95%E5%9B%9E%E8%BD%A6%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98.html">Form表单中回车后自动提交问题解决方案</a></h1>
-          <div class="m-article-content">1. Form表单中回车后自动提交问题解决方案
+</article><article><h1><a href="/ProgramNote/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
+          <div class="m-article-content">装饰者模式
 
 
 
-  1. Form表单中回车后自动提交问题解决方案
+  装饰者模式
     
-      1.1. 问题来源
-      1.2. 方法一
-      1.3. 方法二
+      基本描述
+      代码实例
     
   
 
 
 
-1.1. 问题来源
+基本描述
+目的
 
-  当form表单中只有一个&lt;input type="text" name="name" /&gt;时按回车键将会自动将表单提交。
-
-
-&lt;form id="form1" action="post.php" method="post"&gt;   
-    &lt;input type="text" name="name" /&gt;   
-&lt;/form&gt; 
+  给对象动态地添加附加功能。
+  装饰者提供了一个灵活的拓展子类功能的备选方案。
 
 
-1.2. 方法一
+代码实例
+公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）
 
 
-  添加一个隐藏的input标签...</div><a href="/ProgramNote/javascript/2017/09/15/Form%E8%A1%A8%E5%8D%95%E5%9B%9E%E8%BD%A6%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 15, 2017</span></div>
+  定义一个程序猿
+    /**
+ * 程序员
+ */
+public class Coder {
+
+ public void coding() {
+     System.out...</div><a href="/ProgramNote/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 19, 2017</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>12 post articles, 3 pages.</p>
+</article><article><h1><a href="/ProgramNote/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis一级缓存</a></h1>
+          <div class="m-article-content">
+
+
+
+  1. 一级缓存的作用
+  2. 一级缓存的依赖关系
+  3. 一级缓存的生命周期
+  4. 一级缓存的实现
+  5. Cache接口
+  6. 性能问题
+
+
+
+1. 一级缓存的作用
+
+每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。
+
+肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。
+
+
+
+SqlSession级别的数据缓存，称为一级缓存
+
+2. 一级缓存的依赖关系
+
+一级缓存由SqlSession控制。
+
+
+
+SqlSession将它的工作交给了Executor执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSessi...</div><a href="/ProgramNote/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 15, 2017</span></div>
+  </div>
+</div>
+</article></div><nav class="m-pagination"><p>28 post articles, 6 pages.</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -175,6 +191,12 @@ JavaScript中的每个函数都有许多附加的方法，包括toString()、cal
                 <a class="round-button" href="/ProgramNote/blog/page2"><span>2</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page3"><span>3</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page4"><span>4</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page5"><span>5</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page2">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

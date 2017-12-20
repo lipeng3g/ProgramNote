@@ -1,0 +1,363 @@
+<!-- TOC -->
+
+<ul>
+  <li><a href="#1-mybatis%E4%BA%8B%E5%8A%A1">1. Mybatis事务</a></li>
+  <li><a href="#2-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E3%80%81%E5%88%9B%E5%BB%BA%E3%80%81%E4%BD%BF%E7%94%A8">2. 事务的配置、创建、使用</a>
+    <ul>
+      <li><a href="#21-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE">2.1. 事务的配置</a></li>
+      <li><a href="#22-%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%88%9B%E5%BB%BA">2.2. 事务的创建</a></li>
+      <li><a href="#23-transactionfactory">2.3. TransactionFactory</a></li>
+      <li><a href="#24-transaction%E7%9A%84%E5%88%9B%E5%BB%BA">2.4. Transaction的创建</a></li>
+      <li><a href="#25-jdbctransaction">2.5. JdbcTransaction</a></li>
+      <li><a href="#26-managedtransaction">2.6. ManagedTransaction</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- /TOC -->
+<h1 id="1-mybatis事务">1. Mybatis事务</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>数据库的事务具有 创建、提交、回滚、关闭功能。
+</code></pre></div></div>
+
+<p>Mybatis事务管理分为<code class="highlighter-rouge">JdbcTransaction</code>和<code class="highlighter-rouge">ManagedTransaction</code>：</p>
+<ol>
+  <li>JdbcTransaction : 使用java.sql.Connection对象完成对事务的<code class="highlighter-rouge">commit</code>、<code class="highlighter-rouge">rollback</code>、<code class="highlighter-rouge">close</code>操作</li>
+  <li>ManagedTransaction ： 使用容器例如JBOSS来实现对事务的管理</li>
+</ol>
+
+<p><img src="/Image/mybatis/13.png" alt="类图" title="类图" /></p>
+
+<h1 id="2-事务的配置创建使用">2. 事务的配置、创建、使用</h1>
+<h2 id="21-事务的配置">2.1. 事务的配置</h2>
+<p>通常Mybatis的配置如下
+<img src="/Image/mybatis/14.png" alt="配置" title="配置" /></p>
+
+<p><code class="highlighter-rouge">environment</code>节点定义了连接数据库的信息，<code class="highlighter-rouge">transactionManager</code>的<code class="highlighter-rouge">type</code>属性决定了使用哪种类型的事务管理机制。</p>
+
+<h2 id="22-事务的创建">2.2. 事务的创建</h2>
+<p>MyBatis事务的创建是交给TransactionFactory 事务工厂来创建的，如果我们将<transactionManager>的type 配置为"JDBC",那么，在MyBatis初始化解析<environment>节点时，会根据type="JDBC"创建一个JdbcTransactionFactory工厂</environment></transactionManager></p>
+
+<pre><code class="language-Java">  public Configuration() {
+    typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
+    typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
+
+    typeAliasRegistry.registerAlias("JNDI", JndiDataSourceFactory.class);
+    typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
+    typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
+    ...
+  }
+</code></pre>
+<pre><code class="language-Java">  //XMLConfigBuilder 
+  private void environmentsElement(XNode context) throws Exception {
+    if (context != null) {
+      if (environment == null) {
+        environment = context.getStringAttribute("default");//获取environments的default属性值
+      }
+      for (XNode child : context.getChildren()) {
+        String id = child.getStringAttribute("id");//获取environment的id值
+        if (isSpecifiedEnvironment(id)) {//判断上面获取的这两个值是否一致
+          TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));//根据transactionManager决定创建什么类型的TransactionFactory
+          DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));//创建DataSource
+          DataSource dataSource = dsFactory.getDataSource();
+          Environment.Builder environmentBuilder = new Environment.Builder(id)
+              .transactionFactory(txFactory)
+              .dataSource(dataSource);//使用了Environment内置的构造器Builder，传递id 事务工厂TransactionFactory和数据源DataSource  
+          configuration.setEnvironment(environmentBuilder.build());
+        }
+      }
+    }
+  }
+
+    private boolean isSpecifiedEnvironment(String id) {
+    if (environment == null) {
+      throw new BuilderException("No environment specified.");
+    } else if (id == null) {
+      throw new BuilderException("Environment requires an id attribute.");
+    } else if (environment.equals(id)) {
+      return true;
+    }
+    return false;
+  }
+</code></pre>
+
+<pre><code class="language-Java">  //解析&lt;transactionManager&gt;节点，创建对应的TransactionFactory
+  private TransactionFactory transactionManagerElement(XNode context) throws Exception {
+    if (context != null) {
+      String type = context.getStringAttribute("type");
+      Properties props = context.getChildrenAsProperties();
+      TransactionFactory factory = (TransactionFactory) resolveClass(type).newInstance();//上面Configuration中设置了typeAliasRegistry.registerAlias
+      factory.setProperties(props);
+      return factory;
+    }
+    throw new BuilderException("Environment declaration requires a TransactionFactory.");
+  }
+
+</code></pre>
+
+<h2 id="23-transactionfactory">2.3. TransactionFactory</h2>
+
+<p><img src="/Image/mybatis/15.png" alt="类图" title="类图" /></p>
+
+<p>事务工厂Transaction定义了创建Transaction的两个方法：一个是通过指定的Connection对象创建 Transaction，另外是通过数据源DataSource来创建Transaction。与JDBC 和MANAGED两种Transaction相对应，TransactionFactory有两个对应的实现的子类</p>
+
+<h2 id="24-transaction的创建">2.4. Transaction的创建</h2>
+<p>通过事务工厂TransactionFactory很容易获取到Transaction对象实例。我们以JdbcTransaction为例，看一下JdbcTransactionFactory是怎样生成JdbcTransaction的，代码如下：</p>
+
+<pre><code class="language-Java">/**
+ * Creates {@link JdbcTransaction} instances.
+ *
+ * @author Clinton Begin
+ *
+ * @see JdbcTransaction
+ */
+public class JdbcTransactionFactory implements TransactionFactory {
+
+  @Override
+  public void setProperties(Properties props) {
+  }
+    /** 
+    * 根据给定的数据库连接Connection创建Transaction 
+    * @param conn Existing database connection 
+    * @return 
+    */
+  @Override
+  public Transaction newTransaction(Connection conn) {
+    return new JdbcTransaction(conn);
+  }
+
+    /** 
+     * 根据DataSource、隔离级别和是否自动提交创建Transacion 
+     * 
+     * @param ds 
+     * @param level Desired isolation level 
+     * @param autoCommit Desired autocommit 
+     * @return 
+     */
+  @Override
+  public Transaction newTransaction(DataSource ds, TransactionIsolationLevel level, boolean autoCommit) {
+    return new JdbcTransaction(ds, level, autoCommit);
+  }
+}
+</code></pre>
+<p>如上说是，JdbcTransactionFactory会创建JDBC类型的Transaction，即JdbcTransaction。类似地，ManagedTransactionFactory也会创建ManagedTransaction。</p>
+
+<h2 id="25-jdbctransaction">2.5. JdbcTransaction</h2>
+<p>JdbcTransaction直接使用JDBC提交和回滚事务。它依赖于从DataSource中取得的Connection来管理transaction的作用域，Connection对象的获取被延迟到调用getConnection()方法。</p>
+
+<p>如果aotocommit设置为on，自动忽略commit和rollback。</p>
+
+<pre><code class="language-Java">
+/**
+ * {@link Transaction} 它直接使用JDBC提交和回滚工具。
+ * 它依赖从数据源检索到的连接来管理事务的范围。
+ * 延迟连接检索到get connection()被调用。
+ * 在自动提交时忽略提交或回滚请求。
+ *
+ * @author Clinton Begin
+ *
+ * @see JdbcTransactionFactory
+ */
+public class JdbcTransaction implements Transaction {
+
+  private static final Log log = LogFactory.getLog(JdbcTransaction.class);
+
+  protected Connection connection;
+  protected DataSource dataSource;
+  protected TransactionIsolationLevel level;
+  // MEMO: We are aware of the typo. See #941
+  protected boolean autoCommmit;
+
+  public JdbcTransaction(DataSource ds, TransactionIsolationLevel desiredLevel, boolean desiredAutoCommit) {
+    dataSource = ds;
+    level = desiredLevel;
+    autoCommmit = desiredAutoCommit;
+  }
+
+  public JdbcTransaction(Connection connection) {
+    this.connection = connection;
+  }
+
+  @Override
+  public Connection getConnection() throws SQLException {
+    if (connection == null) {
+      openConnection();
+    }
+    return connection;
+  }
+
+  @Override
+  public void commit() throws SQLException {
+    if (connection != null &amp;&amp; !connection.getAutoCommit()) {
+      if (log.isDebugEnabled()) {
+        log.debug("Committing JDBC Connection [" + connection + "]");
+      }
+      connection.commit();
+    }
+  }
+
+  @Override
+  public void rollback() throws SQLException {
+    if (connection != null &amp;&amp; !connection.getAutoCommit()) {
+      if (log.isDebugEnabled()) {
+        log.debug("Rolling back JDBC Connection [" + connection + "]");
+      }
+      connection.rollback();
+    }
+  }
+
+  @Override
+  public void close() throws SQLException {
+    if (connection != null) {
+      resetAutoCommit();
+      if (log.isDebugEnabled()) {
+        log.debug("Closing JDBC Connection [" + connection + "]");
+      }
+      connection.close();
+    }
+  }
+
+  protected void setDesiredAutoCommit(boolean desiredAutoCommit) {
+    try {
+      if (connection.getAutoCommit() != desiredAutoCommit) {
+        if (log.isDebugEnabled()) {
+          log.debug("Setting autocommit to " + desiredAutoCommit + " on JDBC Connection [" + connection + "]");
+        }
+        connection.setAutoCommit(desiredAutoCommit);
+      }
+    } catch (SQLException e) {
+      // Only a very poorly implemented driver would fail here,
+      // and there's not much we can do about that.
+      throw new TransactionException("Error configuring AutoCommit.  "
+          + "Your driver may not support getAutoCommit() or setAutoCommit(). "
+          + "Requested setting: " + desiredAutoCommit + ".  Cause: " + e, e);
+    }
+  }
+
+  protected void resetAutoCommit() {
+    try {
+      if (!connection.getAutoCommit()) {
+        // MyBatis does not call commit/rollback on a connection if just selects were performed.
+        // Some databases start transactions with select statements
+        // and they mandate a commit/rollback before closing the connection.
+        // A workaround is setting the autocommit to true before closing the connection.
+        // Sybase throws an exception here.
+        if (log.isDebugEnabled()) {
+          log.debug("Resetting autocommit to true on JDBC Connection [" + connection + "]");
+        }
+        connection.setAutoCommit(true);
+      }
+    } catch (SQLException e) {
+      if (log.isDebugEnabled()) {
+        log.debug("Error resetting autocommit to true "
+          + "before closing the connection.  Cause: " + e);
+      }
+    }
+  }
+
+  protected void openConnection() throws SQLException {
+    if (log.isDebugEnabled()) {
+      log.debug("Opening JDBC Connection");
+    }
+    connection = dataSource.getConnection();
+    if (level != null) {
+      connection.setTransactionIsolation(level.getLevel());
+    }
+    setDesiredAutoCommit(autoCommmit);
+  }
+
+  @Override
+  public Integer getTimeout() throws SQLException {
+    return null;
+  }
+  
+}
+</code></pre>
+
+<h2 id="26-managedtransaction">2.6. ManagedTransaction</h2>
+
+<p>ManagedTransaction让容器来管理事务Transaction的整个生命周期，意思就是说，使用ManagedTransaction的commit和rollback功能不会对事务有任何的影响，它什么都不会做，它将事务管理的权利移交给了容器来实现。看如下Managed的实现代码大家就会一目了然：</p>
+
+<pre><code class="language-Java">
+/**
+ * {@link Transaction} 让容器管理事务transaction的整个生命周期 
+ * connection的获取延迟到getConnection()方法的调用 
+ * 忽略所有的commit和rollback操作 
+ * 默认情况下，可以关闭一个连接connection，也可以配置它不可以关闭一个连接 
+ * 让容器来管理transaction的整个生命周期 
+ *
+ * @author Clinton Begin
+ *
+ * @see ManagedTransactionFactory
+ */
+public class ManagedTransaction implements Transaction {
+
+  private static final Log log = LogFactory.getLog(ManagedTransaction.class);
+
+  private DataSource dataSource;
+  private TransactionIsolationLevel level;
+  private Connection connection;
+  private final boolean closeConnection;
+
+  public ManagedTransaction(Connection connection, boolean closeConnection) {
+    this.connection = connection;
+    this.closeConnection = closeConnection;
+  }
+
+  public ManagedTransaction(DataSource ds, TransactionIsolationLevel level, boolean closeConnection) {
+    this.dataSource = ds;
+    this.level = level;
+    this.closeConnection = closeConnection;
+  }
+
+  @Override
+  public Connection getConnection() throws SQLException {
+    if (this.connection == null) {
+      openConnection();
+    }
+    return this.connection;
+  }
+
+  @Override
+  public void commit() throws SQLException {
+    // Does nothing
+  }
+
+  @Override
+  public void rollback() throws SQLException {
+    // Does nothing
+  }
+
+  @Override
+  public void close() throws SQLException {
+    if (this.closeConnection &amp;&amp; this.connection != null) {
+      if (log.isDebugEnabled()) {
+        log.debug("Closing JDBC Connection [" + this.connection + "]");
+      }
+      this.connection.close();
+    }
+  }
+
+  protected void openConnection() throws SQLException {
+    if (log.isDebugEnabled()) {
+      log.debug("Opening JDBC Connection");
+    }
+    this.connection = this.dataSource.getConnection();
+    if (this.level != null) {
+      this.connection.setTransactionIsolation(this.level.getLevel());
+    }
+  }
+
+  @Override
+  public Integer getTimeout() throws SQLException {
+    return null;
+  }
+
+}
+</code></pre>
+
+<p><strong>注意</strong>如果我们使用MyBatis构建本地程序，即不是WEB程序，若将type设置成”MANAGED”，那么，我们执行的任何update操作，即使我们最后执行了commit操作，数据也不会保留，不会对数据库造成任何影响。因为我们将MyBatis配置成了“MANAGED”，即MyBatis自己不管理事务，而我们又是运行的本地程序，没有事务管理功能，所以对数据库的update操作都是无效的。</p>
+
+<p>TODO:Spring+Mybatis事务是如何运转的？</p>
+
+<p><a href="http://blog.csdn.net/luanlouis/article/details/37992171">原文地址http://blog.csdn.net/luanlouis/article/details/37992171</a></p>
+

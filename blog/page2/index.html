@@ -29,118 +29,121 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/10/JavaScript%E4%BA%8B%E4%BB%B6%E5%AD%A6%E4%B9%A0.html">JavaScript事件学习</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
+          <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
+
+
+
+当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中
+
+配置如下
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;spring&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/pa...</div><a href="/ProgramNote/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringMVC">SpringMVC</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 14, 2017</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/2017/12/13/component-scan%E6%80%BB%E7%BB%93.html">component-scan总结</a></h1>
+          <div class="m-article-content">今天偶然看到了原有的一个项目中有这样的配置信息
+
+配置文件spring-config.xml
+    &lt;!-- 扫描注解Bean --&gt;
+    &lt;context:component-scan base-package="com.aaa.bbb,com.aaa.bbb.platform.model.sys"&gt;
+        &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/&gt;
+    &lt;/context:component-scan&gt;
+
+配置文件spring-mvc.xml
+
+    &lt;!...</div><a href="/ProgramNote/2017/12/13/component-scan%E6%80%BB%E7%BB%93.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringMVC">SpringMVC</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 13, 2017</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/2017/12/11/Mybatis%E6%9E%84%E6%9E%B6%E8%AE%BE%E8%AE%A1.html">Mybatis构架设计</a></h1>
           <div class="m-article-content">
 
 
-  1. 鼠标事件
-  2. 事件绑定
+
+  1. Mybatis框架设计
     
-      2.1. DOM中直接绑定
-      2.2. JS事件绑定
-    
-  
-  3. 事件注册
-    
-      3.1. 事件注册方式
+      1.1. 接口层–和数据库交互的方式
         
-          3.1.1. IE以外
-          3.1.2. IE
+          1.1.1. 使用Mybatis提供的API
+          1.1.2. 使用Mapper接口
         
       
-      3.2. 获取事件对象和事件源
-      3.3. 取消事件默认行为
-      3.4. 阻止事件冒泡
-      3.5. 通用解决方案
-    
-  
-  4. 事件委托
-  5. 事件流
-    
-      5.1. 事件类型
-    
-  
-
-
-
-
-1. 鼠标事件
-| 顺序        | 条件           ...</div><a href="/ProgramNote/javascript/2017/09/10/JavaScript%E4%BA%8B%E4%BB%B6%E5%AD%A6%E4%B9%A0.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 10, 2017</span></div>
+      1.2. 数据处理层
+        
+          1.2.1. 参数映射和动态SQL语句生成
+          [1.2.2. SQL语句的执行以及封装查询结果集成List](#122-sql%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E4%BB%A5%E5%8F%8A%E5%B0%81%E8%A3%85%E6%9F%A5%E8%AF%A2%E7...</div><a href="/ProgramNote/2017/12/11/Mybatis%E6%9E%84%E6%9E%B6%E8%AE%BE%E8%AE%A1.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 11, 2017</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">JavaScript 中的 Hoisting 机制</a></h1>
-          <div class="m-article-content">JavaScript 中的 Hoisting 机制
-
-  JavaScript 中的 Hoisting 一般称之为变量声明提升机制。就是说，JavaScript 引擎在执行的时候，会把所有变量的声明都会被提升到当前作用域的最前面，注意，这里被提升的仅仅是声明。怎么理解呢，看下面例子：
-  var myval = "my global var";
-(function() {
-	console.log(myval); // log "my global var"
-})();
-
-  以上代码很显然会输出 "my global var"，但是如果我们把以上代码按如下方式稍加修改：
-  var myval = "my global var";
-(function() {
-	console.log...</div><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 08, 2017</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html">IDEA关联SVN项目</a></h1>
-          <div class="m-article-content">SVN管理 + CornerStone检出 + IDEA关联
+</article><article><h1><a href="/ProgramNote/2017/12/08/Mybatis%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.html">Mybatis事务管理</a></h1>
+          <div class="m-article-content">
 
 
-  CornerStone –&gt; CheckOut项目完整目录
-  IDEA导入项目
-  IDEA 
-preferences --&gt; Version Control --&gt; Subversion --&gt; Use Command line client 取消对勾（后面两个都取消）
-
-</div><a href="/ProgramNote/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 08, 2017</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">函数声明 VS 函数表达式</a></h1>
-          <div class="m-article-content">函数声明 VS 函数表达式
-JavaScript 中需要创建函数的话，有两种方法：函数声明、函数表达式，各自写法如下：
-
-// 方法一：函数声明
-
-function foo() {}
-
-// 方法二：函数表达式
-
-var foo = function () {};
-
-另外还有一种自执行函数表达式，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以匿名函数方式存在，且立即自动执行：
-(function () {
-    // var x = ...
-})();
-
-此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。
-
-方法一和方法二都创建了一个函数，且命名为 foo，但是二者还是有区别的。JavaScript 解释器中存在一种变量...</div><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 08, 2017</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html">原型对象 Prototype</a></h1>
-          <div class="m-article-content">1. JavaScript 的原型对象 Prototype
-
-
-
-  1. JavaScript 的原型对象 Prototype
+  1. Mybatis事务
+  2. 事务的配置、创建、使用
     
-      1.1. 什么是Prototype？
-      1.2. 原型链
-      1.3. 为什么使用Prototype更好？
-      1.4. 如何使用Prototype
-      1.5. Prototype 是一个动态的对象
-      1.6. Prototype 的典型示例
+      2.1. 事务的配置
+      2.2. 事务的创建
+      2.3. TransactionFactory
+      2.4. Transaction的创建
+      2.5. JdbcTransaction
+      2.6. ManagedTransaction
     
   
 
 
 
-当您在JavaScript中定义函数时，它会附带一些预定义的属性; 其中之一是虚幻的原型。 在本文中，我将详细说明它是什么，以及为什么要在项目中使用它。
-1.1. 什么是Prototype？
-原型对象 prototype最初是一个...</div><a href="/ProgramNote/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Sep 08, 2017</span></div>
+1. Mybatis事务
+数据库的事务具有 创建、提交、回滚、关闭功能。
+
+
+Mybatis事务管理分为JdbcTransaction和ManagedTransaction：
+
+  JdbcTransaction : 使用java.sql.Connection对象完成对事务的commit、roll...</div><a href="/ProgramNote/2017/12/08/Mybatis%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 08, 2017</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>12 post articles, 3 pages.</p>
+</article><article><h1><a href="/ProgramNote/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Mybatis数据源和连接池</a></h1>
+          <div class="m-article-content">对于ORM框架而言，数据源的组织是一个非常重要的一部分，这直接影响到框架的性能问题。
+
+
+
+  1. MyBatis数据源DataSource分类
+  2. DataSource的创建过程
+    
+      2.1. 文件解析
+      2.2. 创建模式
+      2.3. 存储
+    
+  
+  3. DataSource什么时候创建Connection对象
+  4. UnpooledDataSource
+    
+      4.1. 创建Connection过程
+    
+  
+  5. 使用连接池
+    
+      5.1. 分析
+    
+  
+  6. PooledDataSource
+    
+      6.1. 基本原理
+      6.2. 获取ja...</div><a href="/ProgramNote/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 07, 2017</span></div>
+  </div>
+</div>
+</article></div><nav class="m-pagination"><p>28 post articles, 6 pages.</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -152,6 +155,12 @@ var foo = function () {};
                 <div class="round-button cur"><span>2</span></div>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page3"><span>3</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page4"><span>4</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page5"><span>5</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page3">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

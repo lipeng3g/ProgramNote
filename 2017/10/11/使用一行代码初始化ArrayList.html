@@ -1,0 +1,48 @@
+<!-- TOC -->
+
+<ul>
+  <li><a href="#1-问题">1. 问题</a></li>
+  <li><a href="#2-答案一">2. 答案一</a></li>
+  <li><a href="#3-答案二">3. 答案二</a></li>
+  <li><a href="#4-答案其他">4. 答案其他</a></li>
+</ul>
+
+<!-- /TOC -->
+<h2 id="1-问题">1. 问题</h2>
+<p><strong>问题来源</strong>：当创建一个<code class="highlighter-rouge">List</code>并且塞入一串测试数据的时候，我需要下面这种代码来完成</p>
+<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;();
+places.add("Buenos Aires");
+places.add("Córdoba");
+places.add("La Plata");
+</code></pre>
+<p>可以使用下面的代码来完成</p>
+<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
+</code></pre>
+<p>但是有没有更好的方式呢？</p>
+<h2 id="2-答案一">2. 答案一</h2>
+
+<p>其实上面最开始的写法可能就是<code class="highlighter-rouge">最好</code>的，它不需要创建新的<code class="highlighter-rouge">list</code>对象，不需要转换，所有的操作都指向原有的对象实例。</p>
+
+<p>当然，有一些替代方法，例如使用实例初始化器（也称为<code class="highlighter-rouge">双括号初始化</code>）来创建一个<code class="highlighter-rouge">匿名内部类</code>：</p>
+<pre><code class="language-Java">ArrayList&lt;Stringlist = new ArrayList&lt;String&gt;() ;
+</code></pre>
+<p>但是这种方法不太好，仅仅是为了创建一个<code class="highlighter-rouge">ArrayList</code>，<code class="highlighter-rouge">{}</code>中又创建了一个<code class="highlighter-rouge">ArrayList</code>的实例对象，有些浪费。
+如果按照下面的方式可以初始化就好了，但是很不幸，这种方式是错误的；</p>
+<pre><code class="language-Java">List&lt;Stringlist = ["A", "B", "C"];
+</code></pre>
+<p>一方面它返回的是一个固定的List，更主要的，这种写法编译器无法通过。</p>
+
+<h2 id="3-答案二">3. 答案二</h2>
+<p>如果你不需要一个<code class="highlighter-rouge">ArrayList</code>，仅仅需要一个<code class="highlighter-rouge">List</code>，那么你可以这么做</p>
+<pre><code class="language-Java">List&lt;Stringplaces = Arrays.asList("Buenos Aires", "Córdoba", "La Plata");
+</code></pre>
+<p>或者你只有一个对象需要初始化</p>
+<pre><code class="language-Java">List&lt;Stringplaces = Collections.singletonList("Buenos Aires");
+</code></pre>
+<p>当然这两种方式返回的是<code class="highlighter-rouge">List</code>对象，你无法动态操作，如果你确实需要<code class="highlighter-rouge">ArrayList</code>，那么可能需要下面的方式</p>
+<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
+</code></pre>
+<h2 id="4-答案其他">4. 答案其他</h2>
+<p>在<code class="highlighter-rouge">Java9</code>中可以使用这种方式</p>
+<pre><code class="language-Java">List&lt;Stringstrings = List.of("foo", "bar", "baz");
+</code></pre>

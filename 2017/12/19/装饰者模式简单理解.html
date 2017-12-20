@@ -1,0 +1,172 @@
+<h1 id="装饰者模式">装饰者模式</h1>
+<!-- TOC -->
+
+<ul>
+  <li><a href="#%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F">装饰者模式</a>
+    <ul>
+      <li><a href="#%E5%9F%BA%E6%9C%AC%E6%8F%8F%E8%BF%B0">基本描述</a></li>
+      <li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B">代码实例</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- /TOC -->
+<h2 id="基本描述">基本描述</h2>
+<p><strong>目的</strong></p>
+<ul>
+  <li>给对象动态地添加附加功能。</li>
+  <li>装饰者提供了一个灵活的拓展子类功能的备选方案。</li>
+</ul>
+
+<h2 id="代码实例">代码实例</h2>
+<p>公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）</p>
+
+<ol>
+  <li>定义一个程序猿
+    <pre><code class="language-Java">/**
+ * 程序员
+ */
+public class Coder {
+
+ public void coding() {
+     System.out.println("我在写程序。。。");
+ }
+}
+</code></pre>
+  </li>
+  <li>定义一个程序猿的装饰器
+    <pre><code class="language-Java">/**
+ * 程序员装饰器
+ */
+public class CoderDecorator extends Coder {
+
+ private Coder coder;
+
+ public CoderDecorator(Coder coder) {
+     this.coder = coder;
+ }
+
+ @Override
+ public void coding() {
+     coder.coding();
+ }
+}
+</code></pre>
+  </li>
+  <li>定义一个专门更换键盘的装饰器
+```Java
+/**
+    <ul>
+      <li>写代码以前换键盘
+ */
+public class CoderDecoratorA extends CoderDecorator {</li>
+    </ul>
+
+    <p>public CoderDecoratorA(Coder coder) {
+     super(coder);
+ }</p>
+
+    <p>@Override
+ public void coding() {
+     this.addNewKeyBoard();
+     super.coding();
+ }</p>
+
+    <p>private void addNewKeyBoard() {
+     System.out.println(“更换了新的机械键盘，噼里啪啦”);
+ }</p>
+  </li>
+</ol>
+
+<p>}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+4. 定义一个专门更换鼠标的装饰器
+```Java
+
+/**
+ * 写代码以前换鼠标
+ */
+public class CoderDecoratorB extends CoderDecorator {
+
+    public CoderDecoratorB(Coder coder) {
+        super(coder);
+    }
+
+    @Override
+    public void coding() {
+        this.addNewMouse();
+        super.coding();
+    }
+
+    private void addNewMouse() {
+        System.out.println("换了新的鼠标，哒哒哒，哒哒哒");
+    }
+}
+
+</code></pre></div></div>
+
+<ol>
+  <li>定义一个更换电脑的装饰器
+    <pre><code class="language-Java">/**
+ * 写代码以前换电脑
+ */
+public class CoderDecoratorC extends CoderDecorator {
+
+ public CoderDecoratorC(Coder coder) {
+     super(coder);
+ }
+
+ @Override
+ public void coding() {
+     this.changeToMacbookPro();
+     super.coding();
+ }
+
+ private void changeToMacbookPro() {
+     System.out.println("电脑不好使，换了，美滋滋");
+ }
+}
+</code></pre>
+  </li>
+  <li>好了，现在老板可以根据不同程序猿的要求一一满足了
+    <pre><code class="language-Java">/**
+ * 程序猿写代码
+ */
+public class Client {
+
+ public static void main(String[] args) {
+     //创造一个程序猿A，并且开始写代码
+     Coder coderA = new Coder();
+     //换个键盘在写
+     CoderDecorator decoratorA = new CoderDecoratorA(coderA);
+     //换个鼠标在写
+     decoratorA = new CoderDecoratorB(decoratorA);
+     //把电脑也换了
+     decoratorA = new CoderDecoratorC(decoratorA);
+     decoratorA.coding();
+
+     //创造一个程序猿B，并且开始写代码
+     Coder coderB = new Coder();
+     //换个键盘在写
+     CoderDecorator decoratorB = new CoderDecoratorA(coderB);
+     //把电脑也换了
+     decoratorB = new CoderDecoratorC(decoratorB);
+     decoratorB.coding();
+ }
+}
+</code></pre>
+  </li>
+</ol>
+
+<p><strong>执行结果</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//这里满足程序猿A的要求
+电脑不好使，换了，美滋滋
+换了新的鼠标，哒哒哒，哒哒哒
+更换了新的机械键盘，噼里啪啦
+我在写程序。。。
+//这里满足程序猿B的要求
+电脑不好使，换了，美滋滋
+更换了新的机械键盘，噼里啪啦
+我在写程序。。。
+</code></pre></div></div>

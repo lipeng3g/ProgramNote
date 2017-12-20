@@ -1,0 +1,68 @@
+<h1 id="tomcat域名和端口设置">Tomcat域名和端口设置</h1>
+
+<p><code class="highlighter-rouge">准备工作</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.下载并安装Tomcat
+2.Tomcat下Webapps目录下增加两个项目，分别为app01 app02,项目内容自定义，本例中两个项目中只包含index.html
+</code></pre></div></div>
+
+<h2 id="设置多个端口访问同一个webapp">设置多个端口访问同一个WebApp</h2>
+<p>默认情况下，server.xml中只包含8080的端口配置，浏览器访问<code class="highlighter-rouge">http://localhost:8080/app01/index.html</code>时候会跳转到app01程序的index页面</p>
+
+<p>按照下面的配置修改server.xml</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Connector</span> <span class="na">connectionTimeout=</span><span class="s">"20000"</span> <span class="na">port=</span><span class="s">"8080"</span> <span class="na">protocol=</span><span class="s">"HTTP/1.1"</span> <span class="na">redirectPort=</span><span class="s">"8443"</span>  <span class="na">executor=</span><span class="s">"tomcatThreadPool"</span> <span class="na">URIEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Connector</span> <span class="na">connectionTimeout=</span><span class="s">"20000"</span> <span class="na">port=</span><span class="s">"8081"</span> <span class="na">protocol=</span><span class="s">"HTTP/1.1"</span> <span class="na">redirectPort=</span><span class="s">"8443"</span>  <span class="na">executor=</span><span class="s">"tomcatThreadPool"</span> <span class="na">URIEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Connector</span> <span class="na">connectionTimeout=</span><span class="s">"20000"</span> <span class="na">port=</span><span class="s">"8082"</span> <span class="na">protocol=</span><span class="s">"HTTP/1.1"</span> <span class="na">redirectPort=</span><span class="s">"8443"</span>  <span class="na">executor=</span><span class="s">"tomcatThreadPool"</span> <span class="na">URIEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>修改以后，我们可以使用</p>
+
+<p><code class="highlighter-rouge">http://localhost:8080/app01/index.html</code><br />
+<code class="highlighter-rouge">http://localhost:8081/app01/index.html</code><br />
+<code class="highlighter-rouge">http://localhost:8082/app01/index.html</code></p>
+
+<p>访问app01的index页面</p>
+
+<h2 id="设置不同域名访问不同webapp">设置不同域名访问不同WebApp</h2>
+
+<p>在<code class="highlighter-rouge">Engine</code>节点中增加下面的信息</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Host</span> <span class="na">appBase=</span><span class="s">"webapps"</span> <span class="na">autoDeploy=</span><span class="s">"true"</span> <span class="na">name=</span><span class="s">"www.app01.com"</span> <span class="na">unpackWARs=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Valve</span> <span class="na">className=</span><span class="s">"org.apache.catalina.valves.AccessLogValve"</span> <span class="na">directory=</span><span class="s">"logs"</span> <span class="na">pattern=</span><span class="s">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span>  <span class="na">prefix=</span><span class="s">"localhost_access_log."</span> <span class="na">suffix=</span><span class="s">".txt"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Context</span> <span class="na">docBase=</span><span class="s">"app01"</span> <span class="na">path=</span><span class="s">""</span> <span class="na">reloadable=</span><span class="s">"true"</span> <span class="na">source=</span><span class="s">"org.eclipse.jst.jee.server:app01"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Host&gt;</span>
+</code></pre></div></div>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Host</span> <span class="na">appBase=</span><span class="s">"webapps"</span> <span class="na">autoDeploy=</span><span class="s">"true"</span> <span class="na">name=</span><span class="s">"www.app02.com"</span> <span class="na">unpackWARs=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Valve</span> <span class="na">className=</span><span class="s">"org.apache.catalina.valves.AccessLogValve"</span> <span class="na">directory=</span><span class="s">"logs"</span> <span class="na">pattern=</span><span class="s">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> <span class="na">prefix=</span><span class="s">"localhost_access_log."</span> <span class="na">suffix=</span><span class="s">".txt"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Context</span> <span class="na">docBase=</span><span class="s">"app02"</span> <span class="na">path=</span><span class="s">""</span> <span class="na">reloadable=</span><span class="s">"true"</span> <span class="na">source=</span><span class="s">"org.eclipse.jst.jee.server:app02"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Host&gt;</span>
+</code></pre></div></div>
+<p>然后在<code class="highlighter-rouge">host</code>文件中增加配置</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>127.0.0.1	www.app01.com
+127.0.0.1	www.app02.com
+127.0.0.1	www.app03.com
+</code></pre></div></div>
+
+<p>此时我们访问 <code class="highlighter-rouge">http://www.app01.com</code>，Tomcat会自动根据上面的配置跳转到Webapps目录下，然后根据<code class="highlighter-rouge">docBase</code>目录指示的<code class="highlighter-rouge">app01</code>，跳转到<code class="highlighter-rouge">app01</code>项目中，此时我们就访问到了<code class="highlighter-rouge">app01</code>项目的<code class="highlighter-rouge">index</code>页面，同样，使用<code class="highlighter-rouge">http://www.app02.com</code>可以访问<code class="highlighter-rouge">app02</code>.</p>
+
+<h2 id="设置不同域名不同端口访问不同webapp">设置不同域名不同端口访问不同WebApp</h2>
+
+<p>现在我们有新的需求，需要访问 <code class="highlighter-rouge">www.app03.com:6666</code>访问<code class="highlighter-rouge">app03</code>项目，此时，需要在<code class="highlighter-rouge">server</code>节点下，新增<code class="highlighter-rouge">service</code>节点</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Service</span> <span class="na">name=</span><span class="s">"Catalina-Test"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Connector</span> <span class="na">connectionTimeout=</span><span class="s">"20000"</span> <span class="na">port=</span><span class="s">"6666"</span> <span class="na">protocol=</span><span class="s">"HTTP/1.1"</span> <span class="na">redirectPort=</span><span class="s">"8443"</span> <span class="na">executor=</span><span class="s">"tomcatThreadPool"</span> <span class="na">URIEncoding=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Connector</span> <span class="na">port=</span><span class="s">"8009"</span> <span class="na">protocol=</span><span class="s">"AJP/1.3"</span> <span class="na">redirectPort=</span><span class="s">"8443"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Engine</span> <span class="na">defaultHost=</span><span class="s">"localhost"</span> <span class="na">name=</span><span class="s">"Catalina"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;Realm</span> <span class="na">className=</span><span class="s">"org.apache.catalina.realm.LockOutRealm"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Realm</span> <span class="na">className=</span><span class="s">"org.apache.catalina.realm.UserDatabaseRealm"</span> <span class="na">resourceName=</span><span class="s">"UserDatabase"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/Realm&gt;</span>
+      <span class="nt">&lt;Host</span> <span class="na">appBase=</span><span class="s">"webapps"</span> <span class="na">autoDeploy=</span><span class="s">"true"</span> <span class="na">name=</span><span class="s">"www.app03.com"</span> <span class="na">unpackWARs=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Valve</span> <span class="na">className=</span><span class="s">"org.apache.catalina.valves.AccessLogValve"</span> <span class="na">directory=</span><span class="s">"logs"</span> <span class="na">pattern=</span><span class="s">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> <span class="na">prefix=</span><span class="s">"localhost_access_log."</span> <span class="na">suffix=</span><span class="s">".txt"</span><span class="nt">/&gt;</span>
+  	    <span class="nt">&lt;Context</span> <span class="na">docBase=</span><span class="s">"app03"</span> <span class="na">path=</span><span class="s">""</span> <span class="na">reloadable=</span><span class="s">"true"</span> <span class="na">source=</span><span class="s">"org.eclipse.jst.jee.server:app03"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/Host&gt;</span>
+    <span class="nt">&lt;/Engine&gt;</span>
+<span class="nt">&lt;/Service&gt;</span>
+</code></pre></div></div>
+
+<p>重启Tomcat，访问<code class="highlighter-rouge">http://www.app03.com:6666</code>就可以直接访问到<code class="highlighter-rouge">app03</code>项目了。</p>

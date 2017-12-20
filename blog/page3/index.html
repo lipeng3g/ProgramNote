@@ -29,37 +29,134 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/%E6%8A%80%E6%9C%AF/2017/04/18/new-theme-h2o.html">H2O theme for Jekyll</a></h1>
-          <div class="m-article-content">正如我在微博上所说的，使用Jekyll半年以来一直没有令我满意的主题模板，所以开始计划自己写一套好看又好用的主题模板。设计之初就明确了极简主义，风格采用扁平化了，通过卡片式设计来进行区块分明的布局，参考了Medium的ui样式和知乎专栏的视觉风格。
-
-H2O
-
-源码及使用文档 →
-
-
-
-新主题名叫”H2O”，基于Jekyll 3.0.x（使用gem update jekyll升级Jekyll），Markdown的代码高亮不再支持pygments转而使用rouge，咱已经默认配置了 highlighter: rouge 。用到的技术栈也很简单：引入jQuery类库，使用Sass编写样式，使用Gulp来编译Sass、合并压缩css、js，开源在Github上，稍作配置即可用于你的Jekyl...</div><a href="/ProgramNote/%E6%8A%80%E6%9C%AF/2017/04/18/new-theme-h2o.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=jekyll">jekyll</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91">前端开发</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E8%AE%BE%E8%AE%A1">设计</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Apr 18, 2017</span></div>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96.html">Mybatis初始化</a></h1>
+          <div class="m-article-content">对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。本章将通过以下几点详细介绍MyBatis的初始化过程。
+1. MyBatis的初始化做了什么
+2. MyBatis基于XML配置文件创建Configuration对象的过程
+3. 手动加载XML配置文件创建Configuration对象完成初始化，创建并使用SqlSessionFactory对象
+4. 涉及到的设计模式 # MyBatis的初始化做了什么
+任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：
+× configuration 配置
+    × properties 属性
+    × settings 设置
+    × typeAlia...</div><a href="/ProgramNote/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Dec 05, 2017</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/2017/04/18/hello-jekyll.html">Hello Jekyll</a></h1>
+</article><article><h1><a href="/ProgramNote/2017/11/20/MySQL5.7%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE.html">Mysql5.7权限配置</a></h1>
+          <div class="m-article-content">Mysql5.7 新增、修改、授权用户
+
+
+
+  Mysql5.7 新增、修改、授权用户
+    
+      1. 前置条件
+      2. 创建用户
+      3. 授权
+      4. 创建用户同时授权
+      5. 设置与更改用户密码
+      6. 撤销用户权限
+      7. 删除用户
+      8. 查看用户的授权
+    
+  
+
+
+
+1. 前置条件
+
+  登录 mysql -uroot -proot -hlocalhost
+  2.MySQL5.7 mysql.user表没有password字段改 authentication_string
+
+
+2. 创建用户
+
+命令:
+CREATE USER 'username'@'host' IDENTIFIED ...</div><a href="/ProgramNote/2017/11/20/MySQL5.7%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Nov 20, 2017</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/2017/11/15/SpringQuartz%E5%92%8CSpringTask%E5%AF%B9%E6%AF%94.html">Springquartz和springtask对比</a></h1>
+          <div class="m-article-content">Spring Quartz 和 Spring Task对比
+
+
+
+
+  Spring Quartz 和 Spring Task对比
+    
+      1、Spring Quartz 和 Spring Task执行时间对比
+      2、Spring Quartz 特点
+      3、Spring Task特点
+      4、Spring Quartz配置
+      5、Spring Task配置
+    
+  
+
+
+
+
+1、Spring Quartz 和 Spring Task执行时间对比
+
+  Quartz设置同步模式时：一个任务的两次执行的时间间隔是：“执行时间”和“trigger的设定间隔”的最大值 
+  Task默认同步模式：一个任务的两次执行的时间间隔是：“执行时...</div><a href="/ProgramNote/2017/11/15/SpringQuartz%E5%92%8CSpringTask%E5%AF%B9%E6%AF%94.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Nov 15, 2017</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">关于scrollHeight和scrollTop取值为0的问题</a></h1>
+          <div class="m-article-content">关于scrollHeight和scrollTop取值为0的问题
+
+
+
+  关于scrollHeight和scrollTop取值为0的问题
+  1. 基础
+    
+      1.1. offsetTop与style.top的区别
+    
+  
+  2. 问题及解决
+  3. 总结
+
+
+
+
+原文地址–简书
+
+1. 基础
+
+
+  obj.offsetTop 指 obj 距离上方或上层控件的位置，整型，单位像素。
+  obj.offsetLeft 指 obj 距离左方或上层控件的位置，整型，单位像素。
+  obj.offsetWidth 指 obj 控件自身的宽度，整型，单位像素。
+  obj.offsetHeight 指 obj 控件自身的高度，整型，单位像素。（clientHeigh...</div><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Nov 07, 2017</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/2017/11/04/Java%E5%BA%8F%E5%88%97%E5%8C%96Serializable%E8%AF%A6%E8%A7%A3.html">Java序列化serializable详解</a></h1>
           <div class="m-article-content">
-  Transform your plain text into static websites and blogs.
 
 
-Welcome
+  1. 什么是序列化和反序列化
+  2. 什么情况下需要序列化
+  3. 如何实现序列化
+  4. 序列化和反序列化例子
+  5. 序列化ID
+  6. 序列化前和序列化后的对象的关系
+    
+      6.1. 是 “==”还是equal？ or 是浅复制还是深复制？
+    
+  
+  7. 静态变量能否序列化
+  8. 总结:
 
-This site aims to be a comprehensive guide to Jekyll. We’ll cover topics such as getting your site up and running, creating and managing your content, customizing the way your site works and looks, deploying to various environments, and give you some advice on participating ...</div><a href="/ProgramNote/2017/04/18/hello-jekyll.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=jekyll">jekyll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Apr 18, 2017</span></div>
+
+
+1. 什么是序列化和反序列化
+Serialization（序列化）是一种将对象以一连串的字节描述的过程；反序列化deserialization是一种将这些字节重建成一个对象的过程。
+
+2. 什么情况下需要序列化
+
+  当你想把的内存中的对象保存到一个文件中或者数据库中时候；
+  当你想用套接字在网络上传送对象的时候；
+  当你想通过RMI...</div><a href="/ProgramNote/2017/11/04/Java%E5%BA%8F%E5%88%97%E5%8C%96Serializable%E8%AF%A6%E8%A7%A3.html">Click to read more ...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">Nov 04, 2017</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>12 post articles, 3 pages.</p>
+</article></div><nav class="m-pagination"><p>28 post articles, 6 pages.</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page2">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -71,12 +168,20 @@ This site aims to be a comprehensive guide to Jekyll. We’ll cover topics such 
                 <a class="round-button" href="/ProgramNote/blog/page2"><span>2</span></a>
               </li><li>
                 <div class="round-button cur"><span>3</span></div>
-              </li><li><div class="round-button inactive">
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page4"><span>4</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page5"><span>5</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
+              </li><li>
+              <a class="round-button" href="/ProgramNote/blog/page4">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
 </svg>
 </div>
-                </div></li></ul>
+              </a>
+            </li></ul>
         </nav></div>
 </div></div>
 </div>
