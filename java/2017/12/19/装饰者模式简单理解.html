@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于scrollHeight和scrollTop取值为0的问题 - lipeng's blog</title>
-<meta name="description" content="关于scrollHeight和scrollTop取值为0的问题  关于scrollHeight和scrollTop取值为0的问题  1. 基础          1.1. offsetTop与style.top的区别        2. 问题及解决  3. 总结原文地址–简书1. 基础  obj.offsetTo...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>装饰者模式简单理解 - lipeng's blog</title>
+<meta name="description" content="装饰者模式  装饰者模式          基本描述      代码实例      基本描述目的  给对象动态地添加附加功能。  装饰者提供了一个灵活的拓展子类功能的备选方案。代码实例公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,88 +31,190 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">关于scrollHeight和scrollTop取值为0的问题</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">装饰者模式简单理解</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Scroll">Scroll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-07T05:51:29+08:00"
-          itemprop="datePublished">Nov 07, 2017
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">设计模式</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-19T13:51:29+08:00"
+          itemprop="datePublished">Dec 19, 2017
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="装饰者模式">装饰者模式</h1>
 <!-- TOC -->
 
 <ul>
-  <li><a href="#关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</a></li>
-  <li><a href="#1-基础">1. 基础</a>
+  <li><a href="#装饰者模式">装饰者模式</a>
     <ul>
-      <li><a href="#11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</a></li>
+      <li><a href="#基本描述">基本描述</a></li>
+      <li><a href="#代码实例">代码实例</a></li>
     </ul>
   </li>
-  <li><a href="#2-问题及解决">2. 问题及解决</a></li>
-  <li><a href="#3-总结">3. 总结</a></li>
 </ul>
 
 <!-- /TOC -->
-
-<p><a href="http://www.jianshu.com/p/46087c0ace05">原文地址–简书</a></p>
-
-<h1 id="1-基础">1. 基础</h1>
-
+<h2 id="基本描述">基本描述</h2>
+<p><strong>目的</strong></p>
 <ul>
-  <li><code class="highlighter-rouge">obj.offsetTop</code> 指 obj 距离上方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetLeft</code> 指 obj 距离左方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetWidth</code> 指 obj 控件自身的宽度，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetHeight</code> 指 obj 控件自身的高度，整型，单位像素。（<code class="highlighter-rouge">clientHeight</code> + <code class="highlighter-rouge">滚动条</code> + <code class="highlighter-rouge">边框</code>）</li>
-  <li><code class="highlighter-rouge">obj.scrollHeight</code> 网页内容的高度，最小值是<code class="highlighter-rouge">clientHeight</code>。</li>
+  <li>给对象动态地添加附加功能。</li>
+  <li>装饰者提供了一个灵活的拓展子类功能的备选方案。</li>
 </ul>
 
-<h2 id="11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</h2>
+<h2 id="代码实例">代码实例</h2>
+<p>公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）</p>
 
-<ul>
-  <li><code class="highlighter-rouge">offsetTop</code> 返回的是<code class="highlighter-rouge">数字</code>，而 <code class="highlighter-rouge">style.top</code> 返回的是<code class="highlighter-rouge">字符串</code>，除了数字外还带有单位：px。</li>
-  <li>
-    <p><code class="highlighter-rouge">offsetTop</code> <code class="highlighter-rouge">只读</code>， <code class="highlighter-rouge">style.top</code> <code class="highlighter-rouge">可读写</code>。</p>
+<ol>
+  <li>定义一个程序猿
+    <pre><code class="language-Java">/**
+ * 程序员
+ */
+public class Coder {
 
-    <p>如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（<code class="highlighter-rouge">也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx</code>）</p>
+ public void coding() {
+     System.out.println("我在写程序。。。");
+ }
+}
+</code></pre>
   </li>
-</ul>
+  <li>定义一个程序猿的装饰器
+    <pre><code class="language-Java">/**
+ * 程序员装饰器
+ */
+public class CoderDecorator extends Coder {
 
-<h1 id="2-问题及解决">2. 问题及解决</h1>
+ private Coder coder;
 
-<p><code class="highlighter-rouge">document.body.scrollHeight</code>与<code class="highlighter-rouge">document.documentElement.scrollHeight</code>都是获取网页页面内容的高。</p>
+ public CoderDecorator(Coder coder) {
+     this.coder = coder;
+ }
 
-<p>但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0</p>
-
-<p>可以发现</p>
-
-<p><code class="highlighter-rouge">chrome</code>对<code class="highlighter-rouge">document.documentElement.scrollHeight</code>&amp;<code class="highlighter-rouge">document.documentElement.scrollTop</code>是不能识别的</p>
-
-<p><code class="highlighter-rouge">firefox</code>和<code class="highlighter-rouge">IE11</code>不能识别<code class="highlighter-rouge">document.body.scrollHeight</code>&amp;<code class="highlighter-rouge">document.body.scrollTop</code></p>
-
-<p>所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。</p>
-
-<p>另外我也测试clientXxx，写在总结里吧。</p>
-
-<h1 id="3-总结">3. 总结</h1>
-
-<p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+ @Override
+ public void coding() {
+     coder.coding();
+ }
+}
 </code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
-<p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
-</code></pre>
+  </li>
+  <li>定义一个专门更换键盘的装饰器
+```Java
+/**
+    <ul>
+      <li>写代码以前换键盘
+ */
+public class CoderDecoratorA extends CoderDecorator {</li>
+    </ul>
 
-<p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
+    <p>public CoderDecoratorA(Coder coder) {
+     super(coder);
+ }</p>
+
+    <p>@Override
+ public void coding() {
+     this.addNewKeyBoard();
+     super.coding();
+ }</p>
+
+    <p>private void addNewKeyBoard() {
+     System.out.println(“更换了新的机械键盘，噼里啪啦”);
+ }</p>
+  </li>
+</ol>
+
+<p>}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+4. 定义一个专门更换鼠标的装饰器
+```Java
+
+/**
+ * 写代码以前换鼠标
+ */
+public class CoderDecoratorB extends CoderDecorator {
+
+    public CoderDecoratorB(Coder coder) {
+        super(coder);
+    }
+
+    @Override
+    public void coding() {
+        this.addNewMouse();
+        super.coding();
+    }
+
+    private void addNewMouse() {
+        System.out.println("换了新的鼠标，哒哒哒，哒哒哒");
+    }
+}
+
+</code></pre></div></div>
+
+<ol>
+  <li>定义一个更换电脑的装饰器
+    <pre><code class="language-Java">/**
+ * 写代码以前换电脑
+ */
+public class CoderDecoratorC extends CoderDecorator {
+
+ public CoderDecoratorC(Coder coder) {
+     super(coder);
+ }
+
+ @Override
+ public void coding() {
+     this.changeToMacbookPro();
+     super.coding();
+ }
+
+ private void changeToMacbookPro() {
+     System.out.println("电脑不好使，换了，美滋滋");
+ }
+}
 </code></pre>
+  </li>
+  <li>好了，现在老板可以根据不同程序猿的要求一一满足了
+    <pre><code class="language-Java">/**
+ * 程序猿写代码
+ */
+public class Client {
+
+ public static void main(String[] args) {
+     //创造一个程序猿A，并且开始写代码
+     Coder coderA = new Coder();
+     //换个键盘在写
+     CoderDecorator decoratorA = new CoderDecoratorA(coderA);
+     //换个鼠标在写
+     decoratorA = new CoderDecoratorB(decoratorA);
+     //把电脑也换了
+     decoratorA = new CoderDecoratorC(decoratorA);
+     decoratorA.coding();
+
+     //创造一个程序猿B，并且开始写代码
+     Coder coderB = new Coder();
+     //换个键盘在写
+     CoderDecorator decoratorB = new CoderDecoratorA(coderB);
+     //把电脑也换了
+     decoratorB = new CoderDecoratorC(decoratorB);
+     decoratorB.coding();
+ }
+}
+</code></pre>
+  </li>
+</ol>
+
+<p><strong>执行结果</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//这里满足程序猿A的要求
+电脑不好使，换了，美滋滋
+换了新的鼠标，哒哒哒，哒哒哒
+更换了新的机械键盘，噼里啪啦
+我在写程序。。。
+//这里满足程序猿B的要求
+电脑不好使，换了，美滋滋
+更换了新的机械键盘，噼里啪啦
+我在写程序。。。
+</code></pre></div></div>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+				<footer><meta itemprop="dateModified" content="2017-12-19T13:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p></p>
   </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于scrollHeight和scrollTop取值为0的问题 - lipeng's blog</title>
-<meta name="description" content="关于scrollHeight和scrollTop取值为0的问题  关于scrollHeight和scrollTop取值为0的问题  1. 基础          1.1. offsetTop与style.top的区别        2. 问题及解决  3. 总结原文地址–简书1. 基础  obj.offsetTo...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redis安装 - lipeng's blog</title>
+<meta name="description" content="# 安装和启动 ## 下载 redis  略 ## 修改文件夹名   mv redis-x.x.x redis    ## 编译   cd redis/ sudo make sudo make test sudo make isntall    ## 配置 你会在redis 目录里找到一个 redis.conf ...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/server/2017/09/09/Redis%E5%AE%89%E8%A3%85(MacOs).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,88 +31,109 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">关于scrollHeight和scrollTop取值为0的问题</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Redis安装</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Server">Server</a>
         </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Scroll">Scroll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-07T05:51:29+08:00"
-          itemprop="datePublished">Nov 07, 2017
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Redis">Redis</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-09T00:00:00+08:00"
+          itemprop="datePublished">Sep 09, 2017
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</h1>
-<!-- TOC -->
+				<div class="m-article-content js-article-content" itemprop="articleBody"><p># 安装和启动
+ ## 下载 redis</p>
+<blockquote>
+  <p>略
+ ## 修改文件夹名</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mv redis-x.x.x redis
+</code></pre></div>  </div>
+  <p>## 编译</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> cd redis/
+ sudo make
+ sudo make test
+ sudo make isntall
+</code></pre></div>  </div>
+  <p>## 配置
+ 你会在redis 目录里找到一个 redis.conf 的配置文件,打开编辑此配置文件,找到 <code class="highlighter-rouge">dir  .  </code>这一行配置.</p>
+</blockquote>
 
-<ul>
-  <li><a href="#关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</a></li>
-  <li><a href="#1-基础">1. 基础</a>
-    <ul>
-      <li><a href="#11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</a></li>
-    </ul>
-  </li>
-  <li><a href="#2-问题及解决">2. 问题及解决</a></li>
-  <li><a href="#3-总结">3. 总结</a></li>
-</ul>
+<p><code class="highlighter-rouge">此配置是将内存中的数据写入一个文件,这个数据库文件要保存到什么地方 就是这个配置项起到的作用.</code></p>
 
-<!-- /TOC -->
+<p>我在<code class="highlighter-rouge">/usr/local/redis</code>目录下创建了 <code class="highlighter-rouge">db</code> 的文件夹(注意此文件夹必须有可读写权限)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> cd redis/
+ mkdir db
+ chmod 777 /usr/local/redis/db
+</code></pre></div></div>
 
-<p><a href="http://www.jianshu.com/p/46087c0ace05">原文地址–简书</a></p>
+<p>所以这一行的配置是<code class="highlighter-rouge"> dir  /usr/local/redis/db/</code></p>
 
-<h1 id="1-基础">1. 基础</h1>
+<p>修改后保存配置文件,同时将配置文件移动到 /etc 目录下.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> sudo mv redis.conf /etc
+</code></pre></div></div>
 
-<ul>
-  <li><code class="highlighter-rouge">obj.offsetTop</code> 指 obj 距离上方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetLeft</code> 指 obj 距离左方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetWidth</code> 指 obj 控件自身的宽度，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetHeight</code> 指 obj 控件自身的高度，整型，单位像素。（<code class="highlighter-rouge">clientHeight</code> + <code class="highlighter-rouge">滚动条</code> + <code class="highlighter-rouge">边框</code>）</li>
-  <li><code class="highlighter-rouge">obj.scrollHeight</code> 网页内容的高度，最小值是<code class="highlighter-rouge">clientHeight</code>。</li>
-</ul>
+<p>## 启动</p>
+<blockquote>
+  <p>上面第三步 make install 成功后,你就应该在这个目录下看到redis</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> /usr/local/bin/redis-server /etc/redis.conf
+</code></pre></div>  </div>
+  <p>启动画面如下
+ <code class="highlighter-rouge">
+                 _._
+            _.-``__ ''-._
+       _.-``    `.  `_.  ''-._           Redis 4.0.1 (00000000/0) 64 bit
+   .-`` .-</code>.  ```\/    <em>.,</em> ‘’-._
+  (    ‘      ,       .-<code class="highlighter-rouge">  | </code>,    )     Running in standalone mode
+  |<code class="highlighter-rouge">-._</code>-…-<code class="highlighter-rouge"> __...-.</code><code class="highlighter-rouge">-._|'</code> <em>.-‘|     Port: 6379
+  |    <code class="highlighter-rouge">-._   </code>.</em>    /     <em>.-‘    |     PID: 13436
+   <code class="highlighter-rouge">-._    </code>-.</em>  <code class="highlighter-rouge">-./  _.-'    _.-'
+  |</code>-.<em><code class="highlighter-rouge">-._    </code>-.<strong>.-‘    _.-‘_.-‘|
+  |    <code class="highlighter-rouge">-._</code>-._        _.-‘_.-‘    |           http://redis.io
+   <code class="highlighter-rouge">-._    </code>-._<code class="highlighter-rouge">-.__.-'_.-'    _.-'
+  |</code>-._<code class="highlighter-rouge">-._    </code>-.</strong>.-‘    _.-‘</em>.-‘|
+  |    <code class="highlighter-rouge">-._</code>-._        <em>.-‘</em>.-‘    |
+   <code class="highlighter-rouge">-._    </code>-.<em><code class="highlighter-rouge">-.__.-'_.-'    _.-'
+       </code>-.</em>    <code class="highlighter-rouge">-.__.-'    _.-'
+           </code>-._        _.-‘
+               `-.__.-‘</p>
+</blockquote>
 
-<h2 id="11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ## 测试
+  服务器端已经顺利启动,下一步我们可以启动客户端来尝试连接一下redis服务端,同时写入数据测试一把
+</code></pre></div></div>
+<p>cd /usr/local/bin
+ ./redis-cli</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ok,成功连接服务端.
+ 
+ # 配置密码验证
+ ## 修改配置文件
+ 上面把redis配置文件放在了`/etc/redis.conf`中，打开后查找`requirepass myRedis `
+ 
+ 默认情况下，这条配置被注释掉，去掉注释，然后保存
+ 
+ ## 重启redis
+</code></pre></div></div>
+<p>sudo service redis restart<br />
+ #或者<br />
+ sudo service redis stop<br />
+ sudo redis-server /etc/redis.conf</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 
+ ## 登录redis
+ 
+</code></pre></div></div>
+<p>$ ./redis-cli
+ 127.0.0.1:6379&gt; client list
+ (error) NOAUTH Authentication required.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 提示没有权限操作，执行下面的操作验证权限
+ 
+</code></pre></div></div>
+<p>127.0.0.1:6379&gt; auth shuxunit#*2016
+ OK
+ ```</p>
 
-<ul>
-  <li><code class="highlighter-rouge">offsetTop</code> 返回的是<code class="highlighter-rouge">数字</code>，而 <code class="highlighter-rouge">style.top</code> 返回的是<code class="highlighter-rouge">字符串</code>，除了数字外还带有单位：px。</li>
-  <li>
-    <p><code class="highlighter-rouge">offsetTop</code> <code class="highlighter-rouge">只读</code>， <code class="highlighter-rouge">style.top</code> <code class="highlighter-rouge">可读写</code>。</p>
-
-    <p>如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（<code class="highlighter-rouge">也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx</code>）</p>
-  </li>
-</ul>
-
-<h1 id="2-问题及解决">2. 问题及解决</h1>
-
-<p><code class="highlighter-rouge">document.body.scrollHeight</code>与<code class="highlighter-rouge">document.documentElement.scrollHeight</code>都是获取网页页面内容的高。</p>
-
-<p>但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0</p>
-
-<p>可以发现</p>
-
-<p><code class="highlighter-rouge">chrome</code>对<code class="highlighter-rouge">document.documentElement.scrollHeight</code>&amp;<code class="highlighter-rouge">document.documentElement.scrollTop</code>是不能识别的</p>
-
-<p><code class="highlighter-rouge">firefox</code>和<code class="highlighter-rouge">IE11</code>不能识别<code class="highlighter-rouge">document.body.scrollHeight</code>&amp;<code class="highlighter-rouge">document.body.scrollTop</code></p>
-
-<p>所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。</p>
-
-<p>另外我也测试clientXxx，写在总结里吧。</p>
-
-<h1 id="3-总结">3. 总结</h1>
-
-<p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-</code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
-<p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
-</code></pre>
-
-<p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
-</code></pre>
+<p><strong>请注意，可以使用命令修改密码，但是重启后密码失效，会重新使用配置文件中的密码</strong></p>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+				<footer><meta itemprop="dateModified" content="2017-09-09T00:00:00+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p></p>
   </div>

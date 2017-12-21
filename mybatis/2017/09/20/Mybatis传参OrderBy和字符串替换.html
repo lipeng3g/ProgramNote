@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于scrollHeight和scrollTop取值为0的问题 - lipeng's blog</title>
-<meta name="description" content="关于scrollHeight和scrollTop取值为0的问题  关于scrollHeight和scrollTop取值为0的问题  1. 基础          1.1. offsetTop与style.top的区别        2. 问题及解决  3. 总结原文地址–简书1. 基础  obj.offsetTo...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Mybatis传参OrderBy和字符串替换 - lipeng's blog</title>
+<meta name="description" content="1. Mybatis 传参OrderBy和字符串替换  1. Mybatis 传参OrderBy和字符串替换          1.1. Mybatis 使用动态 Order By      1.2. 字符串替换      1.1. Mybatis 使用动态 Order By  默认情况下，mybatis使用 #...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/mybatis/2017/09/20/Mybatis%E4%BC%A0%E5%8F%82OrderBy%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,88 +31,48 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">关于scrollHeight和scrollTop取值为0的问题</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis传参OrderBy和字符串替换</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
         </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Scroll">Scroll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-07T05:51:29+08:00"
-          itemprop="datePublished">Nov 07, 2017
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E5%8F%82%E6%95%B0">参数</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-20T02:51:29+08:00"
+          itemprop="datePublished">Sep 20, 2017
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-mybatis-传参orderby和字符串替换">1. Mybatis 传参OrderBy和字符串替换</h1>
 <!-- TOC -->
 
 <ul>
-  <li><a href="#关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</a></li>
-  <li><a href="#1-基础">1. 基础</a>
+  <li><a href="#1-mybatis-传参orderby和字符串替换">1. Mybatis 传参OrderBy和字符串替换</a>
     <ul>
-      <li><a href="#11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</a></li>
+      <li><a href="#11-mybatis-使用动态-order-by">1.1. Mybatis 使用动态 Order By</a></li>
+      <li><a href="#12-字符串替换">1.2. 字符串替换</a></li>
     </ul>
   </li>
-  <li><a href="#2-问题及解决">2. 问题及解决</a></li>
-  <li><a href="#3-总结">3. 总结</a></li>
 </ul>
 
 <!-- /TOC -->
+<h2 id="11-mybatis-使用动态-order-by">1.1. Mybatis 使用动态 Order By</h2>
 
-<p><a href="http://www.jianshu.com/p/46087c0ace05">原文地址–简书</a></p>
+<blockquote>
+  <p>默认情况下，mybatis使用 <code class="highlighter-rouge">#{  }</code> 格式解析用户传递的变量， 但是使用该种方式解析普通变量时， Mybatis会对变量进行<code class="highlighter-rouge">转义</code>操作，如果我们传入的参数时用来 <code class="highlighter-rouge">order by name desc</code> 的话，那么该变量在<code class="highlighter-rouge">转义</code>以后无法表达排序的意思，这时候，我们需要使用 <code class="highlighter-rouge">#{  }</code> 来解析</p>
+</blockquote>
 
-<h1 id="1-基础">1. 基础</h1>
+<h2 id="12-字符串替换">1.2. 字符串替换</h2>
 
-<ul>
-  <li><code class="highlighter-rouge">obj.offsetTop</code> 指 obj 距离上方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetLeft</code> 指 obj 距离左方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetWidth</code> 指 obj 控件自身的宽度，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetHeight</code> 指 obj 控件自身的高度，整型，单位像素。（<code class="highlighter-rouge">clientHeight</code> + <code class="highlighter-rouge">滚动条</code> + <code class="highlighter-rouge">边框</code>）</li>
-  <li><code class="highlighter-rouge">obj.scrollHeight</code> 网页内容的高度，最小值是<code class="highlighter-rouge">clientHeight</code>。</li>
-</ul>
+<p><strong>以下内容来源于</strong><a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html">Mybatis</a></p>
 
-<h2 id="11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">offsetTop</code> 返回的是<code class="highlighter-rouge">数字</code>，而 <code class="highlighter-rouge">style.top</code> 返回的是<code class="highlighter-rouge">字符串</code>，除了数字外还带有单位：px。</li>
-  <li>
-    <p><code class="highlighter-rouge">offsetTop</code> <code class="highlighter-rouge">只读</code>， <code class="highlighter-rouge">style.top</code> <code class="highlighter-rouge">可读写</code>。</p>
-
-    <p>如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（<code class="highlighter-rouge">也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx</code>）</p>
-  </li>
-</ul>
-
-<h1 id="2-问题及解决">2. 问题及解决</h1>
-
-<p><code class="highlighter-rouge">document.body.scrollHeight</code>与<code class="highlighter-rouge">document.documentElement.scrollHeight</code>都是获取网页页面内容的高。</p>
-
-<p>但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0</p>
-
-<p>可以发现</p>
-
-<p><code class="highlighter-rouge">chrome</code>对<code class="highlighter-rouge">document.documentElement.scrollHeight</code>&amp;<code class="highlighter-rouge">document.documentElement.scrollTop</code>是不能识别的</p>
-
-<p><code class="highlighter-rouge">firefox</code>和<code class="highlighter-rouge">IE11</code>不能识别<code class="highlighter-rouge">document.body.scrollHeight</code>&amp;<code class="highlighter-rouge">document.body.scrollTop</code></p>
-
-<p>所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。</p>
-
-<p>另外我也测试clientXxx，写在总结里吧。</p>
-
-<h1 id="3-总结">3. 总结</h1>
-
-<p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-</code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
-<p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
-</code></pre>
-
-<p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
-</code></pre>
+<blockquote>
+  <p>默认情况下,使用<code class="highlighter-rouge">#{}</code>格式的语法会导致 MyBatis 创建预处理语句属性并安全地设置值（比如<code class="highlighter-rouge">?</code>）。这样做<code class="highlighter-rouge">更安全</code>，<code class="highlighter-rouge">更迅速</code>，通常也是<code class="highlighter-rouge">首选做法</code>，不过有时你只是想直接在 SQL 语句中插入一个<code class="highlighter-rouge">不改变</code>的字符串。比如，像 <code class="highlighter-rouge">ORDER BY</code>，你可以这样来使用：</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ORDER BY ${columnName}
+这里 MyBatis 不会修改或转义字符串。
+</code></pre></div>  </div>
+  <p><strong>NOTE</strong> 以这种方式接受从用户输出的内容并提供给语句中不变的字符串是<code class="highlighter-rouge">不安全的</code>，会导致潜在的<code class="highlighter-rouge"> SQL 注入攻击</code>，因此要么不允许用户输入这些字段，要么自行转义并检验。</p>
+</blockquote>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+				<footer><meta itemprop="dateModified" content="2017-09-20T02:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p></p>
   </div>

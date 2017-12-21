@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Mybatis一级缓存 - lipeng's blog</title>
+<meta name="description" content="  1. 一级缓存的作用  2. 一级缓存的依赖关系  3. 一级缓存的生命周期  4. 一级缓存的实现  5. Cache接口  6. 性能问题1. 一级缓存的作用每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，M...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/mybatis/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">Home</a></li><li><a href="/ProgramNote/all.html">All</a></li><li><a href="/ProgramNote/about.html">About</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis一级缓存</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E7%BC%93%E5%AD%98">缓存</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-15T15:51:29+08:00"
+          itemprop="datePublished">Dec 15, 2017
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><!-- TOC -->
+
+<ul>
+  <li><a href="#1-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%9C%E7%94%A8">1. 一级缓存的作用</a></li>
+  <li><a href="#2-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB">2. 一级缓存的依赖关系</a></li>
+  <li><a href="#3-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">3. 一级缓存的生命周期</a></li>
+  <li><a href="#4-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E5%AE%9E%E7%8E%B0">4. 一级缓存的实现</a></li>
+  <li><a href="#5-cache%E6%8E%A5%E5%8F%A3">5. Cache接口</a></li>
+  <li><a href="#6-%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98">6. 性能问题</a></li>
+</ul>
+
+<!-- /TOC -->
+<h1 id="1-一级缓存的作用">1. 一级缓存的作用</h1>
+
+<p>每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。</p>
+
+<p>肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。</p>
+
+<p><img src="/ProgramNote/assets/Image/mybatis/21.png" alt="Mybatis" title="Mybatis" /></p>
+
+<p><strong>SqlSession级别的数据缓存，称为一级缓存</strong></p>
+
+<h1 id="2-一级缓存的依赖关系">2. 一级缓存的依赖关系</h1>
+
+<p>一级缓存由SqlSession控制。</p>
+
+<p><img src="/ProgramNote/assets/Image/mybatis/22.png" alt="Mybatis" title="Mybatis" /></p>
+
+<p><code class="highlighter-rouge">SqlSession</code>将它的工作交给了<code class="highlighter-rouge">Executor</code>执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSession对象时，MyBatis会为这个SqlSession对象创建一个新的Executor执行器，而缓存信息就被维护在这个Executor执行器中，MyBatis将缓存和对缓存相关的操作封装成了Cache接口中。</p>
+
+<p><code class="highlighter-rouge">Executor</code>接口的实现类<code class="highlighter-rouge">BaseExecutor</code>中拥有一个<code class="highlighter-rouge">Cache</code>接口的实现类<code class="highlighter-rouge">PerpetualCache</code>，则对于<code class="highlighter-rouge">BaseExecutor</code>对象而言，它将使用<code class="highlighter-rouge">PerpetualCache</code>对象维护缓存。</p>
+
+<p><img src="/ProgramNote/assets/Image/mybatis/23.png" alt="Mybatis" title="Mybatis" /></p>
+
+<p>PerpetualCache的实现代码</p>
+<pre><code class="language-Java">
+/**
+ * @author Clinton Begin
+ */
+public class PerpetualCache implements Cache {
+
+  private final String id;
+
+  private Map&lt;Object, Object&gt; cache = new HashMap&lt;Object, Object&gt;();
+
+  public PerpetualCache(String id) {
+    this.id = id;
+  }
+
+  @Override
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public int getSize() {
+    return cache.size();
+  }
+
+  @Override
+  public void putObject(Object key, Object value) {
+    cache.put(key, value);
+  }
+
+  @Override
+  public Object getObject(Object key) {
+    return cache.get(key);
+  }
+
+  @Override
+  public Object removeObject(Object key) {
+    return cache.remove(key);
+  }
+
+  @Override
+  public void clear() {
+    cache.clear();
+  }
+
+  @Override
+  public ReadWriteLock getReadWriteLock() {
+    return null;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (getId() == null) {
+      throw new CacheException("Cache instances require an ID.");
+    }
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Cache)) {
+      return false;
+    }
+
+    Cache otherCache = (Cache) o;
+    return getId().equals(otherCache.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    if (getId() == null) {
+      throw new CacheException("Cache instances require an ID.");
+    }
+    return getId().hashCode();
+  }
+
+}
+
+</code></pre>
+
+<h1 id="3-一级缓存的生命周期">3. 一级缓存的生命周期</h1>
+
+<p><img src="/ProgramNote/assets/Image/mybatis/24.png" alt="Mybatis" title="Mybatis" /></p>
+
+<ol>
+  <li>
+    <p>MyBatis在开启一个数据库会话时，会创建一个新的SqlSession对象，SqlSession对象中会有一个新的Executor对象，Executor对象中持有一个新的PerpetualCache对象；当会话结束时，SqlSession对象及其内部的Executor对象还有PerpetualCache对象也一并释放掉。</p>
+  </li>
+  <li>
+    <p>如果SqlSession调用了close()方法，会释放掉一级缓存PerpetualCache对象，一级缓存将不可用；</p>
+  </li>
+  <li>
+    <p>如果SqlSession调用了clearCache()，会清空PerpetualCache对象中的数据，但是该对象仍可使用；</p>
+  </li>
+  <li>
+    <p>SqlSession中执行了任何一个update操作(update()、delete()、insert()) ，都会清空PerpetualCache对象的数据，但是该对象可以继续使用；</p>
+  </li>
+</ol>
+
+<h1 id="4-一级缓存的实现">4. 一级缓存的实现</h1>
+
+<ol>
+  <li>
+    <p>对于某个查询，根据statementId,params,rowBounds来构建一个key值，根据这个key值去缓存Cache中取出对应的key值存储的缓存结果；</p>
+  </li>
+  <li>
+    <p>判断从Cache中根据特定的key值取的数据数据是否为空，即是否命中；</p>
+  </li>
+  <li>
+    <p>如果命中，则直接将缓存结果返回；</p>
+  </li>
+  <li>
+    <p>如果没命中：</p>
+
+    <p>4.1  去数据库中查询数据，得到查询结果；</p>
+
+    <p>4.2  将key和查询到的结果分别作为key,value对存储到Cache中；</p>
+
+    <p>4.3. 将查询结果返回；</p>
+  </li>
+  <li>
+    <p>结束。</p>
+  </li>
+</ol>
+
+<p><img src="/ProgramNote/assets/Image/mybatis/25.png" alt="Mybatis" title="Mybatis" /></p>
+
+<h1 id="5-cache接口">5. Cache接口</h1>
+<p><img src="/ProgramNote/assets/Image/mybatis/26.png" alt="Mybatis" title="Mybatis" /></p>
+
+<p>MyBatis定义了一个org.apache.ibatis.cache.Cache接口作为其Cache提供者的SPI(Service Provider Interface) ，所有的MyBatis内部的Cache缓存，都应该实现这一接口。MyBatis定义了一个PerpetualCache实现类实现了Cache接口，实际上，在SqlSession对象里的Executor 对象内维护的Cache类型实例对象，就是PerpetualCache子类创建的。</p>
+
+<p>MyBatis内部还有很多Cache接口的实现，一级缓存只会涉及到这一个PerpetualCache子类。</p>
+
+<p>Cache最核心的实现其实就是一个Map，将本次查询使用的特征值作为key，将查询结果作为value存储到Map中。</p>
+
+<p>现在最核心的问题出现了：怎样来确定一次查询的特征值？</p>
+
+<p>换句话说就是：怎样判断某两次查询是完全相同的查询？</p>
+
+<p>也可以这样说：如何确定Cache中的key值？</p>
+
+<p>MyBatis认为，对于两次查询，如果以下条件都完全一样，那么就认为它们是完全相同的两次查询</p>
+
+<ol>
+  <li>
+    <p>传入的 statementId</p>
+  </li>
+  <li>
+    <p>查询时要求的结果集中的结果范围 （结果的范围通过rowBounds.offset和rowBounds.limit表示）；</p>
+  </li>
+  <li>
+    <p>这次查询所产生的最终要传递给JDBC java.sql.Preparedstatement的Sql语句字符串（boundSql.getSql() ）</p>
+  </li>
+  <li>
+    <p>传递给java.sql.Statement要设置的参数值</p>
+  </li>
+</ol>
+
+<p>CacheKey由以下条件决定：
+<strong>statementId  + rowBounds  + 传递给JDBC的SQL  + 传递给JDBC的参数值</strong></p>
+
+<p>CacheKey的创建</p>
+
+<pre><code class="language-Java">
+  @Override
+  public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) {
+    if (closed) {
+      throw new ExecutorException("Executor was closed.");
+    }
+    CacheKey cacheKey = new CacheKey();
+    cacheKey.update(ms.getId());//StatementId
+    cacheKey.update(rowBounds.getOffset());//rowBounds.offset
+    cacheKey.update(rowBounds.getLimit());//rowBounds.limit
+    cacheKey.update(boundSql.getSql());//Sql
+    List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();//参数
+    TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
+    // mimic DefaultParameterHandler logic
+    for (ParameterMapping parameterMapping : parameterMappings) {
+      if (parameterMapping.getMode() != ParameterMode.OUT) {
+        Object value;
+        String propertyName = parameterMapping.getProperty();
+        if (boundSql.hasAdditionalParameter(propertyName)) {
+          value = boundSql.getAdditionalParameter(propertyName);
+        } else if (parameterObject == null) {
+          value = null;
+        } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
+          value = parameterObject;
+        } else {
+          MetaObject metaObject = configuration.newMetaObject(parameterObject);
+          value = metaObject.getValue(propertyName);
+        }
+        cacheKey.update(value);
+      }
+    }
+    if (configuration.getEnvironment() != null) {
+      // issue #176
+      cacheKey.update(configuration.getEnvironment().getId());
+    }
+    return cacheKey;
+  }
+</code></pre>
+
+<p>构建CacheKey的过程实际上就是构造其hashCode的过程。下面的代码就是CacheKey的核心hashcode生成算法.</p>
+
+<pre><code class="language-Java">  public void update(Object object) {
+    int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object); 
+
+    count++;
+    checksum += baseHashCode;
+    baseHashCode *= count;
+
+    hashcode = multiplier * hashcode + baseHashCode;
+
+    updateList.add(object);
+  }
+</code></pre>
+
+<h1 id="6-性能问题">6. 性能问题</h1>
+
+<ul>
+  <li>一级缓存没有维护容量和大小限制</li>
+  <li>一级缓存没有更新缓存和缓存过期的概念</li>
+</ul>
+</div>
+				<footer><meta itemprop="dateModified" content="2017-12-15T15:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p></p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"></ul></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

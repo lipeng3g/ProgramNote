@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于scrollHeight和scrollTop取值为0的问题 - lipeng's blog</title>
-<meta name="description" content="关于scrollHeight和scrollTop取值为0的问题  关于scrollHeight和scrollTop取值为0的问题  1. 基础          1.1. offsetTop与style.top的区别        2. 问题及解决  3. 总结原文地址–简书1. 基础  obj.offsetTo...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Spring Quartz 和 Spring Task对比 - lipeng's blog</title>
+<meta name="description" content="Spring Quartz 和 Spring Task对比  Spring Quartz 和 Spring Task对比          1、Spring Quartz 和 Spring Task执行时间对比      2、Spring Quartz 特点      3、Spring Task特点      4...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2017/11/15/SpringQuartz%E5%92%8CSpringTask%E5%AF%B9%E6%AF%94.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,88 +31,113 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">关于scrollHeight和scrollTop取值为0的问题</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Spring Quartz 和 Spring Task对比</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Scroll">Scroll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-07T05:51:29+08:00"
-          itemprop="datePublished">Nov 07, 2017
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Quartz">Quartz</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-15T23:51:29+08:00"
+          itemprop="datePublished">Nov 15, 2017
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="spring-quartz-和-spring-task对比">Spring Quartz 和 Spring Task对比</h1>
+
 <!-- TOC -->
 
 <ul>
-  <li><a href="#关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</a></li>
-  <li><a href="#1-基础">1. 基础</a>
+  <li><a href="#spring-quartz-和-spring-task对比">Spring Quartz 和 Spring Task对比</a>
     <ul>
-      <li><a href="#11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</a></li>
+      <li><a href="#1spring-quartz-和-spring-task执行时间对比">1、Spring Quartz 和 Spring Task执行时间对比</a></li>
+      <li><a href="#2spring-quartz-特点">2、Spring Quartz 特点</a></li>
+      <li><a href="#3spring-task特点">3、Spring Task特点</a></li>
+      <li><a href="#4spring-quartz配置">4、Spring Quartz配置</a></li>
+      <li><a href="#5spring-task配置">5、Spring Task配置</a></li>
     </ul>
   </li>
-  <li><a href="#2-问题及解决">2. 问题及解决</a></li>
-  <li><a href="#3-总结">3. 总结</a></li>
 </ul>
 
 <!-- /TOC -->
 
-<p><a href="http://www.jianshu.com/p/46087c0ace05">原文地址–简书</a></p>
-
-<h1 id="1-基础">1. 基础</h1>
-
+<h2 id="1spring-quartz-和-spring-task执行时间对比">1、Spring Quartz 和 Spring Task执行时间对比</h2>
 <ul>
-  <li><code class="highlighter-rouge">obj.offsetTop</code> 指 obj 距离上方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetLeft</code> 指 obj 距离左方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetWidth</code> 指 obj 控件自身的宽度，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetHeight</code> 指 obj 控件自身的高度，整型，单位像素。（<code class="highlighter-rouge">clientHeight</code> + <code class="highlighter-rouge">滚动条</code> + <code class="highlighter-rouge">边框</code>）</li>
-  <li><code class="highlighter-rouge">obj.scrollHeight</code> 网页内容的高度，最小值是<code class="highlighter-rouge">clientHeight</code>。</li>
+  <li>Quartz设置同步模式时：一个任务的两次执行的时间间隔是：“执行时间”和“trigger的设定间隔”的<code class="highlighter-rouge">最大值 </code></li>
+  <li>Task默认同步模式：一个任务的两次执行的时间间隔是：“执行时间”+“trigger的设定间隔”，即<code class="highlighter-rouge">一个任务完成执行后</code>，才开始trigger计时</li>
 </ul>
 
-<h2 id="11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</h2>
-
+<h2 id="2spring-quartz-特点">2、Spring Quartz 特点</h2>
 <ul>
-  <li><code class="highlighter-rouge">offsetTop</code> 返回的是<code class="highlighter-rouge">数字</code>，而 <code class="highlighter-rouge">style.top</code> 返回的是<code class="highlighter-rouge">字符串</code>，除了数字外还带有单位：px。</li>
-  <li>
-    <p><code class="highlighter-rouge">offsetTop</code> <code class="highlighter-rouge">只读</code>， <code class="highlighter-rouge">style.top</code> <code class="highlighter-rouge">可读写</code>。</p>
-
-    <p>如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（<code class="highlighter-rouge">也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx</code>）</p>
-  </li>
+  <li><code class="highlighter-rouge">默认多线程异步执行 </code></li>
+  <li>一个任务在上一次调度未完成执行，下一次调度时间到时，会另起一个线程开始新的调度。在业务繁忙时，一个任务或许会有多个线程在执行，导致数据处理异常。</li>
+  <li>单任务同步：配置属性，可以使一个任务的一次调度在未完成时，而不会开启下一次调度</li>
+  <li>多个任务同时运行，任务之间没有直接的影响，多任务执行的快慢取决于CPU的性能</li>
+  <li>SchedulerFactoryBean不能使用注解来配置？还是我没找到注解的方法？</li>
 </ul>
 
-<h1 id="2-问题及解决">2. 问题及解决</h1>
+<h2 id="3spring-task特点">3、Spring Task特点</h2>
+<ul>
+  <li><code class="highlighter-rouge">默认单线程同步执行 </code></li>
+  <li>一个任务<code class="highlighter-rouge">执行完</code>上一次之后，才会<code class="highlighter-rouge">执行下一次调度</code></li>
+  <li>多任务之间按顺序执行，一个任务执行完成之后才会执行另一个任务</li>
+  <li>多任务并行执行<code class="highlighter-rouge">需要设置线程池 </code></li>
+  <li>全程可以通过注解配置</li>
+</ul>
 
-<p><code class="highlighter-rouge">document.body.scrollHeight</code>与<code class="highlighter-rouge">document.documentElement.scrollHeight</code>都是获取网页页面内容的高。</p>
+<h2 id="4spring-quartz配置">4、Spring Quartz配置</h2>
+<ul>
+  <li><code class="highlighter-rouge">配置Job</code>，job的targetObject可以使用spring注解@Service(value = “findObjectService”)配置的bean</li>
+  <li><code class="highlighter-rouge">配置Trigger </code></li>
+  <li><code class="highlighter-rouge">配置Scheduler</code>
+```xml</li>
+</ul>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  <bean id="findObjectJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="findObjectService" /> 
+    <property name="targetMethod" value="startJob" /> 
+    <property name="concurrent" value="false" />
+  </bean> 
+  <bean id="findObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="findObjectJob" />
+    <property name="repeatInterval" value="1000" />  
+    <property name="startDelay" value="5000" />   
+  </bean>
+  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="triggers">
+      <list>
+        <ref bean="findObjectTrigger" />
+      </list>
+    </property>
+  </bean>
+```
 
-<p>但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0</p>
+## 5、Spring Task配置
+- `执行方法添加@Scheduled注解 `
+- `配置线程池`
 
-<p>可以发现</p>
+```Java
+@Scheduled(cron = "0/1 * *  * * ? ")
+public void startJob() {......}
+```
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:task="http://www.springframework.org/schema/task" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/task  
+        http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+<task:executor id="executor" pool-size="5" />
+<task:scheduler id="scheduler" pool-size="5" />
+<task:annotation-driven executor="executor" scheduler="scheduler" />
+<context:annotation-config />  
+<context:component-scan base-package="com.test1,com.test2" />  
+```
 
-<p><code class="highlighter-rouge">chrome</code>对<code class="highlighter-rouge">document.documentElement.scrollHeight</code>&amp;<code class="highlighter-rouge">document.documentElement.scrollTop</code>是不能识别的</p>
-
-<p><code class="highlighter-rouge">firefox</code>和<code class="highlighter-rouge">IE11</code>不能识别<code class="highlighter-rouge">document.body.scrollHeight</code>&amp;<code class="highlighter-rouge">document.body.scrollTop</code></p>
-
-<p>所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。</p>
-
-<p>另外我也测试clientXxx，写在总结里吧。</p>
-
-<h1 id="3-总结">3. 总结</h1>
-
-<p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-</code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
-<p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
-</code></pre>
-
-<p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
-</code></pre>
+[原文地址 http://blog.csdn.net/mseeworld/article/details/53331197](http://blog.csdn.net/mseeworld/article/details/53331197)
+</beans></beans>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+				<footer><meta itemprop="dateModified" content="2017-11-15T23:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p></p>
   </div>

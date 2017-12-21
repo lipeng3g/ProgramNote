@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于scrollHeight和scrollTop取值为0的问题 - lipeng's blog</title>
-<meta name="description" content="关于scrollHeight和scrollTop取值为0的问题  关于scrollHeight和scrollTop取值为0的问题  1. 基础          1.1. offsetTop与style.top的区别        2. 问题及解决  3. 总结原文地址–简书1. 基础  obj.offsetTo...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Integer和String类型基础 - lipeng's blog</title>
+<meta name="description" content="  1. Integer比较  2. String比较  3. Integer与int比较1. Integer比较public static void main(String[] args) {        Integer a = 128,b=128;          Integer c = 127,d=12...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2017/09/09/Integer%E5%92%8CString%E7%B1%BB%E5%9E%8B%E5%9F%BA%E7%A1%80.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,88 +31,144 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">关于scrollHeight和scrollTop取值为0的问题</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Integer和String类型基础</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Scroll">Scroll</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-11-07T05:51:29+08:00"
-          itemprop="datePublished">Nov 07, 2017
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Integer">Integer</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-09-09T05:51:29+08:00"
+          itemprop="datePublished">Sep 09, 2017
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</h1>
-<!-- TOC -->
+				<div class="m-article-content js-article-content" itemprop="articleBody"><!-- TOC -->
 
 <ul>
-  <li><a href="#关于scrollheight和scrolltop取值为0的问题">关于scrollHeight和scrollTop取值为0的问题</a></li>
-  <li><a href="#1-基础">1. 基础</a>
-    <ul>
-      <li><a href="#11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</a></li>
-    </ul>
-  </li>
-  <li><a href="#2-问题及解决">2. 问题及解决</a></li>
-  <li><a href="#3-总结">3. 总结</a></li>
+  <li><a href="#1-integer比较">1. Integer比较</a></li>
+  <li><a href="#2-string比较">2. String比较</a></li>
+  <li><a href="#3-integer与int比较">3. Integer与int比较</a></li>
 </ul>
 
 <!-- /TOC -->
-
-<p><a href="http://www.jianshu.com/p/46087c0ace05">原文地址–简书</a></p>
-
-<h1 id="1-基础">1. 基础</h1>
-
-<ul>
-  <li><code class="highlighter-rouge">obj.offsetTop</code> 指 obj 距离上方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetLeft</code> 指 obj 距离左方或上层控件的位置，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetWidth</code> 指 obj 控件自身的宽度，整型，单位像素。</li>
-  <li><code class="highlighter-rouge">obj.offsetHeight</code> 指 obj 控件自身的高度，整型，单位像素。（<code class="highlighter-rouge">clientHeight</code> + <code class="highlighter-rouge">滚动条</code> + <code class="highlighter-rouge">边框</code>）</li>
-  <li><code class="highlighter-rouge">obj.scrollHeight</code> 网页内容的高度，最小值是<code class="highlighter-rouge">clientHeight</code>。</li>
-</ul>
-
-<h2 id="11-offsettop与styletop的区别">1.1. offsetTop与style.top的区别</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">offsetTop</code> 返回的是<code class="highlighter-rouge">数字</code>，而 <code class="highlighter-rouge">style.top</code> 返回的是<code class="highlighter-rouge">字符串</code>，除了数字外还带有单位：px。</li>
-  <li>
-    <p><code class="highlighter-rouge">offsetTop</code> <code class="highlighter-rouge">只读</code>， <code class="highlighter-rouge">style.top</code> <code class="highlighter-rouge">可读写</code>。</p>
-
-    <p>如果没有给 HTML 元素指定过 top 样式，则 style.top 返回的是undefined。（<code class="highlighter-rouge">也就是说内联样式与外联样式和内嵌样式都没有设置style.xx则js是无法设置该元素相应的的style.xx</code>）</p>
-  </li>
-</ul>
-
-<h1 id="2-问题及解决">2. 问题及解决</h1>
-
-<p><code class="highlighter-rouge">document.body.scrollHeight</code>与<code class="highlighter-rouge">document.documentElement.scrollHeight</code>都是获取网页页面内容的高。</p>
-
-<p>但是今天我发现使用他们时并没有达到我想要的效果，仔细查看发现firefox下document.body.scrollHeight的值始终是0</p>
-
-<p>可以发现</p>
-
-<p><code class="highlighter-rouge">chrome</code>对<code class="highlighter-rouge">document.documentElement.scrollHeight</code>&amp;<code class="highlighter-rouge">document.documentElement.scrollTop</code>是不能识别的</p>
-
-<p><code class="highlighter-rouge">firefox</code>和<code class="highlighter-rouge">IE11</code>不能识别<code class="highlighter-rouge">document.body.scrollHeight</code>&amp;<code class="highlighter-rouge">document.body.scrollTop</code></p>
-
-<p>所以要考虑的网页的兼容性，建议两种获取方法都要写在代码里。</p>
-
-<p>另外我也测试clientXxx，写在总结里吧。</p>
-
-<h1 id="3-总结">3. 总结</h1>
-
-<p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+<h1 id="1-integer比较">1. Integer比较</h1>
+<pre><code class="language-Java">public static void main(String[] args) {
+        Integer a = 128,b=128;  
+        Integer c = 127,d=127;
+              
+        System.out.println(a==b);  
+        System.out.println(c==d);
+}
 </code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
-<p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
+<blockquote>
+  <p><code class="highlighter-rouge">a==b</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">c==d</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong></p>
+
+<p>其实当我们给一个Integer对象赋一个int值的时候，会调用Integer类的静态方法valueOf，让我们看下源代码是怎么实现的。</p>
+
+<p>IntegerCache方法有明确的注释，缓存范围，如何修改等等。</p>
+<pre><code class="language-Java">/**
+     * Cache to support the object identity semantics of autoboxing for values between
+     * -128 and 127 (inclusive) as required by JLS.
+     *
+     * The cache is initialized on first usage.  The size of the cache
+     * may be controlled by the -XX:AutoBoxCacheMax=&lt;size&gt; option.
+     * During VM initialization, java.lang.Integer.IntegerCache.high property
+     * may be set and saved in the private system properties in the
+     * sun.misc.VM class.
+     */
+
+    private static class IntegerCache {
+        static final int low = -128;
+        static final int high;
+        static final Integer cache[];
+
+        static {
+            // high value may be configured by property
+            int h = 127;
+            String integerCacheHighPropValue =
+                sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+            if (integerCacheHighPropValue != null) {
+                int i = parseInt(integerCacheHighPropValue);
+                i = Math.max(i, 127);
+                // Maximum array size is Integer.MAX_VALUE
+                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+            }
+            high = h;
+
+            cache = new Integer[(high - low) + 1];
+            int j = low;
+            for(int k = 0; k &lt; cache.length; k++)
+                cache[k] = new Integer(j++);
+        }
+
+        private IntegerCache() {}
+    }
 </code></pre>
 
-<p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
+<pre><code class="language-Java">    public static Integer valueOf(int i) {
+            assert IntegerCache.high &gt;= 127;
+            if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
+                return IntegerCache.cache[i + (-IntegerCache.low)];
+            return new Integer(i);
+    }
 </code></pre>
+<p>代码描述的很清晰，如果整型字面量的值介于-128到127之间，就不会new一个新的Integer对象，而是直接引用常量池中的Integer对象，所以上面的运行结果是a==b=false，而c==d=true。</p>
+
+<h1 id="2-string比较">2. String比较</h1>
+
+<pre><code class="language-Java">public static void main(String[] args) {
+    String s1 = "abc";  
+    String s2 = "abc"; 
+    String s3 = new String("abc"); 
+    System.out.println(s1 == s2); 
+    System.out.println(s1 == s3);
+}
+</code></pre>
+<blockquote>
+  <p><code class="highlighter-rouge">s1 == s2</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">s1 == s3</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong>
+String s1 = “abc”；这样申明的字符串对象，其值就是存储在常量池中。当我们创建String s1 = “abc”这样一个对象之后，”abc”就存储到了常量池（也可叫做字符串池）中。</p>
+
+<p>当我们创建引用String s2 = “abc” 的时候，Java底层会优先在常量池中查找是否存在”abc”，如果存在则让s2指向这个值，不会重新创建，如果常量池中没有则创建并添加的池中。这就是为什么答案是true 和false的原因。</p>
+
+<h1 id="3-integer与int比较">3. Integer与int比较</h1>
+<pre><code class="language-Java">    public static void main(String[] args) {
+        Integer a = new Integer(128);  
+        int b = 128; 
+        Integer c = new Integer(6); 
+        Integer d = new Integer(6); 
+        System.out.println(a == b); 
+        System.out.println(c == d); 
+    }
+</code></pre>
+
+<blockquote>
+  <p><code class="highlighter-rouge">a == b</code> –&gt; <code class="highlighter-rouge">true</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="highlighter-rouge">c == d</code> –&gt; <code class="highlighter-rouge">false</code></p>
+</blockquote>
+
+<p><strong>结果解释</strong></p>
+
+<p>c == d=false，我们这里的Integer是new出来的，并不是用的缓存，所以结果是false。</p>
+
+<p>a == b=true，注意一下这里的b是int类型，当int和Integer做==比较的时候，Integer类型会自动拆箱，也就是把Integer转成int类型，所以这里进行比较的是int类型的值，所以结果即为true。</p>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+				<footer><meta itemprop="dateModified" content="2017-09-09T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> license.</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p></p>
   </div>
