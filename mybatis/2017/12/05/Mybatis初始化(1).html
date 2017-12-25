@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="zh">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Mybatis初始化 - lipeng's blog</title>
-<meta name="description" content="对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。本章将通过以下几点详细介绍MyBatis的初始化过程。1. MyBatis的初始化做了什么2. MyBatis基于XML配置文件创建Configuration对象的过程3. 手动加载XML配置文件创建Configuration对象完成初始化...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Mybatis初始化(1) - lipeng's blog</title>
+<meta name="description" content="对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。MyBatis的初始化做了什么任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：× configuration 配置    × properties 属性    × set...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,40 +31,40 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis初始化</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis初始化(1)</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a>
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-05T06:51:29+08:00"
           itemprop="datePublished">2017年 12月05日
         </time></div>
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。本章将通过以下几点详细介绍MyBatis的初始化过程。
-1. MyBatis的初始化做了什么
-2. MyBatis基于XML配置文件创建Configuration对象的过程
-3. 手动加载XML配置文件创建Configuration对象完成初始化，创建并使用SqlSessionFactory对象
-4. 涉及到的设计模式 # MyBatis的初始化做了什么
-任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：
+				<div class="m-article-content js-article-content" itemprop="articleBody"><div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。
+</code></pre></div></div>
+
+<h1 id="mybatis的初始化做了什么">MyBatis的初始化做了什么</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：
 × configuration 配置
     × properties 属性
     × settings 设置
     × typeAliases 类型命名
     × typeHandlers 类型处理器
-    × objectFactory 对象工厂
     × plugins 插件
+    × objectFactory 对象工厂
+    × reflectorFactory
     × environments 环境
         × environment 环境变量
         × transactionManager 事务管理器
         × dataSource 数据源
+    × mappers
 × 映射器
 </code></pre></div></div>
 
 <p>MyBatis的上述配置信息会配置在XML配置文件中，那么，这些信息被加载进入MyBatis内部，MyBatis是怎样维护的呢？</p>
 
-<p>MyBatis采用了一个非常直白和简单的方式—使用 <code class="highlighter-rouge">org.apache.ibatis.session.Configuration</code> 对象作为一个所有配置信息的容器，Configuration对象的组织结构和XML配置文件的组织结构几乎完全一样（当然，Configuration对象的功能并不限于此，它还负责创建一些MyBatis内部使用的对象，如Executor等）。如下图所示：
-<img src="/ProgramNote/assets/Image/mybatis/1.png" alt="alt text" title="Title" /></p>
+<p>MyBatis采用了一个非常直白和简单的方式—使用 <code class="highlighter-rouge">org.apache.ibatis.session.Configuration</code> 对象作为一个所有配置信息的容器，Configuration对象的组织结构和XML配置文件的组织结构几乎完全一样（当然，Configuration对象的功能并不限于此，它还负责创建一些MyBatis内部使用的对象，如Executor等）。如下图所示：</p>
+
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis1.png" alt="alt text" title="Title" /></p>
 
 <p>MyBatis根据初始化好Configuration信息，这时候用户就可以使用MyBatis进行数据库操作了。
 可以这么说，MyBatis初始化的过程，就是创建 Configuration对象的过程。</p>
@@ -98,7 +98,7 @@ List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");
 <p><code class="highlighter-rouge">SqlSessionFactoryBuilder根据传入的数据流生成Configuration对象，然后根据Configuration对象创建默认的SqlSessionFactory实例。</code>
 初始化的基本过程如下序列图所示：</p>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/2.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis2.png" alt="alt text" title="Title" /></p>
 
 <p>由上图所示，mybatis初始化要经过简单的以下几步：</p>
 <ol>
@@ -167,9 +167,9 @@ List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");
   <li>XMLConfigBuilder会将XML配置文件的信息转换为Document对象，而XML配置定义文件DTD转换成XMLMapperEntityResolver对象，然后将二者封装到XpathParser对象中，XpathParser的作用是提供根据Xpath表达式获取基本的DOM节点Node信息的操作。如下图所示：</li>
 </ol>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/3.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis3.png" alt="alt text" title="Title" /></p>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/4.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis4.png" alt="alt text" title="Title" /></p>
 
 <ol>
   <li>之后XMLConfigBuilder调用parse()方法：会从XPathParser中取出 <configuration>节点对应的Node对象，然后解析此Node节点的子Node：`properties, settings, typeAliases,typeHandlers, objectFactory, objectWrapperFactory, plugins, environments,databaseIdProvider, mappers`
@@ -282,7 +282,7 @@ private boolean isSpecifiedEnvironment(String id)
 我们将上述的MyBatis初始化基本过程的序列图细化，</li>
 </ol>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/5.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis5.png" alt="alt text" title="Title" /></p>
 
 <h1 id="手动加载xml配置文件创建configuration对象完成初始化创建并使用sqlsessionfactory对象">手动加载XML配置文件创建Configuration对象完成初始化，创建并使用SqlSessionFactory对象</h1>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>我们可以使用XMLConfigBuilder手动解析XML配置文件来创建Configuration对象，代码如下： ```Java String resource = "mybatis-config.xml";   InputStream inputStream = Resources.getResourceAsStream(resource);   //手动创建XMLConfigBuilder，并解析创建Configuration对象   XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, null,null);   Configuration configuration=parse();   //使用Configuration对象创建SqlSessionFactory   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);   //使用MyBatis   SqlSession sqlSession = sqlSessionFactory.openSession();   List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");   ``` # 涉及到的设计模式
@@ -293,11 +293,11 @@ private boolean isSpecifiedEnvironment(String id)
 <h2 id="builder模式应用1-sqlsessionfactory的创建">Builder模式应用1： SqlSessionFactory的创建</h2>
 <p>对于创建SqlSessionFactory时，会根据情况提供不同的参数，其参数组合可以有以下几种：</p>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/6.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis6.png" alt="alt text" title="Title" /></p>
 
 <p>由于构造时参数不定，可以为其创建一个构造器Builder，将SqlSessionFactory的构建过程和表示分开：</p>
 
-<p><img src="/ProgramNote/assets/Image/mybatis/7.png" alt="alt text" title="Title" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis7.png" alt="alt text" title="Title" /></p>
 
 <p>MyBatis将SqlSessionFactoryBuilder和SqlSessionFactory相互独立。</p>
 
@@ -393,9 +393,9 @@ private boolean isSpecifiedEnvironment(String id)
 
 <p><a href="http://blog.csdn.net/luanlouis/article/details/37744073#">原文地址http://blog.csdn.net/luanlouis/article/details/37744073#</a></p>
 </div>
-				<footer><meta itemprop="dateModified" content="2017-12-05T06:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/05-Mybatis/2017-12-05-Mybatis初始化.md">
+				<footer><meta itemprop="dateModified" content="2017-12-05T06:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/05-Mybatis/2017-12-05-Mybatis初始化(1).md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
-      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/05-Mybatis/2017-12-05-Mybatis初始化.md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/05-Mybatis/2017-12-05-Mybatis初始化(1).md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
   </div>
