@@ -33,8 +33,6 @@
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
 				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis二级缓存</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=%E7%BC%93%E5%AD%98">缓存</a>
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-19T19:51:29+08:00"
           itemprop="datePublished">2017年 12月19日
         </time></div>
@@ -44,18 +42,18 @@
 				<div class="m-article-content js-article-content" itemprop="articleBody"><!-- TOC -->
 
 <ul>
-  <li><a href="#1-mybatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%95%B4%E4%BD%93%E8%AE%BE%E8%AE%A1">1. Mybatis缓存机制整体设计</a></li>
-  <li><a href="#2-%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">2. 二级缓存的基本原理</a></li>
-  <li><a href="#3-%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E5%88%92%E5%88%86">3. 二级缓存的划分</a>
+  <li><a href="#1-mybatis缓存机制整体设计">1. Mybatis缓存机制整体设计</a></li>
+  <li><a href="#2-二级缓存的基本原理">2. 二级缓存的基本原理</a></li>
+  <li><a href="#3-二级缓存的划分">3. 二级缓存的划分</a>
     <ul>
-      <li><a href="#31-%E4%B8%BA%E6%AF%8F%E4%B8%80%E4%B8%AAmapper%E5%88%86%E9%85%8D%E4%B8%80%E4%B8%AAcache%E7%BC%93%E5%AD%98%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%BD%BF%E7%94%A8cache%E8%8A%82%E7%82%B9%E9%85%8D%E7%BD%AE%EF%BC%89">3.1. 为每一个Mapper分配一个Cache缓存对象（使用<code class="highlighter-rouge">&lt;cache&gt;</code>节点配置）</a></li>
-      <li><a href="#32-%E5%A4%9A%E4%B8%AAmapper%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AAcache%E7%BC%93%E5%AD%98%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%BD%BF%E7%94%A8cache-ref%E8%8A%82%E7%82%B9%E9%85%8D%E7%BD%AE%EF%BC%89">3.2. 多个Mapper共用一个Cache缓存对象（使用<code class="highlighter-rouge">&lt;cache-ref&gt;</code>节点配置）</a></li>
+      <li><a href="#31-为每一个mapper分配一个cache缓存对象使用cache节点配置">3.1. 为每一个Mapper分配一个Cache缓存对象（使用<code class="highlighter-rouge">&lt;cache&gt;</code>节点配置）</a></li>
+      <li><a href="#32-多个mapper共用一个cache缓存对象使用cache-ref节点配置">3.2. 多个Mapper共用一个Cache缓存对象（使用<code class="highlighter-rouge">&lt;cache-ref&gt;</code>节点配置）</a></li>
     </ul>
   </li>
-  <li><a href="#4-%E5%BC%80%E5%90%AF%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E6%9D%A1%E4%BB%B6">4. 开启二级缓存的条件</a></li>
-  <li><a href="#5-%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8%E9%A1%BA%E5%BA%8F">5. 缓存使用顺序</a></li>
-  <li><a href="#6-%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F">6. 二级缓存的实现方式</a></li>
-  <li><a href="#7-mybatis%E8%87%AA%E8%BA%AB%E6%8F%90%E4%BE%9B%E7%9A%84%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0">7. Mybatis自身提供的二级缓存实现</a></li>
+  <li><a href="#4-开启二级缓存的条件">4. 开启二级缓存的条件</a></li>
+  <li><a href="#5-缓存使用顺序">5. 缓存使用顺序</a></li>
+  <li><a href="#6-二级缓存的实现方式">6. 二级缓存的实现方式</a></li>
+  <li><a href="#7-mybatis自身提供的二级缓存实现">7. Mybatis自身提供的二级缓存实现</a></li>
 </ul>
 
 <!-- /TOC -->

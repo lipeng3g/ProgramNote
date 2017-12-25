@@ -33,8 +33,6 @@
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
 				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Mybatis数据源和连接池</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=DataSource">DataSource</a>
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2017-12-07T09:51:29+08:00"
           itemprop="datePublished">2017年 12月07日
         </time></div>
@@ -45,37 +43,37 @@
 <!-- TOC --></p>
 
 <ul>
-  <li><a href="#1-mybatis%E6%95%B0%E6%8D%AE%E6%BA%90datasource%E5%88%86%E7%B1%BB">1. MyBatis数据源DataSource分类</a></li>
-  <li><a href="#2-datasource%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B">2. DataSource的创建过程</a>
+  <li><a href="#1-mybatis数据源datasource分类">1. MyBatis数据源DataSource分类</a></li>
+  <li><a href="#2-datasource的创建过程">2. DataSource的创建过程</a>
     <ul>
-      <li><a href="#21-%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90">2.1. 文件解析</a></li>
-      <li><a href="#22-%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%BC%8F">2.2. 创建模式</a></li>
-      <li><a href="#23-%E5%AD%98%E5%82%A8">2.3. 存储</a></li>
+      <li><a href="#21-文件解析">2.1. 文件解析</a></li>
+      <li><a href="#22-创建模式">2.2. 创建模式</a></li>
+      <li><a href="#23-存储">2.3. 存储</a></li>
     </ul>
   </li>
-  <li><a href="#3-datasource%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9B%E5%BB%BAconnection%E5%AF%B9%E8%B1%A1">3. DataSource什么时候创建Connection对象</a></li>
+  <li><a href="#3-datasource什么时候创建connection对象">3. DataSource什么时候创建Connection对象</a></li>
   <li><a href="#4-unpooleddatasource">4. UnpooledDataSource</a>
     <ul>
-      <li><a href="#41-%E5%88%9B%E5%BB%BAconnection%E8%BF%87%E7%A8%8B">4.1. 创建Connection过程</a></li>
+      <li><a href="#41-创建connection过程">4.1. 创建Connection过程</a></li>
     </ul>
   </li>
-  <li><a href="#5-%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E6%B1%A0">5. 使用连接池</a>
+  <li><a href="#5-使用连接池">5. 使用连接池</a>
     <ul>
-      <li><a href="#51-%E5%88%86%E6%9E%90">5.1. 分析</a></li>
+      <li><a href="#51-分析">5.1. 分析</a></li>
     </ul>
   </li>
   <li><a href="#6-pooleddatasource">6. PooledDataSource</a>
     <ul>
-      <li><a href="#61-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">6.1. 基本原理</a></li>
-      <li><a href="#62-%E8%8E%B7%E5%8F%96javasqlconnection%E5%AF%B9%E8%B1%A1">6.2. 获取java.sql.Connection对象</a></li>
-      <li><a href="#63-javasqlconnection%E5%AF%B9%E8%B1%A1%E5%9B%9E%E6%94%B6">6.3. java.sql.Connection对象回收</a></li>
-      <li><a href="#64-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E5%9B%9E%E6%94%B6connection">6.4. 代理模式回收Connection</a></li>
+      <li><a href="#61-基本原理">6.1. 基本原理</a></li>
+      <li><a href="#62-获取javasqlconnection对象">6.2. 获取java.sql.Connection对象</a></li>
+      <li><a href="#63-javasqlconnection对象回收">6.3. java.sql.Connection对象回收</a></li>
+      <li><a href="#64-代理模式回收connection">6.4. 代理模式回收Connection</a></li>
     </ul>
   </li>
-  <li><a href="#7-jndi%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90datasource">7. JNDI类型的数据源DataSource</a>
+  <li><a href="#7-jndi类型的数据源datasource">7. JNDI类型的数据源DataSource</a>
     <ul>
-      <li><a href="#71-mybatis-jndi%E6%95%B0%E6%8D%AE%E6%BA%90%E5%AE%9E%E7%8E%B0">7.1. Mybatis JNDI数据源实现</a></li>
-      <li><a href="#72-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8jndi">7.2. 为什么使用JNDI</a></li>
+      <li><a href="#71-mybatis-jndi数据源实现">7.1. Mybatis JNDI数据源实现</a></li>
+      <li><a href="#72-为什么使用jndi">7.2. 为什么使用JNDI</a></li>
     </ul>
   </li>
 </ul>
