@@ -59,15 +59,17 @@ places.add("Córdoba");
 places.add("La Plata");
 </code></pre>
 <p>可以使用下面的代码来完成</p>
-<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
+
+<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"))
 </code></pre>
+
 <p>但是有没有更好的方式呢？</p>
 <h2 id="2-答案一">2. 答案一</h2>
 
 <p>其实上面最开始的写法可能就是<code class="highlighter-rouge">最好</code>的，它不需要创建新的<code class="highlighter-rouge">list</code>对象，不需要转换，所有的操作都指向原有的对象实例。</p>
 
 <p>当然，有一些替代方法，例如使用实例初始化器（也称为<code class="highlighter-rouge">双括号初始化</code>）来创建一个<code class="highlighter-rouge">匿名内部类</code>：</p>
-<pre><code class="language-Java">ArrayList&lt;Stringlist = new ArrayList&lt;String&gt;() ;
+<pre><code class="language-Java">    ArrayList&lt;Stringlist = new ArrayList&lt;String&gt;() ;
 </code></pre>
 <p>但是这种方法不太好，仅仅是为了创建一个<code class="highlighter-rouge">ArrayList</code>，<code class="highlighter-rouge">{}</code>中又创建了一个<code class="highlighter-rouge">ArrayList</code>的实例对象，有些浪费。
 如果按照下面的方式可以初始化就好了，但是很不幸，这种方式是错误的；</p>
