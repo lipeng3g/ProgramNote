@@ -279,85 +279,90 @@ typeAliasRegistry.registerAlias("WEAK", WeakCache.class);
 
 <p>从上述代码中可以看到，<code class="highlighter-rouge">XMLConfigBuilder</code>会依次解析配置文件中的<code class="highlighter-rouge">&lt;properties&gt;</code>、<code class="highlighter-rouge">&lt; settings &gt;</code>、<code class="highlighter-rouge">&lt; environments&gt;</code>、<code class="highlighter-rouge">&lt; typeAliases &gt;</code>、<code class="highlighter-rouge">&lt; plugins &gt;</code>、<code class="highlighter-rouge">&lt; mappers &gt;</code>等属性。下面介绍下几个重要属性的解析过程。</p>
 
-<h4 id="2321-节点的解析过程">2.3.2.1 <properties>节点的解析过程</properties></h4>
+<h4 id="2321-properties节点的解析过程">2.3.2.1 <code class="highlighter-rouge">&lt;properties&gt;</code>节点的解析过程</h4>
 
 <ul>
   <li>
     <properties>节点的定义如下：
 
-```
-<properties resource="org/mybatis/example/config.properties">
-  <property name="username" value="dev_user" />
-  <property name="password" value="F2Fa3!33TYyg" />
-</properties>
-
-```
-
+    
 </properties>
   </li>
+</ul>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;properties resource="org/mybatis/example/config.properties"&gt;
+
+    &lt;property name="username" value="dev_user"/&gt;
+
+    &lt;property name="password" value="F2Fa3!33TYyg"/&gt;
+    
+  &lt;/properties&gt;
+</code></pre></div></div>
+
+<ul>
   <li>
     <properties>节点的解析过程：
 
-```
-/**
-  * @Param context <properties>节点
-  */
-private void propertiesElement(XNode context) throws Exception {
-  if (context != null) {
-    // 获取<properties>节点的所有子节点
-    Properties defaults = context.getChildrenAsProperties();
-    // 获取<properties>节点上的resource属性
-    String resource = context.getStringAttribute("resource");
-    // 获取<properties>节点上的url属性
-    String url = context.getStringAttribute("url");
-    // resource和url不能同时存在
-    if (resource != null &amp;&amp; url != null) {
-      throw new BuilderException("The properties element cannot specify both a URL and a resource based property file reference.  Please specify one or the other.");
-    }
-    if (resource != null) {
-      // 获取resource属性值对应的properties文件中的键值对，并添加至defaults容器中        
-      defaults.putAll(Resources.getResourceAsProperties(resource));
-    } else if (url != null) {
-      // 获取url属性值对应的properties文件中的键值对，并添加至defaults容器中
-      defaults.putAll(Resources.getUrlAsProperties(url));
-    }
-    // 获取configuration中原本的属性，并添加至defaults容器中
-    Properties vars = configuration.getVariables();
-    if (vars != null) {
-      defaults.putAll(vars);
-    }
-    parser.setVariables(defaults);
-    // 将defaults容器添加至configuration中
-    configuration.setVariables(defaults);
-  }
-}
-
-```
-
-*   首先读取`<resources>`节点下的所有`<resource>`节点，并将每个节点的`name`和`value`属性存入`Properties`中。
-*   然后读取`<resources>`节点上的`resource`、`url`属性，并获取指定配置文件中的`name`和`value`，也存入`Properties`中。（PS：由此可知，如果resource节点上定义的属性和properties文件中的属性重名，那么properties文件中的属性值会覆盖resource节点上定义的属性值。）
-*   最终，携带所有属性的`Properties`对象会被存储在`Configuration`对象中。
-
-</resources></resource></resources></properties></properties></properties></properties></properties>
+</properties>
   </li>
 </ul>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    /**
+      * @Param context &lt;properties&gt;节点
+      */
+    private void propertiesElement(XNode context) throws Exception {
+      if (context != null) {
+        // 获取&lt;properties&gt;节点的所有子节点
+        Properties defaults = context.getChildrenAsProperties();
+        // 获取&lt;properties&gt;节点上的resource属性
+        String resource = context.getStringAttribute("resource");
+        // 获取&lt;properties&gt;节点上的url属性
+        String url = context.getStringAttribute("url");
+        // resource和url不能同时存在
+        if (resource != null &amp;&amp; url != null) {
+          throw new BuilderException("The properties element cannot specify both a URL and a resource based property file reference.  Please specify one or the other.");
+        }
+        if (resource != null) {
+          // 获取resource属性值对应的properties文件中的键值对，并添加至defaults容器中        
+          defaults.putAll(Resources.getResourceAsProperties(resource));
+        } else if (url != null) {
+          // 获取url属性值对应的properties文件中的键值对，并添加至defaults容器中
+          defaults.putAll(Resources.getUrlAsProperties(url));
+        }
+        // 获取configuration中原本的属性，并添加至defaults容器中
+        Properties vars = configuration.getVariables();
+        if (vars != null) {
+          defaults.putAll(vars);
+        }
+        parser.setVariables(defaults);
+        // 将defaults容器添加至configuration中
+        configuration.setVariables(defaults);
+      }
+    }
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*   首先读取`&lt;resources&gt;`节点下的所有`&lt;resource&gt;`节点，并将每个节点的`name`和`value`属性存入`Properties`中。
+*   然后读取`&lt;resources&gt;`节点上的`resource`、`url`属性，并获取指定配置文件中的`name`和`value`，也存入`Properties`中。（PS：由此可知，如果resource节点上定义的属性和properties文件中的属性重名，那么properties文件中的属性值会覆盖resource节点上定义的属性值。）
+*   最终，携带所有属性的`Properties`对象会被存储在`Configuration`对象中。
+</code></pre></div></div>
+
 <h4 id="2322-节点的解析过程">2.3.2.2 <settings>节点的解析过程</settings></h4>
 
 <ul>
   <li>
     <settings>节点的定义如下：
 
-```
-<settings>
-  <setting name="cacheEnabled" value="true" />
-  <setting name="lazyLoadingEnabled" value="true" />
-  <setting name="multipleResultSetsEnabled" value="true" />
-</settings>
-
-```
-
 </settings>
   </li>
+</ul>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;settings&gt;
+      &lt;setting name="cacheEnabled" value="true"/&gt;
+      &lt;setting name="lazyLoadingEnabled" value="true"/&gt;
+      &lt;setting name="multipleResultSetsEnabled" value="true"/&gt;
+    &lt;/settings&gt;
+
+</code></pre></div></div>
+
+<ul>
   <li>
     <settings>节点的解析过程：
 `<settings>`属性的解析过程和 `<properties>`属性的解析过程极为类似，这里不再赘述。最终，所有的setting属性都被存储在`Configuration`对象中。
