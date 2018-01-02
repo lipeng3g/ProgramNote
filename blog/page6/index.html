@@ -29,7 +29,24 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">函数声明 VS 函数表达式</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">JavaScript 中的 Hoisting 机制</a></h1>
+          <div class="m-article-content">JavaScript 中的 Hoisting 机制
+
+  JavaScript 中的 Hoisting 一般称之为变量声明提升机制。就是说，JavaScript 引擎在执行的时候，会把所有变量的声明都会被提升到当前作用域的最前面，注意，这里被提升的仅仅是声明。怎么理解呢，看下面例子：
+  var myval = "my global var";
+(function() {
+	console.log(myval); // log "my global var"
+})();
+
+  以上代码很显然会输出 "my global var"，但是如果我们把以上代码按如下方式稍加修改：
+  var myval = "my global var";
+(function() {
+	console.log...</div><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">函数声明 VS 函数表达式</a></h1>
           <div class="m-article-content">函数声明 VS 函数表达式
 JavaScript 中需要创建函数的话，有两种方法：函数声明、函数表达式，各自写法如下：
 
@@ -92,7 +109,7 @@ preferences --&gt; Version Control --&gt; Subversion --&gt; Use Command line cli
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>共计 28 篇文章, 6 页。</p>
+</article></div><nav class="m-pagination"><p>共计 29 篇文章, 6 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page5">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
