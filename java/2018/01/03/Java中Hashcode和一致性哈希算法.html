@@ -1,0 +1,479 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Java中hashcode和一致性哈希算法 - lipeng's blog</title>
+<meta name="description" content="哈希算法什么是哈希算法哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。哈希算法的特点  哈希值是二进制值  哈希值具有一定的唯一性  哈希值极其紧凑  要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的正因为哈希值的这些特点，使得哈希算法应用在加密领...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Java中hashcode和一致性哈希算法</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2018-01-03T17:13:29+08:00"
+          itemprop="datePublished">2018年 01月03日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="哈希算法">哈希算法</h1>
+<h2 id="什么是哈希算法">什么是哈希算法</h2>
+<p>哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。</p>
+
+<h2 id="哈希算法的特点">哈希算法的特点</h2>
+<ul>
+  <li>哈希值是二进制值</li>
+  <li>哈希值具有一定的唯一性</li>
+  <li>哈希值极其紧凑</li>
+  <li>要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的</li>
+</ul>
+
+<p>正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。</p>
+
+<h2 id="哈希表">哈希表</h2>
+<p>哈希表是一种数据机构。<br />
+哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。<br />
+哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。<br />
+数据库索引也是用空间换时间的做法。</p>
+
+<h1 id="java应用">Java应用</h1>
+<h2 id="hashmap应用">HashMap应用</h2>
+
+<p>java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。<br />
+从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，<strong>首先</strong>，<code class="highlighter-rouge">调用hashcode()方法，判断元素A在容器中是否已经存在</code>。如果A元素的hashcode值在HashMap中不存在，则直接插入。<strong>否则</strong>，<code class="highlighter-rouge">接着调用equals()方法，判断A元素在容器中是否已经存在</code>。<br />
+<strong>hashcode()的时间复杂度为O(1)</strong>，<strong>equals()方法的时间复杂度为O(m)</strong>，整体的时间复杂度就是：<strong>O(1) + O(m)</strong>。  其中，m是桶的深度。<br />
+桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。<br />
+<code class="highlighter-rouge">一个好的哈希算法应该尽量减少哈希碰撞的次数。</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>关于hashmap中详细的计算方式以后在集合中慢慢学习。
+</code></pre></div></div>
+
+<h2 id="string应用">String应用</h2>
+
+<pre><code class="language-Java">/**
+     * 返回该字符串的哈希代码。 
+     * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+     * s[i]代表字符串数组中的元素
+     * 如果是空字符串，默认hash值是0.
+     *
+     * @return  a hash code value for this object.
+     */
+    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;&amp; value.length &gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+</code></pre>
+
+<pre><code class="language-Java">
+    /**
+     * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true
+     *
+     * @param  anObject
+     *         The object to compare this {@code String} against
+     *
+     * @return  {@code true} if the given object represents a {@code String}
+     *          equivalent to this string, {@code false} otherwise
+     *
+     * @see  #compareTo(String)
+     * @see  #equalsIgnoreCase(String)
+     */
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String)anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+
+<h1 id="一致性哈希算法">一致性哈希算法</h1>
+<h2 id="基本介绍">基本介绍</h2>
+<p>多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。</p>
+
+<p>一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。</p>
+<h2 id="参考标准">参考标准</h2>
+
+<ul>
+  <li>平衡性(Balance)
+    <ul>
+      <li>平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。</li>
+    </ul>
+  </li>
+  <li>单调性(Monotonicity)
+    <ul>
+      <li>单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。</li>
+    </ul>
+  </li>
+  <li>分散性(Spread)
+    <ul>
+      <li>在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。</li>
+    </ul>
+  </li>
+  <li>负载(Load)
+    <ul>
+      <li>负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="实现过程">实现过程</h2>
+
+<h3 id="环形hash空间">环形Hash空间</h3>
+<p>按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图</p>
+
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_001.jpg" alt="Alt text" title="title" /></p>
+
+<h3 id="把数据通过一定的hash算法处理后映射到环上">把数据通过一定的hash算法处理后映射到环上</h3>
+<p>现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图：<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_002.jpg" alt="Alt text" title="title" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hash(object1) = key1；
+Hash(object2) = key2；
+Hash(object3) = key3；
+Hash(object4) = key4；
+</code></pre></div></div>
+
+<h3 id="将机器通过hash算法映射到环上">将机器通过hash算法映射到环上</h3>
+<p>在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。
+假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下：  <br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_003.jpg" alt="Alt text" title="title" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hash(NODE1) = KEY1;
+Hash(NODE2) = KEY2;
+Hash(NODE3) = KEY3;
+</code></pre></div></div>
+
+<p>通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。</p>
+
+<h3 id="机器的删除与添加">机器的删除与添加</h3>
+<p>普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。</p>
+<h4 id="节点机器的删除">节点（机器）的删除</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg "title")  
+</code></pre></div></div>
+
+<h4 id="节点机器的添加">节点（机器）的添加</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg "title")  
+                                                          
+通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。
+</code></pre></div></div>
+
+<h3 id="平衡性">平衡性</h3>
+<p>根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>“虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。
+</code></pre></div></div>
+
+<p>以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下：<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_006.jpg" alt="Alt text" title="title" /></p>
+
+<p>根据上图可知对象的映射关系：object1-&gt;NODE1-1，object2-&gt;NODE1-2，object3-&gt;NODE3-2，object4-&gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图：<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_007.jpg" alt="Alt text" title="title" /></p>
+
+<p>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值：
+Hash(“192.168.1.100”);
+引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值：
+Hash(“192.168.1.100#1”); // NODE1-1
+Hash(“192.168.1.100#2”); // NODE1-2</p>
+
+<h2 id="java实现">Java实现</h2>
+
+<pre><code class="language-Java">import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+public class ConsistentHash&lt;T&gt; {
+    private final HashFunction hashFunction;
+    private final int numberOfReplicas;// 节点的复制因子,实际节点个数 *  numberOfReplicas =
+                                        // 虚拟节点个数
+    private final SortedMap&lt;Long, T&gt; circle = new TreeMap&lt;Long, T&gt;();// 存储虚拟节点的hash值到真实节点的映射
+
+    public ConsistentHash(HashFunction hashFunction, int numberOfReplicas,
+            Collection&lt;T&gt; nodes) {
+        this.hashFunction = hashFunction;
+        this.numberOfReplicas = numberOfReplicas;
+        for (T node : nodes)
+            add(node);
+    }
+
+    public void add(T node) {
+        for (int i = 0; i &lt; numberOfReplicas; i++)
+            // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点
+            /*
+             * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node
+             * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上
+             */
+            circle.put(hashFunction.hash(node.toString() + i), node);
+    }
+
+    public void remove(T node) {
+        for (int i = 0; i &lt; numberOfReplicas; i++)
+            circle.remove(hashFunction.hash(node.toString() + i));
+    }
+
+    /*
+     * 获得一个最近的顺时针节点,根据给定的key 取Hash
+     * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点
+     * 再从实际节点中取得 数据
+     */
+    public T get(Object key) {
+        if (circle.isEmpty())
+            return null;
+        long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode
+        if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器
+            SortedMap&lt;Long, T&gt; tailMap = circle.tailMap(hash);
+            hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
+        }
+        return circle.get(hash);
+    }
+
+    public long getSize() {
+        return circle.size();
+    }
+    
+    /*
+     * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置
+     */
+    public void testBalance(){
+        Set&lt;Long&gt; sets  = circle.keySet();//获得TreeMap中所有的Key
+        SortedSet&lt;Long&gt; sortedSets= new TreeSet&lt;Long&gt;(sets);//将获得的Key集合排序
+        for(Long hashCode : sortedSets){
+            System.out.println(hashCode);
+        }
+        
+        System.out.println("----each location 's distance are follows: ----");
+        /*
+         * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值
+         */
+        Iterator&lt;Long&gt; it = sortedSets.iterator();
+        Iterator&lt;Long&gt; it2 = sortedSets.iterator();
+        if(it2.hasNext())
+            it2.next();
+        long keyPre, keyAfter;
+        while(it.hasNext() &amp;&amp; it2.hasNext()){
+            keyPre = it.next();
+            keyAfter = it2.next();
+            System.out.println(keyAfter - keyPre);
+        }
+    }
+    
+    public static void main(String[] args) {
+        Set&lt;String&gt; nodes = new HashSet&lt;String&gt;();
+        nodes.add("A");
+        nodes.add("B");
+        nodes.add("C");
+        
+        ConsistentHash&lt;String&gt; consistentHash = new ConsistentHash&lt;String&gt;(new HashFunction(), 2, nodes);
+        consistentHash.add("D");
+        
+        System.out.println("hash circle size: " + consistentHash.getSize());
+        System.out.println("location of each node are follows: ");
+        consistentHash.testBalance();
+    }
+    
+}
+</code></pre>
+</div>
+				<footer><meta itemprop="dateModified" content="2018-01-03T17:13:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-03-Java中Hashcode和一致性哈希算法.md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-03-Java中Hashcode和一致性哈希算法.md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

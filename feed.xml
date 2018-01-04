@@ -1,5 +1,474 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-02T16:54:22+08:00</updated><id>http://localhost:4000/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Java常用关键字总结</title><link href="http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html" rel="alternate" type="text/html" title="Java常用关键字总结" /><published>2018-01-02T16:47:46+08:00</published><updated>2018-01-02T16:47:46+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">&lt;h1 id=&quot;abstrate&quot;&gt;abstrate&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-04T12:01:04+08:00</updated><id>http://localhost:4000/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Hashcode和equals</title><link href="http://localhost:4000/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html" rel="alternate" type="text/html" title="Hashcode和equals" /><published>2018-01-04T10:46:08+08:00</published><updated>2018-01-04T10:46:08+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">&lt;h1 id=&quot;问题&quot;&gt;问题&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;equals方法详解&quot;&gt;equals()方法详解&lt;/h1&gt;
+&lt;p&gt;先看java.lang.Object的默认实现，部分内容进行了翻译。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;   /**
+     * 表示某个其他对象是否“等于”这一个。
+     * &amp;lt;p&amp;gt;
+     * equals方法在非null对象引用上实现等价关系
+     * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。
+     * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回true
+     * 传递: 对任何非空的引用值 x, y, z, 如果 x.equals(y)返回 true ，y.equals(z)返回 true, 那么 x.equals(z)也必须返回true
+     * 一致: 如果x.equals(y)返回是true，只要x和y内容一直不变，不管你重复x.equals(y)多少次，返回都是true。
+     * 任何情况下，x.equals(null)，永远返回是“false”；x.equals(和x不同类型的对象)永远返回是“false”。
+     * &amp;lt;p&amp;gt;
+     * Object类的equals方法实现了对象上最可能的等价关系;也就是说，对于任何非null的引用值x和y，当且仅当x和y引用同一个对象x == y时返回 true。
+     * &amp;lt;p&amp;gt;
+     * 请注意，无论何时重写此方法，通常都必须重写hashCode方法，以维护hashCode方法的一般约定，该方法声明相等的对象必须具有相同的哈希码。
+     *
+     * @param   obj   the reference object with which to compare.
+     * @return  true} if this object is the same as the obj
+     *          argument; false} otherwise.
+     * @see     #hashCode()
+     * @see     java.util.HashMap
+     */
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。&lt;/p&gt;
+
+&lt;p&gt;但是，很多时候，equals方法会被重写，例如 java.lang.String&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String) anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                            return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;java.lang.String的equals方法不是进行引用地址比较，而是内容比较。&lt;/p&gt;
+
+&lt;p&gt;下面举个形象的例子&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;public class User {
+    private int id;
+    private String name;
+    private String password;
+
+    &amp;lt;get and set&amp;gt;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;测试方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    User user1 = new User();
+    User user2 = new User();
+    assert user1.equals(user2);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;public class User {
+    private int id;
+    private String name;
+    private String password;
+
+    &amp;lt;get and set&amp;gt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return id == user.id &amp;amp;&amp;amp;
+                Objects.equals(name, user.name) &amp;amp;&amp;amp;
+                Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, name, password);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;需要注意的是，上面同时重写了 equals 和 Hashcode 方法，在这个简单对象中不重写可能不会有太大的问题，但是后面再集合中，如果不重写可能会导致意想不到的问题发生。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;hashcode&quot;&gt;hashCode()&lt;/h1&gt;
+&lt;p&gt;先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;  /**
+     * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。
+     * &amp;lt;p&amp;gt;
+     * hashCode通常情况下遵守的合约是：
+     * &amp;lt;ul&amp;gt;
+     * &amp;lt;li&amp;gt;只要在Java应用程序的执行过程中多次调用同一个对象，{@code hashCode}方法必须始终返回相同的整数，前提是在对象上的比较中没有使用任何信息被修改。 从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。
+     * &amp;lt;li&amp;gt;如果两个对象根据equals方法相等，则在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。
+     * &amp;lt;li&amp;gt;如果两个对象根据equals（Object）方法不相等，则不要求对两个对象中的每一个调用hashCode方法都必须产生不同的整数结果。 但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。
+     * &amp;lt;/ul&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * 尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。 （这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。）
+     *
+     * @return  a hash code value for this object.
+     * @see     java.lang.Object#equals(java.lang.Object)
+     * @see     java.lang.System#identityHashCode
+     */
+    public native int hashCode();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常情况下，String等对象类型会重写这些方法，例如&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &amp;lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;简单理解就是 String 使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]&lt;/code&gt;重写了hashcode 的值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;请注意，下面只是简单介绍集合的存储原理，关于地址值的部分不准备，这部分等我看完jdk8的代码以后再修改&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;想要弄明白hashCode的作用，必须要先知道Java中的集合。　　 
+总的来说，Java中的集合（Collection）有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。这里就引出一个问题：要想保证元素不重复，可两个元素是否重复应该依据什么来判断呢？&lt;/p&gt;
+
+&lt;p&gt;这就是Object.equals方法了。但是，如果每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说，如果集合中现在已经有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。 &lt;br /&gt;
+于是，Java采用了哈希表的原理。哈希（Hash）实际上是个人名，由于他提出一哈希算法的概念，所以就以他的名字命名了。哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上，这个地址上的key值就是hashcode值，而value值则记录了这个对象存储的真是地址。&lt;br /&gt;
+这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。所以这里存在一个冲突解决的问题。这样一来实际调用equals方法的次数就大大降低了，几乎只需要一两次。&lt;/p&gt;
+
+&lt;p&gt;所以，Java对于eqauls方法和hashCode方法是这样规定的：
+1.如果两个对象相同，那么它们的hashCode值一定要相同；
+2.如果两个对象的hashCode相同，它们并不一定相同（这里说的对象相同指的是用eqauls方法比较）。  如不按要求去做了，会发现相同的对象可以出现在Set集合中，同时，增加新元素的效率会大大下降。
+3.equals()相等的两个对象，hashcode()一定相等；equals()不相等的两个对象，却并不能证明他们的hashcode()不相等。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;换句话说，equals()方法不相等的两个对象，hashcode()有可能相等（我的理解是由于哈希码在生成的时候产生冲突造成的）。反过来，hashcode()不等，一定能推出equals()也不等；hashcode()相等，equals()可能相等，也可能不等。
+
+在object类中，hashcode()方法是本地方法，返回的是对象的地址值，而object类中的equals()方法比较的也是两个对象的地址值，如果equals()相等，说明两个对象地址值也相等，当然hashcode()也就相等了；在String类中，equals()返回的是两个对象内容的比较，当两个对象内容相等时，Hashcode()方法根据String类的重写代码的分析，也可知道hashcode()返回结果也会相等。以此类推，可以知道Integer、Double等封装类中经过重写的equals()和hashcode()方法也同样适合于这个原则。当然没有经过重写的类，在继承了object类的equals()和hashcode()方法后，也会遵守这个原则。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;hashsethashmaphashtable与hashcode和equals的密切关系&quot;&gt;Hashset、Hashmap、Hashtable与hashcode()和equals()的密切关系&lt;/h1&gt;
+
+&lt;p&gt;Hashset是继承Set接口，Set接口又实现Collection接口，这是层次关系。那么Hashset、Hashmap、Hashtable中的存储操作是根据什么原理来存取对象的呢？&lt;/p&gt;
+
+&lt;p&gt;以HashSet为例，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是：&lt;br /&gt;
+1.判断两个对象的hashCode是否相等&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如果不相等，认为两个对象也不相等，完毕
+如果相等，转入2 (这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2.判断两个对象用equals运算是否相等&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如果不相等，认为两个对象也不相等
+如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。&lt;/p&gt;
+
+&lt;h1 id=&quot;答案&quot;&gt;答案&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等&lt;/strong&gt;&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">问题 两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。 equals()方法详解 先看java.lang.Object的默认实现，部分内容进行了翻译。 /** * 表示某个其他对象是否“等于”这一个。 * &amp;lt;p&amp;gt; * equals方法在非null对象引用上实现等价关系 * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。 * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回true * 传递: 对任何非空的引用值 x, y, z, 如果 x.equals(y)返回 true ，y.equals(z)返回 true, 那么 x.equals(z)也必须返回true * 一致: 如果x.equals(y)返回是true，只要x和y内容一直不变，不管你重复x.equals(y)多少次，返回都是true。 * 任何情况下，x.equals(null)，永远返回是“false”；x.equals(和x不同类型的对象)永远返回是“false”。 * &amp;lt;p&amp;gt; * Object类的equals方法实现了对象上最可能的等价关系;也就是说，对于任何非null的引用值x和y，当且仅当x和y引用同一个对象x == y时返回 true。 * &amp;lt;p&amp;gt; * 请注意，无论何时重写此方法，通常都必须重写hashCode方法，以维护hashCode方法的一般约定，该方法声明相等的对象必须具有相同的哈希码。 * * @param obj the reference object with which to compare. * @return true} if this object is the same as the obj * argument; false} otherwise. * @see #hashCode() * @see java.util.HashMap */ public boolean equals(Object obj) { return (this == obj); } 通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。 但是，很多时候，equals方法会被重写，例如 java.lang.String public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String) anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } java.lang.String的equals方法不是进行引用地址比较，而是内容比较。 下面举个形象的例子 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; } 测试方法 User user1 = new User(); User user2 = new User(); assert user1.equals(user2); 如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; @Override public boolean equals(Object o) { if (this == o) { return true; } if (o == null || getClass() != o.getClass()) { return false; } User user = (User) o; return id == user.id &amp;amp;&amp;amp; Objects.equals(name, user.name) &amp;amp;&amp;amp; Objects.equals(password, user.password); } @Override public int hashCode() { return Objects.hash(id, name, password); } } 上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。 需要注意的是，上面同时重写了 equals 和 Hashcode 方法，在这个简单对象中不重写可能不会有太大的问题，但是后面再集合中，如果不重写可能会导致意想不到的问题发生。 hashCode() 先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc /** * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。 * &amp;lt;p&amp;gt; * hashCode通常情况下遵守的合约是： * &amp;lt;ul&amp;gt; * &amp;lt;li&amp;gt;只要在Java应用程序的执行过程中多次调用同一个对象，{@code hashCode}方法必须始终返回相同的整数，前提是在对象上的比较中没有使用任何信息被修改。 从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。 * &amp;lt;li&amp;gt;如果两个对象根据equals方法相等，则在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。 * &amp;lt;li&amp;gt;如果两个对象根据equals（Object）方法不相等，则不要求对两个对象中的每一个调用hashCode方法都必须产生不同的整数结果。 但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。 * &amp;lt;/ul&amp;gt; * &amp;lt;p&amp;gt; * 尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。 （这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。） * * @return a hash code value for this object. * @see java.lang.Object#equals(java.lang.Object) * @see java.lang.System#identityHashCode */ public native int hashCode(); 通常情况下，String等对象类型会重写这些方法，例如 public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } 简单理解就是 String 使用 s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]重写了hashcode 的值。 请注意，下面只是简单介绍集合的存储原理，关于地址值的部分不准备，这部分等我看完jdk8的代码以后再修改 想要弄明白hashCode的作用，必须要先知道Java中的集合。　　 总的来说，Java中的集合（Collection）有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。这里就引出一个问题：要想保证元素不重复，可两个元素是否重复应该依据什么来判断呢？ 这就是Object.equals方法了。但是，如果每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说，如果集合中现在已经有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。哈希（Hash）实际上是个人名，由于他提出一哈希算法的概念，所以就以他的名字命名了。哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上，这个地址上的key值就是hashcode值，而value值则记录了这个对象存储的真是地址。 这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。所以这里存在一个冲突解决的问题。这样一来实际调用equals方法的次数就大大降低了，几乎只需要一两次。 所以，Java对于eqauls方法和hashCode方法是这样规定的： 1.如果两个对象相同，那么它们的hashCode值一定要相同； 2.如果两个对象的hashCode相同，它们并不一定相同（这里说的对象相同指的是用eqauls方法比较）。 如不按要求去做了，会发现相同的对象可以出现在Set集合中，同时，增加新元素的效率会大大下降。 3.equals()相等的两个对象，hashcode()一定相等；equals()不相等的两个对象，却并不能证明他们的hashcode()不相等。 换句话说，equals()方法不相等的两个对象，hashcode()有可能相等（我的理解是由于哈希码在生成的时候产生冲突造成的）。反过来，hashcode()不等，一定能推出equals()也不等；hashcode()相等，equals()可能相等，也可能不等。 在object类中，hashcode()方法是本地方法，返回的是对象的地址值，而object类中的equals()方法比较的也是两个对象的地址值，如果equals()相等，说明两个对象地址值也相等，当然hashcode()也就相等了；在String类中，equals()返回的是两个对象内容的比较，当两个对象内容相等时，Hashcode()方法根据String类的重写代码的分析，也可知道hashcode()返回结果也会相等。以此类推，可以知道Integer、Double等封装类中经过重写的equals()和hashcode()方法也同样适合于这个原则。当然没有经过重写的类，在继承了object类的equals()和hashcode()方法后，也会遵守这个原则。 Hashset、Hashmap、Hashtable与hashcode()和equals()的密切关系 Hashset是继承Set接口，Set接口又实现Collection接口，这是层次关系。那么Hashset、Hashmap、Hashtable中的存储操作是根据什么原理来存取对象的呢？ 以HashSet为例，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是： 1.判断两个对象的hashCode是否相等 如果不相等，认为两个对象也不相等，完毕 如果相等，转入2 (这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。） 2.判断两个对象用equals运算是否相等 如果不相等，认为两个对象也不相等 如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键） 为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。 答案 两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等</summary></entry><entry><title type="html">Java中hashcode和一致性哈希算法</title><link href="http://localhost:4000/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html" rel="alternate" type="text/html" title="Java中hashcode和一致性哈希算法" /><published>2018-01-03T17:13:29+08:00</published><updated>2018-01-03T17:13:29+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">&lt;h1 id=&quot;哈希算法&quot;&gt;哈希算法&lt;/h1&gt;
+&lt;h2 id=&quot;什么是哈希算法&quot;&gt;什么是哈希算法&lt;/h2&gt;
+&lt;p&gt;哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。&lt;/p&gt;
+
+&lt;h2 id=&quot;哈希算法的特点&quot;&gt;哈希算法的特点&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;哈希值是二进制值&lt;/li&gt;
+  &lt;li&gt;哈希值具有一定的唯一性&lt;/li&gt;
+  &lt;li&gt;哈希值极其紧凑&lt;/li&gt;
+  &lt;li&gt;要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。&lt;/p&gt;
+
+&lt;h2 id=&quot;哈希表&quot;&gt;哈希表&lt;/h2&gt;
+&lt;p&gt;哈希表是一种数据机构。&lt;br /&gt;
+哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。&lt;br /&gt;
+哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。&lt;br /&gt;
+数据库索引也是用空间换时间的做法。&lt;/p&gt;
+
+&lt;h1 id=&quot;java应用&quot;&gt;Java应用&lt;/h1&gt;
+&lt;h2 id=&quot;hashmap应用&quot;&gt;HashMap应用&lt;/h2&gt;
+
+&lt;p&gt;java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。&lt;br /&gt;
+从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，&lt;strong&gt;首先&lt;/strong&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;调用hashcode()方法，判断元素A在容器中是否已经存在&lt;/code&gt;。如果A元素的hashcode值在HashMap中不存在，则直接插入。&lt;strong&gt;否则&lt;/strong&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;接着调用equals()方法，判断A元素在容器中是否已经存在&lt;/code&gt;。&lt;br /&gt;
+&lt;strong&gt;hashcode()的时间复杂度为O(1)&lt;/strong&gt;，&lt;strong&gt;equals()方法的时间复杂度为O(m)&lt;/strong&gt;，整体的时间复杂度就是：&lt;strong&gt;O(1) + O(m)&lt;/strong&gt;。  其中，m是桶的深度。&lt;br /&gt;
+桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;一个好的哈希算法应该尽量减少哈希碰撞的次数。&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;关于hashmap中详细的计算方式以后在集合中慢慢学习。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;string应用&quot;&gt;String应用&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;/**
+     * 返回该字符串的哈希代码。 
+     * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+     * s[i]代表字符串数组中的元素
+     * 如果是空字符串，默认hash值是0.
+     *
+     * @return  a hash code value for this object.
+     */
+    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &amp;lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
+    /**
+     * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true
+     *
+     * @param  anObject
+     *         The object to compare this {@code String} against
+     *
+     * @return  {@code true} if the given object represents a {@code String}
+     *          equivalent to this string, {@code false} otherwise
+     *
+     * @see  #compareTo(String)
+     * @see  #equalsIgnoreCase(String)
+     */
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String)anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;一致性哈希算法&quot;&gt;一致性哈希算法&lt;/h1&gt;
+&lt;h2 id=&quot;基本介绍&quot;&gt;基本介绍&lt;/h2&gt;
+&lt;p&gt;多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。&lt;/p&gt;
+
+&lt;p&gt;一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。&lt;/p&gt;
+&lt;h2 id=&quot;参考标准&quot;&gt;参考标准&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;平衡性(Balance)
+    &lt;ul&gt;
+      &lt;li&gt;平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;单调性(Monotonicity)
+    &lt;ul&gt;
+      &lt;li&gt;单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;分散性(Spread)
+    &lt;ul&gt;
+      &lt;li&gt;在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;负载(Load)
+    &lt;ul&gt;
+      &lt;li&gt;负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;实现过程&quot;&gt;实现过程&lt;/h2&gt;
+
+&lt;h3 id=&quot;环形hash空间&quot;&gt;环形Hash空间&lt;/h3&gt;
+&lt;p&gt;按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_001.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;把数据通过一定的hash算法处理后映射到环上&quot;&gt;把数据通过一定的hash算法处理后映射到环上&lt;/h3&gt;
+&lt;p&gt;现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图：&lt;br /&gt;
+&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_002.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hash(object1) = key1；
+Hash(object2) = key2；
+Hash(object3) = key3；
+Hash(object4) = key4；
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;将机器通过hash算法映射到环上&quot;&gt;将机器通过hash算法映射到环上&lt;/h3&gt;
+&lt;p&gt;在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。
+假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下：  &lt;br /&gt;
+&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_003.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hash(NODE1) = KEY1;
+Hash(NODE2) = KEY2;
+Hash(NODE3) = KEY3;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。&lt;/p&gt;
+
+&lt;h3 id=&quot;机器的删除与添加&quot;&gt;机器的删除与添加&lt;/h3&gt;
+&lt;p&gt;普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。&lt;/p&gt;
+&lt;h4 id=&quot;节点机器的删除&quot;&gt;节点（机器）的删除&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;)  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;节点机器的添加&quot;&gt;节点（机器）的添加&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;)  
+                                                          
+通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;平衡性&quot;&gt;平衡性&lt;/h3&gt;
+&lt;p&gt;根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;“虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下：&lt;br /&gt;
+&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_006.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图：&lt;br /&gt;
+&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_007.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值：
+Hash(“192.168.1.100”);
+引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值：
+Hash(“192.168.1.100#1”); // NODE1-1
+Hash(“192.168.1.100#2”); // NODE1-2&lt;/p&gt;
+
+&lt;h2 id=&quot;java实现&quot;&gt;Java实现&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+public class ConsistentHash&amp;lt;T&amp;gt; {
+    private final HashFunction hashFunction;
+    private final int numberOfReplicas;// 节点的复制因子,实际节点个数 *  numberOfReplicas =
+                                        // 虚拟节点个数
+    private final SortedMap&amp;lt;Long, T&amp;gt; circle = new TreeMap&amp;lt;Long, T&amp;gt;();// 存储虚拟节点的hash值到真实节点的映射
+
+    public ConsistentHash(HashFunction hashFunction, int numberOfReplicas,
+            Collection&amp;lt;T&amp;gt; nodes) {
+        this.hashFunction = hashFunction;
+        this.numberOfReplicas = numberOfReplicas;
+        for (T node : nodes)
+            add(node);
+    }
+
+    public void add(T node) {
+        for (int i = 0; i &amp;lt; numberOfReplicas; i++)
+            // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点
+            /*
+             * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node
+             * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上
+             */
+            circle.put(hashFunction.hash(node.toString() + i), node);
+    }
+
+    public void remove(T node) {
+        for (int i = 0; i &amp;lt; numberOfReplicas; i++)
+            circle.remove(hashFunction.hash(node.toString() + i));
+    }
+
+    /*
+     * 获得一个最近的顺时针节点,根据给定的key 取Hash
+     * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点
+     * 再从实际节点中取得 数据
+     */
+    public T get(Object key) {
+        if (circle.isEmpty())
+            return null;
+        long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode
+        if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器
+            SortedMap&amp;lt;Long, T&amp;gt; tailMap = circle.tailMap(hash);
+            hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
+        }
+        return circle.get(hash);
+    }
+
+    public long getSize() {
+        return circle.size();
+    }
+    
+    /*
+     * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置
+     */
+    public void testBalance(){
+        Set&amp;lt;Long&amp;gt; sets  = circle.keySet();//获得TreeMap中所有的Key
+        SortedSet&amp;lt;Long&amp;gt; sortedSets= new TreeSet&amp;lt;Long&amp;gt;(sets);//将获得的Key集合排序
+        for(Long hashCode : sortedSets){
+            System.out.println(hashCode);
+        }
+        
+        System.out.println(&quot;----each location 's distance are follows: ----&quot;);
+        /*
+         * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值
+         */
+        Iterator&amp;lt;Long&amp;gt; it = sortedSets.iterator();
+        Iterator&amp;lt;Long&amp;gt; it2 = sortedSets.iterator();
+        if(it2.hasNext())
+            it2.next();
+        long keyPre, keyAfter;
+        while(it.hasNext() &amp;amp;&amp;amp; it2.hasNext()){
+            keyPre = it.next();
+            keyAfter = it2.next();
+            System.out.println(keyAfter - keyPre);
+        }
+    }
+    
+    public static void main(String[] args) {
+        Set&amp;lt;String&amp;gt; nodes = new HashSet&amp;lt;String&amp;gt;();
+        nodes.add(&quot;A&quot;);
+        nodes.add(&quot;B&quot;);
+        nodes.add(&quot;C&quot;);
+        
+        ConsistentHash&amp;lt;String&amp;gt; consistentHash = new ConsistentHash&amp;lt;String&amp;gt;(new HashFunction(), 2, nodes);
+        consistentHash.add(&quot;D&quot;);
+        
+        System.out.println(&quot;hash circle size: &quot; + consistentHash.getSize());
+        System.out.println(&quot;location of each node are follows: &quot;);
+        consistentHash.testBalance();
+    }
+    
+}
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">哈希算法 什么是哈希算法 哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。 哈希算法的特点 哈希值是二进制值 哈希值具有一定的唯一性 哈希值极其紧凑 要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的 正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。 哈希表 哈希表是一种数据机构。 哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。 哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。 数据库索引也是用空间换时间的做法。 Java应用 HashMap应用 java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。 从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，首先，调用hashcode()方法，判断元素A在容器中是否已经存在。如果A元素的hashcode值在HashMap中不存在，则直接插入。否则，接着调用equals()方法，判断A元素在容器中是否已经存在。 hashcode()的时间复杂度为O(1)，equals()方法的时间复杂度为O(m)，整体的时间复杂度就是：O(1) + O(m)。 其中，m是桶的深度。 桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。 一个好的哈希算法应该尽量减少哈希碰撞的次数。 关于hashmap中详细的计算方式以后在集合中慢慢学习。 String应用 /** * 返回该字符串的哈希代码。 * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] * s[i]代表字符串数组中的元素 * 如果是空字符串，默认hash值是0. * * @return a hash code value for this object. */ public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } /** * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true * * @param anObject * The object to compare this {@code String} against * * @return {@code true} if the given object represents a {@code String} * equivalent to this string, {@code false} otherwise * * @see #compareTo(String) * @see #equalsIgnoreCase(String) */ public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String)anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } 一致性哈希算法 基本介绍 多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。 一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。 参考标准 平衡性(Balance) 平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。 单调性(Monotonicity) 单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。 分散性(Spread) 在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。 负载(Load) 负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。 实现过程 环形Hash空间 按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图 把数据通过一定的hash算法处理后映射到环上 现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图： Hash(object1) = key1； Hash(object2) = key2； Hash(object3) = key3； Hash(object4) = key4； 将机器通过hash算法映射到环上 在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。 假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下： Hash(NODE1) = KEY1; Hash(NODE2) = KEY2; Hash(NODE3) = KEY3; 通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。 机器的删除与添加 普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。 节点（机器）的删除 以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;) 节点（机器）的添加 如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;) 通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。 平衡性 根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。 “虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。 以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下： 根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图： “虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值： Hash(“192.168.1.100”); 引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值： Hash(“192.168.1.100#1”); // NODE1-1 Hash(“192.168.1.100#2”); // NODE1-2 Java实现 import java.util.Collection; import java.util.HashSet; import java.util.Iterator; import java.util.Set; import java.util.SortedMap; import java.util.SortedSet; import java.util.TreeMap; import java.util.TreeSet; public class ConsistentHash&amp;lt;T&amp;gt; { private final HashFunction hashFunction; private final int numberOfReplicas;// 节点的复制因子,实际节点个数 * numberOfReplicas = // 虚拟节点个数 private final SortedMap&amp;lt;Long, T&amp;gt; circle = new TreeMap&amp;lt;Long, T&amp;gt;();// 存储虚拟节点的hash值到真实节点的映射 public ConsistentHash(HashFunction hashFunction, int numberOfReplicas, Collection&amp;lt;T&amp;gt; nodes) { this.hashFunction = hashFunction; this.numberOfReplicas = numberOfReplicas; for (T node : nodes) add(node); } public void add(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点 /* * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上 */ circle.put(hashFunction.hash(node.toString() + i), node); } public void remove(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) circle.remove(hashFunction.hash(node.toString() + i)); } /* * 获得一个最近的顺时针节点,根据给定的key 取Hash * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点 * 再从实际节点中取得 数据 */ public T get(Object key) { if (circle.isEmpty()) return null; long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器 SortedMap&amp;lt;Long, T&amp;gt; tailMap = circle.tailMap(hash); hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey(); } return circle.get(hash); } public long getSize() { return circle.size(); } /* * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置 */ public void testBalance(){ Set&amp;lt;Long&amp;gt; sets = circle.keySet();//获得TreeMap中所有的Key SortedSet&amp;lt;Long&amp;gt; sortedSets= new TreeSet&amp;lt;Long&amp;gt;(sets);//将获得的Key集合排序 for(Long hashCode : sortedSets){ System.out.println(hashCode); } System.out.println(&quot;----each location 's distance are follows: ----&quot;); /* * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值 */ Iterator&amp;lt;Long&amp;gt; it = sortedSets.iterator(); Iterator&amp;lt;Long&amp;gt; it2 = sortedSets.iterator(); if(it2.hasNext()) it2.next(); long keyPre, keyAfter; while(it.hasNext() &amp;amp;&amp;amp; it2.hasNext()){ keyPre = it.next(); keyAfter = it2.next(); System.out.println(keyAfter - keyPre); } } public static void main(String[] args) { Set&amp;lt;String&amp;gt; nodes = new HashSet&amp;lt;String&amp;gt;(); nodes.add(&quot;A&quot;); nodes.add(&quot;B&quot;); nodes.add(&quot;C&quot;); ConsistentHash&amp;lt;String&amp;gt; consistentHash = new ConsistentHash&amp;lt;String&amp;gt;(new HashFunction(), 2, nodes); consistentHash.add(&quot;D&quot;); System.out.println(&quot;hash circle size: &quot; + consistentHash.getSize()); System.out.println(&quot;location of each node are follows: &quot;); consistentHash.testBalance(); } }</summary></entry><entry><title type="html">Java常用关键字总结</title><link href="http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html" rel="alternate" type="text/html" title="Java常用关键字总结" /><published>2018-01-02T16:47:46+08:00</published><updated>2018-01-02T16:47:46+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">&lt;h1 id=&quot;abstrate&quot;&gt;abstrate&lt;/h1&gt;
 &lt;h2 id=&quot;说明&quot;&gt;说明&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;abstract 关键字可以&lt;strong&gt;修改类或方法&lt;/strong&gt;。&lt;/li&gt;
@@ -1870,518 +2339,4 @@ public class PerpetualCache implements Cache {
 &lt;ul&gt;
   &lt;li&gt;一级缓存没有维护容量和大小限制&lt;/li&gt;
   &lt;li&gt;一级缓存没有更新缓存和缓存过期的概念&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>lipeng</name></author><category term="Mybatis" /><summary type="html">1. 一级缓存的作用 2. 一级缓存的依赖关系 3. 一级缓存的生命周期 4. 一级缓存的实现 5. Cache接口 6. 性能问题 1. 一级缓存的作用 每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。 肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。 SqlSession级别的数据缓存，称为一级缓存 2. 一级缓存的依赖关系 一级缓存由SqlSession控制。 SqlSession将它的工作交给了Executor执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSession对象时，MyBatis会为这个SqlSession对象创建一个新的Executor执行器，而缓存信息就被维护在这个Executor执行器中，MyBatis将缓存和对缓存相关的操作封装成了Cache接口中。 Executor接口的实现类BaseExecutor中拥有一个Cache接口的实现类PerpetualCache，则对于BaseExecutor对象而言，它将使用PerpetualCache对象维护缓存。 PerpetualCache的实现代码 /** * @author Clinton Begin */ public class PerpetualCache implements Cache { private final String id; private Map&amp;lt;Object, Object&amp;gt; cache = new HashMap&amp;lt;Object, Object&amp;gt;(); public PerpetualCache(String id) { this.id = id; } @Override public String getId() { return id; } @Override public int getSize() { return cache.size(); } @Override public void putObject(Object key, Object value) { cache.put(key, value); } @Override public Object getObject(Object key) { return cache.get(key); } @Override public Object removeObject(Object key) { return cache.remove(key); } @Override public void clear() { cache.clear(); } @Override public ReadWriteLock getReadWriteLock() { return null; } @Override public boolean equals(Object o) { if (getId() == null) { throw new CacheException(&quot;Cache instances require an ID.&quot;); } if (this == o) { return true; } if (!(o instanceof Cache)) { return false; } Cache otherCache = (Cache) o; return getId().equals(otherCache.getId()); } @Override public int hashCode() { if (getId() == null) { throw new CacheException(&quot;Cache instances require an ID.&quot;); } return getId().hashCode(); } } 3. 一级缓存的生命周期 MyBatis在开启一个数据库会话时，会创建一个新的SqlSession对象，SqlSession对象中会有一个新的Executor对象，Executor对象中持有一个新的PerpetualCache对象；当会话结束时，SqlSession对象及其内部的Executor对象还有PerpetualCache对象也一并释放掉。 如果SqlSession调用了close()方法，会释放掉一级缓存PerpetualCache对象，一级缓存将不可用； 如果SqlSession调用了clearCache()，会清空PerpetualCache对象中的数据，但是该对象仍可使用； SqlSession中执行了任何一个update操作(update()、delete()、insert()) ，都会清空PerpetualCache对象的数据，但是该对象可以继续使用； 4. 一级缓存的实现 对于某个查询，根据statementId,params,rowBounds来构建一个key值，根据这个key值去缓存Cache中取出对应的key值存储的缓存结果； 判断从Cache中根据特定的key值取的数据数据是否为空，即是否命中； 如果命中，则直接将缓存结果返回； 如果没命中： 4.1 去数据库中查询数据，得到查询结果； 4.2 将key和查询到的结果分别作为key,value对存储到Cache中； 4.3. 将查询结果返回； 结束。 5. Cache接口 MyBatis定义了一个org.apache.ibatis.cache.Cache接口作为其Cache提供者的SPI(Service Provider Interface) ，所有的MyBatis内部的Cache缓存，都应该实现这一接口。MyBatis定义了一个PerpetualCache实现类实现了Cache接口，实际上，在SqlSession对象里的Executor 对象内维护的Cache类型实例对象，就是PerpetualCache子类创建的。 MyBatis内部还有很多Cache接口的实现，一级缓存只会涉及到这一个PerpetualCache子类。 Cache最核心的实现其实就是一个Map，将本次查询使用的特征值作为key，将查询结果作为value存储到Map中。 现在最核心的问题出现了：怎样来确定一次查询的特征值？ 换句话说就是：怎样判断某两次查询是完全相同的查询？ 也可以这样说：如何确定Cache中的key值？ MyBatis认为，对于两次查询，如果以下条件都完全一样，那么就认为它们是完全相同的两次查询 传入的 statementId 查询时要求的结果集中的结果范围 （结果的范围通过rowBounds.offset和rowBounds.limit表示）； 这次查询所产生的最终要传递给JDBC java.sql.Preparedstatement的Sql语句字符串（boundSql.getSql() ） 传递给java.sql.Statement要设置的参数值 CacheKey由以下条件决定： statementId + rowBounds + 传递给JDBC的SQL + 传递给JDBC的参数值 CacheKey的创建 @Override public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) { if (closed) { throw new ExecutorException(&quot;Executor was closed.&quot;); } CacheKey cacheKey = new CacheKey(); cacheKey.update(ms.getId());//StatementId cacheKey.update(rowBounds.getOffset());//rowBounds.offset cacheKey.update(rowBounds.getLimit());//rowBounds.limit cacheKey.update(boundSql.getSql());//Sql List&amp;lt;ParameterMapping&amp;gt; parameterMappings = boundSql.getParameterMappings();//参数 TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry(); // mimic DefaultParameterHandler logic for (ParameterMapping parameterMapping : parameterMappings) { if (parameterMapping.getMode() != ParameterMode.OUT) { Object value; String propertyName = parameterMapping.getProperty(); if (boundSql.hasAdditionalParameter(propertyName)) { value = boundSql.getAdditionalParameter(propertyName); } else if (parameterObject == null) { value = null; } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) { value = parameterObject; } else { MetaObject metaObject = configuration.newMetaObject(parameterObject); value = metaObject.getValue(propertyName); } cacheKey.update(value); } } if (configuration.getEnvironment() != null) { // issue #176 cacheKey.update(configuration.getEnvironment().getId()); } return cacheKey; } 构建CacheKey的过程实际上就是构造其hashCode的过程。下面的代码就是CacheKey的核心hashcode生成算法. public void update(Object object) { int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object); count++; checksum += baseHashCode; baseHashCode *= count; hashcode = multiplier * hashcode + baseHashCode; updateList.add(object); } 6. 性能问题 一级缓存没有维护容量和大小限制 一级缓存没有更新缓存和缓存过期的概念</summary></entry><entry><title type="html">DispatcherServlet探究</title><link href="http://localhost:4000/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html" rel="alternate" type="text/html" title="DispatcherServlet探究" /><published>2017-12-14T23:51:29+08:00</published><updated>2017-12-14T23:51:29+08:00</updated><id>http://localhost:4000/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6</id><content type="html" xml:base="http://localhost:4000/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/ProgramNote/assets/Image/spring/01.png&quot; alt=&quot;分析图&quot; title=&quot;分析图&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中&lt;/p&gt;
-
-&lt;p&gt;配置如下&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;servlet&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;servlet-name&amp;gt;&lt;/span&gt;spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/servlet-name&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;servlet-class&amp;gt;&lt;/span&gt;org.springframework.web.servlet.DispatcherServlet&lt;span class=&quot;nt&quot;&gt;&amp;lt;/servlet-class&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;init-param&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;param-name&amp;gt;&lt;/span&gt;contextConfigLocation&lt;span class=&quot;nt&quot;&gt;&amp;lt;/param-name&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;param-value&amp;gt;&lt;/span&gt;classpath:spring-mvc.xml&lt;span class=&quot;nt&quot;&gt;&amp;lt;/param-value&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/init-param&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 启动优先级 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;load-on-startup&amp;gt;&lt;/span&gt;1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/load-on-startup&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;async-supported&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/async-supported&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/servlet&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;servlet-mapping&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;servlet-name&amp;gt;&lt;/span&gt;spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/servlet-name&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;url-pattern&amp;gt;&lt;/span&gt;/&lt;span class=&quot;nt&quot;&gt;&amp;lt;/url-pattern&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/servlet-mapping&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;请注意，DispatcherServlet可以配置多个，有自己的上下文容器。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;PropertyValues初始化 ServletConfigPropertyValues是一个内部类&lt;/li&gt;
-  &lt;li&gt;封装了bean的行为，提供了设置和获取属性值&lt;/li&gt;
-  &lt;li&gt;加载资源文件&lt;/li&gt;
-  &lt;li&gt;注册属性编辑&lt;/li&gt;
-  &lt;li&gt;初始化beanWrapper&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;项目启动&lt;/p&gt;
-
-&lt;p&gt;DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-    public final void init() throws ServletException {
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug(&quot;Initializing servlet '&quot; + this.getServletName() + &quot;'&quot;);
-        }
-
-        try {
-            // 1、PropertyValues初始化 ServletConfigPropertyValues是一个内部类
-            PropertyValues pvs = new HttpServletBean.ServletConfigPropertyValues(this.getServletConfig(), this.requiredProperties);
-            // 2、封装了bean的行为，提供了设置和获取属性值
-            BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
-            // 3、加载资源文件
-            ResourceLoader resourceLoader = new ServletContextResourceLoader(this.getServletContext());
-            // 4、注册属性编辑
-            bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, this.getEnvironment()));
-            // 5、初始化beanWrapper
-            this.initBeanWrapper(bw);
-            bw.setPropertyValues(pvs, true);
-        } catch (BeansException var4) {
-            if (this.logger.isErrorEnabled()) {
-                this.logger.error(&quot;Failed to set bean properties on servlet '&quot; + this.getServletName() + &quot;'&quot;, var4);
-            }
-
-            throw var4;
-        }
-        //让子类做任何他们想要的初始化。
-        this.initServletBean();
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug(&quot;Servlet '&quot; + this.getServletName() + &quot;' configured successfully&quot;);
-        }
-
-    }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;PropertyValues初始化&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    private static class ServletConfigPropertyValues extends MutablePropertyValues {
-        public ServletConfigPropertyValues(ServletConfig config, Set&amp;lt;String&amp;gt; requiredProperties) throws ServletException {
-            Set&amp;lt;String&amp;gt; missingProps = requiredProperties != null &amp;amp;&amp;amp; !requiredProperties.isEmpty() ? new HashSet(requiredProperties) : null;
-            //获取init-param中的数值对
-            Enumeration paramNames = config.getInitParameterNames();
-
-            while(paramNames.hasMoreElements()) {
-                String property = (String)paramNames.nextElement();
-                Object value = config.getInitParameter(property);
-                this.addPropertyValue(new PropertyValue(property, value));
-                if (missingProps != null) {
-                    missingProps.remove(property);
-                }
-            }
-
-            if (!CollectionUtils.isEmpty(missingProps)) {
-                throw new ServletException(&quot;Initialization from ServletConfig for servlet '&quot; + config.getServletName() + &quot;' failed; the following required properties were missing: &quot; + StringUtils.collectionToDelimitedString(missingProps, &quot;, &quot;));
-            }
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如下图所示，获取init-param中的配置参数，写入PropertyValues
-&lt;img src=&quot;/ProgramNote/assets/Image/spring/02.png&quot; alt=&quot;分析图&quot; title=&quot;分析图&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;BeanWrapper实现对bean行为的封装&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/zhiweianran/article/details/7919129&quot;&gt;待学习&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ResourceLoader加载资源文件比较简单&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;public class ServletContextResourceLoader extends DefaultResourceLoader {
-
-	private final ServletContext servletContext;
-
-
-	/**
-	 * Create a new ServletContextResourceLoader.
-	 * @param servletContext the ServletContext to load resources with
-	 */
-	public ServletContextResourceLoader(ServletContext servletContext) {
-		this.servletContext = servletContext;
-	}
-
-	/**
-	 * This implementation supports file paths beneath the root of the web application.
-	 * @see ServletContextResource
-	 */
-	@Override
-	protected Resource getResourceByPath(String path) {
-		return new ServletContextResource(this.servletContext, path);
-	}
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;initServletBean的介绍&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	/**
-	 * 子类可以重写这个以执行自定义初始化。此servlet的所有bean属性将在调用此方法之前设置。
-	 * &amp;lt;p&amp;gt;这个方法的默认实现是空的
-	 * @throws ServletException if subclass initialization fails
-	 */
-	protected void initServletBean() throws ServletException {
-	}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;上面说的很清楚，这里只是提供一个方法让bean自己初始化，具体的实现在&lt;strong&gt;FrameworkServlet&lt;/strong&gt;中&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-	/**
-	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
-	 * have been set. Creates this servlet's WebApplicationContext.
-	 */
-	@Override
-	protected final void initServletBean() throws ServletException {
-		getServletContext().log(&quot;Initializing Spring FrameworkServlet '&quot; + getServletName() + &quot;'&quot;);
-		if (this.logger.isInfoEnabled()) {
-			this.logger.info(&quot;FrameworkServlet '&quot; + getServletName() + &quot;': initialization started&quot;);
-		}
-		long startTime = System.currentTimeMillis();
-
-		try {
-            //这里是主要的动作，创建应用程序上下文
-			this.webApplicationContext = initWebApplicationContext();
-			initFrameworkServlet();
-		}
-		catch (ServletException ex) {
-			this.logger.error(&quot;Context initialization failed&quot;, ex);
-			throw ex;
-		}
-		catch (RuntimeException ex) {
-			this.logger.error(&quot;Context initialization failed&quot;, ex);
-			throw ex;
-		}
-
-		if (this.logger.isInfoEnabled()) {
-			long elapsedTime = System.currentTimeMillis() - startTime;
-			this.logger.info(&quot;FrameworkServlet '&quot; + getServletName() + &quot;': initialization completed in &quot; +
-					elapsedTime + &quot; ms&quot;);
-		}
-	}
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-
-	/**
-	 * 初始化并发布此servlet的Web应用程序上下文。
-	 * &amp;lt;p&amp;gt;Delegates to {@link #createWebApplicationContext} for actual creation
-	 * of the context. Can be overridden in subclasses.
-	 * @return the WebApplicationContext instance
-	 * @see #FrameworkServlet(WebApplicationContext)
-	 * @see #setContextClass
-	 * @see #setContextConfigLocation
-	 */
-	protected WebApplicationContext initWebApplicationContext() {
-		WebApplicationContext rootContext =
-				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		WebApplicationContext wac = null;
-
-		if (this.webApplicationContext != null) {
-            //根节点上下文，是通过ContextLoaderListener加载的，服务器启动时，最先加载的  
-			wac = this.webApplicationContext;
-			if (wac instanceof ConfigurableWebApplicationContext) {
-				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
-				if (!cwac.isActive()) {
-					//上下文还没有被刷新——&amp;gt;提供诸如设置父上下文、设置应用程序上下文id等服务
-					if (cwac.getParent() == null) {
-						//在没有显式parent的情况下注入上下文实例,设置根应用程序上下文(如果有的话, 不过也可能是null)作为父元素
-						cwac.setParent(rootContext);
-					}
-					configureAndRefreshWebApplicationContext(cwac);
-				}
-			}
-		}
-		if (wac == null) {
-			//在构建时没有注入上下文实例——&amp;gt;查看是否在servlet上下文中注册了
-			wac = findWebApplicationContext();
-		}
-		if (wac == null) {
-			//没有的话就定义一个
-			wac = createWebApplicationContext(rootContext);
-		}
-
-		if (!this.refreshEventReceived) {
-			// 在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息  
-			onRefresh(wac);
-		}
-
-		if (this.publishContext) {
-			// 对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中  
-			String attrName = getServletContextAttributeName();
-			getServletContext().setAttribute(attrName, wac);
-			if (this.logger.isDebugEnabled()) {
-				this.logger.debug(&quot;Published WebApplicationContext of servlet '&quot; + getServletName() +
-						&quot;' as ServletContext attribute with name [&quot; + attrName + &quot;]&quot;);
-			}
-		}
-
-		return wac;
-	}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;本文地址：
-http://blog.csdn.net/congcong68/article/details/40451233&lt;/p&gt;
-
-&lt;p&gt;需要学的
-http://blog.csdn.net/congcong68/article/details/40650143&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Spring" /><summary type="html">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。 当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中 配置如下 &amp;lt;servlet&amp;gt; &amp;lt;servlet-name&amp;gt;spring&amp;lt;/servlet-name&amp;gt; &amp;lt;servlet-class&amp;gt;org.springframework.web.servlet.DispatcherServlet&amp;lt;/servlet-class&amp;gt; &amp;lt;init-param&amp;gt; &amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt; &amp;lt;param-value&amp;gt;classpath:spring-mvc.xml&amp;lt;/param-value&amp;gt; &amp;lt;/init-param&amp;gt; &amp;lt;!-- 启动优先级 --&amp;gt; &amp;lt;load-on-startup&amp;gt;1&amp;lt;/load-on-startup&amp;gt; &amp;lt;async-supported&amp;gt;true&amp;lt;/async-supported&amp;gt; &amp;lt;/servlet&amp;gt; &amp;lt;servlet-mapping&amp;gt; &amp;lt;servlet-name&amp;gt;spring&amp;lt;/servlet-name&amp;gt; &amp;lt;url-pattern&amp;gt;/&amp;lt;/url-pattern&amp;gt; &amp;lt;/servlet-mapping&amp;gt; 请注意，DispatcherServlet可以配置多个，有自己的上下文容器。 PropertyValues初始化 ServletConfigPropertyValues是一个内部类 封装了bean的行为，提供了设置和获取属性值 加载资源文件 注册属性编辑 初始化beanWrapper 项目启动 DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法 public final void init() throws ServletException { if (this.logger.isDebugEnabled()) { this.logger.debug(&quot;Initializing servlet '&quot; + this.getServletName() + &quot;'&quot;); } try { // 1、PropertyValues初始化 ServletConfigPropertyValues是一个内部类 PropertyValues pvs = new HttpServletBean.ServletConfigPropertyValues(this.getServletConfig(), this.requiredProperties); // 2、封装了bean的行为，提供了设置和获取属性值 BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this); // 3、加载资源文件 ResourceLoader resourceLoader = new ServletContextResourceLoader(this.getServletContext()); // 4、注册属性编辑 bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, this.getEnvironment())); // 5、初始化beanWrapper this.initBeanWrapper(bw); bw.setPropertyValues(pvs, true); } catch (BeansException var4) { if (this.logger.isErrorEnabled()) { this.logger.error(&quot;Failed to set bean properties on servlet '&quot; + this.getServletName() + &quot;'&quot;, var4); } throw var4; } //让子类做任何他们想要的初始化。 this.initServletBean(); if (this.logger.isDebugEnabled()) { this.logger.debug(&quot;Servlet '&quot; + this.getServletName() + &quot;' configured successfully&quot;); } } PropertyValues初始化 private static class ServletConfigPropertyValues extends MutablePropertyValues { public ServletConfigPropertyValues(ServletConfig config, Set&amp;lt;String&amp;gt; requiredProperties) throws ServletException { Set&amp;lt;String&amp;gt; missingProps = requiredProperties != null &amp;amp;&amp;amp; !requiredProperties.isEmpty() ? new HashSet(requiredProperties) : null; //获取init-param中的数值对 Enumeration paramNames = config.getInitParameterNames(); while(paramNames.hasMoreElements()) { String property = (String)paramNames.nextElement(); Object value = config.getInitParameter(property); this.addPropertyValue(new PropertyValue(property, value)); if (missingProps != null) { missingProps.remove(property); } } if (!CollectionUtils.isEmpty(missingProps)) { throw new ServletException(&quot;Initialization from ServletConfig for servlet '&quot; + config.getServletName() + &quot;' failed; the following required properties were missing: &quot; + StringUtils.collectionToDelimitedString(missingProps, &quot;, &quot;)); } } } 如下图所示，获取init-param中的配置参数，写入PropertyValues BeanWrapper实现对bean行为的封装 待学习 ResourceLoader加载资源文件比较简单 public class ServletContextResourceLoader extends DefaultResourceLoader { private final ServletContext servletContext; /** * Create a new ServletContextResourceLoader. * @param servletContext the ServletContext to load resources with */ public ServletContextResourceLoader(ServletContext servletContext) { this.servletContext = servletContext; } /** * This implementation supports file paths beneath the root of the web application. * @see ServletContextResource */ @Override protected Resource getResourceByPath(String path) { return new ServletContextResource(this.servletContext, path); } } initServletBean的介绍 /** * 子类可以重写这个以执行自定义初始化。此servlet的所有bean属性将在调用此方法之前设置。 * &amp;lt;p&amp;gt;这个方法的默认实现是空的 * @throws ServletException if subclass initialization fails */ protected void initServletBean() throws ServletException { } 上面说的很清楚，这里只是提供一个方法让bean自己初始化，具体的实现在FrameworkServlet中 /** * Overridden method of {@link HttpServletBean}, invoked after any bean properties * have been set. Creates this servlet's WebApplicationContext. */ @Override protected final void initServletBean() throws ServletException { getServletContext().log(&quot;Initializing Spring FrameworkServlet '&quot; + getServletName() + &quot;'&quot;); if (this.logger.isInfoEnabled()) { this.logger.info(&quot;FrameworkServlet '&quot; + getServletName() + &quot;': initialization started&quot;); } long startTime = System.currentTimeMillis(); try { //这里是主要的动作，创建应用程序上下文 this.webApplicationContext = initWebApplicationContext(); initFrameworkServlet(); } catch (ServletException ex) { this.logger.error(&quot;Context initialization failed&quot;, ex); throw ex; } catch (RuntimeException ex) { this.logger.error(&quot;Context initialization failed&quot;, ex); throw ex; } if (this.logger.isInfoEnabled()) { long elapsedTime = System.currentTimeMillis() - startTime; this.logger.info(&quot;FrameworkServlet '&quot; + getServletName() + &quot;': initialization completed in &quot; + elapsedTime + &quot; ms&quot;); } } /** * 初始化并发布此servlet的Web应用程序上下文。 * &amp;lt;p&amp;gt;Delegates to {@link #createWebApplicationContext} for actual creation * of the context. Can be overridden in subclasses. * @return the WebApplicationContext instance * @see #FrameworkServlet(WebApplicationContext) * @see #setContextClass * @see #setContextConfigLocation */ protected WebApplicationContext initWebApplicationContext() { WebApplicationContext rootContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext()); WebApplicationContext wac = null; if (this.webApplicationContext != null) { //根节点上下文，是通过ContextLoaderListener加载的，服务器启动时，最先加载的 wac = this.webApplicationContext; if (wac instanceof ConfigurableWebApplicationContext) { ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac; if (!cwac.isActive()) { //上下文还没有被刷新——&amp;gt;提供诸如设置父上下文、设置应用程序上下文id等服务 if (cwac.getParent() == null) { //在没有显式parent的情况下注入上下文实例,设置根应用程序上下文(如果有的话, 不过也可能是null)作为父元素 cwac.setParent(rootContext); } configureAndRefreshWebApplicationContext(cwac); } } } if (wac == null) { //在构建时没有注入上下文实例——&amp;gt;查看是否在servlet上下文中注册了 wac = findWebApplicationContext(); } if (wac == null) { //没有的话就定义一个 wac = createWebApplicationContext(rootContext); } if (!this.refreshEventReceived) { // 在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息 onRefresh(wac); } if (this.publishContext) { // 对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中 String attrName = getServletContextAttributeName(); getServletContext().setAttribute(attrName, wac); if (this.logger.isDebugEnabled()) { this.logger.debug(&quot;Published WebApplicationContext of servlet '&quot; + getServletName() + &quot;' as ServletContext attribute with name [&quot; + attrName + &quot;]&quot;); } } return wac; } 本文地址： http://blog.csdn.net/congcong68/article/details/40451233 需要学的 http://blog.csdn.net/congcong68/article/details/40650143</summary></entry><entry><title type="html">component-scan总结</title><link href="http://localhost:4000/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html" rel="alternate" type="text/html" title="component-scan总结" /><published>2017-12-12T21:51:29+08:00</published><updated>2017-12-12T21:51:29+08:00</updated><id>http://localhost:4000/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93</id><content type="html" xml:base="http://localhost:4000/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html">&lt;p&gt;今天偶然看到了原有的一个项目中有这样的配置信息&lt;/p&gt;
-
-&lt;p&gt;配置文件&lt;strong&gt;spring-config.xml&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 扫描注解Bean --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:component-scan&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;base-package=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.aaa.bbb,com.aaa.bbb.platform.model.sys&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:exclude-filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;annotation&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;expression=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.stereotype.Controller&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/context:component-scan&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;配置文件&lt;strong&gt;spring-mvc.xml&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 开启controller注解支持 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:component-scan&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;base-package=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.aaa.bbb.platform.controller&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;use-default-filters=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:include-filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;annotation&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;expression=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.stereotype.Controller&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:include-filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;annotation&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;expression=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/context:component-scan&amp;gt;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;我的第一个问题是为什么不能直接把这两个配置信息合并在一起呢？然后我试了一下，都放在&lt;strong&gt;spring-config.xml&lt;/strong&gt;中，很不幸，这样是不行的，无法访问到Controller，原因我猜想是Springmvc有自己的初始化过程，放在Spring中初始化导致无法获取到控制层信息，准备过段时间研究一下Springmvc的实现原理。&lt;/p&gt;
-
-&lt;p&gt;第二个问题是&lt;code class=&quot;highlighter-rouge&quot;&gt;use-default-filters=&quot;false&quot;&lt;/code&gt;是做什么的？为什么一个加了，一个没有加，于是我找到了下面的答案。&lt;/p&gt;
-
-&lt;h1 id=&quot;component-scan的分析&quot;&gt;component-scan的分析&lt;/h1&gt;
-
-&lt;h2 id=&quot;注册解析器&quot;&gt;注册解析器&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;component-scan&lt;/code&gt;交由&lt;code class=&quot;highlighter-rouge&quot;&gt;org.springframework.context.config.ContextNamespaceHandler&lt;/code&gt;处理&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;public class ContextNamespaceHandler extends NamespaceHandlerSupport {
-    public ContextNamespaceHandler() {
-    }
-
-    public void init() {
-        this.registerBeanDefinitionParser(&quot;property-placeholder&quot;, new PropertyPlaceholderBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;property-override&quot;, new PropertyOverrideBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;annotation-config&quot;, new AnnotationConfigBeanDefinitionParser());
-        //这里注册处理的解析器
-        this.registerBeanDefinitionParser(&quot;component-scan&quot;, new ComponentScanBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;load-time-weaver&quot;, new LoadTimeWeaverBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;spring-configured&quot;, new SpringConfiguredBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;mbean-export&quot;, new MBeanExportBeanDefinitionParser());
-        this.registerBeanDefinitionParser(&quot;mbean-server&quot;, new MBeanServerBeanDefinitionParser());
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;componentscanbeandefinitionparser组装classpathbeandefinitionscanner&quot;&gt;ComponentScanBeanDefinitionParser组装ClassPathBeanDefinitionScanner&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-    public BeanDefinition parse(Element element, ParserContext parserContext) {
-        //获取basePackage
-        String basePackage = element.getAttribute(&quot;base-package&quot;);
-        basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
-        //注意，这里表示配置多个package的时候可以使用, ; 换行三种形式
-        String[] basePackages = StringUtils.tokenizeToStringArray(basePackage, &quot;,; \t\n&quot;);
-        //组装ClassPathBeanDefinitionScanner
-        ClassPathBeanDefinitionScanner scanner = this.configureScanner(parserContext, element);
-        //扫描===========
-        Set&amp;lt;BeanDefinitionHolder&amp;gt; beanDefinitions = scanner.doScan(basePackages);
-        //注册bean
-        this.registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
-        return null;
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    //组装ClassPathBeanDefinitionScanner
-    protected ClassPathBeanDefinitionScanner configureScanner(ParserContext parserContext, Element element) {
-        //默认情况下  use-default-filters属性为true
-        boolean useDefaultFilters = true;
-        if (element.hasAttribute(&quot;use-default-filters&quot;)) {
-            useDefaultFilters = Boolean.valueOf(element.getAttribute(&quot;use-default-filters&quot;));
-        }
-        //创建ClassPathBeanDefinitionScanner，调用下面一个方法createScanner
-        ClassPathBeanDefinitionScanner scanner = this.createScanner(parserContext.getReaderContext(), useDefaultFilters);
-        scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
-        scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
-        if (element.hasAttribute(&quot;resource-pattern&quot;)) {
-            scanner.setResourcePattern(element.getAttribute(&quot;resource-pattern&quot;));
-        }
-
-        try {
-            this.parseBeanNameGenerator(element, scanner);
-        } catch (Exception var7) {
-            parserContext.getReaderContext().error(var7.getMessage(), parserContext.extractSource(element), var7.getCause());
-        }
-
-        try {
-            this.parseScope(element, scanner);
-        } catch (Exception var6) {
-            parserContext.getReaderContext().error(var6.getMessage(), parserContext.extractSource(element), var6.getCause());
-        }
-
-        this.parseTypeFilters(element, scanner, parserContext);
-        return scanner;
-    }
-
-    protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) {
-        return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters, readerContext.getEnvironment(), readerContext.getResourceLoader());
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    //ClassPathBeanDefinitionScanner构造器
-    public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters, Environment environment, ResourceLoader resourceLoader) {
-        this.beanDefinitionDefaults = new BeanDefinitionDefaults();
-        this.beanNameGenerator = new AnnotationBeanNameGenerator();
-        this.scopeMetadataResolver = new AnnotationScopeMetadataResolver();
-        this.includeAnnotationConfig = true;
-        Assert.notNull(registry, &quot;BeanDefinitionRegistry must not be null&quot;);
-        this.registry = registry;
-        if (useDefaultFilters) {
-            //这里注册过滤器，就是那些bean被扫描注册
-            this.registerDefaultFilters();
-        }
-
-        this.setEnvironment(environment);
-        this.setResourceLoader(resourceLoader);
-    }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    //注册过滤器
-    // 可以看到默认ClassPathBeanDefinitionScanner会自动注册对@Component、@ManagedBean、@Named注解的Bean进行扫描。
-    protected void registerDefaultFilters() {
-        this.includeFilters.add(new AnnotationTypeFilter(Component.class));
-        ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader();
-
-        try {
-            this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName(&quot;javax.annotation.ManagedBean&quot;, cl), false));
-            this.logger.debug(&quot;JSR-250 'javax.annotation.ManagedBean' found and supported for component scanning&quot;);
-        } catch (ClassNotFoundException var4) {
-            ;
-        }
-
-        try {
-            this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName(&quot;javax.inject.Named&quot;, cl), false));
-            this.logger.debug(&quot;JSR-330 'javax.inject.Named' annotation found and supported for component scanning&quot;);
-        } catch (ClassNotFoundException var3) {
-            ;
-        }
-
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;我们再次回到&lt;code class=&quot;highlighter-rouge&quot;&gt;//扫描===========&lt;/code&gt;这个地方，继续往下走&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    protected Set&amp;lt;BeanDefinitionHolder&amp;gt; doScan(String... basePackages) {
-        Assert.notEmpty(basePackages, &quot;At least one base package must be specified&quot;);
-        Set&amp;lt;BeanDefinitionHolder&amp;gt; beanDefinitions = new LinkedHashSet();
-        String[] var3 = basePackages;
-        int var4 = basePackages.length;
-
-        for(int var5 = 0; var5 &amp;lt; var4; ++var5) {
-            String basePackage = var3[var5];
-            //这里判定是否符合条件
-            Set&amp;lt;BeanDefinition&amp;gt; candidates = this.findCandidateComponents(basePackage);
-            Iterator var8 = candidates.iterator();
-
-            while(var8.hasNext()) {
-                BeanDefinition candidate = (BeanDefinition)var8.next();
-                ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
-                candidate.setScope(scopeMetadata.getScopeName());
-                String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
-                if (candidate instanceof AbstractBeanDefinition) {
-                    this.postProcessBeanDefinition((AbstractBeanDefinition)candidate, beanName);
-                }
-
-                if (candidate instanceof AnnotatedBeanDefinition) {
-                    AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition)candidate);
-                }
-
-                if (this.checkCandidate(beanName, candidate)) {
-                    BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
-                    definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
-                    beanDefinitions.add(definitionHolder);
-                    this.registerBeanDefinition(definitionHolder, this.registry);
-                }
-            }
-        }
-
-        return beanDefinitions;
-    }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;从判定符合条件的地方继续往下走&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-    public Set&amp;lt;BeanDefinition&amp;gt; findCandidateComponents(String basePackage) {
-        LinkedHashSet candidates = new LinkedHashSet();
-
-        try {
-            String packageSearchPath = &quot;classpath*:&quot; + this.resolveBasePackage(basePackage) + '/' + this.resourcePattern;
-            Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
-            boolean traceEnabled = this.logger.isTraceEnabled();
-            boolean debugEnabled = this.logger.isDebugEnabled();
-            Resource[] var7 = resources;
-            int var8 = resources.length;
-
-            for(int var9 = 0; var9 &amp;lt; var8; ++var9) {
-                Resource resource = var7[var9];
-                if (traceEnabled) {
-                    this.logger.trace(&quot;Scanning &quot; + resource);
-                }
-
-                if (resource.isReadable()) {
-                    try {
-                        MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
-                        //这里判定是否符合排除或者包含的component条件
-                        if (this.isCandidateComponent(metadataReader)) {
-                            ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
-                            sbd.setResource(resource);
-                            sbd.setSource(resource);
-                            if (this.isCandidateComponent((AnnotatedBeanDefinition)sbd)) {
-                                if (debugEnabled) {
-                                    this.logger.debug(&quot;Identified candidate component class: &quot; + resource);
-                                }
-
-                                candidates.add(sbd);
-                            } else if (debugEnabled) {
-                                this.logger.debug(&quot;Ignored because not a concrete top-level class: &quot; + resource);
-                            }
-                        } else if (traceEnabled) {
-                            this.logger.trace(&quot;Ignored because not matching any filter: &quot; + resource);
-                        }
-                    } catch (Throwable var13) {
-                        throw new BeanDefinitionStoreException(&quot;Failed to read candidate component class: &quot; + resource, var13);
-                    }
-                } else if (traceEnabled) {
-                    this.logger.trace(&quot;Ignored because not readable: &quot; + resource);
-                }
-            }
-
-            return candidates;
-        } catch (IOException var14) {
-            throw new BeanDefinitionStoreException(&quot;I/O failure during classpath scanning&quot;, var14);
-        }
-    }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;从判定是否符合component的地方继续&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
-    protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
-        Iterator var2 = this.excludeFilters.iterator();
-
-        TypeFilter tf;
-        do {
-            //先判断 exclude-filter,黑名单过滤
-            if (!var2.hasNext()) {
-                var2 = this.includeFilters.iterator();
-
-                do {
-                    //然后判断 include-filter,白名单过滤
-                    // 其他情况排除
-                    if (!var2.hasNext()) {
-                        return false;
-                    }
-
-                    tf = (TypeFilter)var2.next();
-                } while(!tf.match(metadataReader, this.metadataReaderFactory));
-
-                return this.isConditionMatch(metadataReader);
-            }
-
-            tf = (TypeFilter)var2.next();
-        } while(!tf.match(metadataReader, this.metadataReaderFactory));
-
-        return false;
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;结论&quot;&gt;结论&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;include-filter和exclude-filter同时配置时，exclude-filter优先级高于include-filter&lt;/li&gt;
-  &lt;li&gt;use-default-filters默认为true，默认情况下会自动扫描@Component、@ManagedBean、@Named，由于service，repository是component的继承，所以也会被扫描&lt;/li&gt;
-  &lt;li&gt;controller需要配置在Springmvc中，同时spring中不能重复配置，否则会导致异常情况（如事务失效）&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>lipeng</name></author><category term="Spring" /><summary type="html">今天偶然看到了原有的一个项目中有这样的配置信息 配置文件spring-config.xml &amp;lt;!-- 扫描注解Bean --&amp;gt; &amp;lt;context:component-scan base-package=&quot;com.aaa.bbb,com.aaa.bbb.platform.model.sys&quot;&amp;gt; &amp;lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&amp;gt; &amp;lt;/context:component-scan&amp;gt; 配置文件spring-mvc.xml &amp;lt;!-- 开启controller注解支持 --&amp;gt; &amp;lt;context:component-scan base-package=&quot;com.aaa.bbb.platform.controller&quot; use-default-filters=&quot;false&quot;&amp;gt; &amp;lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&amp;gt; &amp;lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;/&amp;gt; &amp;lt;/context:component-scan&amp;gt; 我的第一个问题是为什么不能直接把这两个配置信息合并在一起呢？然后我试了一下，都放在spring-config.xml中，很不幸，这样是不行的，无法访问到Controller，原因我猜想是Springmvc有自己的初始化过程，放在Spring中初始化导致无法获取到控制层信息，准备过段时间研究一下Springmvc的实现原理。 第二个问题是use-default-filters=&quot;false&quot;是做什么的？为什么一个加了，一个没有加，于是我找到了下面的答案。 component-scan的分析 注册解析器 component-scan交由org.springframework.context.config.ContextNamespaceHandler处理 public class ContextNamespaceHandler extends NamespaceHandlerSupport { public ContextNamespaceHandler() { } public void init() { this.registerBeanDefinitionParser(&quot;property-placeholder&quot;, new PropertyPlaceholderBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;property-override&quot;, new PropertyOverrideBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;annotation-config&quot;, new AnnotationConfigBeanDefinitionParser()); //这里注册处理的解析器 this.registerBeanDefinitionParser(&quot;component-scan&quot;, new ComponentScanBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;load-time-weaver&quot;, new LoadTimeWeaverBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;spring-configured&quot;, new SpringConfiguredBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;mbean-export&quot;, new MBeanExportBeanDefinitionParser()); this.registerBeanDefinitionParser(&quot;mbean-server&quot;, new MBeanServerBeanDefinitionParser()); } } ComponentScanBeanDefinitionParser组装ClassPathBeanDefinitionScanner public BeanDefinition parse(Element element, ParserContext parserContext) { //获取basePackage String basePackage = element.getAttribute(&quot;base-package&quot;); basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage); //注意，这里表示配置多个package的时候可以使用, ; 换行三种形式 String[] basePackages = StringUtils.tokenizeToStringArray(basePackage, &quot;,; \t\n&quot;); //组装ClassPathBeanDefinitionScanner ClassPathBeanDefinitionScanner scanner = this.configureScanner(parserContext, element); //扫描=========== Set&amp;lt;BeanDefinitionHolder&amp;gt; beanDefinitions = scanner.doScan(basePackages); //注册bean this.registerComponents(parserContext.getReaderContext(), beanDefinitions, element); return null; } //组装ClassPathBeanDefinitionScanner protected ClassPathBeanDefinitionScanner configureScanner(ParserContext parserContext, Element element) { //默认情况下 use-default-filters属性为true boolean useDefaultFilters = true; if (element.hasAttribute(&quot;use-default-filters&quot;)) { useDefaultFilters = Boolean.valueOf(element.getAttribute(&quot;use-default-filters&quot;)); } //创建ClassPathBeanDefinitionScanner，调用下面一个方法createScanner ClassPathBeanDefinitionScanner scanner = this.createScanner(parserContext.getReaderContext(), useDefaultFilters); scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults()); scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns()); if (element.hasAttribute(&quot;resource-pattern&quot;)) { scanner.setResourcePattern(element.getAttribute(&quot;resource-pattern&quot;)); } try { this.parseBeanNameGenerator(element, scanner); } catch (Exception var7) { parserContext.getReaderContext().error(var7.getMessage(), parserContext.extractSource(element), var7.getCause()); } try { this.parseScope(element, scanner); } catch (Exception var6) { parserContext.getReaderContext().error(var6.getMessage(), parserContext.extractSource(element), var6.getCause()); } this.parseTypeFilters(element, scanner, parserContext); return scanner; } protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) { return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters, readerContext.getEnvironment(), readerContext.getResourceLoader()); } //ClassPathBeanDefinitionScanner构造器 public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters, Environment environment, ResourceLoader resourceLoader) { this.beanDefinitionDefaults = new BeanDefinitionDefaults(); this.beanNameGenerator = new AnnotationBeanNameGenerator(); this.scopeMetadataResolver = new AnnotationScopeMetadataResolver(); this.includeAnnotationConfig = true; Assert.notNull(registry, &quot;BeanDefinitionRegistry must not be null&quot;); this.registry = registry; if (useDefaultFilters) { //这里注册过滤器，就是那些bean被扫描注册 this.registerDefaultFilters(); } this.setEnvironment(environment); this.setResourceLoader(resourceLoader); } //注册过滤器 // 可以看到默认ClassPathBeanDefinitionScanner会自动注册对@Component、@ManagedBean、@Named注解的Bean进行扫描。 protected void registerDefaultFilters() { this.includeFilters.add(new AnnotationTypeFilter(Component.class)); ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader(); try { this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName(&quot;javax.annotation.ManagedBean&quot;, cl), false)); this.logger.debug(&quot;JSR-250 'javax.annotation.ManagedBean' found and supported for component scanning&quot;); } catch (ClassNotFoundException var4) { ; } try { this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName(&quot;javax.inject.Named&quot;, cl), false)); this.logger.debug(&quot;JSR-330 'javax.inject.Named' annotation found and supported for component scanning&quot;); } catch (ClassNotFoundException var3) { ; } } 我们再次回到//扫描===========这个地方，继续往下走 protected Set&amp;lt;BeanDefinitionHolder&amp;gt; doScan(String... basePackages) { Assert.notEmpty(basePackages, &quot;At least one base package must be specified&quot;); Set&amp;lt;BeanDefinitionHolder&amp;gt; beanDefinitions = new LinkedHashSet(); String[] var3 = basePackages; int var4 = basePackages.length; for(int var5 = 0; var5 &amp;lt; var4; ++var5) { String basePackage = var3[var5]; //这里判定是否符合条件 Set&amp;lt;BeanDefinition&amp;gt; candidates = this.findCandidateComponents(basePackage); Iterator var8 = candidates.iterator(); while(var8.hasNext()) { BeanDefinition candidate = (BeanDefinition)var8.next(); ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate); candidate.setScope(scopeMetadata.getScopeName()); String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry); if (candidate instanceof AbstractBeanDefinition) { this.postProcessBeanDefinition((AbstractBeanDefinition)candidate, beanName); } if (candidate instanceof AnnotatedBeanDefinition) { AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition)candidate); } if (this.checkCandidate(beanName, candidate)) { BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName); definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry); beanDefinitions.add(definitionHolder); this.registerBeanDefinition(definitionHolder, this.registry); } } } return beanDefinitions; } 从判定符合条件的地方继续往下走 public Set&amp;lt;BeanDefinition&amp;gt; findCandidateComponents(String basePackage) { LinkedHashSet candidates = new LinkedHashSet(); try { String packageSearchPath = &quot;classpath*:&quot; + this.resolveBasePackage(basePackage) + '/' + this.resourcePattern; Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath); boolean traceEnabled = this.logger.isTraceEnabled(); boolean debugEnabled = this.logger.isDebugEnabled(); Resource[] var7 = resources; int var8 = resources.length; for(int var9 = 0; var9 &amp;lt; var8; ++var9) { Resource resource = var7[var9]; if (traceEnabled) { this.logger.trace(&quot;Scanning &quot; + resource); } if (resource.isReadable()) { try { MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource); //这里判定是否符合排除或者包含的component条件 if (this.isCandidateComponent(metadataReader)) { ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader); sbd.setResource(resource); sbd.setSource(resource); if (this.isCandidateComponent((AnnotatedBeanDefinition)sbd)) { if (debugEnabled) { this.logger.debug(&quot;Identified candidate component class: &quot; + resource); } candidates.add(sbd); } else if (debugEnabled) { this.logger.debug(&quot;Ignored because not a concrete top-level class: &quot; + resource); } } else if (traceEnabled) { this.logger.trace(&quot;Ignored because not matching any filter: &quot; + resource); } } catch (Throwable var13) { throw new BeanDefinitionStoreException(&quot;Failed to read candidate component class: &quot; + resource, var13); } } else if (traceEnabled) { this.logger.trace(&quot;Ignored because not readable: &quot; + resource); } } return candidates; } catch (IOException var14) { throw new BeanDefinitionStoreException(&quot;I/O failure during classpath scanning&quot;, var14); } } 从判定是否符合component的地方继续 protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException { Iterator var2 = this.excludeFilters.iterator(); TypeFilter tf; do { //先判断 exclude-filter,黑名单过滤 if (!var2.hasNext()) { var2 = this.includeFilters.iterator(); do { //然后判断 include-filter,白名单过滤 // 其他情况排除 if (!var2.hasNext()) { return false; } tf = (TypeFilter)var2.next(); } while(!tf.match(metadataReader, this.metadataReaderFactory)); return this.isConditionMatch(metadataReader); } tf = (TypeFilter)var2.next(); } while(!tf.match(metadataReader, this.metadataReaderFactory)); return false; } 结论 include-filter和exclude-filter同时配置时，exclude-filter优先级高于include-filter use-default-filters默认为true，默认情况下会自动扫描@Component、@ManagedBean、@Named，由于service，repository是component的继承，所以也会被扫描 controller需要配置在Springmvc中，同时spring中不能重复配置，否则会导致异常情况（如事务失效）</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>lipeng</name></author><category term="Mybatis" /><summary type="html">1. 一级缓存的作用 2. 一级缓存的依赖关系 3. 一级缓存的生命周期 4. 一级缓存的实现 5. Cache接口 6. 性能问题 1. 一级缓存的作用 每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。 肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。 SqlSession级别的数据缓存，称为一级缓存 2. 一级缓存的依赖关系 一级缓存由SqlSession控制。 SqlSession将它的工作交给了Executor执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSession对象时，MyBatis会为这个SqlSession对象创建一个新的Executor执行器，而缓存信息就被维护在这个Executor执行器中，MyBatis将缓存和对缓存相关的操作封装成了Cache接口中。 Executor接口的实现类BaseExecutor中拥有一个Cache接口的实现类PerpetualCache，则对于BaseExecutor对象而言，它将使用PerpetualCache对象维护缓存。 PerpetualCache的实现代码 /** * @author Clinton Begin */ public class PerpetualCache implements Cache { private final String id; private Map&amp;lt;Object, Object&amp;gt; cache = new HashMap&amp;lt;Object, Object&amp;gt;(); public PerpetualCache(String id) { this.id = id; } @Override public String getId() { return id; } @Override public int getSize() { return cache.size(); } @Override public void putObject(Object key, Object value) { cache.put(key, value); } @Override public Object getObject(Object key) { return cache.get(key); } @Override public Object removeObject(Object key) { return cache.remove(key); } @Override public void clear() { cache.clear(); } @Override public ReadWriteLock getReadWriteLock() { return null; } @Override public boolean equals(Object o) { if (getId() == null) { throw new CacheException(&quot;Cache instances require an ID.&quot;); } if (this == o) { return true; } if (!(o instanceof Cache)) { return false; } Cache otherCache = (Cache) o; return getId().equals(otherCache.getId()); } @Override public int hashCode() { if (getId() == null) { throw new CacheException(&quot;Cache instances require an ID.&quot;); } return getId().hashCode(); } } 3. 一级缓存的生命周期 MyBatis在开启一个数据库会话时，会创建一个新的SqlSession对象，SqlSession对象中会有一个新的Executor对象，Executor对象中持有一个新的PerpetualCache对象；当会话结束时，SqlSession对象及其内部的Executor对象还有PerpetualCache对象也一并释放掉。 如果SqlSession调用了close()方法，会释放掉一级缓存PerpetualCache对象，一级缓存将不可用； 如果SqlSession调用了clearCache()，会清空PerpetualCache对象中的数据，但是该对象仍可使用； SqlSession中执行了任何一个update操作(update()、delete()、insert()) ，都会清空PerpetualCache对象的数据，但是该对象可以继续使用； 4. 一级缓存的实现 对于某个查询，根据statementId,params,rowBounds来构建一个key值，根据这个key值去缓存Cache中取出对应的key值存储的缓存结果； 判断从Cache中根据特定的key值取的数据数据是否为空，即是否命中； 如果命中，则直接将缓存结果返回； 如果没命中： 4.1 去数据库中查询数据，得到查询结果； 4.2 将key和查询到的结果分别作为key,value对存储到Cache中； 4.3. 将查询结果返回； 结束。 5. Cache接口 MyBatis定义了一个org.apache.ibatis.cache.Cache接口作为其Cache提供者的SPI(Service Provider Interface) ，所有的MyBatis内部的Cache缓存，都应该实现这一接口。MyBatis定义了一个PerpetualCache实现类实现了Cache接口，实际上，在SqlSession对象里的Executor 对象内维护的Cache类型实例对象，就是PerpetualCache子类创建的。 MyBatis内部还有很多Cache接口的实现，一级缓存只会涉及到这一个PerpetualCache子类。 Cache最核心的实现其实就是一个Map，将本次查询使用的特征值作为key，将查询结果作为value存储到Map中。 现在最核心的问题出现了：怎样来确定一次查询的特征值？ 换句话说就是：怎样判断某两次查询是完全相同的查询？ 也可以这样说：如何确定Cache中的key值？ MyBatis认为，对于两次查询，如果以下条件都完全一样，那么就认为它们是完全相同的两次查询 传入的 statementId 查询时要求的结果集中的结果范围 （结果的范围通过rowBounds.offset和rowBounds.limit表示）； 这次查询所产生的最终要传递给JDBC java.sql.Preparedstatement的Sql语句字符串（boundSql.getSql() ） 传递给java.sql.Statement要设置的参数值 CacheKey由以下条件决定： statementId + rowBounds + 传递给JDBC的SQL + 传递给JDBC的参数值 CacheKey的创建 @Override public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) { if (closed) { throw new ExecutorException(&quot;Executor was closed.&quot;); } CacheKey cacheKey = new CacheKey(); cacheKey.update(ms.getId());//StatementId cacheKey.update(rowBounds.getOffset());//rowBounds.offset cacheKey.update(rowBounds.getLimit());//rowBounds.limit cacheKey.update(boundSql.getSql());//Sql List&amp;lt;ParameterMapping&amp;gt; parameterMappings = boundSql.getParameterMappings();//参数 TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry(); // mimic DefaultParameterHandler logic for (ParameterMapping parameterMapping : parameterMappings) { if (parameterMapping.getMode() != ParameterMode.OUT) { Object value; String propertyName = parameterMapping.getProperty(); if (boundSql.hasAdditionalParameter(propertyName)) { value = boundSql.getAdditionalParameter(propertyName); } else if (parameterObject == null) { value = null; } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) { value = parameterObject; } else { MetaObject metaObject = configuration.newMetaObject(parameterObject); value = metaObject.getValue(propertyName); } cacheKey.update(value); } } if (configuration.getEnvironment() != null) { // issue #176 cacheKey.update(configuration.getEnvironment().getId()); } return cacheKey; } 构建CacheKey的过程实际上就是构造其hashCode的过程。下面的代码就是CacheKey的核心hashcode生成算法. public void update(Object object) { int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object); count++; checksum += baseHashCode; baseHashCode *= count; hashcode = multiplier * hashcode + baseHashCode; updateList.add(object); } 6. 性能问题 一级缓存没有维护容量和大小限制 一级缓存没有更新缓存和缓存过期的概念</summary></entry></feed>

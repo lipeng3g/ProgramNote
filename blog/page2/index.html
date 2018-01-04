@@ -29,7 +29,72 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html">Javascript过滤前后空格</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
+          <div class="m-article-content">
+
+
+  1. Mybatis缓存机制整体设计
+  2. 二级缓存的基本原理
+  3. 二级缓存的划分
+    
+      3.1. 为每一个Mapper分配一个Cache缓存对象（使用&lt;cache&gt;节点配置）
+      3.2. 多个Mapper共用一个Cache缓存对象（使用&lt;cache-ref&gt;节点配置）
+    
+  
+  4. 开启二级缓存的条件
+  5. 缓存使用顺序
+  6. 二级缓存的实现方式
+  7. Mybatis自身提供的二级缓存实现
+
+
+
+1. Mybatis缓存机制整体设计
+
+
+
+  当开一个会话时，一个SqlSession对象会使用一个Executor对象来完成会话操作，MyBatis的二级缓存机制的关键就是对这个Executor...</div><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
+          <div class="m-article-content">装饰者模式
+
+
+
+  装饰者模式
+    
+      基本描述
+      代码实例
+    
+  
+
+
+
+基本描述
+目的
+
+  给对象动态地添加附加功能。
+  装饰者提供了一个灵活的拓展子类功能的备选方案。
+
+
+代码实例
+公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）
+
+
+  定义一个程序猿
+    /**
+ * 程序员
+ */
+public class Coder {
+
+ public void coding() {
+     System.out...</div><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html">Javascript过滤前后空格</a></h1>
           <div class="m-article-content">Javascript过滤前后空格
 
 
@@ -122,41 +187,7 @@ SqlSession将它的工作交给了Executor执行器这个角色来完成，负�
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月15日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
-          <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
-
-
-
-当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中
-
-配置如下
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;spring&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;contextConfigLocation&lt;/pa...</div><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月14日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html">component-scan总结</a></h1>
-          <div class="m-article-content">今天偶然看到了原有的一个项目中有这样的配置信息
-
-配置文件spring-config.xml
-    &lt;!-- 扫描注解Bean --&gt;
-    &lt;context:component-scan base-package="com.aaa.bbb,com.aaa.bbb.platform.model.sys"&gt;
-        &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/&gt;
-    &lt;/context:component-scan&gt;
-
-配置文件spring-mvc.xml
-
-    &lt;!...</div><a href="/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月12日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 29 篇文章, 6 页。</p>
+</article></div><nav class="m-pagination"><p>共计 31 篇文章, 7 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -174,6 +205,8 @@ SqlSession将它的工作交给了Executor执行器这个角色来完成，负�
                 <a class="round-button" href="/ProgramNote/blog/page5"><span>5</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page7"><span>7</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page3">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

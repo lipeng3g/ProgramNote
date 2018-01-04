@@ -29,7 +29,46 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">Hashcode和equals</a></h1>
+          <div class="m-article-content">问题
+两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。
+
+
+equals()方法详解
+先看java.lang.Object的默认实现，部分内容进行了翻译。
+   /**
+     * 表示某个其他对象是否“等于”这一个。
+     * &lt;p&gt;
+     * equals方法在非null对象引用上实现等价关系
+     * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。
+     * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回tru...</div><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月04日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">Java中hashcode和一致性哈希算法</a></h1>
+          <div class="m-article-content">哈希算法
+什么是哈希算法
+哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。
+
+哈希算法的特点
+
+  哈希值是二进制值
+  哈希值具有一定的唯一性
+  哈希值极其紧凑
+  要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的
+
+
+正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。
+
+哈希表
+哈希表是一种数据机构。
+哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希...</div><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月03日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
           <div class="m-article-content">abstrate
 说明
 
@@ -87,72 +126,7 @@ public class Product {
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月23日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
-          <div class="m-article-content">
-
-
-  1. Mybatis缓存机制整体设计
-  2. 二级缓存的基本原理
-  3. 二级缓存的划分
-    
-      3.1. 为每一个Mapper分配一个Cache缓存对象（使用&lt;cache&gt;节点配置）
-      3.2. 多个Mapper共用一个Cache缓存对象（使用&lt;cache-ref&gt;节点配置）
-    
-  
-  4. 开启二级缓存的条件
-  5. 缓存使用顺序
-  6. 二级缓存的实现方式
-  7. Mybatis自身提供的二级缓存实现
-
-
-
-1. Mybatis缓存机制整体设计
-
-
-
-  当开一个会话时，一个SqlSession对象会使用一个Executor对象来完成会话操作，MyBatis的二级缓存机制的关键就是对这个Executor...</div><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
-          <div class="m-article-content">装饰者模式
-
-
-
-  装饰者模式
-    
-      基本描述
-      代码实例
-    
-  
-
-
-
-基本描述
-目的
-
-  给对象动态地添加附加功能。
-  装饰者提供了一个灵活的拓展子类功能的备选方案。
-
-
-代码实例
-公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）
-
-
-  定义一个程序猿
-    /**
- * 程序员
- */
-public class Coder {
-
- public void coding() {
-     System.out...</div><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 29 篇文章, 6 页。</p>
+</article></div><nav class="m-pagination"><p>共计 31 篇文章, 7 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -170,6 +144,8 @@ public class Coder {
                 <a class="round-button" href="/ProgramNote/blog/page5"><span>5</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page7"><span>7</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page2">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Hashcode和equals - lipeng's blog</title>
+<meta name="description" content="问题两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。equals()方法详解先看java.lang.Object的默认实现，部分内容进行了翻译。   /**     * 表示某个其他对...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Hashcode和equals</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2018-01-04T10:46:08+08:00"
+          itemprop="datePublished">2018年 01月04日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="问题">问题</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。
+</code></pre></div></div>
+
+<h1 id="equals方法详解">equals()方法详解</h1>
+<p>先看java.lang.Object的默认实现，部分内容进行了翻译。</p>
+<pre><code class="language-Java">   /**
+     * 表示某个其他对象是否“等于”这一个。
+     * &lt;p&gt;
+     * equals方法在非null对象引用上实现等价关系
+     * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。
+     * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回true
+     * 传递: 对任何非空的引用值 x, y, z, 如果 x.equals(y)返回 true ，y.equals(z)返回 true, 那么 x.equals(z)也必须返回true
+     * 一致: 如果x.equals(y)返回是true，只要x和y内容一直不变，不管你重复x.equals(y)多少次，返回都是true。
+     * 任何情况下，x.equals(null)，永远返回是“false”；x.equals(和x不同类型的对象)永远返回是“false”。
+     * &lt;p&gt;
+     * Object类的equals方法实现了对象上最可能的等价关系;也就是说，对于任何非null的引用值x和y，当且仅当x和y引用同一个对象x == y时返回 true。
+     * &lt;p&gt;
+     * 请注意，无论何时重写此方法，通常都必须重写hashCode方法，以维护hashCode方法的一般约定，该方法声明相等的对象必须具有相同的哈希码。
+     *
+     * @param   obj   the reference object with which to compare.
+     * @return  true} if this object is the same as the obj
+     *          argument; false} otherwise.
+     * @see     #hashCode()
+     * @see     java.util.HashMap
+     */
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+</code></pre>
+
+<p>通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。</p>
+
+<p>但是，很多时候，equals方法会被重写，例如 java.lang.String</p>
+
+<pre><code class="language-Java">public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String) anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                            return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+
+<p>java.lang.String的equals方法不是进行引用地址比较，而是内容比较。</p>
+
+<p>下面举个形象的例子</p>
+<pre><code class="language-Java">public class User {
+    private int id;
+    private String name;
+    private String password;
+
+    &lt;get and set&gt;
+}
+</code></pre>
+<p>测试方法</p>
+<pre><code class="language-Java">    User user1 = new User();
+    User user2 = new User();
+    assert user1.equals(user2);
+</code></pre>
+<p>如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。</p>
+
+<pre><code class="language-Java">public class User {
+    private int id;
+    private String name;
+    private String password;
+
+    &lt;get and set&gt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return id == user.id &amp;&amp;
+                Objects.equals(name, user.name) &amp;&amp;
+                Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, name, password);
+    }
+}
+</code></pre>
+
+<p>上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。</p>
+
+<p><strong>需要注意的是，上面同时重写了 equals 和 Hashcode 方法，在这个简单对象中不重写可能不会有太大的问题，但是后面再集合中，如果不重写可能会导致意想不到的问题发生。</strong></p>
+
+<h1 id="hashcode">hashCode()</h1>
+<p>先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc</p>
+<pre><code class="language-Java">  /**
+     * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。
+     * &lt;p&gt;
+     * hashCode通常情况下遵守的合约是：
+     * &lt;ul&gt;
+     * &lt;li&gt;只要在Java应用程序的执行过程中多次调用同一个对象，{@code hashCode}方法必须始终返回相同的整数，前提是在对象上的比较中没有使用任何信息被修改。 从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。
+     * &lt;li&gt;如果两个对象根据equals方法相等，则在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。
+     * &lt;li&gt;如果两个对象根据equals（Object）方法不相等，则不要求对两个对象中的每一个调用hashCode方法都必须产生不同的整数结果。 但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。
+     * &lt;/ul&gt;
+     * &lt;p&gt;
+     * 尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。 （这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。）
+     *
+     * @return  a hash code value for this object.
+     * @see     java.lang.Object#equals(java.lang.Object)
+     * @see     java.lang.System#identityHashCode
+     */
+    public native int hashCode();
+</code></pre>
+
+<p>通常情况下，String等对象类型会重写这些方法，例如</p>
+<pre><code class="language-Java">    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;&amp; value.length &gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+</code></pre>
+
+<p>简单理解就是 String 使用 <code class="highlighter-rouge">s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]</code>重写了hashcode 的值。</p>
+
+<p><strong>请注意，下面只是简单介绍集合的存储原理，关于地址值的部分不准备，这部分等我看完jdk8的代码以后再修改</strong></p>
+
+<p>想要弄明白hashCode的作用，必须要先知道Java中的集合。　　 
+总的来说，Java中的集合（Collection）有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。这里就引出一个问题：要想保证元素不重复，可两个元素是否重复应该依据什么来判断呢？</p>
+
+<p>这就是Object.equals方法了。但是，如果每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说，如果集合中现在已经有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。 <br />
+于是，Java采用了哈希表的原理。哈希（Hash）实际上是个人名，由于他提出一哈希算法的概念，所以就以他的名字命名了。哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上，这个地址上的key值就是hashcode值，而value值则记录了这个对象存储的真是地址。<br />
+这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。所以这里存在一个冲突解决的问题。这样一来实际调用equals方法的次数就大大降低了，几乎只需要一两次。</p>
+
+<p>所以，Java对于eqauls方法和hashCode方法是这样规定的：
+1.如果两个对象相同，那么它们的hashCode值一定要相同；
+2.如果两个对象的hashCode相同，它们并不一定相同（这里说的对象相同指的是用eqauls方法比较）。  如不按要求去做了，会发现相同的对象可以出现在Set集合中，同时，增加新元素的效率会大大下降。
+3.equals()相等的两个对象，hashcode()一定相等；equals()不相等的两个对象，却并不能证明他们的hashcode()不相等。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>换句话说，equals()方法不相等的两个对象，hashcode()有可能相等（我的理解是由于哈希码在生成的时候产生冲突造成的）。反过来，hashcode()不等，一定能推出equals()也不等；hashcode()相等，equals()可能相等，也可能不等。
+
+在object类中，hashcode()方法是本地方法，返回的是对象的地址值，而object类中的equals()方法比较的也是两个对象的地址值，如果equals()相等，说明两个对象地址值也相等，当然hashcode()也就相等了；在String类中，equals()返回的是两个对象内容的比较，当两个对象内容相等时，Hashcode()方法根据String类的重写代码的分析，也可知道hashcode()返回结果也会相等。以此类推，可以知道Integer、Double等封装类中经过重写的equals()和hashcode()方法也同样适合于这个原则。当然没有经过重写的类，在继承了object类的equals()和hashcode()方法后，也会遵守这个原则。
+</code></pre></div></div>
+
+<h1 id="hashsethashmaphashtable与hashcode和equals的密切关系">Hashset、Hashmap、Hashtable与hashcode()和equals()的密切关系</h1>
+
+<p>Hashset是继承Set接口，Set接口又实现Collection接口，这是层次关系。那么Hashset、Hashmap、Hashtable中的存储操作是根据什么原理来存取对象的呢？</p>
+
+<p>以HashSet为例，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是：<br />
+1.判断两个对象的hashCode是否相等</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>如果不相等，认为两个对象也不相等，完毕
+如果相等，转入2 (这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。）
+</code></pre></div></div>
+
+<p>2.判断两个对象用equals运算是否相等</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>如果不相等，认为两个对象也不相等
+如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键）
+</code></pre></div></div>
+
+<p>为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。</p>
+
+<h1 id="答案">答案</h1>
+
+<p><strong>两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等</strong></p>
+</div>
+				<footer><meta itemprop="dateModified" content="2018-01-04T10:46:08+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-04-Hashcode和equals.md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-04-Hashcode和equals.md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>
