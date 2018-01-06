@@ -32,7 +32,7 @@
     <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">HashMap源码解析(JDK1.7.0_80)</a></h1>
           <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录
 
-数据存储结构
+1. 数据存储结构
 采用双表结构：数组+单向链表
 
 
@@ -44,7 +44,7 @@
      * 该表根据需要调整大小。长度必须始终是2的幂。
      * 用户储存元素的数组，最初定义为空，实例化的时候会调用下面的膨胀表的方法，对Table进行赋值操作
      */
-    transient Entry&lt;K,V&gt;[] table = (Ent...</div><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+    transient Entry&lt;K,V&gt;[] table = (...</div><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月06日</span></div>
   </div>

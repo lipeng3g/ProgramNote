@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HashMap源码解析(JDK1.7.0_80) - lipeng's blog</title>
-<meta name="description" content="写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录数据存储结构采用双表结构：数组+单向链表    /**     * 一个空的表实例，用于在表未膨胀时共享。     */    static final Ent...">
+<meta name="description" content="写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录1. 数据存储结构采用双表结构：数组+单向链表    /**     * 一个空的表实例，用于在表未膨胀时共享。     */    static final ...">
 <link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -41,7 +41,7 @@
 </header>
 				<div class="m-article-content js-article-content" itemprop="articleBody"><p><strong>写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录</strong></p>
 
-<h1 id="数据存储结构">数据存储结构</h1>
+<h1 id="1-数据存储结构">1. 数据存储结构</h1>
 <p>采用双表结构：数组+单向链表<br />
 <img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/HashMap.png" alt="hashmap" title="hashMap" /></p>
 
@@ -99,8 +99,66 @@
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="插入数据-put">插入数据 PUT</h1>
-<h2 id="插入">插入</h2>
+<h1 id="2-初始化">2. 初始化</h1>
+<p>HashMap的构造函数一共有四个</p>
+<pre><code class="language-Java">
+    public HashMap(int initialCapacity, float loadFactor) {
+        //初始化容量不能为负数
+        if (initialCapacity &lt; 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +
+                                               initialCapacity);
+        //如果初始化容量超过最大值，以最大值赋值，最大值 1 &lt;&lt; 30
+        if (initialCapacity &gt; MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        //负载因子不能为负数
+        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +
+                                               loadFactor);
+        //负载因子赋值
+        this.loadFactor = loadFactor;
+        //阈值为初始化大小
+        threshold = initialCapacity;
+        //这里init方法是空实现，没有任何操作
+        init();
+    }
+
+    public HashMap(int initialCapacity) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public HashMap() {
+        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
+    }
+
+    /**
+     * Constructs a new &lt;tt&gt;HashMap&lt;/tt&gt; with the same mappings as the
+     * specified &lt;tt&gt;Map&lt;/tt&gt;.  The &lt;tt&gt;HashMap&lt;/tt&gt; is created with
+     * default load factor (0.75) and an initial capacity sufficient to
+     * hold the mappings in the specified &lt;tt&gt;Map&lt;/tt&gt;.
+     *
+     * @param   m the map whose mappings are to be placed in this map
+     * @throws  NullPointerException if the specified map is null
+     */
+    public HashMap(Map&lt;? extends K, ? extends V&gt; m) {
+        //初始化容量是 16 或者是 通过负载因子计算的数量 的最大值
+        this(Math.max((int) (m.size() / DEFAULT_LOAD_FACTOR) + 1,
+                      DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+        //请注意，只有这里初始化了，前面三个构造函数都没有初始化操作
+        inflateTable(threshold);
+
+        putAllForCreate(m);
+    }
+
+
+    private void putAllForCreate(Map&lt;? extends K, ? extends V&gt; m) {
+        for (Map.Entry&lt;? extends K, ? extends V&gt; e : m.entrySet())
+            //新增table元素，详细过程略
+            putForCreate(e.getKey(), e.getValue());
+    }
+</code></pre>
+
+<h1 id="3-插入数据-put">3. 插入数据 PUT</h1>
+<h2 id="31-插入">3.1. 插入</h2>
 <p>代码比较简单</p>
 <pre><code class="language-Java">    /**
      * 将指定的值与该映射中的指定键关联。如果映射之前包含了键的映射，则旧值将被替换。
@@ -138,7 +196,7 @@
         return null;
     }
 </code></pre>
-<h2 id="链表新增数据">链表新增数据</h2>
+<h2 id="32-链表新增数据">3.2. 链表新增数据</h2>
 
 <pre><code class="language-Java">    /**
      * 向指定的bucket添加一个具有指定键、值和哈希代码的新条目。如果需要的话，该方法还会调整表的大小。
@@ -170,16 +228,16 @@
     }
 </code></pre>
 
-<h2 id="扩容">扩容</h2>
+<h2 id="33-扩容">3.3. 扩容</h2>
 
-<h3 id="扩容条件">扩容条件</h3>
+<h3 id="331-扩容条件">3.3.1. 扩容条件</h3>
 <p>请注意在上面 <code class="highlighter-rouge">addEntry</code>方法中扩容的条件，表的容量大于阈值并且存储的目标位置不为空就会扩容，实际还有一个触发扩容方法的调用，只要满足前一个条件<strong>表的容量大于阈值</strong>就会触发扩容</p>
 
 <ul>
   <li>阈值 = 容量 * 阈值系数</li>
   <li>容量默认值 16  <code class="highlighter-rouge">static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16</code></li>
   <li>阈值系数默认值 0.75 <code class="highlighter-rouge">static final float DEFAULT_LOAD_FACTOR = 0.75f;</code>
-    <h3 id="扩容过程">扩容过程</h3>
+    <h3 id="332-扩容过程">3.3.2. 扩容过程</h3>
   </li>
 </ul>
 
@@ -231,7 +289,7 @@
 </code></pre>
 
 <p>上面有个方法叫做 <code class="highlighter-rouge">initHashSeedAsNeeded</code> ，用于表示是否重新计算hash值，后面讲。</p>
-<h1 id="获取数据-get">获取数据 GET</h1>
+<h1 id="4-获取数据-get">4. 获取数据 GET</h1>
 <p>请注意，这里获取返回值为null的时候，不一定表示不包含key，也可能是键值就是null，如果要知道是否真的包含，需要调用 <code class="highlighter-rouge">containsKey</code> 方法。</p>
 
 <pre><code class="language-Java">    /**
@@ -289,7 +347,7 @@
     }
 </code></pre>
 
-<h1 id="hash计算和冲突">Hash计算和冲突</h1>
+<h1 id="5-hash计算和冲突">5. Hash计算和冲突</h1>
 
 <ul>
   <li>hash方法为了让每一位都参与位运算，让相近的数最后通过hash能分散开并减少碰撞，采用了多次位移和异或，当然多一次与key的hashCode异或，也是为了尽量减少碰撞；</li>
@@ -347,13 +405,15 @@
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>我们来看switching 的取值方法，是cur和use的异或，cur表示已经有seed，use表示capcity超过了阈值，需要use alternative。那么它们的异或就表示，当没有seed且需要use时；或者当有seed且不需要use时，switch才为true，特别的，switch为true时，如果需要alternative，则seed赋值为一个新的随机值，如果是已有seed则把seed置零。
 </code></pre></div></div>
 
-<h1 id="其他">其他</h1>
+<h1 id="6-其他">6. 其他</h1>
 
 <ol>
   <li>如果可以预估数据量，在创建HashMap实例时，设置合适的初始容量，可以减少扩容操作，提升性能。</li>
   <li>将容量设置为2的n次方性能最好，如：16，32。原因：和HashMap的indexFor方法实现有关。</li>
   <li>用作Key的对象须实现equals和hashCode方法。如果用String对象作Key，就不用自己实现equals和hashCode方法，因为String对象已经实现。</li>
   <li>HashMap是非线程安全的，在多线程并发操作时会出现死循环。原因：执行扩容操作时，将旧表中的数据插入新表时有可能导致单向链表形成闭环。</li>
+  <li>HashMap在普通的构造函数，也就是默认不放入任何值的构造函数中，不初始化table，只有在put或者是使用两外一个map初始化的时候才会初始化table</li>
+  <li>默认情况下，<strong>初始化的时候阈值就是table的初始化长度</strong>，只有调用resize以后，<strong>阈值 = 长度 * 负载因子</strong></li>
 </ol>
 
 <p><strong>参考</strong></p>
