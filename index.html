@@ -29,7 +29,27 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">Hashcode和equals</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">HashMap源码解析(JDK1.7.0_80)</a></h1>
+          <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录
+
+数据存储结构
+采用双表结构：数组+单向链表
+
+
+    /**
+     * 一个空的表实例，用于在表未膨胀时共享。
+     */
+    static final Entry&lt;?,?&gt;[] EMPTY_TABLE = {};
+    /**
+     * 该表根据需要调整大小。长度必须始终是2的幂。
+     * 用户储存元素的数组，最初定义为空，实例化的时候会调用下面的膨胀表的方法，对Table进行赋值操作
+     */
+    transient Entry&lt;K,V&gt;[] table = (Ent...</div><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月06日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">Hashcode和equals</a></h1>
           <div class="m-article-content">问题
 两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。
 
@@ -111,22 +131,7 @@ public class Product {
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月25日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">Spring手动提交事务</a></h1>
-          <div class="m-article-content">开篇之前先说一下问题来源，我是用了redisson作为项目的分布式锁，程序中使用分布式锁来锁定 对象A， 然后锁定对象A 下的 对象B，然后再对对象B 做业务操作。
-
-	RLock ALock = redissonClient.getLock("AAAAA");
-	if (ALock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-		RLock BLock = redissonClient.getLock("BBBBB");
-		if (BLock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-			// 吧啦吧啦
-			// 这里是业务逻辑代码
-			// 修改对象状态等等
-		} e...</div><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月23日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 31 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 32 篇文章, 7 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

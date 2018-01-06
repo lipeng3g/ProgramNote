@@ -29,7 +29,22 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">Spring手动提交事务</a></h1>
+          <div class="m-article-content">开篇之前先说一下问题来源，我是用了redisson作为项目的分布式锁，程序中使用分布式锁来锁定 对象A， 然后锁定对象A 下的 对象B，然后再对对象B 做业务操作。
+
+	RLock ALock = redissonClient.getLock("AAAAA");
+	if (ALock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
+		RLock BLock = redissonClient.getLock("BBBBB");
+		if (BLock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
+			// 吧啦吧啦
+			// 这里是业务逻辑代码
+			// 修改对象状态等等
+		} e...</div><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月23日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
           <div class="m-article-content">
 
 
@@ -153,41 +168,7 @@ JavaScript中的每个函数都有许多附加的方法，包括toString()、cal
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis一级缓存</a></h1>
-          <div class="m-article-content">
-
-
-  1. 一级缓存的作用
-  2. 一级缓存的依赖关系
-  3. 一级缓存的生命周期
-  4. 一级缓存的实现
-  5. Cache接口
-  6. 性能问题
-
-
-
-1. 一级缓存的作用
-
-每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。
-
-肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。
-
-
-
-SqlSession级别的数据缓存，称为一级缓存
-
-2. 一级缓存的依赖关系
-
-一级缓存由SqlSession控制。
-
-
-
-SqlSession将它的工作交给了Executor执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSessio...</div><a href="/ProgramNote/mybatis/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月15日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 31 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 32 篇文章, 7 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
