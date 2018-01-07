@@ -70,6 +70,10 @@
      * 上面说的膨胀表，就是赋值，获取一个2的幂值，然后初始化table
      */
     private void inflateTable(int toSize) {
+        //注意，这里tosize其实是默认的表的长度值16，如果使用构造函数初始化，比如指定了长度是5，这里就是5
+        //但是，在第一次初始化表的时候调用方式是 inflateTable(threshold); 也就是说上面的5或者16其实是阈值
+        //下面一句话就是获取了大于5的2的幂值，使用的是 highestOneBit， 取这个数的二进制形式最左边的最高一位且高位后面全部补零，最后返回int型的结果
+        //比如这里获取到的是8，然后通过负载因子和容量，重新计算阈值
         // Find a power of 2 &gt;= toSize
         int capacity = roundUpToPowerOf2(toSize);
 
@@ -116,7 +120,7 @@
                                                loadFactor);
         //负载因子赋值
         this.loadFactor = loadFactor;
-        //阈值为初始化大小
+        //阈值为初始化大小，请注意，比如，现在初始化大小是5，那么阈值就设置为5了，但是，在inflateTable方法中有进行了重新计算 ******
         threshold = initialCapacity;
         //这里init方法是空实现，没有任何操作
         init();
