@@ -1,0 +1,612 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HashMap源码解析(JDK1.8.0_131) - lipeng's blog</title>
+<meta name="description" content="写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同1. 数据存储结构才用的结构和1.7类似，但是有些不同的是 数组+单向链表以后，为了提高链...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">HashMap源码解析(JDK1.8.0_131)</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2018-01-07T22:58:21+08:00"
+          itemprop="datePublished">2018年 01月07日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><p><strong>写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同</strong></p>
+
+<h1 id="1-数据存储结构">1. 数据存储结构</h1>
+<p>才用的结构和1.7类似，但是有些不同的是 数组+单向链表以后，为了提高链表的效率，在链表长度超过一定值（8）以后，链表转换成 红黑树。<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/HashMap8.png" alt="hashmap" title="hashmap" /></p>
+
+<p>关于默认值需要注意下面的部分</p>
+<pre><code class="language-Java">
+    /**
+     * 默认初始容量——必须是2的幂。
+     */
+    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16
+
+    /**
+     * 最大容量，如果任何一个构造函数都隐式地指定了一个更高的值，则使用参数。必须是 &lt;= (1&lt;&lt; 30) 2的幂。
+     */
+    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;
+
+    /**
+     * 在构造函数中没有指定的负载因子。
+     */
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+    /**
+     * 链表和tree的转换阈值。超过8时转换成tree
+     */
+    static final int TREEIFY_THRESHOLD = 8;
+
+    /**
+     * 链表和tree的转换阈值。小于6的时候转换成链表
+     */
+    static final int UNTREEIFY_THRESHOLD = 6;
+
+    /**
+     * 容器可能被树化的最小表容量。(否则，如果bin中有太多节点，那么该表就会被调整大小。)应该至少有4 * TREEIFY_THRESHOLD，以避免调整大小和调整阈值之间的冲突。
+     */
+    static final int MIN_TREEIFY_CAPACITY = 64;
+    /**
+     * 初始化的表，并根据需要调整大小。当分配时，长度总是2的幂。(在某些操作中，我们还允许长度为零，以允许自启动机制，而这是目前不需要的。)
+     */
+    transient Node&lt;K,V&gt;[] table;
+</code></pre>
+<p>下面是map的基础节点，和1.7中基本相同，但是名称换了。</p>
+<pre><code class="language-Java">/**
+     * Basic hash bin node, used for most entries.  (See below for
+     * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
+     */
+    static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
+        final int hash;
+        final K key;
+        V value;
+        Node&lt;K,V&gt; next;
+
+        Node(int hash, K key, V value, Node&lt;K,V&gt; next) {
+            this.hash = hash;
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+
+        public final K getKey()        { return key; }
+        public final V getValue()      { return value; }
+        public final String toString() { return key + "=" + value; }
+
+        public final int hashCode() {
+            return Objects.hashCode(key) ^ Objects.hashCode(value);
+        }
+
+        public final V setValue(V newValue) {
+            V oldValue = value;
+            value = newValue;
+            return oldValue;
+        }
+
+        public final boolean equals(Object o) {
+            if (o == this)
+                return true;
+            if (o instanceof Map.Entry) {
+                Map.Entry&lt;?,?&gt; e = (Map.Entry&lt;?,?&gt;)o;
+                if (Objects.equals(key, e.getKey()) &amp;&amp;
+                    Objects.equals(value, e.getValue()))
+                    return true;
+            }
+            return false;
+        }
+    }
+</code></pre>
+
+<h1 id="2-初始化">2. 初始化</h1>
+<h2 id="21-构造方法-hashmap">2.1. 构造方法 HashMap()</h2>
+<p>依然是有四个构造方法，先看最简单也是最常用的一个</p>
+<pre><code class="language-Java">
+    /**
+     * Constructs an empty &lt;tt&gt;HashMap&lt;/tt&gt; with the default initial capacity
+     * (16) and the default load factor (0.75).
+     */
+    public HashMap() {
+        this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
+    }
+</code></pre>
+<p>这里要说的是，除了一个负载因子进行了默认赋值以外，其他的没有任何操作。</p>
+<h2 id="22-构造方法-hashmapint-initialcapacity">2.2. 构造方法 HashMap(int initialCapacity)</h2>
+
+<pre><code class="language-Java">    /**
+     * Constructs an empty &lt;tt&gt;HashMap&lt;/tt&gt; with the specified initial
+     * capacity and the default load factor (0.75).
+     *
+     * @param  initialCapacity the initial capacity.
+     * @throws IllegalArgumentException if the initial capacity is negative.
+     */
+    public HashMap(int initialCapacity) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+</code></pre>
+<h2 id="23-构造方法-hashmapint-initialcapacity-float-loadfactor">2.3. 构造方法 HashMap(int initialCapacity, float loadFactor)</h2>
+<pre><code class="language-Java">
+    /**
+     * Constructs an empty &lt;tt&gt;HashMap&lt;/tt&gt; with the specified initial
+     * capacity and load factor.
+     *
+     * @param  initialCapacity the initial capacity
+     * @param  loadFactor      the load factor
+     * @throws IllegalArgumentException if the initial capacity is negative
+     *         or the load factor is nonpositive
+     */
+    public HashMap(int initialCapacity, float loadFactor) {
+        //初始化大小不能小于0
+        if (initialCapacity &lt; 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " +
+                                               initialCapacity);
+        //如果超过默认的最大值 ，以最大值初始化
+        if (initialCapacity &gt; MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        //负载因子不能 小于等于 0
+        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException("Illegal load factor: " +
+                                               loadFactor);
+        //负载因子赋值
+        this.loadFactor = loadFactor;
+        //阈值赋值（请注意，tableSizeFor 返回的是目标容量，也就是说这里把目标容量给了 阈值， 在resize的时候会重新计算 阈值）
+        this.threshold = tableSizeFor(initialCapacity);
+    }
+
+    /**
+     * 简单说就是返回一个大于大于当前输入值的最小的 2的幂值，请注意对照 1.7 的代码，1.7中是使用 Integer.highestOneBit 高位补1 的方式实现的
+     */
+    static final int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n &gt;&gt;&gt; 1;
+        n |= n &gt;&gt;&gt; 2;
+        n |= n &gt;&gt;&gt; 4;
+        n |= n &gt;&gt;&gt; 8;
+        n |= n &gt;&gt;&gt; 16;
+        return (n &lt; 0) ? 1 : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
+
+</code></pre>
+<h2 id="24-构造方法-hashmapmap-extends-k--extends-v-m">2.4. 构造方法 HashMap(Map&lt;? extends K, ? extends V&gt; m)</h2>
+
+<p>这里有需要注意的地方，如果使用这个构造方法初始化，会在调用resize或者putVal(依然是调用resize)的时候初始化Table，这是和前面三个的不同，前面三个始终都没有初始化Table，只有在调用put的时候才会真正初始化，这里其实也是，不过因为初始时就放入了数据，所以接着调用了put方法进行初始化了。</p>
+
+<pre><code class="language-Java">
+
+    /**
+     * Constructs a new &lt;tt&gt;HashMap&lt;/tt&gt; with the same mappings as the
+     * specified &lt;tt&gt;Map&lt;/tt&gt;.  The &lt;tt&gt;HashMap&lt;/tt&gt; is created with
+     * default load factor (0.75) and an initial capacity sufficient to
+     * hold the mappings in the specified &lt;tt&gt;Map&lt;/tt&gt;.
+     *
+     * @param   m the map whose mappings are to be placed in this map
+     * @throws  NullPointerException if the specified map is null
+     */
+    public HashMap(Map&lt;? extends K, ? extends V&gt; m) {
+        this.loadFactor = DEFAULT_LOAD_FACTOR;
+        putMapEntries(m, false);
+    }
+
+
+    /**
+     * Implements Map.putAll and Map constructor
+     *
+     * @param m the map
+     * @param evict false when initially constructing this map, else
+     * true (relayed to method afterNodeInsertion).
+     */
+    final void putMapEntries(Map&lt;? extends K, ? extends V&gt; m, boolean evict) {
+        int s = m.size();
+        if (s &gt; 0) {
+            if (table == null) { // pre-size
+                float ft = ((float)s / loadFactor) + 1.0F;
+                int t = ((ft &lt; (float)MAXIMUM_CAPACITY) ?
+                         (int)ft : MAXIMUM_CAPACITY);
+                if (t &gt; threshold)
+                    threshold = tableSizeFor(t);
+            }
+            else if (s &gt; threshold)
+                resize();
+            for (Map.Entry&lt;? extends K, ? extends V&gt; e : m.entrySet()) {
+                K key = e.getKey();
+                V value = e.getValue();
+                putVal(hash(key), key, value, false, evict);
+            }
+        }
+    }
+</code></pre>
+<h1 id="3-插入数据-put">3. 插入数据 PUT</h1>
+<h2 id="31-插入">3.1. 插入</h2>
+<p>通常情况下调用的 <code class="highlighter-rouge">put</code> 直接调用了一个内部方法 putVal</p>
+<pre><code class="language-Java">    public V put(K key, V value) {
+        return putVal(hash(key), key, value, false, true);
+    }
+</code></pre>
+
+<pre><code class="language-Java">    /**
+     * Implements Map.put and related methods
+     *
+     * @param hash hash for key
+     * @param key the key
+     * @param value the value to put
+     * @param onlyIfAbsent 如果为true，不改变当前值，通常调用put的时候这里是false，也就是会覆盖原来的值
+     * @param evict if false, the table is in creation mode.这个值在LinkHashMap中有用，这里暂时用不到
+     * @return previous value, or null if none
+     */
+    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+        //如果表为空，那么这里进行扩容
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        //如果当前位置没有数据，那么直接创建新节点（请注意，计算i位置的方法，在1.7里面是有 indexFor 完成的，这里没有了 indexFor，但是实际处理是一样一样的）
+        if ((p = tab[i = (n - 1) &amp; hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            //如果有数据，那么进行下面比较复杂的操作
+            Node&lt;K,V&gt; e; K k;
+            //table 节点存储的值恰好是当前要put的值，覆盖
+            if (p.hash == hash &amp;&amp;
+                ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+                e = p;
+            //如果当前位置存放的是 树节点，那么调用树节点的 put 方法（红黑树具体插入查找方法暂时不在本次讨论当中）
+            else if (p instanceof TreeNode)
+                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                //否则说明当前依然是链表结构，先插入节点
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        //请注意，这里很重要，在1.7中，插入新节点始终都是在链表的开头，但是这里是next，也就是说，插在了链表的结尾！！！！
+                        p.next = newNode(hash, key, value, null);
+                        //判断是否需要转成红黑树
+                        if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &amp;&amp;
+                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if (++size &gt; threshold)
+            resize();
+        //这里在其他class调用，目前hashmap中没有任何操作
+        afterNodeInsertion(evict);
+        return null;
+    }
+</code></pre>
+<h2 id="32-扩容">3.2. 扩容</h2>
+
+<h3 id="321-扩容条件">3.2.1. 扩容条件</h3>
+<p>通常情况下，扩容前会执行下面的方法，扩容的基本条件就是当前表数量超过阈值！</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(++</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="o">)</span>
+    <span class="n">resize</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h3 id="322-扩容过程">3.2.2. 扩容过程</h3>
+
+<pre><code class="language-Java">    /**
+     * 初始化或者是表翻倍。如果为空，使用之前设置的目标容量（这个值存储在阈值中）初始化。
+     * 由于我们使用表容量翻倍，元素要么待在原来的位置，要么有一个2的幂值的位移。
+     *
+     * @return the table
+     */
+    final Node&lt;K,V&gt;[] resize() {
+        Node&lt;K,V&gt;[] oldTab = table;
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        int oldThr = threshold;
+        int newCap, newThr = 0;
+        //翻倍容量，如果是最大值，返回最大值，否则，容量翻倍。
+        if (oldCap &gt; 0) {
+            if (oldCap &gt;= MAXIMUM_CAPACITY) {
+                threshold = Integer.MAX_VALUE;
+                return oldTab;
+            }
+            else if ((newCap = oldCap &lt;&lt; 1) &lt; MAXIMUM_CAPACITY &amp;&amp;
+                     oldCap &gt;= DEFAULT_INITIAL_CAPACITY)
+                newThr = oldThr &lt;&lt; 1; // double threshold
+        }
+        //初始化容量，使用之前设置的值
+        else if (oldThr &gt; 0) // initial capacity was placed in threshold
+            newCap = oldThr;
+        else {               // zero initial threshold signifies using defaults
+            newCap = DEFAULT_INITIAL_CAPACITY;
+            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+        }
+        if (newThr == 0) {
+            float ft = (float)newCap * loadFactor;
+            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (float)MAXIMUM_CAPACITY ?
+                      (int)ft : Integer.MAX_VALUE);
+        }
+        threshold = newThr;
+        //下面是具体的翻倍操作（节点操作）
+        @SuppressWarnings({"rawtypes","unchecked"})
+            Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])new Node[newCap];
+        table = newTab;
+        if (oldTab != null) {
+            for (int j = 0; j &lt; oldCap; ++j) {
+                Node&lt;K,V&gt; e;
+                //取出一个node
+                if ((e = oldTab[j]) != null) {
+                    oldTab[j] = null;
+                    //next == null 说明是一个孤立节点，直接重新插入
+                    if (e.next == null)
+                        newTab[e.hash &amp; (newCap - 1)] = e;
+                    //是一个tree节点，进行红黑树拆分操作（暂时不深入讨论）
+                    else if (e instanceof TreeNode)
+                        ((TreeNode&lt;K,V&gt;)e).split(this, newTab, j, oldCap);
+                    else { // 对链表进行高地位重新排序
+                        Node&lt;K,V&gt; loHead = null, loTail = null;
+                        Node&lt;K,V&gt; hiHead = null, hiTail = null;
+                        Node&lt;K,V&gt; next;
+                        do {
+                            next = e.next;
+                            if ((e.hash &amp; oldCap) == 0) {
+                                if (loTail == null)
+                                    loHead = e;
+                                else
+                                    loTail.next = e;
+                                loTail = e;
+                            }
+                            else {
+                                if (hiTail == null)
+                                    hiHead = e;
+                                else
+                                    hiTail.next = e;
+                                hiTail = e;
+                            }
+                        } while ((e = next) != null);
+                        if (loTail != null) {
+                            loTail.next = null;
+                            newTab[j] = loHead;
+                        }
+                        if (hiTail != null) {
+                            hiTail.next = null;
+                            newTab[j + oldCap] = hiHead;
+                        }
+                    }
+                }
+            }
+        }
+        return newTab;
+    }
+</code></pre>
+<p>每一次扩容，newCapacity和newThreshold均是扩容前值的两倍，为什么如此设计呢？还是照样举个例子来说明这样子设计的原因：<br />
+resize后index计算<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/hashmap008.png" alt="hashmap" title="hashmap" /><br />
+resize后，key所在bucket的节点位置保持不变。<br />
+首先，table.length也就是capacity肯定是2的n次方，根据所在bucket节点下标计算公式：index = hash &amp; (table.length - 1)，其实在进行&amp;运算的时候，只是多了一个最高位1，那么新位置要么保持原位置不变，要么在原位置 + oldCapacity，这个设计的巧妙就在于节省了一部分重新计算hash的时间，而且hash值高位出现0和1的概率均等，在resize的过程又将节点平均分配到两个bucket节点。</p>
+
+<h1 id="4-获取数据-get">4. 获取数据 GET</h1>
+<p>获取数据的方式比较清晰，但是这里依然和1.7有很大的不同，请留意</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Node</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">e</span> <span class="o">=</span> <span class="n">getNode</span><span class="o">(</span><span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">),</span> <span class="n">key</span><span class="o">))</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">final</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="nf">getNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Node</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">tab</span><span class="o">;</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">first</span><span class="o">,</span> <span class="n">e</span><span class="o">;</span> <span class="kt">int</span> <span class="n">n</span><span class="o">;</span> <span class="n">K</span> <span class="n">k</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">tab</span> <span class="o">=</span> <span class="n">table</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">n</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+            <span class="o">(</span><span class="n">first</span> <span class="o">=</span> <span class="n">tab</span><span class="o">[(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">hash</span><span class="o">])</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//先比较第一个节点（hash值存放的第一个节点，不是Table的第一个节点）</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">first</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="c1">// always check first node</span>
+                <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="o">(</span><span class="n">key</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">))))</span>
+                <span class="k">return</span> <span class="n">first</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">e</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="k">instanceof</span> <span class="n">TreeNode</span><span class="o">)</span>
+                    <span class="k">return</span> <span class="o">((</span><span class="n">TreeNode</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">first</span><span class="o">).</span><span class="na">getTreeNode</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
+                <span class="k">do</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span>
+                        <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="o">(</span><span class="n">key</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">))))</span>
+                        <span class="k">return</span> <span class="n">e</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">while</span> <span class="o">((</span><span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<h1 id="5-hash计算和冲突">5. Hash计算和冲突</h1>
+
+<h1 id="6-其他">6. 其他</h1>
+<p>1.8和1.7相比较，最大的不同在于</p>
+<ul>
+  <li>引入红黑树，在bucket节点下链表长度 &gt; 8时将链表编程rbtree；</li>
+  <li>优化hash和resize，减少resize带来的hash性能消耗。</li>
+  <li>其他不同</li>
+</ul>
+
+</div>
+				<footer><meta itemprop="dateModified" content="2018-01-07T22:58:21+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-07-HashMap源码解析(JDK1.8.0_131).md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-07-HashMap源码解析(JDK1.8.0_131).md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

@@ -29,7 +29,27 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">HashMap源码解析(JDK1.7.0_80)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashMap源码解析(JDK1.8.0_131)</a></h1>
+          <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同
+
+1. 数据存储结构
+才用的结构和1.7类似，但是有些不同的是 数组+单向链表以后，为了提高链表的效率，在链表长度超过一定值（8）以后，链表转换成 红黑树。
+
+
+关于默认值需要注意下面的部分
+
+    /**
+     * 默认初始容量——必须是2的幂。
+     */
+    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16
+
+    /**
+     * 最大容量，如果任何一...</div><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月07日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">HashMap源码解析(JDK1.7.0_80)</a></h1>
           <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录
 
 1. 数据存储结构
@@ -107,31 +127,7 @@ abstract 关键字不能应用于 static、private 或 final 方法，因为这�
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月02日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/25/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(2).html">Mybatis初始化(2)</a></h1>
-          <div class="m-article-content">MyBatis源码解析(一)——MyBatis初始化过程解析
-
-1. 准备工作
-
-为了看清楚MyBatis的整个初始化过程，先创建一个简单的Java项目，目录结构如下图所示：
-
-
-
-1.1 Product 产品实体类
-
-public class Product {
-    private long id;
-    private String productName;
-    private String productContent;
-    private String price;
-    private int sort;
-    private int falseSales;
-    private long category_id;
-    private byte typ...</div><a href="/ProgramNote/mybatis/2017/12/25/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(2).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 12月25日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 32 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 33 篇文章, 7 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

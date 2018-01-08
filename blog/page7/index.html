@@ -29,7 +29,31 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html">原型对象 Prototype</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">函数声明 VS 函数表达式</a></h1>
+          <div class="m-article-content">函数声明 VS 函数表达式
+JavaScript 中需要创建函数的话，有两种方法：函数声明、函数表达式，各自写法如下：
+
+// 方法一：函数声明
+
+function foo() {}
+
+// 方法二：函数表达式
+
+var foo = function () {};
+
+另外还有一种自执行函数表达式，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以匿名函数方式存在，且立即自动执行：
+(function () {
+    // var x = ...
+})();
+
+此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。
+
+方法一和方法二都创建了一个函数，且命名为 foo，但是二者还是有区别的。JavaScript 解释器中存在一种变量...</div><a href="/ProgramNote/javascript/2017/09/08/%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8EVS%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/JavaScript%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1Prototype.html">原型对象 Prototype</a></h1>
           <div class="m-article-content">1. JavaScript 的原型对象 Prototype
 
 
@@ -68,7 +92,7 @@ preferences --&gt; Version Control --&gt; Subversion --&gt; Use Command line cli
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>共计 32 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 33 篇文章, 7 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page6">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
