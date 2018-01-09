@@ -1,5 +1,192 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-08T12:10:32+08:00</updated><id>http://localhost:4000/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">HashMap源码解析(JDK1.8.0_131)</title><link href="http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="HashMap源码解析(JDK1.8.0_131)" /><published>2018-01-07T22:58:21+08:00</published><updated>2018-01-07T22:58:21+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;p&gt;&lt;strong&gt;写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同&lt;/strong&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-09T11:43:56+08:00</updated><id>http://localhost:4000/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">HashSet源码解析(JDK1.8.0_131)</title><link href="http://localhost:4000/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="HashSet源码解析(JDK1.8.0_131)" /><published>2018-01-09T10:21:57+08:00</published><updated>2018-01-09T10:21:57+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;数据结构&quot;&gt;数据结构&lt;/h1&gt;
+&lt;p&gt;HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。&lt;/p&gt;
+
+&lt;p&gt;集成关系&lt;br /&gt;
+&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset.png&quot; alt=&quot;hashset&quot; title=&quot;HashSet&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;构造函数&quot;&gt;构造函数&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset2.png&quot; alt=&quot;hashset&quot; title=&quot;HashSet&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅供LinkedHashSet使用，这里暂时不介绍）&lt;/p&gt;
+
+&lt;p&gt;先看最简单的3个构造方法，都是直接调用HashMap的构造方法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
+    /**
+     * 构造一个新的空set,返回一个使用默认的容量16和负载因子0.75的HashMap实例
+     */
+    public HashSet() {
+        map = new HashMap&amp;lt;&amp;gt;();
+    }
+
+    /**
+     * 构造一个新的空set，返回一个使用指定初始容量和指定负载因子的HashMap实例.
+     *
+     * @param      initialCapacity   the initial capacity of the hash map
+     * @param      loadFactor        the load factor of the hash map
+     * @throws     IllegalArgumentException if the initial capacity is less
+     *             than zero, or if the load factor is nonpositive
+     */
+    public HashSet(int initialCapacity, float loadFactor) {
+        map = new HashMap&amp;lt;&amp;gt;(initialCapacity, loadFactor);
+    }
+
+    /**
+     * 构造一个新的空set，返回一个使用指定初始容量和默认负载因子0.75的HashMap实例.
+     *
+     * @param      initialCapacity   the initial capacity of the hash table
+     * @throws     IllegalArgumentException if the initial capacity is less
+     *             than zero
+     */
+    public HashSet(int initialCapacity) {
+        map = new HashMap&amp;lt;&amp;gt;(initialCapacity);
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;和HashMap类似，这里也可以使用一个集合来初始化&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;
+    /**
+     * 构造一个新的，包含指定集合数据的HashMap实例.  
+     * HashMap实例创建的时候使用默认的负载因子0.75，初始化容量是根据集合容量计算而来的
+     *
+     * @param c the collection whose elements are to be placed into this set
+     * @throws NullPointerException if the specified collection is null
+     */
+    public HashSet(Collection&amp;lt;? extends E&amp;gt; c) {
+        map = new HashMap&amp;lt;&amp;gt;(Math.max((int) (c.size()/.75f) + 1, 16));
+        addAll(c);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;新增元素&quot;&gt;新增元素&lt;/h1&gt;
+&lt;p&gt;我们从上面的 addAll 开始分析, addAll 是 AbstractCollection 中的方法，知识单纯的循环，调用add方法添加&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    /**
+     * 这个实现遍历指定的集合，并依次将迭代器返回的每个对象添加到这个集合中。
+     *
+     * &amp;lt;p&amp;gt;如果没有重写add方法会抛出异常 UnsupportedOperationException
+     *
+     * @throws UnsupportedOperationException {@inheritDoc}
+     * @throws ClassCastException            {@inheritDoc}
+     * @throws NullPointerException          {@inheritDoc}
+     * @throws IllegalArgumentException      {@inheritDoc}
+     * @throws IllegalStateException         {@inheritDoc}
+     *
+     * @see #add(Object)
+     */
+    public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) {
+        boolean modified = false;
+        for (E e : c)
+            if (add(e))
+                modified = true;
+        return modified;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后看具体的add操作，请注意，这里有一个 PRESENT，这个值是不变的，会存放到map的value中，这也是判断HashMap中是否存在的一部分。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    // 与map中的对象（key）关联的虚拟值（value）
+    private static final Object PRESENT = new Object();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;HashSet的add方法仍然是调用HashMap的方法，HashSet如何保证插入数据唯一的呢？&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    /**
+     * 如果指定的元素不存在，则将其添加到此集合中。 
+     * 更正式地说，如果这个集合不包含元素e2（e == null？e2 == null：e.equals（e2）），那么将指定元素e添加到此集合中。 
+     * 如果这个集合已经包含这个元素，那么不会新增并且返回false。
+     *
+     * @param e element to be added to this set
+     * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; if this set did not already contain the specified
+     * element
+     */
+    public boolean add(E e) {
+        return map.put(e, PRESENT)==null;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;HashMap的put方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    public V put(K key, V value) {
+        return putVal(hash(key), key, value, false, true);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;HashMap的putVal方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node&amp;lt;K,V&amp;gt;[] tab; Node&amp;lt;K,V&amp;gt; p; int n, i;
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        if ((p = tab[i = (n - 1) &amp;amp; hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            Node&amp;lt;K,V&amp;gt; e; K k;
+            if (p.hash == hash &amp;amp;&amp;amp;
+                ((k = p.key) == key || (key != null &amp;amp;&amp;amp; key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode)
+                e = ((TreeNode&amp;lt;K,V&amp;gt;)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount &amp;gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &amp;amp;&amp;amp;
+                        ((k = e.key) == key || (key != null &amp;amp;&amp;amp; key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                //////////////这里，如果存在了，那么返回的是oldValue，对于set来说也就是PRESENT ////////////////
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if (++size &amp;gt; threshold)
+            resize();
+        afterNodeInsertion(evict);
+         //////////////这里，如果不存在，返回的是null ////////////////
+        return null;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;HashMap的key值是唯一的，而 HashSet 往HashMap中新增值得时候 value 使用了默认的 PRESENT，那么如果现在插入一个 新的 key和默认的PRESENT,HashMap返回的是null，&lt;code class=&quot;highlighter-rouge&quot;&gt;map.put(e, PRESENT)==null&lt;/code&gt; 返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;，添加成功，如果插入一个重复的 key 和默认的 PRESENT ，HashMap 会返回旧的值，也就是 PRESENT，那么&lt;code class=&quot;highlighter-rouge&quot;&gt;map.put(e, PRESENT)==null&lt;/code&gt; 返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h1 id=&quot;其他&quot;&gt;其他&lt;/h1&gt;
+&lt;h2 id=&quot;复制&quot;&gt;复制&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;    /**
+     * 返回此HashSet实例的浅表副本：并没有复制这些元素本身。
+     *
+     * 底层实际调用HashMap的clone()方法，获取HashMap的浅表副本，并设置到HashSet中。
+     *
+     * @return a shallow copy of this set
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public Object clone() {
+        try {
+            HashSet&amp;lt;E&amp;gt; newSet = (HashSet&amp;lt;E&amp;gt;) super.clone();
+            newSet.map = (HashMap&amp;lt;E, Object&amp;gt;) map.clone();
+            return newSet;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;others&quot;&gt;Others&lt;/h2&gt;
+
+&lt;p&gt;HashSet的 remove 和 contains 方法都是调用 HashMap 的方法来实现的&lt;/p&gt;
+
+&lt;h1 id=&quot;总结&quot;&gt;总结&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HashSet的底层实现是HashMap&lt;/li&gt;
+  &lt;li&gt;HashSet的多数方法都是直接调用HashMap&lt;/li&gt;
+  &lt;li&gt;HashSet中元素的不重复是依靠 HashMap 的（key值不重复 + value 完全相同）来实现的&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">数据结构 HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。 集成关系 构造函数 可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅供LinkedHashSet使用，这里暂时不介绍） 先看最简单的3个构造方法，都是直接调用HashMap的构造方法。 /** * 构造一个新的空set,返回一个使用默认的容量16和负载因子0.75的HashMap实例 */ public HashSet() { map = new HashMap&amp;lt;&amp;gt;(); } /** * 构造一个新的空set，返回一个使用指定初始容量和指定负载因子的HashMap实例. * * @param initialCapacity the initial capacity of the hash map * @param loadFactor the load factor of the hash map * @throws IllegalArgumentException if the initial capacity is less * than zero, or if the load factor is nonpositive */ public HashSet(int initialCapacity, float loadFactor) { map = new HashMap&amp;lt;&amp;gt;(initialCapacity, loadFactor); } /** * 构造一个新的空set，返回一个使用指定初始容量和默认负载因子0.75的HashMap实例. * * @param initialCapacity the initial capacity of the hash table * @throws IllegalArgumentException if the initial capacity is less * than zero */ public HashSet(int initialCapacity) { map = new HashMap&amp;lt;&amp;gt;(initialCapacity); } 和HashMap类似，这里也可以使用一个集合来初始化 /** * 构造一个新的，包含指定集合数据的HashMap实例. * HashMap实例创建的时候使用默认的负载因子0.75，初始化容量是根据集合容量计算而来的 * * @param c the collection whose elements are to be placed into this set * @throws NullPointerException if the specified collection is null */ public HashSet(Collection&amp;lt;? extends E&amp;gt; c) { map = new HashMap&amp;lt;&amp;gt;(Math.max((int) (c.size()/.75f) + 1, 16)); addAll(c); } 新增元素 我们从上面的 addAll 开始分析, addAll 是 AbstractCollection 中的方法，知识单纯的循环，调用add方法添加 /** * 这个实现遍历指定的集合，并依次将迭代器返回的每个对象添加到这个集合中。 * * &amp;lt;p&amp;gt;如果没有重写add方法会抛出异常 UnsupportedOperationException * * @throws UnsupportedOperationException {@inheritDoc} * @throws ClassCastException {@inheritDoc} * @throws NullPointerException {@inheritDoc} * @throws IllegalArgumentException {@inheritDoc} * @throws IllegalStateException {@inheritDoc} * * @see #add(Object) */ public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { boolean modified = false; for (E e : c) if (add(e)) modified = true; return modified; } 然后看具体的add操作，请注意，这里有一个 PRESENT，这个值是不变的，会存放到map的value中，这也是判断HashMap中是否存在的一部分。 // 与map中的对象（key）关联的虚拟值（value） private static final Object PRESENT = new Object(); HashSet的add方法仍然是调用HashMap的方法，HashSet如何保证插入数据唯一的呢？ /** * 如果指定的元素不存在，则将其添加到此集合中。 * 更正式地说，如果这个集合不包含元素e2（e == null？e2 == null：e.equals（e2）），那么将指定元素e添加到此集合中。 * 如果这个集合已经包含这个元素，那么不会新增并且返回false。 * * @param e element to be added to this set * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; if this set did not already contain the specified * element */ public boolean add(E e) { return map.put(e, PRESENT)==null; } HashMap的put方法 public V put(K key, V value) { return putVal(hash(key), key, value, false, true); } HashMap的putVal方法 final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict) { Node&amp;lt;K,V&amp;gt;[] tab; Node&amp;lt;K,V&amp;gt; p; int n, i; if ((tab = table) == null || (n = tab.length) == 0) n = (tab = resize()).length; if ((p = tab[i = (n - 1) &amp;amp; hash]) == null) tab[i] = newNode(hash, key, value, null); else { Node&amp;lt;K,V&amp;gt; e; K k; if (p.hash == hash &amp;amp;&amp;amp; ((k = p.key) == key || (key != null &amp;amp;&amp;amp; key.equals(k)))) e = p; else if (p instanceof TreeNode) e = ((TreeNode&amp;lt;K,V&amp;gt;)p).putTreeVal(this, tab, hash, key, value); else { for (int binCount = 0; ; ++binCount) { if ((e = p.next) == null) { p.next = newNode(hash, key, value, null); if (binCount &amp;gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st treeifyBin(tab, hash); break; } if (e.hash == hash &amp;amp;&amp;amp; ((k = e.key) == key || (key != null &amp;amp;&amp;amp; key.equals(k)))) break; p = e; } } if (e != null) { // existing mapping for key V oldValue = e.value; if (!onlyIfAbsent || oldValue == null) e.value = value; afterNodeAccess(e); //////////////这里，如果存在了，那么返回的是oldValue，对于set来说也就是PRESENT //////////////// return oldValue; } } ++modCount; if (++size &amp;gt; threshold) resize(); afterNodeInsertion(evict); //////////////这里，如果不存在，返回的是null //////////////// return null; } HashMap的key值是唯一的，而 HashSet 往HashMap中新增值得时候 value 使用了默认的 PRESENT，那么如果现在插入一个 新的 key和默认的PRESENT,HashMap返回的是null，map.put(e, PRESENT)==null 返回 true，添加成功，如果插入一个重复的 key 和默认的 PRESENT ，HashMap 会返回旧的值，也就是 PRESENT，那么map.put(e, PRESENT)==null 返回 false。 其他 复制 /** * 返回此HashSet实例的浅表副本：并没有复制这些元素本身。 * * 底层实际调用HashMap的clone()方法，获取HashMap的浅表副本，并设置到HashSet中。 * * @return a shallow copy of this set */ @SuppressWarnings(&quot;unchecked&quot;) public Object clone() { try { HashSet&amp;lt;E&amp;gt; newSet = (HashSet&amp;lt;E&amp;gt;) super.clone(); newSet.map = (HashMap&amp;lt;E, Object&amp;gt;) map.clone(); return newSet; } catch (CloneNotSupportedException e) { throw new InternalError(e); } } Others HashSet的 remove 和 contains 方法都是调用 HashMap 的方法来实现的 总结 HashSet的底层实现是HashMap HashSet的多数方法都是直接调用HashMap HashSet中元素的不重复是依靠 HashMap 的（key值不重复 + value 完全相同）来实现的</summary></entry><entry><title type="html">HashMap源码解析(JDK1.8.0_131)</title><link href="http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="HashMap源码解析(JDK1.8.0_131)" /><published>2018-01-07T22:58:21+08:00</published><updated>2018-01-07T22:58:21+08:00</updated><id>http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="http://localhost:4000/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;p&gt;&lt;strong&gt;写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h1 id=&quot;1-数据存储结构&quot;&gt;1. 数据存储结构&lt;/h1&gt;
 &lt;p&gt;才用的结构和1.7类似，但是有些不同的是 数组+单向链表以后，为了提高链表的效率，在链表长度超过一定值（8）以后，链表转换成 红黑树。&lt;br /&gt;
@@ -2608,95 +2795,4 @@ public class Client {
 电脑不好使，换了，美滋滋
 更换了新的机械键盘，噼里啪啦
 我在写程序。。。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">装饰者模式 装饰者模式 基本描述 代码实例 基本描述 目的 给对象动态地添加附加功能。 装饰者提供了一个灵活的拓展子类功能的备选方案。 代码实例 公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。） 定义一个程序猿 /** * 程序员 */ public class Coder { public void coding() { System.out.println(&quot;我在写程序。。。&quot;); } } 定义一个程序猿的装饰器 /** * 程序员装饰器 */ public class CoderDecorator extends Coder { private Coder coder; public CoderDecorator(Coder coder) { this.coder = coder; } @Override public void coding() { coder.coding(); } } 定义一个专门更换键盘的装饰器 ```Java /** 写代码以前换键盘 */ public class CoderDecoratorA extends CoderDecorator { public CoderDecoratorA(Coder coder) { super(coder); } @Override public void coding() { this.addNewKeyBoard(); super.coding(); } private void addNewKeyBoard() { System.out.println(“更换了新的机械键盘，噼里啪啦”); } } 4. 定义一个专门更换鼠标的装饰器 ```Java /** * 写代码以前换鼠标 */ public class CoderDecoratorB extends CoderDecorator { public CoderDecoratorB(Coder coder) { super(coder); } @Override public void coding() { this.addNewMouse(); super.coding(); } private void addNewMouse() { System.out.println(&quot;换了新的鼠标，哒哒哒，哒哒哒&quot;); } } 定义一个更换电脑的装饰器 /** * 写代码以前换电脑 */ public class CoderDecoratorC extends CoderDecorator { public CoderDecoratorC(Coder coder) { super(coder); } @Override public void coding() { this.changeToMacbookPro(); super.coding(); } private void changeToMacbookPro() { System.out.println(&quot;电脑不好使，换了，美滋滋&quot;); } } 好了，现在老板可以根据不同程序猿的要求一一满足了 /** * 程序猿写代码 */ public class Client { public static void main(String[] args) { //创造一个程序猿A，并且开始写代码 Coder coderA = new Coder(); //换个键盘在写 CoderDecorator decoratorA = new CoderDecoratorA(coderA); //换个鼠标在写 decoratorA = new CoderDecoratorB(decoratorA); //把电脑也换了 decoratorA = new CoderDecoratorC(decoratorA); decoratorA.coding(); //创造一个程序猿B，并且开始写代码 Coder coderB = new Coder(); //换个键盘在写 CoderDecorator decoratorB = new CoderDecoratorA(coderB); //把电脑也换了 decoratorB = new CoderDecoratorC(decoratorB); decoratorB.coding(); } } 执行结果 //这里满足程序猿A的要求 电脑不好使，换了，美滋滋 换了新的鼠标，哒哒哒，哒哒哒 更换了新的机械键盘，噼里啪啦 我在写程序。。。 //这里满足程序猿B的要求 电脑不好使，换了，美滋滋 更换了新的机械键盘，噼里啪啦 我在写程序。。。</summary></entry><entry><title type="html">Javascript过滤前后空格</title><link href="http://localhost:4000/ProgramNote/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html" rel="alternate" type="text/html" title="Javascript过滤前后空格" /><published>2017-12-19T05:51:29+08:00</published><updated>2017-12-19T05:51:29+08:00</updated><id>http://localhost:4000/ProgramNote/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC</id><content type="html" xml:base="http://localhost:4000/ProgramNote/javascript/2017/12/19/Javascript%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC.html">&lt;h1 id=&quot;javascript过滤前后空格&quot;&gt;Javascript过滤前后空格&lt;/h1&gt;
-&lt;!-- TOC --&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;#javascript%E8%BF%87%E6%BB%A4%E5%89%8D%E5%90%8E%E7%A9%BA%E6%A0%BC&quot;&gt;Javascript过滤前后空格&lt;/a&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#%E5%BE%AA%E7%8E%AF%E6%A3%80%E6%9F%A5&quot;&gt;循环检查&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%9B%BF%E6%8D%A2&quot;&gt;正则表达式替换&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#jquery&quot;&gt;JQuery&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!-- /TOC --&gt;
-&lt;h2 id=&quot;循环检查&quot;&gt;循环检查&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;//供使用者调用 
-function trim(s){ 
-  return trimRight(trimLeft(s)); 
-} 
-//去掉左边的空白 
-function trimLeft(s){ 
-  if(s == null) { 
-    return &quot;&quot;; 
-  } 
-  var whitespace = new String(&quot; \t\n\r&quot;); 
-  var str = new String(s); 
-  if (whitespace.indexOf(str.charAt(0)) != -1) { 
-    var j=0, i = str.length; 
-    while (j &amp;lt; i &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(j)) != -1){ 
-      j++; 
-    } 
-    str = str.substring(j, i); 
-  } 
-  return str; 
-} 
-
-//去掉右边的空白
-function trimRight(s){ 
-  if(s == null) return &quot;&quot;; 
-  var whitespace = new String(&quot; \t\n\r&quot;); 
-  var str = new String(s); 
-  if (whitespace.indexOf(str.charAt(str.length-1)) != -1){ 
-    var i = str.length - 1; 
-    while (i &amp;gt;= 0 &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(i)) != -1){ 
-      i--; 
-    } 
-    str = str.substring(0, i+1); 
-  } 
-  return str; 
-}    
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;正则表达式替换&quot;&gt;正则表达式替换&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆☆&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;
-String.prototype.Trim = function() //去左右空格;
-{ 
-    return this.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); 
-} 
-String.prototype.LTrim = function() //去左空格;
-{ 
-    return this.replace(/(^\s*)/g, &quot;&quot;); 
-} 
-String.prototype.RTrim = function() //去右空格;
-{ 
-    return this.replace(/(\s*$)/g, &quot;&quot;); 
-} 
-
-//去左空格;
-function ltrim(s){
-    return s.replace(/(^\s*)/g, &quot;&quot;);
-}
-//去右空格;
-function rtrim(s){
-    return s.replace(/(\s*$)/g, &quot;&quot;);
-}
-//去左右空格;
-function trim(s){
-    return s.replace(/(^\s*)|(\s*$)/g, &quot;&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;jquery&quot;&gt;JQuery&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;推荐 ☆☆☆☆☆&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Javascript&quot;&gt;// 使用方法
-$.trim(str) 
-// Jquery实现方法
-function trim(str){  
-    return str.replace(/^(\s|\u00A0)+/,'').replace(/(\s|\u00A0)+$/,'');  
-}
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>lipeng</name></author><category term="JavaScript" /><summary type="html">Javascript过滤前后空格 Javascript过滤前后空格 循环检查 正则表达式替换 JQuery 循环检查 推荐 ☆☆☆ //供使用者调用 function trim(s){ return trimRight(trimLeft(s)); } //去掉左边的空白 function trimLeft(s){ if(s == null) { return &quot;&quot;; } var whitespace = new String(&quot; \t\n\r&quot;); var str = new String(s); if (whitespace.indexOf(str.charAt(0)) != -1) { var j=0, i = str.length; while (j &amp;lt; i &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(j)) != -1){ j++; } str = str.substring(j, i); } return str; } //去掉右边的空白 function trimRight(s){ if(s == null) return &quot;&quot;; var whitespace = new String(&quot; \t\n\r&quot;); var str = new String(s); if (whitespace.indexOf(str.charAt(str.length-1)) != -1){ var i = str.length - 1; while (i &amp;gt;= 0 &amp;amp;&amp;amp; whitespace.indexOf(str.charAt(i)) != -1){ i--; } str = str.substring(0, i+1); } return str; } 正则表达式替换 推荐 ☆☆☆☆ String.prototype.Trim = function() //去左右空格; { return this.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); } String.prototype.LTrim = function() //去左空格; { return this.replace(/(^\s*)/g, &quot;&quot;); } String.prototype.RTrim = function() //去右空格; { return this.replace(/(\s*$)/g, &quot;&quot;); } //去左空格; function ltrim(s){ return s.replace(/(^\s*)/g, &quot;&quot;); } //去右空格; function rtrim(s){ return s.replace(/(\s*$)/g, &quot;&quot;); } //去左右空格; function trim(s){ return s.replace(/(^\s*)|(\s*$)/g, &quot;&quot;); } JQuery 推荐 ☆☆☆☆☆ // 使用方法 $.trim(str) // Jquery实现方法 function trim(str){ return str.replace(/^(\s|\u00A0)+/,'').replace(/(\s|\u00A0)+$/,''); }</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">装饰者模式 装饰者模式 基本描述 代码实例 基本描述 目的 给对象动态地添加附加功能。 装饰者提供了一个灵活的拓展子类功能的备选方案。 代码实例 公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。） 定义一个程序猿 /** * 程序员 */ public class Coder { public void coding() { System.out.println(&quot;我在写程序。。。&quot;); } } 定义一个程序猿的装饰器 /** * 程序员装饰器 */ public class CoderDecorator extends Coder { private Coder coder; public CoderDecorator(Coder coder) { this.coder = coder; } @Override public void coding() { coder.coding(); } } 定义一个专门更换键盘的装饰器 ```Java /** 写代码以前换键盘 */ public class CoderDecoratorA extends CoderDecorator { public CoderDecoratorA(Coder coder) { super(coder); } @Override public void coding() { this.addNewKeyBoard(); super.coding(); } private void addNewKeyBoard() { System.out.println(“更换了新的机械键盘，噼里啪啦”); } } 4. 定义一个专门更换鼠标的装饰器 ```Java /** * 写代码以前换鼠标 */ public class CoderDecoratorB extends CoderDecorator { public CoderDecoratorB(Coder coder) { super(coder); } @Override public void coding() { this.addNewMouse(); super.coding(); } private void addNewMouse() { System.out.println(&quot;换了新的鼠标，哒哒哒，哒哒哒&quot;); } } 定义一个更换电脑的装饰器 /** * 写代码以前换电脑 */ public class CoderDecoratorC extends CoderDecorator { public CoderDecoratorC(Coder coder) { super(coder); } @Override public void coding() { this.changeToMacbookPro(); super.coding(); } private void changeToMacbookPro() { System.out.println(&quot;电脑不好使，换了，美滋滋&quot;); } } 好了，现在老板可以根据不同程序猿的要求一一满足了 /** * 程序猿写代码 */ public class Client { public static void main(String[] args) { //创造一个程序猿A，并且开始写代码 Coder coderA = new Coder(); //换个键盘在写 CoderDecorator decoratorA = new CoderDecoratorA(coderA); //换个鼠标在写 decoratorA = new CoderDecoratorB(decoratorA); //把电脑也换了 decoratorA = new CoderDecoratorC(decoratorA); decoratorA.coding(); //创造一个程序猿B，并且开始写代码 Coder coderB = new Coder(); //换个键盘在写 CoderDecorator decoratorB = new CoderDecoratorA(coderB); //把电脑也换了 decoratorB = new CoderDecoratorC(decoratorB); decoratorB.coding(); } } 执行结果 //这里满足程序猿A的要求 电脑不好使，换了，美滋滋 换了新的鼠标，哒哒哒，哒哒哒 更换了新的机械键盘，噼里啪啦 我在写程序。。。 //这里满足程序猿B的要求 电脑不好使，换了，美滋滋 更换了新的机械键盘，噼里啪啦 我在写程序。。。</summary></entry></feed>

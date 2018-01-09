@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HashSet源码解析(JDK1.8.0_131) - lipeng's blog</title>
+<meta name="description" content="数据结构HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。集成关系构造函数可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">HashSet源码解析(JDK1.8.0_131)</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><time class="article-meta" datetime="2018-01-09T10:21:57+08:00"
+          itemprop="datePublished">2018年 01月09日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="数据结构">数据结构</h1>
+<p>HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。</p>
+
+<p>集成关系<br />
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset.png" alt="hashset" title="HashSet" /></p>
+
+<h1 id="构造函数">构造函数</h1>
+
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset2.png" alt="hashset" title="HashSet" /></p>
+
+<p>可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅供LinkedHashSet使用，这里暂时不介绍）</p>
+
+<p>先看最简单的3个构造方法，都是直接调用HashMap的构造方法。</p>
+<pre><code class="language-Java">
+    /**
+     * 构造一个新的空set,返回一个使用默认的容量16和负载因子0.75的HashMap实例
+     */
+    public HashSet() {
+        map = new HashMap&lt;&gt;();
+    }
+
+    /**
+     * 构造一个新的空set，返回一个使用指定初始容量和指定负载因子的HashMap实例.
+     *
+     * @param      initialCapacity   the initial capacity of the hash map
+     * @param      loadFactor        the load factor of the hash map
+     * @throws     IllegalArgumentException if the initial capacity is less
+     *             than zero, or if the load factor is nonpositive
+     */
+    public HashSet(int initialCapacity, float loadFactor) {
+        map = new HashMap&lt;&gt;(initialCapacity, loadFactor);
+    }
+
+    /**
+     * 构造一个新的空set，返回一个使用指定初始容量和默认负载因子0.75的HashMap实例.
+     *
+     * @param      initialCapacity   the initial capacity of the hash table
+     * @throws     IllegalArgumentException if the initial capacity is less
+     *             than zero
+     */
+    public HashSet(int initialCapacity) {
+        map = new HashMap&lt;&gt;(initialCapacity);
+    }
+
+</code></pre>
+<p>和HashMap类似，这里也可以使用一个集合来初始化</p>
+<pre><code class="language-Java">
+    /**
+     * 构造一个新的，包含指定集合数据的HashMap实例.  
+     * HashMap实例创建的时候使用默认的负载因子0.75，初始化容量是根据集合容量计算而来的
+     *
+     * @param c the collection whose elements are to be placed into this set
+     * @throws NullPointerException if the specified collection is null
+     */
+    public HashSet(Collection&lt;? extends E&gt; c) {
+        map = new HashMap&lt;&gt;(Math.max((int) (c.size()/.75f) + 1, 16));
+        addAll(c);
+    }
+</code></pre>
+
+<h1 id="新增元素">新增元素</h1>
+<p>我们从上面的 addAll 开始分析, addAll 是 AbstractCollection 中的方法，知识单纯的循环，调用add方法添加</p>
+<pre><code class="language-Java">    /**
+     * 这个实现遍历指定的集合，并依次将迭代器返回的每个对象添加到这个集合中。
+     *
+     * &lt;p&gt;如果没有重写add方法会抛出异常 UnsupportedOperationException
+     *
+     * @throws UnsupportedOperationException {@inheritDoc}
+     * @throws ClassCastException            {@inheritDoc}
+     * @throws NullPointerException          {@inheritDoc}
+     * @throws IllegalArgumentException      {@inheritDoc}
+     * @throws IllegalStateException         {@inheritDoc}
+     *
+     * @see #add(Object)
+     */
+    public boolean addAll(Collection&lt;? extends E&gt; c) {
+        boolean modified = false;
+        for (E e : c)
+            if (add(e))
+                modified = true;
+        return modified;
+    }
+</code></pre>
+
+<p>然后看具体的add操作，请注意，这里有一个 PRESENT，这个值是不变的，会存放到map的value中，这也是判断HashMap中是否存在的一部分。</p>
+<pre><code class="language-Java">    // 与map中的对象（key）关联的虚拟值（value）
+    private static final Object PRESENT = new Object();
+</code></pre>
+<p>HashSet的add方法仍然是调用HashMap的方法，HashSet如何保证插入数据唯一的呢？</p>
+<pre><code class="language-Java">    /**
+     * 如果指定的元素不存在，则将其添加到此集合中。 
+     * 更正式地说，如果这个集合不包含元素e2（e == null？e2 == null：e.equals（e2）），那么将指定元素e添加到此集合中。 
+     * 如果这个集合已经包含这个元素，那么不会新增并且返回false。
+     *
+     * @param e element to be added to this set
+     * @return &lt;tt&gt;true&lt;/tt&gt; if this set did not already contain the specified
+     * element
+     */
+    public boolean add(E e) {
+        return map.put(e, PRESENT)==null;
+    }
+</code></pre>
+<p>HashMap的put方法</p>
+<pre><code class="language-Java">    public V put(K key, V value) {
+        return putVal(hash(key), key, value, false, true);
+    }
+</code></pre>
+
+<p>HashMap的putVal方法</p>
+<pre><code class="language-Java">final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        if ((p = tab[i = (n - 1) &amp; hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            Node&lt;K,V&gt; e; K k;
+            if (p.hash == hash &amp;&amp;
+                ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode)
+                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &amp;&amp;
+                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                //////////////这里，如果存在了，那么返回的是oldValue，对于set来说也就是PRESENT ////////////////
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if (++size &gt; threshold)
+            resize();
+        afterNodeInsertion(evict);
+         //////////////这里，如果不存在，返回的是null ////////////////
+        return null;
+    }
+</code></pre>
+<p>HashMap的key值是唯一的，而 HashSet 往HashMap中新增值得时候 value 使用了默认的 PRESENT，那么如果现在插入一个 新的 key和默认的PRESENT,HashMap返回的是null，<code class="highlighter-rouge">map.put(e, PRESENT)==null</code> 返回 <code class="highlighter-rouge">true</code>，添加成功，如果插入一个重复的 key 和默认的 PRESENT ，HashMap 会返回旧的值，也就是 PRESENT，那么<code class="highlighter-rouge">map.put(e, PRESENT)==null</code> 返回 <code class="highlighter-rouge">false</code>。</p>
+
+<h1 id="其他">其他</h1>
+<h2 id="复制">复制</h2>
+<pre><code class="language-Java">    /**
+     * 返回此HashSet实例的浅表副本：并没有复制这些元素本身。
+     *
+     * 底层实际调用HashMap的clone()方法，获取HashMap的浅表副本，并设置到HashSet中。
+     *
+     * @return a shallow copy of this set
+     */
+    @SuppressWarnings("unchecked")
+    public Object clone() {
+        try {
+            HashSet&lt;E&gt; newSet = (HashSet&lt;E&gt;) super.clone();
+            newSet.map = (HashMap&lt;E, Object&gt;) map.clone();
+            return newSet;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
+</code></pre>
+
+<h2 id="others">Others</h2>
+
+<p>HashSet的 remove 和 contains 方法都是调用 HashMap 的方法来实现的</p>
+
+<h1 id="总结">总结</h1>
+
+<ul>
+  <li>HashSet的底层实现是HashMap</li>
+  <li>HashSet的多数方法都是直接调用HashMap</li>
+  <li>HashSet中元素的不重复是依靠 HashMap 的（key值不重复 + value 完全相同）来实现的</li>
+</ul>
+</div>
+				<footer><meta itemprop="dateModified" content="2018-01-09T10:21:57+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-09-HashSet源码解析(JDK1.8.0_131).md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-09-HashSet源码解析(JDK1.8.0_131).md">在 Github 上查阅此文。</a></p><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>

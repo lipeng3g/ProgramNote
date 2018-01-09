@@ -29,7 +29,31 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashMap源码解析(JDK1.8.0_131)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashSet源码解析(JDK1.8.0_131)</a></h1>
+          <div class="m-article-content">数据结构
+HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。
+
+集成关系
+
+
+构造函数
+
+
+
+可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅供LinkedHashSet使用，这里暂时不介绍）
+
+先看最简单的3个构造方法，都是直接调用HashMap的构造方法。
+
+    /**
+     * 构造一个新的空set,返回一个使用默认的容量16和负载因子0.75的HashMap实例
+     */
+    public HashSet() {
+        map = new HashMap&lt;...</div><a href="/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月09日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashMap源码解析(JDK1.8.0_131)</a></h1>
           <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同
 
 1. 数据存储结构
@@ -108,26 +132,7 @@ equals()方法详解
         </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月03日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
-          <div class="m-article-content">abstrate
-说明
-
-  abstract 关键字可以修改类或方法。
-  abstract 类可以扩展（增加子类），但不能直接实例化。
-  abstract 方法必须在某个子类中重写，abstract 方法的类本来就是抽象类，并且必须声明为 abstract。
-
-
-总结
-仅当 abstract 类的子类实现其超类的所有 abstract 方法时，才能实例化 abstract 类的子类。这种类称为具体类，以区别于 abstract 类 。
-
-如果 abstract 类的子类没有实现其超类的所有 abstract 方法，该子类也是 abstract 类。
-
-abstract 关键字不能应用于 static、private 或 final 方法，因为这些方法不能被重写，因此，不能在子类中...</div><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="date-wrapper"><span class="article-meta">2018年 01月02日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 33 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 34 篇文章, 7 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
