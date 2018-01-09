@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HashSet源码解析(JDK1.8.0_131) - lipeng's blog</title>
-<meta name="description" content="数据结构HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。集成关系构造函数可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅...">
+<meta name="description" content="1. 数据结构HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。集成关系2. 构造函数可以看到，HashSet一共有四个构造函数（其实是5个，有一...">
 <link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -39,13 +39,13 @@
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="数据结构">数据结构</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-数据结构">1. 数据结构</h1>
 <p>HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。</p>
 
 <p>集成关系<br />
 <img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset.png" alt="hashset" title="HashSet" /></p>
 
-<h1 id="构造函数">构造函数</h1>
+<h1 id="2-构造函数">2. 构造函数</h1>
 
 <p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/hashset2.png" alt="hashset" title="HashSet" /></p>
 
@@ -99,7 +99,7 @@
     }
 </code></pre>
 
-<h1 id="新增元素">新增元素</h1>
+<h1 id="3-新增元素">3. 新增元素</h1>
 <p>我们从上面的 addAll 开始分析, addAll 是 AbstractCollection 中的方法，知识单纯的循环，调用add方法添加</p>
 <pre><code class="language-Java">    /**
      * 这个实现遍历指定的集合，并依次将迭代器返回的每个对象添加到这个集合中。
@@ -195,8 +195,8 @@
 </code></pre>
 <p>HashMap的key值是唯一的，而 HashSet 往HashMap中新增值得时候 value 使用了默认的 PRESENT，那么如果现在插入一个 新的 key和默认的PRESENT,HashMap返回的是null，<code class="highlighter-rouge">map.put(e, PRESENT)==null</code> 返回 <code class="highlighter-rouge">true</code>，添加成功，如果插入一个重复的 key 和默认的 PRESENT ，HashMap 会返回旧的值，也就是 PRESENT，那么<code class="highlighter-rouge">map.put(e, PRESENT)==null</code> 返回 <code class="highlighter-rouge">false</code>。</p>
 
-<h1 id="其他">其他</h1>
-<h2 id="复制">复制</h2>
+<h1 id="4-其他">4. 其他</h1>
+<h2 id="41-复制">4.1. 复制</h2>
 <pre><code class="language-Java">    /**
      * 返回此HashSet实例的浅表副本：并没有复制这些元素本身。
      *
@@ -216,11 +216,11 @@
     }
 </code></pre>
 
-<h2 id="others">Others</h2>
+<h2 id="42-others">4.2. Others</h2>
 
 <p>HashSet的 remove 和 contains 方法都是调用 HashMap 的方法来实现的</p>
 
-<h1 id="总结">总结</h1>
+<h1 id="5-总结">5. 总结</h1>
 
 <ul>
   <li>HashSet的底层实现是HashMap</li>
