@@ -82,64 +82,64 @@
 
 <p>而反序列的过程（即将一个序列还原成为一个对象），需要将一个InputStream(如FileInputstream、ByteArrayInputStream等)封装在ObjectInputStream内，然后调用readObject()即可。</p>
 
-<pre><code class="language-Java">package com.sheepmu;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">sheepmu</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
  
-public class MyTest implements Serializable
-{
-    private static final long serialVersionUID = 1L;
-    private String name="SheepMu";
-    private int age=24;
-    public static void main(String[] args)
-    {//以下代码实现序列化
-        try
-        {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("my.out"));//输出流保存的文件名为 my.out ；ObjectOutputStream能把Object输出成Byte流
-            MyTest myTest=new MyTest();
-            oos.writeObject(myTest); 
-            oos.flush();  //缓冲流 
-            oos.close(); //关闭流
-        } catch (FileNotFoundException e) 
-        {        
-            e.printStackTrace();
-        } catch (IOException e) 
-        {
-            e.printStackTrace();
-        } 
-        fan();//调用下面的  反序列化  代码
-    }
-    public static void fan()//反序列的过程
-    {    
-         ObjectInputStream oin = null;//局部变量必须要初始化
-        try
-        {
-            oin = new ObjectInputStream(new FileInputStream("my.out"));
-        } catch (FileNotFoundException e1)
-        {        
-            e1.printStackTrace();
-        } catch (IOException e1)
-        {
-            e1.printStackTrace();
-        }      
-        MyTest mts = null;
-        try {
-            mts = (MyTest ) oin.readObject();//由Object对象向下转型为MyTest对象
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }     
-         System.out.println("name="+mts.name);    
-         System.out.println("age="+mts.age);    
-    }
-}
-</code></pre>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="kd">implements</span> <span class="n">Serializable</span>
+<span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">=</span><span class="s">"SheepMu"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">=</span><span class="mi">24</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+    <span class="o">{</span><span class="c1">//以下代码实现序列化</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">ObjectOutputStream</span> <span class="n">oos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="s">"my.out"</span><span class="o">));</span><span class="c1">//输出流保存的文件名为 my.out ；ObjectOutputStream能把Object输出成Byte流</span>
+            <span class="n">MyTest</span> <span class="n">myTest</span><span class="o">=</span><span class="k">new</span> <span class="n">MyTest</span><span class="o">();</span>
+            <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">myTest</span><span class="o">);</span> 
+            <span class="n">oos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>  <span class="c1">//缓冲流 </span>
+            <span class="n">oos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span> <span class="c1">//关闭流</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> 
+        <span class="o">{</span>        
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> 
+        <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> 
+        <span class="n">fan</span><span class="o">();</span><span class="c1">//调用下面的  反序列化  代码</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">fan</span><span class="o">()</span><span class="c1">//反序列的过程</span>
+    <span class="o">{</span>    
+         <span class="n">ObjectInputStream</span> <span class="n">oin</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span><span class="c1">//局部变量必须要初始化</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">oin</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectInputStream</span><span class="o">(</span><span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="s">"my.out"</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e1</span><span class="o">)</span>
+        <span class="o">{</span>        
+            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e1</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>      
+        <span class="n">MyTest</span> <span class="n">mts</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">mts</span> <span class="o">=</span> <span class="o">(</span><span class="n">MyTest</span> <span class="o">)</span> <span class="n">oin</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span><span class="c1">//由Object对象向下转型为MyTest对象</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>     
+         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name="</span><span class="o">+</span><span class="n">mts</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>    
+         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"age="</span><span class="o">+</span><span class="n">mts</span><span class="o">.</span><span class="na">age</span><span class="o">);</span>    
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>会在此项目的工作空间生成一个 <code class="highlighter-rouge">my.out</code>文件。序列化后的内容稍后补齐，先看反序列化后输出如下：</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name=SheepMu
@@ -167,65 +167,65 @@ age=24
 
 <p>但是看下面的例子：</p>
 
-<pre><code class="language-Java">package com.sheepmu;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-public class MyTest implements Serializable
-{
-    private static final long serialVersionUID = 1L;
-    private String name="SheepMu";
-    private static int age=24;
-    public static void main(String[] args)
-    {//以下代码实现序列化
-        try
-        {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("my.out"));//输出流保存的文件名为 my.out ；ObjectOutputStream能把Object输出成Byte流
-            MyTest myTest=new MyTest();
-            oos.writeObject(myTest); 
-            oos.flush();  //缓冲流 
-            oos.close(); //关闭流
-        } catch (FileNotFoundException e) 
-        {        
-            e.printStackTrace();
-        } catch (IOException e) 
-        {
-            e.printStackTrace();
-        } 
-        fan();//调用下面的  反序列化  代码
-    }
-    public static void fan()
-    {
-        new MyTest().name="SheepMu_1";//!!!!!!!!!!!!!!!!重点看这两行 更改部分
-        age=1;//!!!!!!!!!!!!!!!!!!!重点看这两行 更改部分
-        ObjectInputStream oin = null;//局部变量必须要初始化
-        try
-        {
-            oin = new ObjectInputStream(new FileInputStream("my.out"));
-        } catch (FileNotFoundException e1)
-        {        
-            e1.printStackTrace();
-        } catch (IOException e1)
-        {
-            e1.printStackTrace();
-        }      
-        MyTest mts = null;
-        try {
-            mts = (MyTest ) oin.readObject();//由Object对象向下转型为MyTest对象
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }     
-         System.out.println("name="+mts.name);    
-         System.out.println("age="+mts.age);    
-    }
-}
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">sheepmu</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="kd">implements</span> <span class="n">Serializable</span>
+<span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">=</span><span class="s">"SheepMu"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">age</span><span class="o">=</span><span class="mi">24</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+    <span class="o">{</span><span class="c1">//以下代码实现序列化</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">ObjectOutputStream</span> <span class="n">oos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="s">"my.out"</span><span class="o">));</span><span class="c1">//输出流保存的文件名为 my.out ；ObjectOutputStream能把Object输出成Byte流</span>
+            <span class="n">MyTest</span> <span class="n">myTest</span><span class="o">=</span><span class="k">new</span> <span class="n">MyTest</span><span class="o">();</span>
+            <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">myTest</span><span class="o">);</span> 
+            <span class="n">oos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>  <span class="c1">//缓冲流 </span>
+            <span class="n">oos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span> <span class="c1">//关闭流</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> 
+        <span class="o">{</span>        
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> 
+        <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> 
+        <span class="n">fan</span><span class="o">();</span><span class="c1">//调用下面的  反序列化  代码</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">fan</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">new</span> <span class="nf">MyTest</span><span class="o">().</span><span class="na">name</span><span class="o">=</span><span class="s">"SheepMu_1"</span><span class="o">;</span><span class="c1">//!!!!!!!!!!!!!!!!重点看这两行 更改部分</span>
+        <span class="n">age</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span><span class="c1">//!!!!!!!!!!!!!!!!!!!重点看这两行 更改部分</span>
+        <span class="n">ObjectInputStream</span> <span class="n">oin</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span><span class="c1">//局部变量必须要初始化</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">oin</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectInputStream</span><span class="o">(</span><span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="s">"my.out"</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e1</span><span class="o">)</span>
+        <span class="o">{</span>        
+            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e1</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>      
+        <span class="n">MyTest</span> <span class="n">mts</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">mts</span> <span class="o">=</span> <span class="o">(</span><span class="n">MyTest</span> <span class="o">)</span> <span class="n">oin</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span><span class="c1">//由Object对象向下转型为MyTest对象</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>     
+         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name="</span><span class="o">+</span><span class="n">mts</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>    
+         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"age="</span><span class="o">+</span><span class="n">mts</span><span class="o">.</span><span class="na">age</span><span class="o">);</span>    
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>输出结果为：</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name=SheepMu

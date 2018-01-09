@@ -70,249 +70,249 @@
 
 <h2 id="注册解析器">注册解析器</h2>
 <p><code class="highlighter-rouge">component-scan</code>交由<code class="highlighter-rouge">org.springframework.context.config.ContextNamespaceHandler</code>处理</p>
-<pre><code class="language-Java">public class ContextNamespaceHandler extends NamespaceHandlerSupport {
-    public ContextNamespaceHandler() {
-    }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ContextNamespaceHandler</span> <span class="kd">extends</span> <span class="n">NamespaceHandlerSupport</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">ContextNamespaceHandler</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
 
-    public void init() {
-        this.registerBeanDefinitionParser("property-placeholder", new PropertyPlaceholderBeanDefinitionParser());
-        this.registerBeanDefinitionParser("property-override", new PropertyOverrideBeanDefinitionParser());
-        this.registerBeanDefinitionParser("annotation-config", new AnnotationConfigBeanDefinitionParser());
-        //这里注册处理的解析器
-        this.registerBeanDefinitionParser("component-scan", new ComponentScanBeanDefinitionParser());
-        this.registerBeanDefinitionParser("load-time-weaver", new LoadTimeWeaverBeanDefinitionParser());
-        this.registerBeanDefinitionParser("spring-configured", new SpringConfiguredBeanDefinitionParser());
-        this.registerBeanDefinitionParser("mbean-export", new MBeanExportBeanDefinitionParser());
-        this.registerBeanDefinitionParser("mbean-server", new MBeanServerBeanDefinitionParser());
-    }
-}
-</code></pre>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"property-placeholder"</span><span class="o">,</span> <span class="k">new</span> <span class="n">PropertyPlaceholderBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"property-override"</span><span class="o">,</span> <span class="k">new</span> <span class="n">PropertyOverrideBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"annotation-config"</span><span class="o">,</span> <span class="k">new</span> <span class="n">AnnotationConfigBeanDefinitionParser</span><span class="o">());</span>
+        <span class="c1">//这里注册处理的解析器</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"component-scan"</span><span class="o">,</span> <span class="k">new</span> <span class="n">ComponentScanBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"load-time-weaver"</span><span class="o">,</span> <span class="k">new</span> <span class="n">LoadTimeWeaverBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"spring-configured"</span><span class="o">,</span> <span class="k">new</span> <span class="n">SpringConfiguredBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"mbean-export"</span><span class="o">,</span> <span class="k">new</span> <span class="n">MBeanExportBeanDefinitionParser</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinitionParser</span><span class="o">(</span><span class="s">"mbean-server"</span><span class="o">,</span> <span class="k">new</span> <span class="n">MBeanServerBeanDefinitionParser</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="componentscanbeandefinitionparser组装classpathbeandefinitionscanner">ComponentScanBeanDefinitionParser组装ClassPathBeanDefinitionScanner</h2>
 
-<pre><code class="language-Java">
-    public BeanDefinition parse(Element element, ParserContext parserContext) {
-        //获取basePackage
-        String basePackage = element.getAttribute("base-package");
-        basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
-        //注意，这里表示配置多个package的时候可以使用, ; 换行三种形式
-        String[] basePackages = StringUtils.tokenizeToStringArray(basePackage, ",; \t\n");
-        //组装ClassPathBeanDefinitionScanner
-        ClassPathBeanDefinitionScanner scanner = this.configureScanner(parserContext, element);
-        //扫描===========
-        Set&lt;BeanDefinitionHolder&gt; beanDefinitions = scanner.doScan(basePackages);
-        //注册bean
-        this.registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
-        return null;
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">public</span> <span class="n">BeanDefinition</span> <span class="nf">parse</span><span class="o">(</span><span class="n">Element</span> <span class="n">element</span><span class="o">,</span> <span class="n">ParserContext</span> <span class="n">parserContext</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//获取basePackage</span>
+        <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"base-package"</span><span class="o">);</span>
+        <span class="n">basePackage</span> <span class="o">=</span> <span class="n">parserContext</span><span class="o">.</span><span class="na">getReaderContext</span><span class="o">().</span><span class="na">getEnvironment</span><span class="o">().</span><span class="na">resolvePlaceholders</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
+        <span class="c1">//注意，这里表示配置多个package的时候可以使用, ; 换行三种形式</span>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">basePackages</span> <span class="o">=</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">tokenizeToStringArray</span><span class="o">(</span><span class="n">basePackage</span><span class="o">,</span> <span class="s">",; \t\n"</span><span class="o">);</span>
+        <span class="c1">//组装ClassPathBeanDefinitionScanner</span>
+        <span class="n">ClassPathBeanDefinitionScanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">configureScanner</span><span class="o">(</span><span class="n">parserContext</span><span class="o">,</span> <span class="n">element</span><span class="o">);</span>
+        <span class="c1">//扫描===========</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="n">beanDefinitions</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">doScan</span><span class="o">(</span><span class="n">basePackages</span><span class="o">);</span>
+        <span class="c1">//注册bean</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registerComponents</span><span class="o">(</span><span class="n">parserContext</span><span class="o">.</span><span class="na">getReaderContext</span><span class="o">(),</span> <span class="n">beanDefinitions</span><span class="o">,</span> <span class="n">element</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">    //组装ClassPathBeanDefinitionScanner
-    protected ClassPathBeanDefinitionScanner configureScanner(ParserContext parserContext, Element element) {
-        //默认情况下  use-default-filters属性为true
-        boolean useDefaultFilters = true;
-        if (element.hasAttribute("use-default-filters")) {
-            useDefaultFilters = Boolean.valueOf(element.getAttribute("use-default-filters"));
-        }
-        //创建ClassPathBeanDefinitionScanner，调用下面一个方法createScanner
-        ClassPathBeanDefinitionScanner scanner = this.createScanner(parserContext.getReaderContext(), useDefaultFilters);
-        scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
-        scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
-        if (element.hasAttribute("resource-pattern")) {
-            scanner.setResourcePattern(element.getAttribute("resource-pattern"));
-        }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//组装ClassPathBeanDefinitionScanner</span>
+    <span class="kd">protected</span> <span class="n">ClassPathBeanDefinitionScanner</span> <span class="nf">configureScanner</span><span class="o">(</span><span class="n">ParserContext</span> <span class="n">parserContext</span><span class="o">,</span> <span class="n">Element</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//默认情况下  use-default-filters属性为true</span>
+        <span class="kt">boolean</span> <span class="n">useDefaultFilters</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">element</span><span class="o">.</span><span class="na">hasAttribute</span><span class="o">(</span><span class="s">"use-default-filters"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">useDefaultFilters</span> <span class="o">=</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">element</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"use-default-filters"</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="c1">//创建ClassPathBeanDefinitionScanner，调用下面一个方法createScanner</span>
+        <span class="n">ClassPathBeanDefinitionScanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">createScanner</span><span class="o">(</span><span class="n">parserContext</span><span class="o">.</span><span class="na">getReaderContext</span><span class="o">(),</span> <span class="n">useDefaultFilters</span><span class="o">);</span>
+        <span class="n">scanner</span><span class="o">.</span><span class="na">setBeanDefinitionDefaults</span><span class="o">(</span><span class="n">parserContext</span><span class="o">.</span><span class="na">getDelegate</span><span class="o">().</span><span class="na">getBeanDefinitionDefaults</span><span class="o">());</span>
+        <span class="n">scanner</span><span class="o">.</span><span class="na">setAutowireCandidatePatterns</span><span class="o">(</span><span class="n">parserContext</span><span class="o">.</span><span class="na">getDelegate</span><span class="o">().</span><span class="na">getAutowireCandidatePatterns</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">element</span><span class="o">.</span><span class="na">hasAttribute</span><span class="o">(</span><span class="s">"resource-pattern"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">scanner</span><span class="o">.</span><span class="na">setResourcePattern</span><span class="o">(</span><span class="n">element</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"resource-pattern"</span><span class="o">));</span>
+        <span class="o">}</span>
 
-        try {
-            this.parseBeanNameGenerator(element, scanner);
-        } catch (Exception var7) {
-            parserContext.getReaderContext().error(var7.getMessage(), parserContext.extractSource(element), var7.getCause());
-        }
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">parseBeanNameGenerator</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">scanner</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">var7</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">parserContext</span><span class="o">.</span><span class="na">getReaderContext</span><span class="o">().</span><span class="na">error</span><span class="o">(</span><span class="n">var7</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(),</span> <span class="n">parserContext</span><span class="o">.</span><span class="na">extractSource</span><span class="o">(</span><span class="n">element</span><span class="o">),</span> <span class="n">var7</span><span class="o">.</span><span class="na">getCause</span><span class="o">());</span>
+        <span class="o">}</span>
 
-        try {
-            this.parseScope(element, scanner);
-        } catch (Exception var6) {
-            parserContext.getReaderContext().error(var6.getMessage(), parserContext.extractSource(element), var6.getCause());
-        }
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">parseScope</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">scanner</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">var6</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">parserContext</span><span class="o">.</span><span class="na">getReaderContext</span><span class="o">().</span><span class="na">error</span><span class="o">(</span><span class="n">var6</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(),</span> <span class="n">parserContext</span><span class="o">.</span><span class="na">extractSource</span><span class="o">(</span><span class="n">element</span><span class="o">),</span> <span class="n">var6</span><span class="o">.</span><span class="na">getCause</span><span class="o">());</span>
+        <span class="o">}</span>
 
-        this.parseTypeFilters(element, scanner, parserContext);
-        return scanner;
-    }
+        <span class="k">this</span><span class="o">.</span><span class="na">parseTypeFilters</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">scanner</span><span class="o">,</span> <span class="n">parserContext</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">scanner</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) {
-        return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters, readerContext.getEnvironment(), readerContext.getResourceLoader());
-    }
-</code></pre>
+    <span class="kd">protected</span> <span class="n">ClassPathBeanDefinitionScanner</span> <span class="nf">createScanner</span><span class="o">(</span><span class="n">XmlReaderContext</span> <span class="n">readerContext</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">useDefaultFilters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ClassPathBeanDefinitionScanner</span><span class="o">(</span><span class="n">readerContext</span><span class="o">.</span><span class="na">getRegistry</span><span class="o">(),</span> <span class="n">useDefaultFilters</span><span class="o">,</span> <span class="n">readerContext</span><span class="o">.</span><span class="na">getEnvironment</span><span class="o">(),</span> <span class="n">readerContext</span><span class="o">.</span><span class="na">getResourceLoader</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">    //ClassPathBeanDefinitionScanner构造器
-    public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry, boolean useDefaultFilters, Environment environment, ResourceLoader resourceLoader) {
-        this.beanDefinitionDefaults = new BeanDefinitionDefaults();
-        this.beanNameGenerator = new AnnotationBeanNameGenerator();
-        this.scopeMetadataResolver = new AnnotationScopeMetadataResolver();
-        this.includeAnnotationConfig = true;
-        Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-        this.registry = registry;
-        if (useDefaultFilters) {
-            //这里注册过滤器，就是那些bean被扫描注册
-            this.registerDefaultFilters();
-        }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//ClassPathBeanDefinitionScanner构造器</span>
+    <span class="kd">public</span> <span class="nf">ClassPathBeanDefinitionScanner</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">useDefaultFilters</span><span class="o">,</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">,</span> <span class="n">ResourceLoader</span> <span class="n">resourceLoader</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">beanDefinitionDefaults</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BeanDefinitionDefaults</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">beanNameGenerator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationBeanNameGenerator</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">scopeMetadataResolver</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationScopeMetadataResolver</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">includeAnnotationConfig</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">registry</span><span class="o">,</span> <span class="s">"BeanDefinitionRegistry must not be null"</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">registry</span> <span class="o">=</span> <span class="n">registry</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">useDefaultFilters</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//这里注册过滤器，就是那些bean被扫描注册</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">registerDefaultFilters</span><span class="o">();</span>
+        <span class="o">}</span>
 
-        this.setEnvironment(environment);
-        this.setResourceLoader(resourceLoader);
-    }
+        <span class="k">this</span><span class="o">.</span><span class="na">setEnvironment</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">setResourceLoader</span><span class="o">(</span><span class="n">resourceLoader</span><span class="o">);</span>
+    <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
-<pre><code class="language-Java">    //注册过滤器
-    // 可以看到默认ClassPathBeanDefinitionScanner会自动注册对@Component、@ManagedBean、@Named注解的Bean进行扫描。
-    protected void registerDefaultFilters() {
-        this.includeFilters.add(new AnnotationTypeFilter(Component.class));
-        ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader();
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//注册过滤器</span>
+    <span class="c1">// 可以看到默认ClassPathBeanDefinitionScanner会自动注册对@Component、@ManagedBean、@Named注解的Bean进行扫描。</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">registerDefaultFilters</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">includeFilters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">Component</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+        <span class="n">ClassLoader</span> <span class="n">cl</span> <span class="o">=</span> <span class="n">ClassPathScanningCandidateComponentProvider</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">();</span>
 
-        try {
-            this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName("javax.annotation.ManagedBean", cl), false));
-            this.logger.debug("JSR-250 'javax.annotation.ManagedBean' found and supported for component scanning");
-        } catch (ClassNotFoundException var4) {
-            ;
-        }
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">includeFilters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"javax.annotation.ManagedBean"</span><span class="o">,</span> <span class="n">cl</span><span class="o">),</span> <span class="kc">false</span><span class="o">));</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"JSR-250 'javax.annotation.ManagedBean' found and supported for component scanning"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">;</span>
+        <span class="o">}</span>
 
-        try {
-            this.includeFilters.add(new AnnotationTypeFilter(ClassUtils.forName("javax.inject.Named", cl), false));
-            this.logger.debug("JSR-330 'javax.inject.Named' annotation found and supported for component scanning");
-        } catch (ClassNotFoundException var3) {
-            ;
-        }
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">includeFilters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"javax.inject.Named"</span><span class="o">,</span> <span class="n">cl</span><span class="o">),</span> <span class="kc">false</span><span class="o">));</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"JSR-330 'javax.inject.Named' annotation found and supported for component scanning"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">;</span>
+        <span class="o">}</span>
 
-    }
-</code></pre>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>我们再次回到<code class="highlighter-rouge">//扫描===========</code>这个地方，继续往下走</p>
 
-<pre><code class="language-Java">    protected Set&lt;BeanDefinitionHolder&gt; doScan(String... basePackages) {
-        Assert.notEmpty(basePackages, "At least one base package must be specified");
-        Set&lt;BeanDefinitionHolder&gt; beanDefinitions = new LinkedHashSet();
-        String[] var3 = basePackages;
-        int var4 = basePackages.length;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">protected</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="nf">doScan</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">basePackages</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">notEmpty</span><span class="o">(</span><span class="n">basePackages</span><span class="o">,</span> <span class="s">"At least one base package must be specified"</span><span class="o">);</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="n">beanDefinitions</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashSet</span><span class="o">();</span>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">var3</span> <span class="o">=</span> <span class="n">basePackages</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">var4</span> <span class="o">=</span> <span class="n">basePackages</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
 
-        for(int var5 = 0; var5 &lt; var4; ++var5) {
-            String basePackage = var3[var5];
-            //这里判定是否符合条件
-            Set&lt;BeanDefinition&gt; candidates = this.findCandidateComponents(basePackage);
-            Iterator var8 = candidates.iterator();
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var5</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">var5</span> <span class="o">&lt;</span> <span class="n">var4</span><span class="o">;</span> <span class="o">++</span><span class="n">var5</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="n">var3</span><span class="o">[</span><span class="n">var5</span><span class="o">];</span>
+            <span class="c1">//这里判定是否符合条件</span>
+            <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span> <span class="n">candidates</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
+            <span class="n">Iterator</span> <span class="n">var8</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
 
-            while(var8.hasNext()) {
-                BeanDefinition candidate = (BeanDefinition)var8.next();
-                ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
-                candidate.setScope(scopeMetadata.getScopeName());
-                String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
-                if (candidate instanceof AbstractBeanDefinition) {
-                    this.postProcessBeanDefinition((AbstractBeanDefinition)candidate, beanName);
-                }
+            <span class="k">while</span><span class="o">(</span><span class="n">var8</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">BeanDefinition</span> <span class="n">candidate</span> <span class="o">=</span> <span class="o">(</span><span class="n">BeanDefinition</span><span class="o">)</span><span class="n">var8</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+                <span class="n">ScopeMetadata</span> <span class="n">scopeMetadata</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">scopeMetadataResolver</span><span class="o">.</span><span class="na">resolveScopeMetadata</span><span class="o">(</span><span class="n">candidate</span><span class="o">);</span>
+                <span class="n">candidate</span><span class="o">.</span><span class="na">setScope</span><span class="o">(</span><span class="n">scopeMetadata</span><span class="o">.</span><span class="na">getScopeName</span><span class="o">());</span>
+                <span class="n">String</span> <span class="n">beanName</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">beanNameGenerator</span><span class="o">.</span><span class="na">generateBeanName</span><span class="o">(</span><span class="n">candidate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">registry</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">candidate</span> <span class="k">instanceof</span> <span class="n">AbstractBeanDefinition</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">postProcessBeanDefinition</span><span class="o">((</span><span class="n">AbstractBeanDefinition</span><span class="o">)</span><span class="n">candidate</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
+                <span class="o">}</span>
 
-                if (candidate instanceof AnnotatedBeanDefinition) {
-                    AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition)candidate);
-                }
+                <span class="k">if</span> <span class="o">(</span><span class="n">candidate</span> <span class="k">instanceof</span> <span class="n">AnnotatedBeanDefinition</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">AnnotationConfigUtils</span><span class="o">.</span><span class="na">processCommonDefinitionAnnotations</span><span class="o">((</span><span class="n">AnnotatedBeanDefinition</span><span class="o">)</span><span class="n">candidate</span><span class="o">);</span>
+                <span class="o">}</span>
 
-                if (this.checkCandidate(beanName, candidate)) {
-                    BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
-                    definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
-                    beanDefinitions.add(definitionHolder);
-                    this.registerBeanDefinition(definitionHolder, this.registry);
-                }
-            }
-        }
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">checkCandidate</span><span class="o">(</span><span class="n">beanName</span><span class="o">,</span> <span class="n">candidate</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">BeanDefinitionHolder</span> <span class="n">definitionHolder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BeanDefinitionHolder</span><span class="o">(</span><span class="n">candidate</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
+                    <span class="n">definitionHolder</span> <span class="o">=</span> <span class="n">AnnotationConfigUtils</span><span class="o">.</span><span class="na">applyScopedProxyMode</span><span class="o">(</span><span class="n">scopeMetadata</span><span class="o">,</span> <span class="n">definitionHolder</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">registry</span><span class="o">);</span>
+                    <span class="n">beanDefinitions</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">definitionHolder</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">definitionHolder</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">registry</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
 
-        return beanDefinitions;
-    }
+        <span class="k">return</span> <span class="n">beanDefinitions</span><span class="o">;</span>
+    <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>从判定符合条件的地方继续往下走</p>
 
-<pre><code class="language-Java">
-    public Set&lt;BeanDefinition&gt; findCandidateComponents(String basePackage) {
-        LinkedHashSet candidates = new LinkedHashSet();
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">public</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span> <span class="nf">findCandidateComponents</span><span class="o">(</span><span class="n">String</span> <span class="n">basePackage</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">LinkedHashSet</span> <span class="n">candidates</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashSet</span><span class="o">();</span>
 
-        try {
-            String packageSearchPath = "classpath*:" + this.resolveBasePackage(basePackage) + '/' + this.resourcePattern;
-            Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
-            boolean traceEnabled = this.logger.isTraceEnabled();
-            boolean debugEnabled = this.logger.isDebugEnabled();
-            Resource[] var7 = resources;
-            int var8 = resources.length;
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">packageSearchPath</span> <span class="o">=</span> <span class="s">"classpath*:"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">resolveBasePackage</span><span class="o">(</span><span class="n">basePackage</span><span class="o">)</span> <span class="o">+</span> <span class="sc">'/'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">resourcePattern</span><span class="o">;</span>
+            <span class="n">Resource</span><span class="o">[]</span> <span class="n">resources</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">resourcePatternResolver</span><span class="o">.</span><span class="na">getResources</span><span class="o">(</span><span class="n">packageSearchPath</span><span class="o">);</span>
+            <span class="kt">boolean</span> <span class="n">traceEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isTraceEnabled</span><span class="o">();</span>
+            <span class="kt">boolean</span> <span class="n">debugEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">();</span>
+            <span class="n">Resource</span><span class="o">[]</span> <span class="n">var7</span> <span class="o">=</span> <span class="n">resources</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">var8</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
 
-            for(int var9 = 0; var9 &lt; var8; ++var9) {
-                Resource resource = var7[var9];
-                if (traceEnabled) {
-                    this.logger.trace("Scanning " + resource);
-                }
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var9</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">var9</span> <span class="o">&lt;</span> <span class="n">var8</span><span class="o">;</span> <span class="o">++</span><span class="n">var9</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">Resource</span> <span class="n">resource</span> <span class="o">=</span> <span class="n">var7</span><span class="o">[</span><span class="n">var9</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">traceEnabled</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"Scanning "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">);</span>
+                <span class="o">}</span>
 
-                if (resource.isReadable()) {
-                    try {
-                        MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
-                        //这里判定是否符合排除或者包含的component条件
-                        if (this.isCandidateComponent(metadataReader)) {
-                            ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
-                            sbd.setResource(resource);
-                            sbd.setSource(resource);
-                            if (this.isCandidateComponent((AnnotatedBeanDefinition)sbd)) {
-                                if (debugEnabled) {
-                                    this.logger.debug("Identified candidate component class: " + resource);
-                                }
+                <span class="k">if</span> <span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="na">isReadable</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="n">MetadataReader</span> <span class="n">metadataReader</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">metadataReaderFactory</span><span class="o">.</span><span class="na">getMetadataReader</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+                        <span class="c1">//这里判定是否符合排除或者包含的component条件</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">isCandidateComponent</span><span class="o">(</span><span class="n">metadataReader</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="n">ScannedGenericBeanDefinition</span> <span class="n">sbd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ScannedGenericBeanDefinition</span><span class="o">(</span><span class="n">metadataReader</span><span class="o">);</span>
+                            <span class="n">sbd</span><span class="o">.</span><span class="na">setResource</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+                            <span class="n">sbd</span><span class="o">.</span><span class="na">setSource</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">isCandidateComponent</span><span class="o">((</span><span class="n">AnnotatedBeanDefinition</span><span class="o">)</span><span class="n">sbd</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="n">debugEnabled</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Identified candidate component class: "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">);</span>
+                                <span class="o">}</span>
 
-                                candidates.add(sbd);
-                            } else if (debugEnabled) {
-                                this.logger.debug("Ignored because not a concrete top-level class: " + resource);
-                            }
-                        } else if (traceEnabled) {
-                            this.logger.trace("Ignored because not matching any filter: " + resource);
-                        }
-                    } catch (Throwable var13) {
-                        throw new BeanDefinitionStoreException("Failed to read candidate component class: " + resource, var13);
-                    }
-                } else if (traceEnabled) {
-                    this.logger.trace("Ignored because not readable: " + resource);
-                }
-            }
+                                <span class="n">candidates</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">sbd</span><span class="o">);</span>
+                            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">debugEnabled</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Ignored because not a concrete top-level class: "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">);</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">traceEnabled</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"Ignored because not matching any filter: "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">var13</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BeanDefinitionStoreException</span><span class="o">(</span><span class="s">"Failed to read candidate component class: "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">,</span> <span class="n">var13</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">traceEnabled</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"Ignored because not readable: "</span> <span class="o">+</span> <span class="n">resource</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
 
-            return candidates;
-        } catch (IOException var14) {
-            throw new BeanDefinitionStoreException("I/O failure during classpath scanning", var14);
-        }
-    }
+            <span class="k">return</span> <span class="n">candidates</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">var14</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">BeanDefinitionStoreException</span><span class="o">(</span><span class="s">"I/O failure during classpath scanning"</span><span class="o">,</span> <span class="n">var14</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>从判定是否符合component的地方继续</p>
 
-<pre><code class="language-Java">
-    protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
-        Iterator var2 = this.excludeFilters.iterator();
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isCandidateComponent</span><span class="o">(</span><span class="n">MetadataReader</span> <span class="n">metadataReader</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">Iterator</span> <span class="n">var2</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">excludeFilters</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
 
-        TypeFilter tf;
-        do {
-            //先判断 exclude-filter,黑名单过滤
-            if (!var2.hasNext()) {
-                var2 = this.includeFilters.iterator();
+        <span class="n">TypeFilter</span> <span class="n">tf</span><span class="o">;</span>
+        <span class="k">do</span> <span class="o">{</span>
+            <span class="c1">//先判断 exclude-filter,黑名单过滤</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">var2</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">var2</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">includeFilters</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
 
-                do {
-                    //然后判断 include-filter,白名单过滤
-                    // 其他情况排除
-                    if (!var2.hasNext()) {
-                        return false;
-                    }
+                <span class="k">do</span> <span class="o">{</span>
+                    <span class="c1">//然后判断 include-filter,白名单过滤</span>
+                    <span class="c1">// 其他情况排除</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">var2</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
 
-                    tf = (TypeFilter)var2.next();
-                } while(!tf.match(metadataReader, this.metadataReaderFactory));
+                    <span class="n">tf</span> <span class="o">=</span> <span class="o">(</span><span class="n">TypeFilter</span><span class="o">)</span><span class="n">var2</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">while</span><span class="o">(!</span><span class="n">tf</span><span class="o">.</span><span class="na">match</span><span class="o">(</span><span class="n">metadataReader</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">metadataReaderFactory</span><span class="o">));</span>
 
-                return this.isConditionMatch(metadataReader);
-            }
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">isConditionMatch</span><span class="o">(</span><span class="n">metadataReader</span><span class="o">);</span>
+            <span class="o">}</span>
 
-            tf = (TypeFilter)var2.next();
-        } while(!tf.match(metadataReader, this.metadataReaderFactory));
+            <span class="n">tf</span> <span class="o">=</span> <span class="o">(</span><span class="n">TypeFilter</span><span class="o">)</span><span class="n">var2</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">while</span><span class="o">(!</span><span class="n">tf</span><span class="o">.</span><span class="na">match</span><span class="o">(</span><span class="n">metadataReader</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">metadataReaderFactory</span><span class="o">));</span>
 
-        return false;
-    }
-</code></pre>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="结论">结论</h2>
 <ul>

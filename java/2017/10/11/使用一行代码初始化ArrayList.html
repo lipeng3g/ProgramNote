@@ -56,15 +56,15 @@
 <!-- /TOC -->
 <h2 id="1-问题">1. 问题</h2>
 <p><strong>问题来源</strong>：当创建一个<code class="highlighter-rouge">List</code>并且塞入一串测试数据的时候，我需要下面这种代码来完成</p>
-<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;();
-places.add("Buenos Aires");
-places.add("Córdoba");
-places.add("La Plata");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Stringplaces</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+<span class="n">places</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Buenos Aires"</span><span class="o">);</span>
+<span class="n">places</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Córdoba"</span><span class="o">);</span>
+<span class="n">places</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"La Plata"</span><span class="o">);</span>
+</code></pre></div></div>
 <p>可以使用下面的代码来完成</p>
 
-<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"))
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Stringplaces</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">"Buenos Aires"</span><span class="o">,</span> <span class="s">"Córdoba"</span><span class="o">,</span> <span class="s">"La Plata"</span><span class="o">))</span>
+</code></pre></div></div>
 
 <p>但是有没有更好的方式呢？</p>
 <h2 id="2-答案一">2. 答案一</h2>
@@ -72,28 +72,28 @@ places.add("La Plata");
 <p>其实上面最开始的写法可能就是<code class="highlighter-rouge">最好</code>的，它不需要创建新的<code class="highlighter-rouge">list</code>对象，不需要转换，所有的操作都指向原有的对象实例。</p>
 
 <p>当然，有一些替代方法，例如使用实例初始化器（也称为<code class="highlighter-rouge">双括号初始化</code>）来创建一个<code class="highlighter-rouge">匿名内部类</code>：</p>
-<pre><code class="language-Java">    ArrayList&lt;Stringlist = new ArrayList&lt;String&gt;() ;
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Stringlist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">;</span>
+</code></pre></div></div>
 <p>但是这种方法不太好，仅仅是为了创建一个<code class="highlighter-rouge">ArrayList</code>，<code class="highlighter-rouge">{}</code>中又创建了一个<code class="highlighter-rouge">ArrayList</code>的实例对象，有些浪费。
 如果按照下面的方式可以初始化就好了，但是很不幸，这种方式是错误的；</p>
-<pre><code class="language-Java">List&lt;Stringlist = ["A", "B", "C"];
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Stringlist</span> <span class="o">=</span> <span class="o">[</span><span class="s">"A"</span><span class="o">,</span> <span class="s">"B"</span><span class="o">,</span> <span class="s">"C"</span><span class="o">];</span>
+</code></pre></div></div>
 <p>一方面它返回的是一个固定的List，更主要的，这种写法编译器无法通过。</p>
 
 <h2 id="3-答案二">3. 答案二</h2>
 <p>如果你不需要一个<code class="highlighter-rouge">ArrayList</code>，仅仅需要一个<code class="highlighter-rouge">List</code>，那么你可以这么做</p>
-<pre><code class="language-Java">List&lt;Stringplaces = Arrays.asList("Buenos Aires", "Córdoba", "La Plata");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Stringplaces</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">"Buenos Aires"</span><span class="o">,</span> <span class="s">"Córdoba"</span><span class="o">,</span> <span class="s">"La Plata"</span><span class="o">);</span>
+</code></pre></div></div>
 <p>或者你只有一个对象需要初始化</p>
-<pre><code class="language-Java">List&lt;Stringplaces = Collections.singletonList("Buenos Aires");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Stringplaces</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">singletonList</span><span class="o">(</span><span class="s">"Buenos Aires"</span><span class="o">);</span>
+</code></pre></div></div>
 <p>当然这两种方式返回的是<code class="highlighter-rouge">List</code>对象，你无法动态操作，如果你确实需要<code class="highlighter-rouge">ArrayList</code>，那么可能需要下面的方式</p>
-<pre><code class="language-Java">ArrayList&lt;Stringplaces = new ArrayList&lt;&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"));
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Stringplaces</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">"Buenos Aires"</span><span class="o">,</span> <span class="s">"Córdoba"</span><span class="o">,</span> <span class="s">"La Plata"</span><span class="o">));</span>
+</code></pre></div></div>
 <h2 id="4-答案其他">4. 答案其他</h2>
 <p>在<code class="highlighter-rouge">Java9</code>中可以使用这种方式</p>
-<pre><code class="language-Java">List&lt;Stringstrings = List.of("foo", "bar", "baz");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Stringstrings</span> <span class="o">=</span> <span class="n">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"foo"</span><span class="o">,</span> <span class="s">"bar"</span><span class="o">,</span> <span class="s">"baz"</span><span class="o">);</span>
+</code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2017-10-11T15:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2017-10-11-使用一行代码初始化ArrayList.md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />

@@ -162,18 +162,18 @@ finally 块通常包含清理代码，用在部分执行 try 块后恢复正常�
 <h1 id="private">private</h1>
 <h2 id="说明-12">说明</h2>
 <p>private 关键字是访问控制修饰符，可以应用于类、方法或字段（在类中声明的变量）。</p>
-<pre><code class="language-Java">   public class MyPublicClass
-   {
-      private class MyPrivateClass
-      {
-      }
-      private int i;
-      private String myMethod()
-      {
-        &lt;statements&gt;
-      }
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyPublicClass</span>
+   <span class="o">{</span>
+      <span class="kd">private</span> <span class="kd">class</span> <span class="nc">MyPrivateClass</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">i</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="n">String</span> <span class="nf">myMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+        <span class="o">&lt;</span><span class="n">statements</span><span class="o">&gt;</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 <h2 id="总结-10">总结</h2>
 <p>只能在声明 private（内部）类、方法或字段的类中引用这些类、方法或字段。在类的外部或者对于子类而言，它们是不可见的。<br />
 所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。</p>
@@ -181,18 +181,18 @@ finally 块通常包含清理代码，用在部分执行 try 块后恢复正常�
 <h1 id="protected">protected</h1>
 <h2 id="说明-13">说明</h2>
 <p>protected 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。</p>
-<pre><code class="language-Java">   public class MyPublicClass
-   {
-      protected class MyPrivateClass
-      {
-      }
-      protected int i;
-      protected String myMethod()
-      {
-        &lt;statements&gt;
-      }
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyPublicClass</span>
+   <span class="o">{</span>
+      <span class="kd">protected</span> <span class="kd">class</span> <span class="nc">MyPrivateClass</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+      <span class="kd">protected</span> <span class="kt">int</span> <span class="n">i</span><span class="o">;</span>
+      <span class="kd">protected</span> <span class="n">String</span> <span class="nf">myMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+        <span class="o">&lt;</span><span class="n">statements</span><span class="o">&gt;</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 <h2 id="总结-11">总结</h2>
 <p>可以在声明 protected 类、方法或字段的类、同一个包中的其他任何类以及任何子类（无论子类是在哪个包中声明的）中引用这些类、方法或字段。<br />
 所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。</p>
@@ -200,18 +200,18 @@ finally 块通常包含清理代码，用在部分执行 try 块后恢复正常�
 <h1 id="public">public</h1>
 <h2 id="说明-14">说明</h2>
 <p>public 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。</p>
-<pre><code class="language-Java">   public class MyPublicClass
-   {
-      public class MyPrivateClass
-      {
-      }
-      public int i;
-      public String myMethod()
-      {
-        &lt;statements&gt;
-      }
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyPublicClass</span>
+   <span class="o">{</span>
+      <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyPrivateClass</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="n">i</span><span class="o">;</span>
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">myMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+        <span class="o">&lt;</span><span class="n">statements</span><span class="o">&gt;</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="总结-12">总结</h2>
 <p>可以在其他任何类或包中引用 public 类、方法或字段。</p>
@@ -219,19 +219,19 @@ finally 块通常包含清理代码，用在部分执行 try 块后恢复正常�
 <h1 id="static">static</h1>
 <h2 id="说明-15">说明</h2>
 <p>static 关键字可以应用于内部类（在另一个类中定义的类）、方法或字段（类的成员变量）。</p>
-<pre><code class="language-Java">   public class MyPublicClass
-   {
-      public final static int MAX_OBJECTS = 100;
-      static int _numObjects = 0;
-      static class MyStaticClass
-      {
-      }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyPublicClass</span>
+   <span class="o">{</span>
+      <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">MAX_OBJECTS</span> <span class="o">=</span> <span class="mi">100</span><span class="o">;</span>
+      <span class="kd">static</span> <span class="kt">int</span> <span class="n">_numObjects</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+      <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyStaticClass</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
     
-      static int getNumObjects()
-      {
-      }
-   }
-</code></pre>
+      <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getNumObjects</span><span class="o">()</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="总结-13">总结</h2>
 <p>通常，static 关键字意味着应用它的实体在声明该实体的类的任何特定实例外部可用。<br />
@@ -245,18 +245,18 @@ static 字段（类的成员变量）在类的所有实例中只存在一次。<
 <h1 id="super">super</h1>
 <h2 id="说明-16">说明</h2>
 <p>super 关键字用于引用使用该关键字的类的超类。</p>
-<pre><code class="language-Java">   public class MyClass
-   {
-      public MyClass(String arg)
-      {
-         super(arg);
-      }
-      public String myStringMethod()
-      {
-         return super.otherStringMethod();
-      }
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClass</span>
+   <span class="o">{</span>
+      <span class="kd">public</span> <span class="nf">MyClass</span><span class="o">(</span><span class="n">String</span> <span class="n">arg</span><span class="o">)</span>
+      <span class="o">{</span>
+         <span class="kd">super</span><span class="o">(</span><span class="n">arg</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">myStringMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+         <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">otherStringMethod</span><span class="o">();</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="总结-14">总结</h2>
 <p>作为独立语句出现的 super 表示调用超类的构造方法。<br />
@@ -265,28 +265,28 @@ super.<methodName>() 表示调用超类的方法。</methodName></p>
 <h1 id="synchronized">synchronized</h1>
 <h2 id="说明-17">说明</h2>
 <p>synchronized 关键字可以应用于方法或语句块，并为一次只应由一个线程执行的关键代码段提供保护。</p>
-<pre><code class="language-Java">   public class MyClass
-   {
-      public synchronized static String mySyncStaticMethod()
-      {
-      }
-      public synchronized String mySyncMethod()
-      {
-      }
-   {
-   public class MyOtherClass
-   {
-      Object someObj;
-      public String myMethod()
-      {
-         &lt;statements&gt;
-         synchronized (someObj)
-         {
-            &lt;statements affecting someObj&gt;
-         }
-      }
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClass</span>
+   <span class="o">{</span>
+      <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">mySyncStaticMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+      <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">String</span> <span class="nf">mySyncMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+      <span class="o">}</span>
+   <span class="o">{</span>
+   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyOtherClass</span>
+   <span class="o">{</span>
+      <span class="n">Object</span> <span class="n">someObj</span><span class="o">;</span>
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">myMethod</span><span class="o">()</span>
+      <span class="o">{</span>
+         <span class="o">&lt;</span><span class="n">statements</span><span class="o">&gt;</span>
+         <span class="nf">synchronized</span> <span class="o">(</span><span class="n">someObj</span><span class="o">)</span>
+         <span class="o">{</span>
+            <span class="o">&lt;</span><span class="n">statements</span> <span class="n">affecting</span> <span class="n">someObj</span><span class="o">&gt;</span>
+         <span class="o">}</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 <h2 id="总结-15">总结</h2>
 <p>synchronized 关键字可防止代码的关键代码段一次被多个线程执行。<br />
 如果应用于静态方法（如上例中的 MySyncStaticMethod），那么，当该方法一次由一个线程执行时，整个类将被锁定。<br />
@@ -314,11 +314,11 @@ super.<methodName>() 表示调用超类的方法。</methodName></p>
 <h2 id="说明-19">说明</h2>
 <p>volatile 关键字用于表示可以被多个线程异步修改的成员变量。</p>
 
-<pre><code class="language-Java">   public class MyClass
-   {
-      volatile int sharedValue;
-   }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyClass</span>
+   <span class="o">{</span>
+      <span class="kd">volatile</span> <span class="kt">int</span> <span class="n">sharedValue</span><span class="o">;</span>
+   <span class="o">}</span>
+</code></pre></div></div>
 <h2 id="总结-17">总结</h2>
 <p>volatile 的目标用途是为了确保所有线程所看到的指定变量的值都是相同的。</p>
 

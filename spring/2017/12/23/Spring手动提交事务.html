@@ -46,26 +46,26 @@
 </header>
 				<div class="m-article-content js-article-content" itemprop="articleBody"><p>开篇之前先说一下问题来源，我是用了<a href="https://github.com/redisson/redisson">redisson</a>作为项目的分布式锁，程序中使用分布式锁来锁定 对象A， 然后锁定对象A 下的 对象B，然后再对对象B 做业务操作。</p>
 
-<pre><code class="language-Java">	RLock ALock = redissonClient.getLock("AAAAA");
-	if (ALock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-		RLock BLock = redissonClient.getLock("BBBBB");
-		if (BLock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-			// 吧啦吧啦
-			// 这里是业务逻辑代码
-			// 修改对象状态等等
-		} else {
-			//操作超时，请重新操作
-		}
-		if (BLock.isLocked()) {
-			BLock.unlock();
-		}
-	} else {
-		//操作超时，请重新操作
-	}
-	if (ALock.isLocked()) {
-		ALock.unlock();
-	}
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">RLock</span> <span class="n">ALock</span> <span class="o">=</span> <span class="n">redissonClient</span><span class="o">.</span><span class="na">getLock</span><span class="o">(</span><span class="s">"AAAAA"</span><span class="o">);</span>
+	<span class="k">if</span> <span class="o">(</span><span class="n">ALock</span><span class="o">.</span><span class="na">tryLock</span><span class="o">(</span><span class="mi">10000</span><span class="o">,</span> <span class="mi">10000</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">RLock</span> <span class="n">BLock</span> <span class="o">=</span> <span class="n">redissonClient</span><span class="o">.</span><span class="na">getLock</span><span class="o">(</span><span class="s">"BBBBB"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">BLock</span><span class="o">.</span><span class="na">tryLock</span><span class="o">(</span><span class="mi">10000</span><span class="o">,</span> <span class="mi">10000</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">))</span> <span class="o">{</span>
+			<span class="c1">// 吧啦吧啦</span>
+			<span class="c1">// 这里是业务逻辑代码</span>
+			<span class="c1">// 修改对象状态等等</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="c1">//操作超时，请重新操作</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">BLock</span><span class="o">.</span><span class="na">isLocked</span><span class="o">())</span> <span class="o">{</span>
+			<span class="n">BLock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="c1">//操作超时，请重新操作</span>
+	<span class="o">}</span>
+	<span class="k">if</span> <span class="o">(</span><span class="n">ALock</span><span class="o">.</span><span class="na">isLocked</span><span class="o">())</span> <span class="o">{</span>
+		<span class="n">ALock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+	<span class="o">}</span>
+</code></pre></div></div>
 
 <p>这段代码的位置在 SpringMVC 的service 层， 同一个对象A 下的 同一个 对象 B 只能操作一次，但是上面的代码在连续两次请求以后会操作两次，很奇怪，为什么日志里面显示确实锁定了对象A和对象B,但是依然能够进行两次操作呢，在多次打印业务内容以后，发现了，原来是事务未提交导致。</p>
 
@@ -80,22 +80,22 @@
 <p>解决方案2：
 	service层手动提交事务，代码如下</p>
 
-<pre><code class="language-Java">	@Resource 
-    private DataSourceTransactionManager transactionManager; 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="nd">@Resource</span> 
+    <span class="kd">private</span> <span class="n">DataSourceTransactionManager</span> <span class="n">transactionManager</span><span class="o">;</span> 
 
 
-	// 下面是手动提交
-	DefaultTransactionDefinition def = new DefaultTransactionDefinition();  
-	// 事物隔离级别，开启新事务，这样会比较安全些。  
-	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW); 
-	// 获得事务状态 
-	TransactionStatus status = transactionManager.getTransaction(def);  
-	try {  
-		transactionManager.commit(status);  
-	} catch (Exception e) {  
-		transactionManager.rollback(status);  
-	}   
-</code></pre>
+	<span class="c1">// 下面是手动提交</span>
+	<span class="n">DefaultTransactionDefinition</span> <span class="n">def</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultTransactionDefinition</span><span class="o">();</span>  
+	<span class="c1">// 事物隔离级别，开启新事务，这样会比较安全些。  </span>
+	<span class="n">def</span><span class="o">.</span><span class="na">setPropagationBehavior</span><span class="o">(</span><span class="n">TransactionDefinition</span><span class="o">.</span><span class="na">PROPAGATION_REQUIRES_NEW</span><span class="o">);</span> 
+	<span class="c1">// 获得事务状态 </span>
+	<span class="n">TransactionStatus</span> <span class="n">status</span> <span class="o">=</span> <span class="n">transactionManager</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span><span class="n">def</span><span class="o">);</span>  
+	<span class="k">try</span> <span class="o">{</span>  
+		<span class="n">transactionManager</span><span class="o">.</span><span class="na">commit</span><span class="o">(</span><span class="n">status</span><span class="o">);</span>  
+	<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  
+		<span class="n">transactionManager</span><span class="o">.</span><span class="na">rollback</span><span class="o">(</span><span class="n">status</span><span class="o">);</span>  
+	<span class="o">}</span>   
+</code></pre></div></div>
 
 <p>以上两种解决方案都可以，但是第二种请注意，如果抛出异常，可能导致无法回滚。</p>
 

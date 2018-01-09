@@ -83,63 +83,63 @@
 
 <p>DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法</p>
 
-<pre><code class="language-Java">
-    public final void init() throws ServletException {
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug("Initializing servlet '" + this.getServletName() + "'");
-        }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Initializing servlet '"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        try {
-            // 1、PropertyValues初始化 ServletConfigPropertyValues是一个内部类
-            PropertyValues pvs = new HttpServletBean.ServletConfigPropertyValues(this.getServletConfig(), this.requiredProperties);
-            // 2、封装了bean的行为，提供了设置和获取属性值
-            BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
-            // 3、加载资源文件
-            ResourceLoader resourceLoader = new ServletContextResourceLoader(this.getServletContext());
-            // 4、注册属性编辑
-            bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, this.getEnvironment()));
-            // 5、初始化beanWrapper
-            this.initBeanWrapper(bw);
-            bw.setPropertyValues(pvs, true);
-        } catch (BeansException var4) {
-            if (this.logger.isErrorEnabled()) {
-                this.logger.error("Failed to set bean properties on servlet '" + this.getServletName() + "'", var4);
-            }
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 1、PropertyValues初始化 ServletConfigPropertyValues是一个内部类</span>
+            <span class="n">PropertyValues</span> <span class="n">pvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpServletBean</span><span class="o">.</span><span class="na">ServletConfigPropertyValues</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getServletConfig</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="na">requiredProperties</span><span class="o">);</span>
+            <span class="c1">// 2、封装了bean的行为，提供了设置和获取属性值</span>
+            <span class="n">BeanWrapper</span> <span class="n">bw</span> <span class="o">=</span> <span class="n">PropertyAccessorFactory</span><span class="o">.</span><span class="na">forBeanPropertyAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            <span class="c1">// 3、加载资源文件</span>
+            <span class="n">ResourceLoader</span> <span class="n">resourceLoader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServletContextResourceLoader</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">());</span>
+            <span class="c1">// 4、注册属性编辑</span>
+            <span class="n">bw</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">Resource</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ResourceEditor</span><span class="o">(</span><span class="n">resourceLoader</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">getEnvironment</span><span class="o">()));</span>
+            <span class="c1">// 5、初始化beanWrapper</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">initBeanWrapper</span><span class="o">(</span><span class="n">bw</span><span class="o">);</span>
+            <span class="n">bw</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">pvs</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">BeansException</span> <span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isErrorEnabled</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Failed to set bean properties on servlet '"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">,</span> <span class="n">var4</span><span class="o">);</span>
+            <span class="o">}</span>
 
-            throw var4;
-        }
-        //让子类做任何他们想要的初始化。
-        this.initServletBean();
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug("Servlet '" + this.getServletName() + "' configured successfully");
-        }
+            <span class="k">throw</span> <span class="n">var4</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//让子类做任何他们想要的初始化。</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">initServletBean</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Servlet '"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"' configured successfully"</span><span class="o">);</span>
+        <span class="o">}</span>
 
-    }
+    <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>PropertyValues初始化</p>
-<pre><code class="language-Java">    private static class ServletConfigPropertyValues extends MutablePropertyValues {
-        public ServletConfigPropertyValues(ServletConfig config, Set&lt;String&gt; requiredProperties) throws ServletException {
-            Set&lt;String&gt; missingProps = requiredProperties != null &amp;&amp; !requiredProperties.isEmpty() ? new HashSet(requiredProperties) : null;
-            //获取init-param中的数值对
-            Enumeration paramNames = config.getInitParameterNames();
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ServletConfigPropertyValues</span> <span class="kd">extends</span> <span class="n">MutablePropertyValues</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">ServletConfigPropertyValues</span><span class="o">(</span><span class="n">ServletConfig</span> <span class="n">config</span><span class="o">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">requiredProperties</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+            <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">missingProps</span> <span class="o">=</span> <span class="n">requiredProperties</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">requiredProperties</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">(</span><span class="n">requiredProperties</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">//获取init-param中的数值对</span>
+            <span class="n">Enumeration</span> <span class="n">paramNames</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameterNames</span><span class="o">();</span>
 
-            while(paramNames.hasMoreElements()) {
-                String property = (String)paramNames.nextElement();
-                Object value = config.getInitParameter(property);
-                this.addPropertyValue(new PropertyValue(property, value));
-                if (missingProps != null) {
-                    missingProps.remove(property);
-                }
-            }
+            <span class="k">while</span><span class="o">(</span><span class="n">paramNames</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">String</span> <span class="n">property</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">paramNames</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
+                <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="n">property</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">addPropertyValue</span><span class="o">(</span><span class="k">new</span> <span class="n">PropertyValue</span><span class="o">(</span><span class="n">property</span><span class="o">,</span> <span class="n">value</span><span class="o">));</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">missingProps</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">missingProps</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">property</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
 
-            if (!CollectionUtils.isEmpty(missingProps)) {
-                throw new ServletException("Initialization from ServletConfig for servlet '" + config.getServletName() + "' failed; the following required properties were missing: " + StringUtils.collectionToDelimitedString(missingProps, ", "));
-            }
-        }
-    }
-</code></pre>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">CollectionUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">missingProps</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ServletException</span><span class="o">(</span><span class="s">"Initialization from ServletConfig for servlet '"</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="na">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"' failed; the following required properties were missing: "</span> <span class="o">+</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">collectionToDelimitedString</span><span class="o">(</span><span class="n">missingProps</span><span class="o">,</span> <span class="s">", "</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 <p>如下图所示，获取init-param中的配置参数，写入PropertyValues
 <img src="/ProgramNote/assets/Image/spring/02.png" alt="分析图" title="分析图" /></p>
 
@@ -148,82 +148,82 @@
 <p><a href="http://blog.csdn.net/zhiweianran/article/details/7919129">待学习</a></p>
 
 <p>ResourceLoader加载资源文件比较简单</p>
-<pre><code class="language-Java">public class ServletContextResourceLoader extends DefaultResourceLoader {
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServletContextResourceLoader</span> <span class="kd">extends</span> <span class="n">DefaultResourceLoader</span> <span class="o">{</span>
 
-	private final ServletContext servletContext;
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">;</span>
 
 
-	/**
+	<span class="cm">/**
 	 * Create a new ServletContextResourceLoader.
 	 * @param servletContext the ServletContext to load resources with
-	 */
-	public ServletContextResourceLoader(ServletContext servletContext) {
-		this.servletContext = servletContext;
-	}
+	 */</span>
+	<span class="kd">public</span> <span class="nf">ServletContextResourceLoader</span><span class="o">(</span><span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">servletContext</span> <span class="o">=</span> <span class="n">servletContext</span><span class="o">;</span>
+	<span class="o">}</span>
 
-	/**
+	<span class="cm">/**
 	 * This implementation supports file paths beneath the root of the web application.
 	 * @see ServletContextResource
-	 */
-	@Override
-	protected Resource getResourceByPath(String path) {
-		return new ServletContextResource(this.servletContext, path);
-	}
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="n">Resource</span> <span class="nf">getResourceByPath</span><span class="o">(</span><span class="n">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">ServletContextResource</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">servletContext</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+	<span class="o">}</span>
 
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>initServletBean的介绍</p>
 
-<pre><code class="language-Java">	/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="cm">/**
 	 * 子类可以重写这个以执行自定义初始化。此servlet的所有bean属性将在调用此方法之前设置。
 	 * &lt;p&gt;这个方法的默认实现是空的
 	 * @throws ServletException if subclass initialization fails
-	 */
-	protected void initServletBean() throws ServletException {
-	}
-</code></pre>
+	 */</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initServletBean</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+	<span class="o">}</span>
+</code></pre></div></div>
 
 <p>上面说的很清楚，这里只是提供一个方法让bean自己初始化，具体的实现在<strong>FrameworkServlet</strong>中</p>
 
-<pre><code class="language-Java">
-	/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+	<span class="cm">/**
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
-	 */
-	@Override
-	protected final void initServletBean() throws ServletException {
-		getServletContext().log("Initializing Spring FrameworkServlet '" + getServletName() + "'");
-		if (this.logger.isInfoEnabled()) {
-			this.logger.info("FrameworkServlet '" + getServletName() + "': initialization started");
-		}
-		long startTime = System.currentTimeMillis();
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">initServletBean</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+		<span class="n">getServletContext</span><span class="o">().</span><span class="na">log</span><span class="o">(</span><span class="s">"Initializing Spring FrameworkServlet '"</span> <span class="o">+</span> <span class="n">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isInfoEnabled</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"FrameworkServlet '"</span> <span class="o">+</span> <span class="n">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"': initialization started"</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
 
-		try {
-            //这里是主要的动作，创建应用程序上下文
-			this.webApplicationContext = initWebApplicationContext();
-			initFrameworkServlet();
-		}
-		catch (ServletException ex) {
-			this.logger.error("Context initialization failed", ex);
-			throw ex;
-		}
-		catch (RuntimeException ex) {
-			this.logger.error("Context initialization failed", ex);
-			throw ex;
-		}
+		<span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//这里是主要的动作，创建应用程序上下文</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">webApplicationContext</span> <span class="o">=</span> <span class="n">initWebApplicationContext</span><span class="o">();</span>
+			<span class="n">initFrameworkServlet</span><span class="o">();</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">ServletException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Context initialization failed"</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+			<span class="k">throw</span> <span class="n">ex</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">RuntimeException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Context initialization failed"</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+			<span class="k">throw</span> <span class="n">ex</span><span class="o">;</span>
+		<span class="o">}</span>
 
-		if (this.logger.isInfoEnabled()) {
-			long elapsedTime = System.currentTimeMillis() - startTime;
-			this.logger.info("FrameworkServlet '" + getServletName() + "': initialization completed in " +
-					elapsedTime + " ms");
-		}
-	}
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isInfoEnabled</span><span class="o">())</span> <span class="o">{</span>
+			<span class="kt">long</span> <span class="n">elapsedTime</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"FrameworkServlet '"</span> <span class="o">+</span> <span class="n">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"': initialization completed in "</span> <span class="o">+</span>
+					<span class="n">elapsedTime</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
 
-</code></pre>
-<pre><code class="language-Java">
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 
-	/**
+	<span class="cm">/**
 	 * 初始化并发布此servlet的Web应用程序上下文。
 	 * &lt;p&gt;Delegates to {@link #createWebApplicationContext} for actual creation
 	 * of the context. Can be overridden in subclasses.
@@ -231,54 +231,54 @@
 	 * @see #FrameworkServlet(WebApplicationContext)
 	 * @see #setContextClass
 	 * @see #setContextConfigLocation
-	 */
-	protected WebApplicationContext initWebApplicationContext() {
-		WebApplicationContext rootContext =
-				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		WebApplicationContext wac = null;
+	 */</span>
+	<span class="kd">protected</span> <span class="n">WebApplicationContext</span> <span class="nf">initWebApplicationContext</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">WebApplicationContext</span> <span class="n">rootContext</span> <span class="o">=</span>
+				<span class="n">WebApplicationContextUtils</span><span class="o">.</span><span class="na">getWebApplicationContext</span><span class="o">(</span><span class="n">getServletContext</span><span class="o">());</span>
+		<span class="n">WebApplicationContext</span> <span class="n">wac</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-		if (this.webApplicationContext != null) {
-            //根节点上下文，是通过ContextLoaderListener加载的，服务器启动时，最先加载的  
-			wac = this.webApplicationContext;
-			if (wac instanceof ConfigurableWebApplicationContext) {
-				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
-				if (!cwac.isActive()) {
-					//上下文还没有被刷新——&gt;提供诸如设置父上下文、设置应用程序上下文id等服务
-					if (cwac.getParent() == null) {
-						//在没有显式parent的情况下注入上下文实例,设置根应用程序上下文(如果有的话, 不过也可能是null)作为父元素
-						cwac.setParent(rootContext);
-					}
-					configureAndRefreshWebApplicationContext(cwac);
-				}
-			}
-		}
-		if (wac == null) {
-			//在构建时没有注入上下文实例——&gt;查看是否在servlet上下文中注册了
-			wac = findWebApplicationContext();
-		}
-		if (wac == null) {
-			//没有的话就定义一个
-			wac = createWebApplicationContext(rootContext);
-		}
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">webApplicationContext</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//根节点上下文，是通过ContextLoaderListener加载的，服务器启动时，最先加载的  </span>
+			<span class="n">wac</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">webApplicationContext</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">wac</span> <span class="k">instanceof</span> <span class="n">ConfigurableWebApplicationContext</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">ConfigurableWebApplicationContext</span> <span class="n">cwac</span> <span class="o">=</span> <span class="o">(</span><span class="n">ConfigurableWebApplicationContext</span><span class="o">)</span> <span class="n">wac</span><span class="o">;</span>
+				<span class="k">if</span> <span class="o">(!</span><span class="n">cwac</span><span class="o">.</span><span class="na">isActive</span><span class="o">())</span> <span class="o">{</span>
+					<span class="c1">//上下文还没有被刷新——&gt;提供诸如设置父上下文、设置应用程序上下文id等服务</span>
+					<span class="k">if</span> <span class="o">(</span><span class="n">cwac</span><span class="o">.</span><span class="na">getParent</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+						<span class="c1">//在没有显式parent的情况下注入上下文实例,设置根应用程序上下文(如果有的话, 不过也可能是null)作为父元素</span>
+						<span class="n">cwac</span><span class="o">.</span><span class="na">setParent</span><span class="o">(</span><span class="n">rootContext</span><span class="o">);</span>
+					<span class="o">}</span>
+					<span class="n">configureAndRefreshWebApplicationContext</span><span class="o">(</span><span class="n">cwac</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">wac</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">//在构建时没有注入上下文实例——&gt;查看是否在servlet上下文中注册了</span>
+			<span class="n">wac</span> <span class="o">=</span> <span class="n">findWebApplicationContext</span><span class="o">();</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">wac</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">//没有的话就定义一个</span>
+			<span class="n">wac</span> <span class="o">=</span> <span class="n">createWebApplicationContext</span><span class="o">(</span><span class="n">rootContext</span><span class="o">);</span>
+		<span class="o">}</span>
 
-		if (!this.refreshEventReceived) {
-			// 在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息  
-			onRefresh(wac);
-		}
+		<span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="na">refreshEventReceived</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// 在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息  </span>
+			<span class="n">onRefresh</span><span class="o">(</span><span class="n">wac</span><span class="o">);</span>
+		<span class="o">}</span>
 
-		if (this.publishContext) {
-			// 对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中  
-			String attrName = getServletContextAttributeName();
-			getServletContext().setAttribute(attrName, wac);
-			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("Published WebApplicationContext of servlet '" + getServletName() +
-						"' as ServletContext attribute with name [" + attrName + "]");
-			}
-		}
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">publishContext</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// 对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中  </span>
+			<span class="n">String</span> <span class="n">attrName</span> <span class="o">=</span> <span class="n">getServletContextAttributeName</span><span class="o">();</span>
+			<span class="n">getServletContext</span><span class="o">().</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">,</span> <span class="n">wac</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="na">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Published WebApplicationContext of servlet '"</span> <span class="o">+</span> <span class="n">getServletName</span><span class="o">()</span> <span class="o">+</span>
+						<span class="s">"' as ServletContext attribute with name ["</span> <span class="o">+</span> <span class="n">attrName</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
 
-		return wac;
-	}
-</code></pre>
+		<span class="k">return</span> <span class="n">wac</span><span class="o">;</span>
+	<span class="o">}</span>
+</code></pre></div></div>
 <p>本文地址：
 http://blog.csdn.net/congcong68/article/details/40451233</p>
 

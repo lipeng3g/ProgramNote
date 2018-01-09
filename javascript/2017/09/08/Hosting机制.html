@@ -47,59 +47,59 @@
 				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="javascript-中的-hoisting-机制">JavaScript 中的 Hoisting 机制</h1>
 <blockquote>
   <p>JavaScript 中的 <code class="highlighter-rouge">Hoisting</code> 一般称之为<code class="highlighter-rouge">变量声明提升机制</code>。就是说，<code class="highlighter-rouge">JavaScript 引擎</code>在执行的时候，<code class="highlighter-rouge">会把所有变量的声明都会被提升到当前作用域的最前面</code>，注意，<code class="highlighter-rouge">这里被提升的仅仅是声明</code>。怎么理解呢，看下面例子：</p>
-  <pre><code class="language-Javascript">var myval = "my global var";
-(function() {
-	console.log(myval); // log "my global var"
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myval</span> <span class="o">=</span> <span class="s2">"my global var"</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myval</span><span class="p">);</span> <span class="c1">// log "my global var"</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p>以上代码很显然会输出 <code class="highlighter-rouge">"my global var"</code>，但是如果我们把以上代码按如下方式稍加修改：</p>
-  <pre><code class="language-Javascript">var myval = "my global var";
-(function() {
-	console.log(myval); // log "undefined"
-	var myval = "my local var";
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myval</span> <span class="o">=</span> <span class="s2">"my global var"</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myval</span><span class="p">);</span> <span class="c1">// log "undefined"</span>
+	<span class="kd">var</span> <span class="nx">myval</span> <span class="o">=</span> <span class="s2">"my local var"</span><span class="p">;</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p>执行结果是输出了一个 <code class="highlighter-rouge">undefined</code>，出现这个结果的原因就是变量的声明被提升了，以上代码等同如下：</p>
-  <pre><code class="language-Javascript">var myval = "my global var";
-(function() {
-	var myval;
-	console.log(myval); // log "undefined"
-	myval = "my local var";
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myval</span> <span class="o">=</span> <span class="s2">"my global var"</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">myval</span><span class="p">;</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myval</span><span class="p">);</span> <span class="c1">// log "undefined"</span>
+	<span class="nx">myval</span> <span class="o">=</span> <span class="s2">"my local var"</span><span class="p">;</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p>被提升的仅仅是变量的声明部分，并<code class="highlighter-rouge">没有立即初始化</code>，所以会输出 <code class="highlighter-rouge">undefined</code>。</p>
 </blockquote>
 
 <blockquote>
   <p>然而这种提升机制，不仅仅表现于在普通的变量，同时也表现在函数上。例如下面这段代码并不能被正确执行：</p>
-  <pre><code class="language-Javascript">(function() {
-	fun(); // Uncaught TypeError: undefined is not a function
-	var fun = function() {
-		console.log("Hello!");
-	}
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fun</span><span class="p">();</span> <span class="c1">// Uncaught TypeError: undefined is not a function</span>
+	<span class="kd">var</span> <span class="nx">fun</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Hello!"</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p>因为它等价于：</p>
-  <pre><code class="language-Javascript">(function() {
-	var fun;
-	fun(); // Uncaught TypeError: undefined is not a function
-	fun = function() {
-		console.log("Hello!");
-	}
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">fun</span><span class="p">;</span>
+	<span class="nx">fun</span><span class="p">();</span> <span class="c1">// Uncaught TypeError: undefined is not a function</span>
+	<span class="nx">fun</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Hello!"</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p>因为函数的声明同样被提升而没有立即初始化，所以会出错。</p>
 </blockquote>
 
 <blockquote>
   <p>当然，这种定义函数的方式称之为<code class="highlighter-rouge">“函数表达式”</code>，会有提升机制，如果是如下的这种<code class="highlighter-rouge">“函数声明”</code>方式，则完全没有提升机制方面的问题：</p>
-  <pre><code class="language-Javascript">(function() {
-	fun();
-	function fun() {
-		console.log("Hello!");  // log "Hello!"
-	}
-})();
-</code></pre>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fun</span><span class="p">();</span>
+	<span class="kd">function</span> <span class="nx">fun</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Hello!"</span><span class="p">);</span>  <span class="c1">// log "Hello!"</span>
+	<span class="p">}</span>
+<span class="p">})();</span>
+</code></pre></div>  </div>
   <p><strong>这也是函数声明与函数表达式的主要区别。</strong></p>
 </blockquote>
 </div>

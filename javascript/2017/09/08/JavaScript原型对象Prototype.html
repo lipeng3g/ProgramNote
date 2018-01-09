@@ -65,7 +65,7 @@
 <h2 id="11-什么是prototype">1.1. 什么是Prototype？</h2>
 <p><code class="highlighter-rouge">原型对象 prototype</code>最初是一个空对象，可以添加成员 - 就​​像其他对象一样。</p>
 
-<pre><code class="language-JavaScript">var myObject = function( name ) {
+<pre><code class="language-javaScript">var myObject = function( name ) {
 	this.name = name;
 	return this;
 };
@@ -78,7 +78,7 @@ myObject.prototype.getName = function() {
 </code></pre>
 
 <p>上面的代码创建了一个函数，然后赋值给 <code class="highlighter-rouge">myObject</code>。如果我调用 <code class="highlighter-rouge">myObject()</code>，它将返回 <code class="highlighter-rouge">window</code> 对象。因为它是在<code class="highlighter-rouge">全局作用域</code>内定义的，而且它还<code class="highlighter-rouge">没有被实例化</code>，所以 <code class="highlighter-rouge">this</code> 直接指向全局对象：</p>
-<pre><code class="language-JavaScript">console.log(myObject() === window); // true
+<pre><code class="language-javaScript">console.log(myObject() === window); // true
 </code></pre>
 
 <h2 id="12-原型链">1.2. 原型链</h2>
@@ -86,10 +86,10 @@ myObject.prototype.getName = function() {
 另外<code class="highlighter-rouge"> __proto__</code> 和 对象的 <code class="highlighter-rouge">prototype</code> 属性也不是一回事，它们各自有各自的用途。而且，他们是携手工作的！</p>
 
 <p>怎么理解呢？其实，当我们创建 <code class="highlighter-rouge">myObject</code> 函数时，实际上是创建了一个 <code class="highlighter-rouge">Function</code> 类型的对象：</p>
-<pre><code class="language-JavaScript">console.log(typeof myObject); // function
+<pre><code class="language-javaScript">console.log(typeof myObject); // function
 </code></pre>
 <p>这里要说明一下，<code class="highlighter-rouge">Function 是 JavaScript 中预定义的一个对象</code>，所以它也有自己预定义的属性（如 length 和 arguments）和方法（如 call 和 apply），当然也有 <code class="highlighter-rouge">__proto__</code>，以此实现原型链。也就是说，JavaScript 引擎内可能有类似如下的代码片段：</p>
-<pre><code class="language-JavaScript">Function.prototype = {
+<pre><code class="language-javaScript">Function.prototype = {
 	arguments: null,
 	length: 0,
 	call: function() {
@@ -104,23 +104,23 @@ myObject.prototype.getName = function() {
 <p>事实上，JavaScript 引擎代码不可能这样简单，这里只是描述一下原型链是如何工作的。</p>
 
 <p>我们定义了一个函数 <code class="highlighter-rouge">myObject</code>，它还有一个参数 <code class="highlighter-rouge">name</code>，但是并没有给它任何其它属性，例如 length 或者其它方法，如 call。那么下面这段代码为啥能正常执行呢？</p>
-<pre><code class="language-JavaScript">console.log(myObject.length); // 结果：1，是参数的个数
+<pre><code class="language-javaScript">console.log(myObject.length); // 结果：1，是参数的个数
 </code></pre>
 <p>这是因为我们定义 <code class="highlighter-rouge">myObject</code> 时，同时也给它定义了一个 <code class="highlighter-rouge">__proto__</code> 属性，并赋值为 Function.prototype（参考前面的代码片段），所以我们能够像访问其它属性一样访问 myObject.length，即使我们并没有定义这个属性，因为它会顺着<code class="highlighter-rouge">__proto__</code> 原型链往上去找 length，最终在 Function 里面找到了。</p>
 
 <p>那为什么找到的 <code class="highlighter-rouge">length</code> 属性的值是 <code class="highlighter-rouge">1</code>，而不是 <code class="highlighter-rouge">0</code> 呢，是什么时候给它赋值的呢？由于 myObject 是 Function 的一个实例：</p>
-<pre><code class="language-JavaScript">console.log(myObject instanceof Function); // true
+<pre><code class="language-javaScript">console.log(myObject instanceof Function); // true
 console.log(myObject === Function); // false
 </code></pre>
 <p>当实例化一个对象的时候，对象的 <code class="highlighter-rouge">__proto__</code> 属性会被赋值为其构造者的原型对象，在本示例中就是 Function，此时构造器回去计算参数的个数，改变 length 的值。</p>
-<pre><code class="language-JavaScript">console.log(myObject.__proto__ === Function.prototype); // true
+<pre><code class="language-javaScript">console.log(myObject.__proto__ === Function.prototype); // true
 </code></pre>
 <p>而当我们用 <code class="highlighter-rouge">new</code> 关键字创建一个新的实例时，新对象的 <code class="highlighter-rouge">__proto__</code> 将会被赋值为 <code class="highlighter-rouge">myObject.prototype</code>，因为现在的构造函数为 <code class="highlighter-rouge">myObject</code>，而非 <code class="highlighter-rouge">Function</code>。</p>
-<pre><code class="language-JavaScript">var myInstance = new myObject('foo');
+<pre><code class="language-javaScript">var myInstance = new myObject('foo');
 console.log(myInstance.__proto__ === myObject.prototype); // true
 </code></pre>
 <p>新对象除了能访问 <code class="highlighter-rouge">Function.prototype</code> 中继承下来的 <code class="highlighter-rouge">call</code> 和 <code class="highlighter-rouge">apply</code> 外，还能访问从 <code class="highlighter-rouge">myObject</code> 中继承下来的 <code class="highlighter-rouge">getName</code> 方法：</p>
-<pre><code class="language-JavaScript">console.log(myInstance.getName()); // foo
+<pre><code class="language-javaScript">console.log(myInstance.getName()); // foo
  
 var mySecondInstance = new myObject('bar');
  
@@ -133,7 +133,7 @@ console.log(myInstance.getName()); // foo
 <p>比方说，我们正在开发一个<code class="highlighter-rouge">canvas</code>游戏，同时在屏幕上需要几个（可能数百个）对象。每个对象都需要自己的属性，如<code class="highlighter-rouge">x</code>和<code class="highlighter-rouge">y</code>坐标，<code class="highlighter-rouge">宽度</code>，<code class="highlighter-rouge">高度</code>等等。</p>
 
 <p><strong>我们可能需要这么做</strong></p>
-<pre><code class="language-JavaScript">var GameObject1 = {
+<pre><code class="language-javaScript">var GameObject1 = {
     x: Math.floor((Math.random() * myCanvasWidth) + 1),
     y: Math.floor((Math.random() * myCanvasHeight) + 1),
     width: 10,
@@ -160,7 +160,7 @@ var GameObject2 = {
 <h2 id="14-如何使用prototype">1.4. 如何使用Prototype</h2>
 <p>为了使应用程序运行得更快（并遵循最佳实践），我们可以（重新）定义<code class="highlighter-rouge">GameObject</code>的<code class="highlighter-rouge">Prototype</code>原型属性; <code class="highlighter-rouge">GameObject</code>的每个实例都将引用<code class="highlighter-rouge">GameObject.prototype</code>中的方法，就像它们是自己的方法一样。</p>
 
-<pre><code class="language-JavaScript">// define the GameObject constructor function
+<pre><code class="language-javaScript">// define the GameObject constructor function
 var GameObject = function(width, height) {
     this.x = Math.floor((Math.random() * myCanvasWidth) + 1);
     this.y = Math.floor((Math.random() * myCanvasHeight) + 1);
@@ -181,7 +181,7 @@ GameObject.prototype = {
 };
 </code></pre>
 <p>然后我们可以把<code class="highlighter-rouge">GameObject</code>实例化100次</p>
-<pre><code class="language-JavaScript">var x = 100,
+<pre><code class="language-javaScript">var x = 100,
 arrayOfGameObjects = [];
  
 do {
@@ -190,7 +190,7 @@ do {
 </code></pre>
 <p>现在我们有一个100个<code class="highlighter-rouge">GameObjects</code>的数组，它们都共享了<code class="highlighter-rouge">draw</code>方法的相同Prototype和定义，它大大地节省了应用程序中的内存。
 当我们调用<code class="highlighter-rouge">draw</code>方法的时候，它将会指向一个相同的<code class="highlighter-rouge">Function</code></p>
-<pre><code class="language-JavaScript">var GameLoop = function() {
+<pre><code class="language-javaScript">var GameLoop = function() {
     for(gameObject in arrayOfGameObjects) {
         gameObject.draw();
     }
@@ -198,7 +198,7 @@ do {
 </code></pre>
 <h2 id="15-prototype-是一个动态的对象">1.5. Prototype 是一个动态的对象</h2>
 <p>对象的原型是一个动态的对象，这意味着，如果在创建了所有的<code class="highlighter-rouge">GameObject</code>实例之后，我们决定，而不是绘制一个矩形，我们要绘制一个圆，我们可以相应地更新我们的<code class="highlighter-rouge">GameObject.prototype.draw</code>方法。</p>
-<pre><code class="language-JavaScript">GameObject.prototype.draw = function() {
+<pre><code class="language-javaScript">GameObject.prototype.draw = function() {
     myCanvasContext.arc(this.x, this.y, this.width, 0, Math.PI*2, true);
 }
 </code></pre>
@@ -209,15 +209,15 @@ do {
 <p>用过 <code class="highlighter-rouge">jQuery</code> 或者 <code class="highlighter-rouge">Prototype</code> 库的朋友可能知道，这些库中通常都会有 trim 这个方法。</p>
 
 <p><strong>示例</strong></p>
-<pre><code class="language-JavaScript">String.prototype.trim = function() {
+<pre><code class="language-javaScript">String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g, '');
 };
 </code></pre>
 <p><strong>trim 用法</strong></p>
-<pre><code class="language-JavaScript">' foo bar   '.trim(); // 'foo bar'
+<pre><code class="language-javaScript">' foo bar   '.trim(); // 'foo bar'
 </code></pre>
 <p>但是这样做又有一个缺点，因为比较新版本的浏览器中的 <code class="highlighter-rouge">JavaScript</code> 引擎在 <code class="highlighter-rouge">String</code> 对象中本身就提供了 <code class="highlighter-rouge">trim</code> 方法， 那么我们自己定义的 trim 就会覆写它自带的 <code class="highlighter-rouge">trim</code>。其实，我们在定义 <code class="highlighter-rouge">trim</code> 方法之前，可以做个简单的检测，看是否需要自己添加这个方法：</p>
-<pre><code class="language-JavaScript">if(!String.prototype.trim) {
+<pre><code class="language-javaScript">if(!String.prototype.trim) {
 	String.prototype.trim = function() {
 		return this.replace(/^\s+|\s+$/g, '');
 	};

@@ -83,62 +83,62 @@
 <h2 id="22-事务的创建">2.2. 事务的创建</h2>
 <p>MyBatis事务的创建是交给TransactionFactory 事务工厂来创建的，如果我们将<transactionManager>的type 配置为"JDBC",那么，在MyBatis初始化解析<environment>节点时，会根据type="JDBC"创建一个JdbcTransactionFactory工厂</environment></transactionManager></p>
 
-<pre><code class="language-Java">  public Configuration() {
-    typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
-    typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="nf">Configuration</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JDBC"</span><span class="o">,</span> <span class="n">JdbcTransactionFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"MANAGED"</span><span class="o">,</span> <span class="n">ManagedTransactionFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-    typeAliasRegistry.registerAlias("JNDI", JndiDataSourceFactory.class);
-    typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
-    typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
-    ...
-  }
-</code></pre>
-<pre><code class="language-Java">  //XMLConfigBuilder 
-  private void environmentsElement(XNode context) throws Exception {
-    if (context != null) {
-      if (environment == null) {
-        environment = context.getStringAttribute("default");//获取environments的default属性值
-      }
-      for (XNode child : context.getChildren()) {
-        String id = child.getStringAttribute("id");//获取environment的id值
-        if (isSpecifiedEnvironment(id)) {//判断上面获取的这两个值是否一致
-          TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));//根据transactionManager决定创建什么类型的TransactionFactory
-          DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));//创建DataSource
-          DataSource dataSource = dsFactory.getDataSource();
-          Environment.Builder environmentBuilder = new Environment.Builder(id)
-              .transactionFactory(txFactory)
-              .dataSource(dataSource);//使用了Environment内置的构造器Builder，传递id 事务工厂TransactionFactory和数据源DataSource  
-          configuration.setEnvironment(environmentBuilder.build());
-        }
-      }
-    }
-  }
+    <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"JNDI"</span><span class="o">,</span> <span class="n">JndiDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"POOLED"</span><span class="o">,</span> <span class="n">PooledDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">typeAliasRegistry</span><span class="o">.</span><span class="na">registerAlias</span><span class="o">(</span><span class="s">"UNPOOLED"</span><span class="o">,</span> <span class="n">UnpooledDataSourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">//XMLConfigBuilder </span>
+  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">environmentsElement</span><span class="o">(</span><span class="n">XNode</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">environment</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">environment</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"default"</span><span class="o">);</span><span class="c1">//获取environments的default属性值</span>
+      <span class="o">}</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">XNode</span> <span class="n">child</span> <span class="o">:</span> <span class="n">context</span><span class="o">.</span><span class="na">getChildren</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"id"</span><span class="o">);</span><span class="c1">//获取environment的id值</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">isSpecifiedEnvironment</span><span class="o">(</span><span class="n">id</span><span class="o">))</span> <span class="o">{</span><span class="c1">//判断上面获取的这两个值是否一致</span>
+          <span class="n">TransactionFactory</span> <span class="n">txFactory</span> <span class="o">=</span> <span class="n">transactionManagerElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"transactionManager"</span><span class="o">));</span><span class="c1">//根据transactionManager决定创建什么类型的TransactionFactory</span>
+          <span class="n">DataSourceFactory</span> <span class="n">dsFactory</span> <span class="o">=</span> <span class="n">dataSourceElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"dataSource"</span><span class="o">));</span><span class="c1">//创建DataSource</span>
+          <span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="n">dsFactory</span><span class="o">.</span><span class="na">getDataSource</span><span class="o">();</span>
+          <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span> <span class="n">environmentBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+              <span class="o">.</span><span class="na">transactionFactory</span><span class="o">(</span><span class="n">txFactory</span><span class="o">)</span>
+              <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span><span class="c1">//使用了Environment内置的构造器Builder，传递id 事务工厂TransactionFactory和数据源DataSource  </span>
+          <span class="n">configuration</span><span class="o">.</span><span class="na">setEnvironment</span><span class="o">(</span><span class="n">environmentBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">());</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-    private boolean isSpecifiedEnvironment(String id) {
-    if (environment == null) {
-      throw new BuilderException("No environment specified.");
-    } else if (id == null) {
-      throw new BuilderException("Environment requires an id attribute.");
-    } else if (environment.equals(id)) {
-      return true;
-    }
-    return false;
-  }
-</code></pre>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isSpecifiedEnvironment</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">environment</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"No environment specified."</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"Environment requires an id attribute."</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">id</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">  //解析&lt;transactionManager&gt;节点，创建对应的TransactionFactory
-  private TransactionFactory transactionManagerElement(XNode context) throws Exception {
-    if (context != null) {
-      String type = context.getStringAttribute("type");
-      Properties props = context.getChildrenAsProperties();
-      TransactionFactory factory = (TransactionFactory) resolveClass(type).newInstance();//上面Configuration中设置了typeAliasRegistry.registerAlias
-      factory.setProperties(props);
-      return factory;
-    }
-    throw new BuilderException("Environment declaration requires a TransactionFactory.");
-  }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">//解析&lt;transactionManager&gt;节点，创建对应的TransactionFactory</span>
+  <span class="kd">private</span> <span class="n">TransactionFactory</span> <span class="nf">transactionManagerElement</span><span class="o">(</span><span class="n">XNode</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"type"</span><span class="o">);</span>
+      <span class="n">Properties</span> <span class="n">props</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getChildrenAsProperties</span><span class="o">();</span>
+      <span class="n">TransactionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="o">(</span><span class="n">TransactionFactory</span><span class="o">)</span> <span class="n">resolveClass</span><span class="o">(</span><span class="n">type</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span><span class="c1">//上面Configuration中设置了typeAliasRegistry.registerAlias</span>
+      <span class="n">factory</span><span class="o">.</span><span class="na">setProperties</span><span class="o">(</span><span class="n">props</span><span class="o">);</span>
+      <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"Environment declaration requires a TransactionFactory."</span><span class="o">);</span>
+  <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <h2 id="23-transactionfactory">2.3. TransactionFactory</h2>
 
@@ -149,42 +149,42 @@
 <h2 id="24-transaction的创建">2.4. Transaction的创建</h2>
 <p>通过事务工厂TransactionFactory很容易获取到Transaction对象实例。我们以JdbcTransaction为例，看一下JdbcTransactionFactory是怎样生成JdbcTransaction的，代码如下：</p>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Creates {@link JdbcTransaction} instances.
  *
  * @author Clinton Begin
  *
  * @see JdbcTransaction
- */
-public class JdbcTransactionFactory implements TransactionFactory {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JdbcTransactionFactory</span> <span class="kd">implements</span> <span class="n">TransactionFactory</span> <span class="o">{</span>
 
-  @Override
-  public void setProperties(Properties props) {
-  }
-    /** 
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setProperties</span><span class="o">(</span><span class="n">Properties</span> <span class="n">props</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">}</span>
+    <span class="cm">/** 
     * 根据给定的数据库连接Connection创建Transaction 
     * @param conn Existing database connection 
     * @return 
-    */
-  @Override
-  public Transaction newTransaction(Connection conn) {
-    return new JdbcTransaction(conn);
-  }
+    */</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Transaction</span> <span class="nf">newTransaction</span><span class="o">(</span><span class="n">Connection</span> <span class="n">conn</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">JdbcTransaction</span><span class="o">(</span><span class="n">conn</span><span class="o">);</span>
+  <span class="o">}</span>
 
-    /** 
+    <span class="cm">/** 
      * 根据DataSource、隔离级别和是否自动提交创建Transacion 
      * 
      * @param ds 
      * @param level Desired isolation level 
      * @param autoCommit Desired autocommit 
      * @return 
-     */
-  @Override
-  public Transaction newTransaction(DataSource ds, TransactionIsolationLevel level, boolean autoCommit) {
-    return new JdbcTransaction(ds, level, autoCommit);
-  }
-}
-</code></pre>
+     */</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Transaction</span> <span class="nf">newTransaction</span><span class="o">(</span><span class="n">DataSource</span> <span class="n">ds</span><span class="o">,</span> <span class="n">TransactionIsolationLevel</span> <span class="n">level</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">autoCommit</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">JdbcTransaction</span><span class="o">(</span><span class="n">ds</span><span class="o">,</span> <span class="n">level</span><span class="o">,</span> <span class="n">autoCommit</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 <p>如上说是，JdbcTransactionFactory会创建JDBC类型的Transaction，即JdbcTransaction。类似地，ManagedTransactionFactory也会创建ManagedTransaction。</p>
 
 <h2 id="25-jdbctransaction">2.5. JdbcTransaction</h2>
@@ -192,8 +192,8 @@ public class JdbcTransactionFactory implements TransactionFactory {
 
 <p>如果aotocommit设置为on，自动忽略commit和rollback。</p>
 
-<pre><code class="language-Java">
-/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/**
  * {@link Transaction} 它直接使用JDBC提交和回滚工具。
  * 它依赖从数据源检索到的连接来管理事务的范围。
  * 延迟连接检索到get connection()被调用。
@@ -202,129 +202,129 @@ public class JdbcTransactionFactory implements TransactionFactory {
  * @author Clinton Begin
  *
  * @see JdbcTransactionFactory
- */
-public class JdbcTransaction implements Transaction {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JdbcTransaction</span> <span class="kd">implements</span> <span class="n">Transaction</span> <span class="o">{</span>
 
-  private static final Log log = LogFactory.getLog(JdbcTransaction.class);
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Log</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">JdbcTransaction</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-  protected Connection connection;
-  protected DataSource dataSource;
-  protected TransactionIsolationLevel level;
-  // MEMO: We are aware of the typo. See #941
-  protected boolean autoCommmit;
+  <span class="kd">protected</span> <span class="n">Connection</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="kd">protected</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>
+  <span class="kd">protected</span> <span class="n">TransactionIsolationLevel</span> <span class="n">level</span><span class="o">;</span>
+  <span class="c1">// MEMO: We are aware of the typo. See #941</span>
+  <span class="kd">protected</span> <span class="kt">boolean</span> <span class="n">autoCommmit</span><span class="o">;</span>
 
-  public JdbcTransaction(DataSource ds, TransactionIsolationLevel desiredLevel, boolean desiredAutoCommit) {
-    dataSource = ds;
-    level = desiredLevel;
-    autoCommmit = desiredAutoCommit;
-  }
+  <span class="kd">public</span> <span class="nf">JdbcTransaction</span><span class="o">(</span><span class="n">DataSource</span> <span class="n">ds</span><span class="o">,</span> <span class="n">TransactionIsolationLevel</span> <span class="n">desiredLevel</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">desiredAutoCommit</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">dataSource</span> <span class="o">=</span> <span class="n">ds</span><span class="o">;</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">desiredLevel</span><span class="o">;</span>
+    <span class="n">autoCommmit</span> <span class="o">=</span> <span class="n">desiredAutoCommit</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public JdbcTransaction(Connection connection) {
-    this.connection = connection;
-  }
+  <span class="kd">public</span> <span class="nf">JdbcTransaction</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">=</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public Connection getConnection() throws SQLException {
-    if (connection == null) {
-      openConnection();
-    }
-    return connection;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connection</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">openConnection</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public void commit() throws SQLException {
-    if (connection != null &amp;&amp; !connection.getAutoCommit()) {
-      if (log.isDebugEnabled()) {
-        log.debug("Committing JDBC Connection [" + connection + "]");
-      }
-      connection.commit();
-    }
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">commit</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connection</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">connection</span><span class="o">.</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Committing JDBC Connection ["</span> <span class="o">+</span> <span class="n">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">connection</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  @Override
-  public void rollback() throws SQLException {
-    if (connection != null &amp;&amp; !connection.getAutoCommit()) {
-      if (log.isDebugEnabled()) {
-        log.debug("Rolling back JDBC Connection [" + connection + "]");
-      }
-      connection.rollback();
-    }
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rollback</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connection</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">connection</span><span class="o">.</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Rolling back JDBC Connection ["</span> <span class="o">+</span> <span class="n">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">connection</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  @Override
-  public void close() throws SQLException {
-    if (connection != null) {
-      resetAutoCommit();
-      if (log.isDebugEnabled()) {
-        log.debug("Closing JDBC Connection [" + connection + "]");
-      }
-      connection.close();
-    }
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connection</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">resetAutoCommit</span><span class="o">();</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Closing JDBC Connection ["</span> <span class="o">+</span> <span class="n">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">connection</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  protected void setDesiredAutoCommit(boolean desiredAutoCommit) {
-    try {
-      if (connection.getAutoCommit() != desiredAutoCommit) {
-        if (log.isDebugEnabled()) {
-          log.debug("Setting autocommit to " + desiredAutoCommit + " on JDBC Connection [" + connection + "]");
-        }
-        connection.setAutoCommit(desiredAutoCommit);
-      }
-    } catch (SQLException e) {
-      // Only a very poorly implemented driver would fail here,
-      // and there's not much we can do about that.
-      throw new TransactionException("Error configuring AutoCommit.  "
-          + "Your driver may not support getAutoCommit() or setAutoCommit(). "
-          + "Requested setting: " + desiredAutoCommit + ".  Cause: " + e, e);
-    }
-  }
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">setDesiredAutoCommit</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">desiredAutoCommit</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">connection</span><span class="o">.</span><span class="na">getAutoCommit</span><span class="o">()</span> <span class="o">!=</span> <span class="n">desiredAutoCommit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+          <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Setting autocommit to "</span> <span class="o">+</span> <span class="n">desiredAutoCommit</span> <span class="o">+</span> <span class="s">" on JDBC Connection ["</span> <span class="o">+</span> <span class="n">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">connection</span><span class="o">.</span><span class="na">setAutoCommit</span><span class="o">(</span><span class="n">desiredAutoCommit</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// Only a very poorly implemented driver would fail here,</span>
+      <span class="c1">// and there's not much we can do about that.</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">TransactionException</span><span class="o">(</span><span class="s">"Error configuring AutoCommit.  "</span>
+          <span class="o">+</span> <span class="s">"Your driver may not support getAutoCommit() or setAutoCommit(). "</span>
+          <span class="o">+</span> <span class="s">"Requested setting: "</span> <span class="o">+</span> <span class="n">desiredAutoCommit</span> <span class="o">+</span> <span class="s">".  Cause: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  protected void resetAutoCommit() {
-    try {
-      if (!connection.getAutoCommit()) {
-        // MyBatis does not call commit/rollback on a connection if just selects were performed.
-        // Some databases start transactions with select statements
-        // and they mandate a commit/rollback before closing the connection.
-        // A workaround is setting the autocommit to true before closing the connection.
-        // Sybase throws an exception here.
-        if (log.isDebugEnabled()) {
-          log.debug("Resetting autocommit to true on JDBC Connection [" + connection + "]");
-        }
-        connection.setAutoCommit(true);
-      }
-    } catch (SQLException e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Error resetting autocommit to true "
-          + "before closing the connection.  Cause: " + e);
-      }
-    }
-  }
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">resetAutoCommit</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(!</span><span class="n">connection</span><span class="o">.</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span>
+        <span class="c1">// MyBatis does not call commit/rollback on a connection if just selects were performed.</span>
+        <span class="c1">// Some databases start transactions with select statements</span>
+        <span class="c1">// and they mandate a commit/rollback before closing the connection.</span>
+        <span class="c1">// A workaround is setting the autocommit to true before closing the connection.</span>
+        <span class="c1">// Sybase throws an exception here.</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+          <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Resetting autocommit to true on JDBC Connection ["</span> <span class="o">+</span> <span class="n">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">connection</span><span class="o">.</span><span class="na">setAutoCommit</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Error resetting autocommit to true "</span>
+          <span class="o">+</span> <span class="s">"before closing the connection.  Cause: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  protected void openConnection() throws SQLException {
-    if (log.isDebugEnabled()) {
-      log.debug("Opening JDBC Connection");
-    }
-    connection = dataSource.getConnection();
-    if (level != null) {
-      connection.setTransactionIsolation(level.getLevel());
-    }
-    setDesiredAutoCommit(autoCommmit);
-  }
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">openConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Opening JDBC Connection"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">dataSource</span><span class="o">.</span><span class="na">getConnection</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">level</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">connection</span><span class="o">.</span><span class="na">setTransactionIsolation</span><span class="o">(</span><span class="n">level</span><span class="o">.</span><span class="na">getLevel</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="n">setDesiredAutoCommit</span><span class="o">(</span><span class="n">autoCommmit</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public Integer getTimeout() throws SQLException {
-    return null;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getTimeout</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+  <span class="o">}</span>
   
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="26-managedtransaction">2.6. ManagedTransaction</h2>
 
 <p>ManagedTransaction让容器来管理事务Transaction的整个生命周期，意思就是说，使用ManagedTransaction的commit和rollback功能不会对事务有任何的影响，它什么都不会做，它将事务管理的权利移交给了容器来实现。看如下Managed的实现代码大家就会一目了然：</p>
 
-<pre><code class="language-Java">
-/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/**
  * {@link Transaction} 让容器管理事务transaction的整个生命周期 
  * connection的获取延迟到getConnection()方法的调用 
  * 忽略所有的commit和rollback操作 
@@ -334,72 +334,72 @@ public class JdbcTransaction implements Transaction {
  * @author Clinton Begin
  *
  * @see ManagedTransactionFactory
- */
-public class ManagedTransaction implements Transaction {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManagedTransaction</span> <span class="kd">implements</span> <span class="n">Transaction</span> <span class="o">{</span>
 
-  private static final Log log = LogFactory.getLog(ManagedTransaction.class);
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Log</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">ManagedTransaction</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-  private DataSource dataSource;
-  private TransactionIsolationLevel level;
-  private Connection connection;
-  private final boolean closeConnection;
+  <span class="kd">private</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">TransactionIsolationLevel</span> <span class="n">level</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">Connection</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">closeConnection</span><span class="o">;</span>
 
-  public ManagedTransaction(Connection connection, boolean closeConnection) {
-    this.connection = connection;
-    this.closeConnection = closeConnection;
-  }
+  <span class="kd">public</span> <span class="nf">ManagedTransaction</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">closeConnection</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">=</span> <span class="n">connection</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">closeConnection</span> <span class="o">=</span> <span class="n">closeConnection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  public ManagedTransaction(DataSource ds, TransactionIsolationLevel level, boolean closeConnection) {
-    this.dataSource = ds;
-    this.level = level;
-    this.closeConnection = closeConnection;
-  }
+  <span class="kd">public</span> <span class="nf">ManagedTransaction</span><span class="o">(</span><span class="n">DataSource</span> <span class="n">ds</span><span class="o">,</span> <span class="n">TransactionIsolationLevel</span> <span class="n">level</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">closeConnection</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span> <span class="o">=</span> <span class="n">ds</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">level</span> <span class="o">=</span> <span class="n">level</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">closeConnection</span> <span class="o">=</span> <span class="n">closeConnection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public Connection getConnection() throws SQLException {
-    if (this.connection == null) {
-      openConnection();
-    }
-    return this.connection;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">openConnection</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">connection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public void commit() throws SQLException {
-    // Does nothing
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">commit</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="c1">// Does nothing</span>
+  <span class="o">}</span>
 
-  @Override
-  public void rollback() throws SQLException {
-    // Does nothing
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rollback</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="c1">// Does nothing</span>
+  <span class="o">}</span>
 
-  @Override
-  public void close() throws SQLException {
-    if (this.closeConnection &amp;&amp; this.connection != null) {
-      if (log.isDebugEnabled()) {
-        log.debug("Closing JDBC Connection [" + this.connection + "]");
-      }
-      this.connection.close();
-    }
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">closeConnection</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Closing JDBC Connection ["</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">connection</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  protected void openConnection() throws SQLException {
-    if (log.isDebugEnabled()) {
-      log.debug("Opening JDBC Connection");
-    }
-    this.connection = this.dataSource.getConnection();
-    if (this.level != null) {
-      this.connection.setTransactionIsolation(this.level.getLevel());
-    }
-  }
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">openConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Opening JDBC Connection"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span><span class="o">.</span><span class="na">getConnection</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">level</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">connection</span><span class="o">.</span><span class="na">setTransactionIsolation</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">level</span><span class="o">.</span><span class="na">getLevel</span><span class="o">());</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  @Override
-  public Integer getTimeout() throws SQLException {
-    return null;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getTimeout</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+  <span class="o">}</span>
 
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p><strong>注意</strong>如果我们使用MyBatis构建本地程序，即不是WEB程序，若将type设置成”MANAGED”，那么，我们执行的任何update操作，即使我们最后执行了commit操作，数据也不会保留，不会对数据库造成任何影响。因为我们将MyBatis配置成了“MANAGED”，即MyBatis自己不管理事务，而我们又是运行的本地程序，没有事务管理功能，所以对数据库的update操作都是无效的。</p>
 

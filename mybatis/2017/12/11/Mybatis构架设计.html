@@ -315,62 +315,62 @@
 </code></pre></div></div>
 
 <h3 id="313-创建employee实体bean-以及配置mapper配置文件">3.1.3. 创建Employee实体Bean 以及配置Mapper配置文件</h3>
-<pre><code class="language-Java">package com.louis.mybatis.model;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">louis</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">model</span><span class="o">;</span>
 
-import java.math.BigDecimal;
+<span class="kn">import</span> <span class="nn">java.math.BigDecimal</span><span class="o">;</span>
 
-public class Employee {
-    private Integer employeeId;
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">employeeId</span><span class="o">;</span>
 
-    private String firstName;
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">firstName</span><span class="o">;</span>
 
-    private String lastName;
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">lastName</span><span class="o">;</span>
 
-    private String email;
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
 
-    private BigDecimal salary;
+    <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">salary</span><span class="o">;</span>
 
-    public Integer getEmployeeId() {
-        return employeeId;
-    }
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getEmployeeId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">employeeId</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEmployeeId</span><span class="o">(</span><span class="n">Integer</span> <span class="n">employeeId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">employeeId</span> <span class="o">=</span> <span class="n">employeeId</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public String getFirstName() {
-        return firstName;
-    }
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getFirstName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">firstName</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setFirstName</span><span class="o">(</span><span class="n">String</span> <span class="n">firstName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">firstName</span> <span class="o">=</span> <span class="n">firstName</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public String getLastName() {
-        return lastName;
-    }
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLastName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">lastName</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setLastName</span><span class="o">(</span><span class="n">String</span> <span class="n">lastName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lastName</span> <span class="o">=</span> <span class="n">lastName</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public String getEmail() {
-        return email;
-    }
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getEmail</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">email</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public BigDecimal getSalary() {
-        return salary;
-    }
+    <span class="kd">public</span> <span class="n">BigDecimal</span> <span class="nf">getSalary</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">salary</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
-}
-</code></pre>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSalary</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">salary</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">salary</span> <span class="o">=</span> <span class="n">salary</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <pre><code class="language-XML">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" &gt;
@@ -410,91 +410,91 @@ public class Employee {
 </code></pre>
 
 <h3 id="314-演示代码">3.1.4. 演示代码</h3>
-<pre><code class="language-Java">package com.louis.mybatis.test;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">louis</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
 
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.io.Resources</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.session.SqlSession</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.session.SqlSessionFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.session.SqlSessionFactoryBuilder</span><span class="o">;</span>
 
-import com.louis.mybatis.model.Employee;
+<span class="kn">import</span> <span class="nn">com.louis.mybatis.model.Employee</span><span class="o">;</span>
 
-/**
+<span class="cm">/**
  * SqlSession 简单查询演示类
  * @author louluan
- */
-public class SelectDemo {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SelectDemo</span> <span class="o">{</span>
 
-	public static void main(String[] args) throws Exception {
-		/*
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="cm">/*
 		 * 1.加载mybatis的配置文件，初始化mybatis，创建出SqlSessionFactory，是创建SqlSession的工厂
 		 * 这里只是为了演示的需要，SqlSessionFactory临时创建出来，在实际的使用中，SqlSessionFactory只需要创建一次，当作单例来使用
-		 */
-		InputStream inputStream = Resources.getResourceAsStream("mybatisConfig.xml");
-		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-		SqlSessionFactory factory = builder.build(inputStream);
+		 */</span>
+		<span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"mybatisConfig.xml"</span><span class="o">);</span>
+		<span class="n">SqlSessionFactoryBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">();</span>
+		<span class="n">SqlSessionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>
 		
-		//2. 从SqlSession工厂 SqlSessionFactory中创建一个SqlSession，进行数据库操作
-		SqlSession sqlSession = factory.openSession();
+		<span class="c1">//2. 从SqlSession工厂 SqlSessionFactory中创建一个SqlSession，进行数据库操作</span>
+		<span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
 	
-		//3.使用SqlSession查询
-		Map&lt;String,Object&gt; params = new HashMap&lt;String,Object&gt;();
+		<span class="c1">//3.使用SqlSession查询</span>
+		<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;();</span>
 		
-		params.put("min_salary",10000);
-		//a.查询工资低于10000的员工
-		List&lt;Employee&gt; result = sqlSession.selectList("com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary",params);
-		//b.未传最低工资，查所有员工
-		List&lt;Employee&gt; result1 = sqlSession.selectList("com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary");
-		System.out.println("薪资低于10000的员工数："+result.size());
-		//~output :   查询到的数据总数：5  
-		System.out.println("所有员工数: "+result1.size());
-		//~output :  所有员工数: 8
-	}
+		<span class="n">params</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"min_salary"</span><span class="o">,</span><span class="mi">10000</span><span class="o">);</span>
+		<span class="c1">//a.查询工资低于10000的员工</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary"</span><span class="o">,</span><span class="n">params</span><span class="o">);</span>
+		<span class="c1">//b.未传最低工资，查所有员工</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary"</span><span class="o">);</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"薪资低于10000的员工数："</span><span class="o">+</span><span class="n">result</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+		<span class="c1">//~output :   查询到的数据总数：5  </span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"所有员工数: "</span><span class="o">+</span><span class="n">result1</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+		<span class="c1">//~output :  所有员工数: 8</span>
+	<span class="o">}</span>
 
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 <h2 id="32-sqlsession工作工程分析">3.2. SqlSession工作工程分析</h2>
 <h3 id="321-开启一个数据库访问会话创建sqlsession对象">3.2.1. 开启一个数据库访问会话–创建SqlSession对象</h3>
-<pre><code class="language-Java">SqlSession sqlSession = factory.openSession();  
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>  
+</code></pre></div></div>
 
 <p>Mybatis封装了对数据库的访问，把对数据库的会话和事务控制放到了SqlSession对象中。</p>
 
 <p><img src="/ProgramNote/assets/Image/mybatis/20.png" alt="Mybatis设计图" title="设计图" /></p>
 
 <h3 id="322-为sqlsession传递一个配置的sql语句statementid和参数然后返回结果">3.2.2. 为SqlSession传递一个配置的SQL语句StatementId和参数，然后返回结果</h3>
-<pre><code class="language-Java">List&lt;Employee&gt; result = sqlSession.selectList("com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary",params);
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary"</span><span class="o">,</span><span class="n">params</span><span class="o">);</span>
+</code></pre></div></div>
 <p><strong>com.louis.mybatis.dao.EmployeesMapper.selectByMinSalary</strong>是配置在xml中的statementId， params是传递的查询参数。</p>
 
 <p>selectList的默认实现</p>
 
-<pre><code class="language-Java">
-  @Override
-  public &lt;E&gt; List&lt;E&gt; selectList(String statement, Object parameter) {
-    return this.selectList(statement, parameter, RowBounds.DEFAULT);
-  }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">(</span><span class="n">String</span> <span class="n">statement</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="n">statement</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public &lt;E&gt; List&lt;E&gt; selectList(String statement, Object parameter, RowBounds rowBounds) {
-    try {
-      //1、根据Statement Id，在mybatis 配置对象Configuration中查找和配置文件相对应的MappedStatement   
-      MappedStatement ms = configuration.getMappedStatement(statement);
-      //2、将查询任务委托给Mybatis的执行器Execute
-      return executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
-    } catch (Exception e) {
-      throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);
-    } finally {
-      ErrorContext.instance().reset();
-    }
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">(</span><span class="n">String</span> <span class="n">statement</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="c1">//1、根据Statement Id，在mybatis 配置对象Configuration中查找和配置文件相对应的MappedStatement   </span>
+      <span class="n">MappedStatement</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">getMappedStatement</span><span class="o">(</span><span class="n">statement</span><span class="o">);</span>
+      <span class="c1">//2、将查询任务委托给Mybatis的执行器Execute</span>
+      <span class="k">return</span> <span class="n">executor</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">wrapCollection</span><span class="o">(</span><span class="n">parameter</span><span class="o">),</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">Executor</span><span class="o">.</span><span class="na">NO_RESULT_HANDLER</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="n">ExceptionFactory</span><span class="o">.</span><span class="na">wrapException</span><span class="o">(</span><span class="s">"Error querying database.  Cause: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">ErrorContext</span><span class="o">.</span><span class="na">instance</span><span class="o">().</span><span class="na">reset</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>MyBatis在初始化的时候，会将MyBatis的配置信息全部加载到内存中，使用org.apache.ibatis.session.Configuration实例来维护。使用者可以使用sqlSession.getConfiguration()方法来获取。MyBatis的配置文件中配置信息的组织格式和内存中对象的组织格式几乎完全对应的。上述例子中的</p>
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectByMinSalary"</span> <span class="na">resultMap=</span><span class="s">"BaseResultMap"</span> <span class="na">parameterType=</span><span class="s">"java.util.Map"</span> <span class="nt">&gt;</span>
@@ -514,87 +514,87 @@ public class SelectDemo {
 
 <h3 id="323-mybatis执行器executor根据sqlsession传递的参数执行query方法">3.2.3. Mybatis执行器Executor根据SqlSession传递的参数执行query()方法</h3>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
 * BaseExecutor 类部分代码
 *
-*/
-public &lt;E&gt; List&lt;E&gt; query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
-	// 1.根据具体传入的参数，动态地生成需要执行的SQL语句，用BoundSql对象表示  
-    BoundSql boundSql = ms.getBoundSql(parameter);
-    // 2.为当前的查询创建一个缓存Key
-    CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql);
-    return query(ms, parameter, rowBounds, resultHandler, key, boundSql);
- }
+*/</span>
+<span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">query</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+	<span class="c1">// 1.根据具体传入的参数，动态地生成需要执行的SQL语句，用BoundSql对象表示  </span>
+    <span class="n">BoundSql</span> <span class="n">boundSql</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="na">getBoundSql</span><span class="o">(</span><span class="n">parameter</span><span class="o">);</span>
+    <span class="c1">// 2.为当前的查询创建一个缓存Key</span>
+    <span class="n">CacheKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">createCacheKey</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+    <span class="k">return</span> <span class="nf">query</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+ <span class="o">}</span>
 
-  @SuppressWarnings("unchecked")
-  public &lt;E&gt; List&lt;E&gt; query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
-    ErrorContext.instance().resource(ms.getResource()).activity("executing a query").object(ms.getId());
-    if (closed) throw new ExecutorException("Executor was closed.");
-    if (queryStack == 0 &amp;&amp; ms.isFlushCacheRequired()) {
-      clearLocalCache();
-    }
-    List&lt;E&gt; list;
-    try {
-      queryStack++;
-      list = resultHandler == null ? (List&lt;E&gt;) localCache.getObject(key) : null;
-      if (list != null) {
-        handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
-      } else {
-    	// 3.缓存中没有值，直接从数据库中读取数据  
-        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
-      }
-    } finally {
-      queryStack--;
-    }
-    if (queryStack == 0) {
-      for (DeferredLoad deferredLoad : deferredLoads) {
-        deferredLoad.load();
-      }
-      deferredLoads.clear(); // issue #601
-      if (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) {
-        clearLocalCache(); // issue #482
-      }
-    }
-    return list;
-  }
- private &lt;E&gt; List&lt;E&gt; queryFromDatabase(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
-    List&lt;E&gt; list;
-    localCache.putObject(key, EXECUTION_PLACEHOLDER);
-    try {
+  <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">query</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">CacheKey</span> <span class="n">key</span><span class="o">,</span> <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">ErrorContext</span><span class="o">.</span><span class="na">instance</span><span class="o">().</span><span class="na">resource</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getResource</span><span class="o">()).</span><span class="na">activity</span><span class="o">(</span><span class="s">"executing a query"</span><span class="o">).</span><span class="na">object</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">closed</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">ExecutorException</span><span class="o">(</span><span class="s">"Executor was closed."</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">queryStack</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ms</span><span class="o">.</span><span class="na">isFlushCacheRequired</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">clearLocalCache</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">queryStack</span><span class="o">++;</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="n">resultHandler</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;)</span> <span class="n">localCache</span><span class="o">.</span><span class="na">getObject</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">list</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">handleLocallyCachedOutputParameters</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    	<span class="c1">// 3.缓存中没有值，直接从数据库中读取数据  </span>
+        <span class="n">list</span> <span class="o">=</span> <span class="n">queryFromDatabase</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">queryStack</span><span class="o">--;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">queryStack</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">DeferredLoad</span> <span class="n">deferredLoad</span> <span class="o">:</span> <span class="n">deferredLoads</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">deferredLoad</span><span class="o">.</span><span class="na">load</span><span class="o">();</span>
+      <span class="o">}</span>
+      <span class="n">deferredLoads</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span> <span class="c1">// issue #601</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">configuration</span><span class="o">.</span><span class="na">getLocalCacheScope</span><span class="o">()</span> <span class="o">==</span> <span class="n">LocalCacheScope</span><span class="o">.</span><span class="na">STATEMENT</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">clearLocalCache</span><span class="o">();</span> <span class="c1">// issue #482</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="err"> </span><span class="kd">private</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">queryFromDatabase</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">CacheKey</span> <span class="n">key</span><span class="o">,</span> <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">;</span>
+    <span class="n">localCache</span><span class="o">.</span><span class="na">putObject</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">EXECUTION_PLACEHOLDER</span><span class="o">);</span>
+    <span class="k">try</span> <span class="o">{</span>
     	
-      //4. 执行查询，返回List 结果，然后	将查询的结果放入缓存之中
-      list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
-    } finally {
-      localCache.removeObject(key);
-    }
-    localCache.putObject(key, list);
-    if (ms.getStatementType() == StatementType.CALLABLE) {
-      localOutputParameterCache.putObject(key, parameter);
-    }
-    return list;
-  }
-</code></pre>
+      <span class="c1">//4. 执行查询，返回List 结果，然后	将查询的结果放入缓存之中</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="n">doQuery</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">localCache</span><span class="o">.</span><span class="na">removeObject</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">localCache</span><span class="o">.</span><span class="na">putObject</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">list</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getStatementType</span><span class="o">()</span> <span class="o">==</span> <span class="n">StatementType</span><span class="o">.</span><span class="na">CALLABLE</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">localOutputParameterCache</span><span class="o">.</span><span class="na">putObject</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">parameter</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
 *
 *SimpleExecutor类的doQuery()方法实现
 *
-*/
-  public &lt;E&gt; List&lt;E&gt; doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
-    Statement stmt = null;
-    try {
-      Configuration configuration = ms.getConfiguration();
-      //5. 根据既有的参数，创建StatementHandler对象来执行查询操作
-      StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
-      //6. 创建java.Sql.Statement对象，传递给StatementHandler对象
-      stmt = prepareStatement(handler, ms.getStatementLog());
-      //7. 调用StatementHandler.query()方法，返回List结果集
-      return handler.&lt;E&gt;query(stmt, resultHandler);
-    } finally {
-      closeStatement(stmt);
-    }
-  }
-</code></pre>
+*/</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">doQuery</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">Statement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">Configuration</span> <span class="n">configuration</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">();</span>
+      <span class="c1">//5. 根据既有的参数，创建StatementHandler对象来执行查询操作</span>
+      <span class="n">StatementHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">newStatementHandler</span><span class="o">(</span><span class="n">wrapper</span><span class="o">,</span> <span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span>
+      <span class="c1">//6. 创建java.Sql.Statement对象，传递给StatementHandler对象</span>
+      <span class="n">stmt</span> <span class="o">=</span> <span class="n">prepareStatement</span><span class="o">(</span><span class="n">handler</span><span class="o">,</span> <span class="n">ms</span><span class="o">.</span><span class="na">getStatementLog</span><span class="o">());</span>
+      <span class="c1">//7. 调用StatementHandler.query()方法，返回List结果集</span>
+     <span class="err"> </span><span class="k">return</span> <span class="n">handler</span><span class="o">.&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="n">query</span><span class="o">(</span><span class="n">stmt</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">closeStatement</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p>上述的<code class="highlighter-rouge">Executor.query()</code>方法几经转折，最后会创建一个<code class="highlighter-rouge">StatementHandler</code>对象，然后将必要的参数传递给<code class="highlighter-rouge">StatementHandler</code>，使用<code class="highlighter-rouge">StatementHandler</code>来完成对数据库的查询，最终返回List结果集。</p>
 
@@ -608,36 +608,36 @@ public &lt;E&gt; List&lt;E&gt; query(MappedStatement ms, Object parameter, RowBo
 
 <h3 id="324-statementhandler对象负责设置statement对象中的查询参数处理jdbc返回的resultset将resultset加工为list-集合返回">3.2.4. StatementHandler对象负责设置Statement对象中的查询参数、处理JDBC返回的resultSet，将resultSet加工为List 集合返回</h3>
 <p>看一下：prepareStatement() 方法的实现</p>
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
 *
 *SimpleExecutor类的doQuery()方法实现
 *
-*/
-    public &lt;E&gt; List&lt;E&gt; doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException { 
-        Statement stmt = null; 
-        try { 
-            Configuration configuration = ms.getConfiguration(); 
-            StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql); 
-            // 1.准备Statement对象，并设置Statement对象的参数 
-            stmt = prepareStatement(handler, ms.getStatementLog()); 
-            // 2. StatementHandler执行query()方法，返回List结果 
-            return handler.&lt;E&gt;query(stmt, resultHandler); 
-        } 
-        finally 
-        { 
-            closeStatement(stmt); 
-        } 
-    }
+*/</span>
+    <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">doQuery</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span> 
+        <span class="n">Statement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> 
+        <span class="k">try</span> <span class="o">{</span> 
+            <span class="n">Configuration</span> <span class="n">configuration</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">();</span> 
+            <span class="n">StatementHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">newStatementHandler</span><span class="o">(</span><span class="n">wrapper</span><span class="o">,</span> <span class="n">ms</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">);</span> 
+            <span class="c1">// 1.准备Statement对象，并设置Statement对象的参数 </span>
+            <span class="n">stmt</span> <span class="o">=</span> <span class="n">prepareStatement</span><span class="o">(</span><span class="n">handler</span><span class="o">,</span> <span class="n">ms</span><span class="o">.</span><span class="na">getStatementLog</span><span class="o">());</span> 
+            <span class="c1">// 2. StatementHandler执行query()方法，返回List结果 </span>
+            <span class="k">return</span> <span class="n">handler</span><span class="o">.&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="n">query</span><span class="o">(</span><span class="n">stmt</span><span class="o">,</span> <span class="n">resultHandler</span><span class="o">);</span> 
+        <span class="o">}</span> 
+        <span class="k">finally</span> 
+        <span class="o">{</span> 
+            <span class="n">closeStatement</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span> 
+        <span class="o">}</span> 
+    <span class="o">}</span>
 
-  private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
-    Statement stmt;
-    Connection connection = getConnection(statementLog);
-    stmt = handler.prepare(connection);
-    //对创建的Statement对象设置参数，即设置SQL 语句中 ? 设置为指定的参数
-    handler.parameterize(stmt);
-    return stmt;
-  }
-</code></pre>
+  <span class="kd">private</span> <span class="n">Statement</span> <span class="nf">prepareStatement</span><span class="o">(</span><span class="n">StatementHandler</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Log</span> <span class="n">statementLog</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">Statement</span> <span class="n">stmt</span><span class="o">;</span>
+    <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">getConnection</span><span class="o">(</span><span class="n">statementLog</span><span class="o">);</span>
+    <span class="n">stmt</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="na">prepare</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span>
+    <span class="c1">//对创建的Statement对象设置参数，即设置SQL 语句中 ? 设置为指定的参数</span>
+    <span class="n">handler</span><span class="o">.</span><span class="na">parameterize</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">stmt</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p><strong>总结</strong></p>
 <ul>
@@ -648,51 +648,51 @@ StatementHandler通过parameterize(statement)方法对Statement进行设值；</
 
 <h3 id="325-statementhandler-的parameterizestatement-方法的实现">3.2.5. StatementHandler 的parameterize(statement) 方法的实现</h3>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
 *   StatementHandler 类的parameterize(statement) 方法实现 
-*/
-public void parameterize(Statement statement) throws SQLException {
-	//使用ParameterHandler对象来完成对Statement的设值  
-    parameterHandler.setParameters((PreparedStatement) statement);
-  }
-</code></pre>
+*/</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">parameterize</span><span class="o">(</span><span class="n">Statement</span> <span class="n">statement</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+	<span class="c1">//使用ParameterHandler对象来完成对Statement的设值  </span>
+    <span class="n">parameterHandler</span><span class="o">.</span><span class="na">setParameters</span><span class="o">((</span><span class="n">PreparedStatement</span><span class="o">)</span> <span class="n">statement</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">  /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/**
    * 
    *ParameterHandler类的setParameters(PreparedStatement ps) 实现
    * 对某一个Statement进行设置参数
-   */
-  public void setParameters(PreparedStatement ps) throws SQLException {
-    ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
-    List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();
-    if (parameterMappings != null) {
-      for (int i = 0; i &lt; parameterMappings.size(); i++) {
-        ParameterMapping parameterMapping = parameterMappings.get(i);
-        if (parameterMapping.getMode() != ParameterMode.OUT) {
-          Object value;
-          String propertyName = parameterMapping.getProperty();
-          if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
-            value = boundSql.getAdditionalParameter(propertyName);
-          } else if (parameterObject == null) {
-            value = null;
-          } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
-            value = parameterObject;
-          } else {
-            MetaObject metaObject = configuration.newMetaObject(parameterObject);
-            value = metaObject.getValue(propertyName);
-          }
+   */</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setParameters</span><span class="o">(</span><span class="n">PreparedStatement</span> <span class="n">ps</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">ErrorContext</span><span class="o">.</span><span class="na">instance</span><span class="o">().</span><span class="na">activity</span><span class="o">(</span><span class="s">"setting parameters"</span><span class="o">).</span><span class="na">object</span><span class="o">(</span><span class="n">mappedStatement</span><span class="o">.</span><span class="na">getParameterMap</span><span class="o">().</span><span class="na">getId</span><span class="o">());</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ParameterMapping</span><span class="o">&gt;</span> <span class="n">parameterMappings</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getParameterMappings</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">parameterMappings</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">parameterMappings</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="n">ParameterMapping</span> <span class="n">parameterMapping</span> <span class="o">=</span> <span class="n">parameterMappings</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parameterMapping</span><span class="o">.</span><span class="na">getMode</span><span class="o">()</span> <span class="o">!=</span> <span class="n">ParameterMode</span><span class="o">.</span><span class="na">OUT</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">Object</span> <span class="n">value</span><span class="o">;</span>
+          <span class="n">String</span> <span class="n">propertyName</span> <span class="o">=</span> <span class="n">parameterMapping</span><span class="o">.</span><span class="na">getProperty</span><span class="o">();</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">boundSql</span><span class="o">.</span><span class="na">hasAdditionalParameter</span><span class="o">(</span><span class="n">propertyName</span><span class="o">))</span> <span class="o">{</span> <span class="c1">// issue #448 ask first for additional params</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getAdditionalParameter</span><span class="o">(</span><span class="n">propertyName</span><span class="o">);</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">parameterObject</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">typeHandlerRegistry</span><span class="o">.</span><span class="na">hasTypeHandler</span><span class="o">(</span><span class="n">parameterObject</span><span class="o">.</span><span class="na">getClass</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">parameterObject</span><span class="o">;</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">MetaObject</span> <span class="n">metaObject</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">newMetaObject</span><span class="o">(</span><span class="n">parameterObject</span><span class="o">);</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">metaObject</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">propertyName</span><span class="o">);</span>
+          <span class="o">}</span>
           
-          // 每一个Mapping都有一个TypeHandler，根据TypeHandler来对preparedStatement进行设置参数
-          TypeHandler typeHandler = parameterMapping.getTypeHandler();
-          JdbcType jdbcType = parameterMapping.getJdbcType();
-          if (value == null &amp;&amp; jdbcType == null) jdbcType = configuration.getJdbcTypeForNull();
-          // 设置参数
-          typeHandler.setParameter(ps, i + 1, value, jdbcType);
-        }
-      }
-    }
-  }
-</code></pre>
+          <span class="c1">// 每一个Mapping都有一个TypeHandler，根据TypeHandler来对preparedStatement进行设置参数</span>
+          <span class="n">TypeHandler</span> <span class="n">typeHandler</span> <span class="o">=</span> <span class="n">parameterMapping</span><span class="o">.</span><span class="na">getTypeHandler</span><span class="o">();</span>
+          <span class="n">JdbcType</span> <span class="n">jdbcType</span> <span class="o">=</span> <span class="n">parameterMapping</span><span class="o">.</span><span class="na">getJdbcType</span><span class="o">();</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">jdbcType</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="n">jdbcType</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">getJdbcTypeForNull</span><span class="o">();</span>
+          <span class="c1">// 设置参数</span>
+          <span class="n">typeHandler</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="n">ps</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">jdbcType</span><span class="o">);</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p><strong>总结</strong></p>
 <ul>
@@ -701,107 +701,107 @@ public void parameterize(Statement statement) throws SQLException {
 </ul>
 
 <h3 id="326-statementhandler-的list-querystatement-statement-resulthandler-resulthandler方法的实现">3.2.6. StatementHandler 的List<E> query(Statement statement, ResultHandler resultHandler)方法的实现</E></h3>
-<pre><code class="language-Java">  /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/**
    * PreParedStatement类的query方法实现
-   */
-  public &lt;E&gt; List&lt;E&gt; query(Statement statement, ResultHandler resultHandler) throws SQLException {
-	// 1.调用preparedStatemnt。execute()方法，然后将resultSet交给ResultSetHandler处理  
-    PreparedStatement ps = (PreparedStatement) statement;
-    ps.execute();
-    //2. 使用ResultHandler来处理ResultSet
-    return resultSetHandler.&lt;E&gt; handleResultSets(ps);
-  }
+   */</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">query</span><span class="o">(</span><span class="n">Statement</span> <span class="n">statement</span><span class="o">,</span> <span class="n">ResultHandler</span> <span class="n">resultHandler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+	<span class="c1">// 1.调用preparedStatemnt。execute()方法，然后将resultSet交给ResultSetHandler处理  </span>
+    <span class="n">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="o">(</span><span class="n">PreparedStatement</span><span class="o">)</span> <span class="n">statement</span><span class="o">;</span>
+    <span class="n">ps</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+    <span class="c1">//2. 使用ResultHandler来处理ResultSet</span>
+    <span class="k">return</span> <span class="n">resultSetHandler</span><span class="o">.&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">handleResultSets</span><span class="o">(</span><span class="n">ps</span><span class="o">);</span>
+  <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
-<pre><code class="language-Java">/**  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**  
 *ResultSetHandler类的handleResultSets()方法实现
 *
-*/
-public List&lt;Object&gt; handleResultSets(Statement stmt) throws SQLException {
-    final List&lt;Object&gt; multipleResults = new ArrayList&lt;Object&gt;();
+*/</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">handleResultSets</span><span class="o">(</span><span class="n">Statement</span> <span class="n">stmt</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">multipleResults</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span>
 
-    int resultSetCount = 0;
-    ResultSetWrapper rsw = getFirstResultSet(stmt);
+    <span class="kt">int</span> <span class="n">resultSetCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">ResultSetWrapper</span> <span class="n">rsw</span> <span class="o">=</span> <span class="n">getFirstResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
 
-    List&lt;ResultMap&gt; resultMaps = mappedStatement.getResultMaps();
-    int resultMapCount = resultMaps.size();
-    validateResultMapsCount(rsw, resultMapCount);
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ResultMap</span><span class="o">&gt;</span> <span class="n">resultMaps</span> <span class="o">=</span> <span class="n">mappedStatement</span><span class="o">.</span><span class="na">getResultMaps</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">resultMapCount</span> <span class="o">=</span> <span class="n">resultMaps</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="n">validateResultMapsCount</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMapCount</span><span class="o">);</span>
     
-    while (rsw != null &amp;&amp; resultMapCount &gt; resultSetCount) {
-      ResultMap resultMap = resultMaps.get(resultSetCount);
+    <span class="k">while</span> <span class="o">(</span><span class="n">rsw</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">resultMapCount</span> <span class="o">&gt;</span> <span class="n">resultSetCount</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">ResultMap</span> <span class="n">resultMap</span> <span class="o">=</span> <span class="n">resultMaps</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resultSetCount</span><span class="o">);</span>
       
-      //将resultSet
-      handleResultSet(rsw, resultMap, multipleResults, null);
-      rsw = getNextResultSet(stmt);
-      cleanUpAfterHandlingResultSet();
-      resultSetCount++;
-    }
+      <span class="c1">//将resultSet</span>
+      <span class="n">handleResultSet</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMap</span><span class="o">,</span> <span class="n">multipleResults</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+      <span class="n">rsw</span> <span class="o">=</span> <span class="n">getNextResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+      <span class="n">cleanUpAfterHandlingResultSet</span><span class="o">();</span>
+      <span class="n">resultSetCount</span><span class="o">++;</span>
+    <span class="o">}</span>
 
-    String[] resultSets = mappedStatement.getResulSets();
-    if (resultSets != null) {
-      while (rsw != null &amp;&amp; resultSetCount &lt; resultSets.length) {
-        ResultMapping parentMapping = nextResultMaps.get(resultSets[resultSetCount]);
-        if (parentMapping != null) {
-          String nestedResultMapId = parentMapping.getNestedResultMapId();
-          ResultMap resultMap = configuration.getResultMap(nestedResultMapId);
-          handleResultSet(rsw, resultMap, null, parentMapping);
-        }
-        rsw = getNextResultSet(stmt);
-        cleanUpAfterHandlingResultSet();
-        resultSetCount++;
-      }
-    }
+    <span class="n">String</span><span class="o">[]</span> <span class="n">resultSets</span> <span class="o">=</span> <span class="n">mappedStatement</span><span class="o">.</span><span class="na">getResulSets</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">resultSets</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">while</span> <span class="o">(</span><span class="n">rsw</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">resultSetCount</span> <span class="o">&lt;</span> <span class="n">resultSets</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ResultMapping</span> <span class="n">parentMapping</span> <span class="o">=</span> <span class="n">nextResultMaps</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resultSets</span><span class="o">[</span><span class="n">resultSetCount</span><span class="o">]);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parentMapping</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">String</span> <span class="n">nestedResultMapId</span> <span class="o">=</span> <span class="n">parentMapping</span><span class="o">.</span><span class="na">getNestedResultMapId</span><span class="o">();</span>
+          <span class="n">ResultMap</span> <span class="n">resultMap</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">getResultMap</span><span class="o">(</span><span class="n">nestedResultMapId</span><span class="o">);</span>
+          <span class="n">handleResultSet</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parentMapping</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">rsw</span> <span class="o">=</span> <span class="n">getNextResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+        <span class="n">cleanUpAfterHandlingResultSet</span><span class="o">();</span>
+        <span class="n">resultSetCount</span><span class="o">++;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
 
-    return collapseSingleResultList(multipleResults);
-  }
-</code></pre>
+    <span class="k">return</span> <span class="nf">collapseSingleResultList</span><span class="o">(</span><span class="n">multipleResults</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p>StatementHandler 的List<E> query(Statement statement, ResultHandler resultHandler)方法的实现，是调用了ResultSetHandler的handleResultSets(Statement) 方法。ResultSetHandler的handleResultSets(Statement) 方法会将Statement语句执行后生成的resultSet 结果集转换成List<E> 结果集</E></E></p>
 
-<pre><code class="language-Java">  //
-  // DefaultResultSetHandler 类的handleResultSets(Statement stmt)实现 
-  //HANDLE RESULT SETS
-  //
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">//</span>
+  <span class="c1">// DefaultResultSetHandler 类的handleResultSets(Statement stmt)实现 </span>
+  <span class="c1">//HANDLE RESULT SETS</span>
+  <span class="c1">//</span>
 
-  public List&lt;Object&gt; handleResultSets(Statement stmt) throws SQLException {
-    final List&lt;Object&gt; multipleResults = new ArrayList&lt;Object&gt;();
+  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">handleResultSets</span><span class="o">(</span><span class="n">Statement</span> <span class="n">stmt</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">multipleResults</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span>
 
-    int resultSetCount = 0;
-    ResultSetWrapper rsw = getFirstResultSet(stmt);
+    <span class="kt">int</span> <span class="n">resultSetCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">ResultSetWrapper</span> <span class="n">rsw</span> <span class="o">=</span> <span class="n">getFirstResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
 
-    List&lt;ResultMap&gt; resultMaps = mappedStatement.getResultMaps();
-    int resultMapCount = resultMaps.size();
-    validateResultMapsCount(rsw, resultMapCount);
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ResultMap</span><span class="o">&gt;</span> <span class="n">resultMaps</span> <span class="o">=</span> <span class="n">mappedStatement</span><span class="o">.</span><span class="na">getResultMaps</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">resultMapCount</span> <span class="o">=</span> <span class="n">resultMaps</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="n">validateResultMapsCount</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMapCount</span><span class="o">);</span>
     
-    while (rsw != null &amp;&amp; resultMapCount &gt; resultSetCount) {
-      ResultMap resultMap = resultMaps.get(resultSetCount);
+    <span class="k">while</span> <span class="o">(</span><span class="n">rsw</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">resultMapCount</span> <span class="o">&gt;</span> <span class="n">resultSetCount</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">ResultMap</span> <span class="n">resultMap</span> <span class="o">=</span> <span class="n">resultMaps</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resultSetCount</span><span class="o">);</span>
       
-      //将resultSet
-      handleResultSet(rsw, resultMap, multipleResults, null);
-      rsw = getNextResultSet(stmt);
-      cleanUpAfterHandlingResultSet();
-      resultSetCount++;
-    }
+      <span class="c1">//将resultSet</span>
+      <span class="n">handleResultSet</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMap</span><span class="o">,</span> <span class="n">multipleResults</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+      <span class="n">rsw</span> <span class="o">=</span> <span class="n">getNextResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+      <span class="n">cleanUpAfterHandlingResultSet</span><span class="o">();</span>
+      <span class="n">resultSetCount</span><span class="o">++;</span>
+    <span class="o">}</span>
 
-    String[] resultSets = mappedStatement.getResulSets();
-    if (resultSets != null) {
-      while (rsw != null &amp;&amp; resultSetCount &lt; resultSets.length) {
-        ResultMapping parentMapping = nextResultMaps.get(resultSets[resultSetCount]);
-        if (parentMapping != null) {
-          String nestedResultMapId = parentMapping.getNestedResultMapId();
-          ResultMap resultMap = configuration.getResultMap(nestedResultMapId);
-          handleResultSet(rsw, resultMap, null, parentMapping);
-        }
-        rsw = getNextResultSet(stmt);
-        cleanUpAfterHandlingResultSet();
-        resultSetCount++;
-      }
-    }
+    <span class="n">String</span><span class="o">[]</span> <span class="n">resultSets</span> <span class="o">=</span> <span class="n">mappedStatement</span><span class="o">.</span><span class="na">getResulSets</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">resultSets</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">while</span> <span class="o">(</span><span class="n">rsw</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">resultSetCount</span> <span class="o">&lt;</span> <span class="n">resultSets</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ResultMapping</span> <span class="n">parentMapping</span> <span class="o">=</span> <span class="n">nextResultMaps</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resultSets</span><span class="o">[</span><span class="n">resultSetCount</span><span class="o">]);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parentMapping</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">String</span> <span class="n">nestedResultMapId</span> <span class="o">=</span> <span class="n">parentMapping</span><span class="o">.</span><span class="na">getNestedResultMapId</span><span class="o">();</span>
+          <span class="n">ResultMap</span> <span class="n">resultMap</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">getResultMap</span><span class="o">(</span><span class="n">nestedResultMapId</span><span class="o">);</span>
+          <span class="n">handleResultSet</span><span class="o">(</span><span class="n">rsw</span><span class="o">,</span> <span class="n">resultMap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parentMapping</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">rsw</span> <span class="o">=</span> <span class="n">getNextResultSet</span><span class="o">(</span><span class="n">stmt</span><span class="o">);</span>
+        <span class="n">cleanUpAfterHandlingResultSet</span><span class="o">();</span>
+        <span class="n">resultSetCount</span><span class="o">++;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
 
-    return collapseSingleResultList(multipleResults);
-  }
-</code></pre>
+    <span class="k">return</span> <span class="nf">collapseSingleResultList</span><span class="o">(</span><span class="n">multipleResults</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2017-12-11T13:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/05-Mybatis/2017-12-11-Mybatis构架设计.md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />

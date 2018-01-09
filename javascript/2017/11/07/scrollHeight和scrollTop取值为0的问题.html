@@ -102,18 +102,18 @@
 <h1 id="3-总结">3. 总结</h1>
 
 <p>在js中需要取scrollHeight值和scrollTop值时，我们需要使用：</p>
-<pre><code class="language-Javascript">var scrollHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-</code></pre>
-<pre><code class="language-Javascript">var scrollTop=document.body.scrollTop==0?document.documentElement.scrollTop:document.body.scrollTop;
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">scrollHeight</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span><span class="o">==</span><span class="mi">0</span><span class="p">?</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollHeight</span><span class="p">:</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollHeight</span><span class="p">;</span>
+</code></pre></div></div>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">scrollTop</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span><span class="o">==</span><span class="mi">0</span><span class="p">?</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">:</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+</code></pre></div></div>
 <p>关于scrollWidth(下面两种都可以)</p>
-<pre><code class="language-Javascript">var oWidth=document.body.scrollWidth;
-var oWidth=document.documentElement.scrollWidth;
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">oWidth</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollWidth</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">oWidth</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollWidth</span><span class="p">;</span>
+</code></pre></div></div>
 
 <p>取clientXxx值只能</p>
-<pre><code class="language-Javascript">var wWidth=document.documentElement.clientXxx;
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">wWidth</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">clientXxx</span><span class="p">;</span>
+</code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2017-11-07T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/02-Javascript/2017-11-07-scrollHeight和scrollTop取值为0的问题.md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />

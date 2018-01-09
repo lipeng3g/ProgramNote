@@ -53,91 +53,93 @@ HashTable依然是一个散列表，和HashMap（JDK1.7，在1.8里面HashMap中
 
 <h1 id="2-构造函数">2. 构造函数</h1>
 <p>HashTable一共有四个构造函数，先从简单的看起</p>
-<pre><code class="language-Java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * 创建一个新的、空的HashTable，初始化的大小是 11， 负载因子是 0.75.
-     */
-    public Hashtable() {
-        this(11, 0.75f);
-    }
+     */</span>
+    <span class="kd">public</span> <span class="nf">Hashtable</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="mi">11</span><span class="o">,</span> <span class="mf">0.75f</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    /**
+    <span class="cm">/**
      * 创建一个新的、空的HashTable，初始化大小是指定的初始化容量，负载因子是 0.75.
      *
      * @param     initialCapacity   the initial capacity of the hashtable.
      * @exception IllegalArgumentException if the initial capacity is less
      *              than zero.
-     */
-    public Hashtable(int initialCapacity) {
-        this(initialCapacity, 0.75f);
-    }
+     */</span>
+    <span class="kd">public</span> <span class="nf">Hashtable</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="mf">0.75f</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    /**
+    <span class="cm">/**
      * 创建一个新的、空的HashTable，初始化容量和负载因子均有参数指定
      *
      * @param      initialCapacity   the initial capacity of the hashtable.
      * @param      loadFactor        the load factor of the hashtable.
      * @exception  IllegalArgumentException  if the initial capacity is less
      *             than zero, or if the load factor is nonpositive.
-     */
-    public Hashtable(int initialCapacity, float loadFactor) {
-        //初始化容量小于0，抛出异常
-        if (initialCapacity &lt; 0)
-            throw new IllegalArgumentException("Illegal Capacity: "+
-                                               initialCapacity);
-        //负载因子必须为正值，否则抛出异常
-        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
-            throw new IllegalArgumentException("Illegal Load: "+loadFactor);
-        //初始化容量最小为 1
-        if (initialCapacity==0)
-            initialCapacity = 1;
-        this.loadFactor = loadFactor;
-        //初始化 Table，指定大小（请注意，这里初始化了，HashMap是在put或者扩容中初始化的，和这里是不同的）
-        table = new Entry&lt;?,?&gt;[initialCapacity];
-        //根据初始化大小，计算扩容阈值
-        threshold = (int)Math.min(initialCapacity * loadFactor, MAX_ARRAY_SIZE + 1);
-    }
+     */</span>
+    <span class="kd">public</span> <span class="nf">Hashtable</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//初始化容量小于0，抛出异常</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">initialCapacity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Illegal Capacity: "</span><span class="o">+</span>
+                                               <span class="n">initialCapacity</span><span class="o">);</span>
+        <span class="c1">//负载因子必须为正值，否则抛出异常</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">loadFactor</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">Float</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">loadFactor</span><span class="o">))</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Illegal Load: "</span><span class="o">+</span><span class="n">loadFactor</span><span class="o">);</span>
+        <span class="c1">//初始化容量最小为 1</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">initialCapacity</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
+            <span class="n">initialCapacity</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">loadFactor</span> <span class="o">=</span> <span class="n">loadFactor</span><span class="o">;</span>
+        <span class="c1">//初始化 Table，指定大小（请注意，这里初始化了，HashMap是在put或者扩容中初始化的，和这里是不同的）</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">&lt;?,?&gt;[</span><span class="n">initialCapacity</span><span class="o">];</span>
+        <span class="c1">//根据初始化大小，计算扩容阈值</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">initialCapacity</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="n">MAX_ARRAY_SIZE</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 <p>关于容量的最大值，这里有些不同，请看下面的说明。</p>
-<pre><code class="language-Java">
-    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * 要分配的最大数组大小。 一些虚拟机在数组中保留一些标题字。 尝试分配较大的数组可能会导致OutOfMemoryError：请求的数组大小超过VM限制
-     */
-    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-</code></pre>
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">MAX_ARRAY_SIZE</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">-</span> <span class="mi">8</span><span class="o">;</span>
+</code></pre></div></div>
 <p>关于 Table中的元素 Entry，和HashMap中基本完全一致，这里不做详细记录。</p>
 
 <p>最后一个构造函数是使用集合数据进行初始化操作</p>
 
-<pre><code class="language-Java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 使用指定的map来初始化。
      * 初始化容量是通过 Math.max(2*t.size(), 11) 来计算的。
      *
      * @param t the map whose mappings are to be placed in this map.
      * @throws NullPointerException 注意，如果 t 为空，会抛出异常
      * @since   1.2
-     */
-    public Hashtable(Map&lt;? extends K, ? extends V&gt; t) {
-        this(Math.max(2*t.size(), 11), 0.75f);
-        putAll(t);
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="nf">Hashtable</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">K</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="n">V</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">2</span><span class="o">*</span><span class="n">t</span><span class="o">.</span><span class="na">size</span><span class="o">(),</span> <span class="mi">11</span><span class="o">),</span> <span class="mf">0.75f</span><span class="o">);</span>
+        <span class="n">putAll</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="3-新增元素">3. 新增元素</h1>
 
 <p>我们接着上面的构造方法继续往下看</p>
-<pre><code class="language-Java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * 将指定映射的所有映射复制到这个散列表。这些映射将替换此hashtable对当前指定映射中任何键的任何映射。
      *
      * @param t mappings to be stored in this map
      * @throws NullPointerException 注意，如果 t 为空，会抛出异常
      * @since 1.2
-     */
-    public synchronized void putAll(Map&lt;? extends K, ? extends V&gt; t) {
-        for (Map.Entry&lt;? extends K, ? extends V&gt; e : t.entrySet())
-            put(e.getKey(), e.getValue());
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">putAll</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">K</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="n">V</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">K</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">t</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span>
+            <span class="n">put</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">e</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>然后调用 put 方法，put方法在插入时首先判断value是否为空，不为空的时候执行插入操作，如果以前存在该key，执行更新操作，并且返回旧值</p>
 
@@ -184,116 +186,120 @@ HashTable依然是一个散列表，和HashMap（JDK1.7，在1.8里面HashMap中
 
 <p>如果之前不存在，那么执行新增操作</p>
 
-<pre><code class="language-Java">
-    private void addEntry(int hash, K key, V value, int index) {
-        modCount++;
-        //如果达到扩容限制，进行扩容操作
-        Entry&lt;?,?&gt; tab[] = table;
-        if (count &gt;= threshold) {
-            //扩容（稍后讲解具体过程）
-            rehash();
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">modCount</span><span class="o">++;</span>
+        <span class="c1">//如果达到扩容限制，进行扩容操作</span>
+        <span class="n">Entry</span><span class="o">&lt;?,?&gt;</span> <span class="n">tab</span><span class="o">[]</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//扩容（稍后讲解具体过程）</span>
+            <span class="n">rehash</span><span class="o">();</span>
 
-            tab = table;
-            hash = key.hashCode();
-            index = (hash &amp; 0x7FFFFFFF) % tab.length;
-        }
+            <span class="n">tab</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&amp;</span> <span class="mh">0x7FFFFFFF</span><span class="o">)</span> <span class="o">%</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        // Creates the new entry.
-        @SuppressWarnings("unchecked")
-        //获取table中的链表存储的entry对象
-        Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) tab[index];
-        //定义一个新的entry，并且把指针指向旧的entry对象（这里多说一句，很明显hashtable把插入的值放在了链表的头位置，hashmap1.8的版本中，插入位置是链表的结尾，而HashMap1.7版本是插入在头位置的，这里需要注意）
-        tab[index] = new Entry&lt;&gt;(hash, key, value, e);
-        count++;
-    }
-</code></pre>
+        <span class="c1">// Creates the new entry.</span>
+        <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+        <span class="c1">//获取table中的链表存储的entry对象</span>
+        <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span> <span class="n">tab</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+        <span class="c1">//定义一个新的entry，并且把指针指向旧的entry对象（这里多说一句，很明显hashtable把插入的值放在了链表的头位置，hashmap1.8的版本中，插入位置是链表的结尾，而HashMap1.7版本是插入在头位置的，这里需要注意）</span>
+        <span class="n">tab</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">&lt;&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="n">count</span><span class="o">++;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>在HashTable中还有一个 putIfAbsent 方法，基本和put相同，不同的是，只有key不存在的时候或者是key存在但是value == null 的时候才会添加成功。</p>
 
-<pre><code class="language-Java">    public synchronized V putIfAbsent(K key, V value) {
-        Objects.requireNonNull(value);
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">V</span> <span class="nf">putIfAbsent</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
 
-        // Makes sure the key is not already in the hashtable.
-        Entry&lt;?,?&gt; tab[] = table;
-        int hash = key.hashCode();
-        int index = (hash &amp; 0x7FFFFFFF) % tab.length;
-        @SuppressWarnings("unchecked")
-        Entry&lt;K,V&gt; entry = (Entry&lt;K,V&gt;)tab[index];
-        for (; entry != null; entry = entry.next) {
-            if ((entry.hash == hash) &amp;&amp; entry.key.equals(key)) {
-                V old = entry.value;
-                if (old == null) {
-                    entry.value = value;
-                }
-                return old;
-            }
-        }
+        <span class="c1">// Makes sure the key is not already in the hashtable.</span>
+        <span class="n">Entry</span><span class="o">&lt;?,?&gt;</span> <span class="n">tab</span><span class="o">[]</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&amp;</span> <span class="mh">0x7FFFFFFF</span><span class="o">)</span> <span class="o">%</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+        <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">=</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">tab</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(;</span> <span class="n">entry</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">entry</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">entry</span><span class="o">.</span><span class="na">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">V</span> <span class="n">old</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">old</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="n">old</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
 
-        addEntry(hash, key, value, index);
-        return null;
-    }
-</code></pre>
+        <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="4-扩容">4. 扩容</h1>
 <p>在put的时候会执行一个 rehash 方法，</p>
-<pre><code class="language-Java">protected void rehash() {
-        int oldCapacity = table.length;
-        Entry&lt;?,?&gt;[] oldMap = table;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">rehash</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">oldCapacity</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="n">Entry</span><span class="o">&lt;?,?&gt;[]</span> <span class="n">oldMap</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
 
-                // overflow-conscious code
-        //这里需要注意，扩容不是 * 2，而是 *2 + 1，比如开始是11，扩容以后是 23！
-        int newCapacity = (oldCapacity &lt;&lt; 1) + 1;
-        //最大值限制
-        if (newCapacity - MAX_ARRAY_SIZE &gt; 0) {
-            if (oldCapacity == MAX_ARRAY_SIZE)
-                // Keep running with MAX_ARRAY_SIZE buckets
-                return;
-            newCapacity = MAX_ARRAY_SIZE;
-        }
-        //创建一个新的map
-        Entry&lt;?,?&gt;[] newMap = new Entry&lt;?,?&gt;[newCapacity];
+                <span class="c1">// overflow-conscious code</span>
+        <span class="c1">//这里需要注意，扩容不是 * 2，而是 *2 + 1，比如开始是11，扩容以后是 23！</span>
+        <span class="kt">int</span> <span class="n">newCapacity</span> <span class="o">=</span> <span class="o">(</span><span class="n">oldCapacity</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="c1">//最大值限制</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">newCapacity</span> <span class="o">-</span> <span class="n">MAX_ARRAY_SIZE</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">oldCapacity</span> <span class="o">==</span> <span class="n">MAX_ARRAY_SIZE</span><span class="o">)</span>
+                <span class="c1">// Keep running with MAX_ARRAY_SIZE buckets</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="n">newCapacity</span> <span class="o">=</span> <span class="n">MAX_ARRAY_SIZE</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//创建一个新的map</span>
+        <span class="n">Entry</span><span class="o">&lt;?,?&gt;[]</span> <span class="n">newMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">&lt;?,?&gt;[</span><span class="n">newCapacity</span><span class="o">];</span>
 
-        modCount++;
-        //计算新的扩容阈值
-        threshold = (int)Math.min(newCapacity * loadFactor, MAX_ARRAY_SIZE + 1);
-        table = newMap;
-        //遍历原来的table，放入新的map中，这里可能会把一个链表拆分到table的多个位置上
-        for (int i = oldCapacity ; i-- &gt; 0 ;) {
-            for (Entry&lt;K,V&gt; old = (Entry&lt;K,V&gt;)oldMap[i] ; old != null ; ) {
-                Entry&lt;K,V&gt; e = old;
-                old = old.next;
+        <span class="n">modCount</span><span class="o">++;</span>
+        <span class="c1">//计算新的扩容阈值</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">newCapacity</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="n">MAX_ARRAY_SIZE</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">newMap</span><span class="o">;</span>
+        <span class="c1">//遍历原来的table，放入新的map中，这里可能会把一个链表拆分到table的多个位置上</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">oldCapacity</span> <span class="o">;</span> <span class="n">i</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">;)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">old</span> <span class="o">=</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">oldMap</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">;</span> <span class="n">old</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">;</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">old</span><span class="o">;</span>
+                <span class="n">old</span> <span class="o">=</span> <span class="n">old</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
 
-                int index = (e.hash &amp; 0x7FFFFFFF) % newCapacity;
-                e.next = (Entry&lt;K,V&gt;)newMap[index];
-                newMap[index] = e;
-            }
-        }
-    }
-</code></pre>
+                <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">&amp;</span> <span class="mh">0x7FFFFFFF</span><span class="o">)</span> <span class="o">%</span> <span class="n">newCapacity</span><span class="o">;</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">newMap</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+                <span class="n">newMap</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="5-取值-get">5. 取值 get</h1>
 
-<pre><code class="language-Java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * 返回指定键映射到的值;如果此映射不包含键映射，则返回null。
      * 更正式地说，如果这个映射包含从关键字k到值v的映射（key.equals（k）），那么这个方法返回v; 否则返回null。 （最多可以有一个这样的映射。） 
-     */
-    public synchronized V get(Object key) {
-        Entry&lt;?,?&gt; tab[] = table;
-        int hash = key.hashCode();
-        int index = (hash &amp; 0x7FFFFFFF) % tab.length;
-        for (Entry&lt;?,?&gt; e = tab[index] ; e != null ; e = e.next) {
-            if ((e.hash == hash) &amp;&amp; e.key.equals(key)) {
-                return (V)e.value;
-            }
-        }
-        return null;
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">V</span> <span class="nf">get</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Entry</span><span class="o">&lt;?,?&gt;</span> <span class="n">tab</span><span class="o">[]</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&amp;</span> <span class="mh">0x7FFFFFFF</span><span class="o">)</span> <span class="o">%</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;?,?&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">tab</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">;</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">(</span><span class="n">V</span><span class="o">)</span><span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="6-遍历">6. 遍历</h1>
 
 <p>说遍历以前，先看下面两个方法</p>
-<pre><code class="language-Java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * Returns an enumeration of the keys in this hashtable.
      *
      * @return  an enumeration of the keys in this hashtable.
@@ -301,12 +307,12 @@ HashTable依然是一个散列表，和HashMap（JDK1.7，在1.8里面HashMap中
      * @see     #elements()
      * @see     #keySet()
      * @see     Map
-     */
-    public synchronized Enumeration&lt;K&gt; keys() {
-        return this.&lt;K&gt;getEnumeration(KEYS);
-    }
+     */</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">Enumeration</span><span class="o">&lt;</span><span class="n">K</span><span class="o">&gt;</span> <span class="nf">keys</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.&lt;</span><span class="n">K</span><span class="o">&gt;</span><span class="n">getEnumeration</span><span class="o">(</span><span class="n">KEYS</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    /**
+    <span class="cm">/**
      * Returns an enumeration of the values in this hashtable.
      * Use the Enumeration methods on the returned object to fetch the elements
      * sequentially.
@@ -316,39 +322,40 @@ HashTable依然是一个散列表，和HashMap（JDK1.7，在1.8里面HashMap中
      * @see     #keys()
      * @see     #values()
      * @see     Map
-     */
-    public synchronized Enumeration&lt;V&gt; elements() {
-        return this.&lt;V&gt;getEnumeration(VALUES);
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">Enumeration</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="nf">elements</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.&lt;</span><span class="n">V</span><span class="o">&gt;</span><span class="n">getEnumeration</span><span class="o">(</span><span class="n">VALUES</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>这样我们遍历HashMap的时候至少可以使用下面的三种方法进行遍历</p>
 
-<pre><code class="language-Java">        //1、使用keys()
-        Enumeration&lt;String&gt; en1 = table.keys();
-            while(en1.hasMoreElements()) {
-            en1.nextElement();
-        }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="c1">//1、使用keys()</span>
+        <span class="n">Enumeration</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">en1</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">keys</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">en1</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">en1</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
+        <span class="o">}</span>
 
-        //2、使用elements()
-        Enumeration&lt;String&gt; en2 = table.elements();
-            while(en2.hasMoreElements()) {
-            en2.nextElement();
-        }
+        <span class="c1">//2、使用elements()</span>
+        <span class="n">Enumeration</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">en2</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">elements</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">en2</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">en2</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
+        <span class="o">}</span>
 
-        //3、使用keySet()
-        Iterator&lt;String&gt; it1 = table.keySet().iterator();
-            while(it1.hasNext()) {
-            it1.next();
-        }
+        <span class="c1">//3、使用keySet()</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">it1</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">keySet</span><span class="o">().</span><span class="na">iterator</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">it1</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">it1</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="o">}</span>
 
-        //4、使用entrySet()
-        Iterator&lt;Entry&lt;String, String&gt;&gt; it2 = table.entrySet().iterator();
-            while(it2.hasNext()) {
-            it2.next();
-        }
+        <span class="c1">//4、使用entrySet()</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">it2</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">entrySet</span><span class="o">().</span><span class="na">iterator</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">it2</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">it2</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <h1 id="7-其他">7. 其他</h1>
 <ul>

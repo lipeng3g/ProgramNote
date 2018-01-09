@@ -56,22 +56,22 @@
 <p><code class="highlighter-rouge">var foo = function () {};</code></p>
 
 <p>另外还有一种<code class="highlighter-rouge">自执行函数表达式</code>，主要用于创建一个新的作用域，在此作用域内声明的变量不会和其它作用域内的变量冲突或混淆，大多是以<strong>匿名函数</strong>方式存在，且<code class="highlighter-rouge">立即自动执行</code>：</p>
-<pre><code class="language-Javascript">(function () {
-    // var x = ...
-})();
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// var x = ...</span>
+<span class="p">})();</span>
+</code></pre></div></div>
 <p>此种自执行函数表达式归类于以上两种方法的第二种，也算是函数表达式。</p>
 
 <p>方法一和方法二都创建了一个函数，且命名为 <code class="highlighter-rouge">foo</code>，但是二者还是有区别的。JavaScript 解释器中存在一种变量声明被提升（<code class="highlighter-rouge">hoisting</code>）的机制，也就是说<code class="highlighter-rouge">变量（函数）的声明</code>会被提升到作用域的最前面，即使写代码的时候是写在最后面，也还是会被提升至最前面。</p>
 
 <p>例如以下代码段：</p>
-<pre><code class="language-Javascript">alert(foo); // function foo() {}
-alert(bar); // undefined
-function foo() {}
-var bar = function bar_fn() {};
-alert(foo); // function foo() {}
-alert(bar); // function bar_fn() {}
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">alert</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// function foo() {}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">bar</span><span class="p">);</span> <span class="c1">// undefined</span>
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{}</span>
+<span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">bar_fn</span><span class="p">()</span> <span class="p">{};</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// function foo() {}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">bar</span><span class="p">);</span> <span class="c1">// function bar_fn() {}</span>
+</code></pre></div></div>
 <p>输出结果分别是<code class="highlighter-rouge">function foo() {}</code>、<code class="highlighter-rouge">undefined</code>、<code class="highlighter-rouge">function foo() {}</code>和<code class="highlighter-rouge">function bar_fn() {}</code>。</p>
 
 <p>可以看到 <code class="highlighter-rouge">foo</code> 的声明是写在 <code class="highlighter-rouge">alert</code> 之后，仍然可以被正确调用，因为 <code class="highlighter-rouge">JavaScript 解释器</code>会将其提升到 <code class="highlighter-rouge">alert</code> 前面，而以函数表达式创建的函数 <code class="highlighter-rouge">bar</code> 则不享受此待遇。</p>
@@ -91,9 +91,9 @@ alert(bar); // function bar_fn() {}
 <p><strong>注</strong></p>
 
 <p>严格地说，再 JavaScript 中创建函数的话，还有另外一种方法，称为“函数构造法”：</p>
-<pre><code class="language-Javascript">var foo = Function('alert("hi!");');
-var foo = new Function('alert("hi!");'); // 等同于上面一行
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="nb">Function</span><span class="p">(</span><span class="s1">'alert("hi!");'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s1">'alert("hi!");'</span><span class="p">);</span> <span class="c1">// 等同于上面一行</span>
+</code></pre></div></div>
 <p>此方法以一个字符串作为参数形成函数体。但是用这种方法，执行效率方面会打折扣，且似乎无法传递参数，所以少用为妙。</p>
 
 </div>

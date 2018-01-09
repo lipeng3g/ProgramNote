@@ -69,38 +69,38 @@
 
 <ol>
   <li>定义一个程序猿
-    <pre><code class="language-Java">/**
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * 程序员
- */
-public class Coder {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Coder</span> <span class="o">{</span>
 
- public void coding() {
-     System.out.println("我在写程序。。。");
- }
-}
-</code></pre>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">coding</span><span class="o">()</span> <span class="o">{</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"我在写程序。。。"</span><span class="o">);</span>
+ <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
   </li>
   <li>定义一个程序猿的装饰器
-    <pre><code class="language-Java">/**
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * 程序员装饰器
- */
-public class CoderDecorator extends Coder {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CoderDecorator</span> <span class="kd">extends</span> <span class="n">Coder</span> <span class="o">{</span>
 
- private Coder coder;
+ <span class="kd">private</span> <span class="n">Coder</span> <span class="n">coder</span><span class="o">;</span>
 
- public CoderDecorator(Coder coder) {
-     this.coder = coder;
- }
+ <span class="kd">public</span> <span class="nf">CoderDecorator</span><span class="o">(</span><span class="n">Coder</span> <span class="n">coder</span><span class="o">)</span> <span class="o">{</span>
+     <span class="k">this</span><span class="o">.</span><span class="na">coder</span> <span class="o">=</span> <span class="n">coder</span><span class="o">;</span>
+ <span class="o">}</span>
 
- @Override
- public void coding() {
-     coder.coding();
- }
-}
-</code></pre>
+ <span class="nd">@Override</span>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">coding</span><span class="o">()</span> <span class="o">{</span>
+     <span class="n">coder</span><span class="o">.</span><span class="na">coding</span><span class="o">();</span>
+ <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
   </li>
   <li>定义一个专门更换键盘的装饰器
-```Java
+```java
 /**
     <ul>
       <li>写代码以前换键盘
@@ -127,7 +127,7 @@ public class CoderDecoratorA extends CoderDecorator {</li>
 <p>}</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 4. 定义一个专门更换鼠标的装饰器
-```Java
+```java
 
 /**
  * 写代码以前换鼠标
@@ -153,54 +153,54 @@ public class CoderDecoratorB extends CoderDecorator {
 
 <ol>
   <li>定义一个更换电脑的装饰器
-    <pre><code class="language-Java">/**
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * 写代码以前换电脑
- */
-public class CoderDecoratorC extends CoderDecorator {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CoderDecoratorC</span> <span class="kd">extends</span> <span class="n">CoderDecorator</span> <span class="o">{</span>
 
- public CoderDecoratorC(Coder coder) {
-     super(coder);
- }
+ <span class="kd">public</span> <span class="nf">CoderDecoratorC</span><span class="o">(</span><span class="n">Coder</span> <span class="n">coder</span><span class="o">)</span> <span class="o">{</span>
+     <span class="kd">super</span><span class="o">(</span><span class="n">coder</span><span class="o">);</span>
+ <span class="o">}</span>
 
- @Override
- public void coding() {
-     this.changeToMacbookPro();
-     super.coding();
- }
+ <span class="nd">@Override</span>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">coding</span><span class="o">()</span> <span class="o">{</span>
+     <span class="k">this</span><span class="o">.</span><span class="na">changeToMacbookPro</span><span class="o">();</span>
+     <span class="kd">super</span><span class="o">.</span><span class="na">coding</span><span class="o">();</span>
+ <span class="o">}</span>
 
- private void changeToMacbookPro() {
-     System.out.println("电脑不好使，换了，美滋滋");
- }
-}
-</code></pre>
+ <span class="kd">private</span> <span class="kt">void</span> <span class="nf">changeToMacbookPro</span><span class="o">()</span> <span class="o">{</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"电脑不好使，换了，美滋滋"</span><span class="o">);</span>
+ <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
   </li>
   <li>好了，现在老板可以根据不同程序猿的要求一一满足了
-    <pre><code class="language-Java">/**
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * 程序猿写代码
- */
-public class Client {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Client</span> <span class="o">{</span>
 
- public static void main(String[] args) {
-     //创造一个程序猿A，并且开始写代码
-     Coder coderA = new Coder();
-     //换个键盘在写
-     CoderDecorator decoratorA = new CoderDecoratorA(coderA);
-     //换个鼠标在写
-     decoratorA = new CoderDecoratorB(decoratorA);
-     //把电脑也换了
-     decoratorA = new CoderDecoratorC(decoratorA);
-     decoratorA.coding();
+ <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+     <span class="c1">//创造一个程序猿A，并且开始写代码</span>
+     <span class="n">Coder</span> <span class="n">coderA</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Coder</span><span class="o">();</span>
+     <span class="c1">//换个键盘在写</span>
+     <span class="n">CoderDecorator</span> <span class="n">decoratorA</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CoderDecoratorA</span><span class="o">(</span><span class="n">coderA</span><span class="o">);</span>
+     <span class="c1">//换个鼠标在写</span>
+     <span class="n">decoratorA</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CoderDecoratorB</span><span class="o">(</span><span class="n">decoratorA</span><span class="o">);</span>
+     <span class="c1">//把电脑也换了</span>
+     <span class="n">decoratorA</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CoderDecoratorC</span><span class="o">(</span><span class="n">decoratorA</span><span class="o">);</span>
+     <span class="n">decoratorA</span><span class="o">.</span><span class="na">coding</span><span class="o">();</span>
 
-     //创造一个程序猿B，并且开始写代码
-     Coder coderB = new Coder();
-     //换个键盘在写
-     CoderDecorator decoratorB = new CoderDecoratorA(coderB);
-     //把电脑也换了
-     decoratorB = new CoderDecoratorC(decoratorB);
-     decoratorB.coding();
- }
-}
-</code></pre>
+     <span class="c1">//创造一个程序猿B，并且开始写代码</span>
+     <span class="n">Coder</span> <span class="n">coderB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Coder</span><span class="o">();</span>
+     <span class="c1">//换个键盘在写</span>
+     <span class="n">CoderDecorator</span> <span class="n">decoratorB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CoderDecoratorA</span><span class="o">(</span><span class="n">coderB</span><span class="o">);</span>
+     <span class="c1">//把电脑也换了</span>
+     <span class="n">decoratorB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CoderDecoratorC</span><span class="o">(</span><span class="n">decoratorB</span><span class="o">);</span>
+     <span class="n">decoratorB</span><span class="o">.</span><span class="na">coding</span><span class="o">();</span>
+ <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
   </li>
 </ol>
 

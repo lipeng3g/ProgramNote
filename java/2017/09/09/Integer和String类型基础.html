@@ -54,14 +54,14 @@
 
 <!-- /TOC -->
 <h1 id="1-integer比较">1. Integer比较</h1>
-<pre><code class="language-Java">public static void main(String[] args) {
-        Integer a = 128,b=128;  
-        Integer c = 127,d=127;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">128</span><span class="o">,</span><span class="n">b</span><span class="o">=</span><span class="mi">128</span><span class="o">;</span>  
+        <span class="n">Integer</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">127</span><span class="o">,</span><span class="n">d</span><span class="o">=</span><span class="mi">127</span><span class="o">;</span>
               
-        System.out.println(a==b);  
-        System.out.println(c==d);
-}
-</code></pre>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">==</span><span class="n">b</span><span class="o">);</span>  
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">==</span><span class="n">d</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
 <blockquote>
   <p><code class="highlighter-rouge">a==b</code> –&gt; <code class="highlighter-rouge">false</code></p>
 </blockquote>
@@ -75,7 +75,7 @@
 <p>其实当我们给一个Integer对象赋一个int值的时候，会调用Integer类的静态方法valueOf，让我们看下源代码是怎么实现的。</p>
 
 <p>IntegerCache方法有明确的注释，缓存范围，如何修改等等。</p>
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
      * Cache to support the object identity semantics of autoboxing for values between
      * -128 and 127 (inclusive) as required by JLS.
      *
@@ -84,55 +84,55 @@
      * During VM initialization, java.lang.Integer.IntegerCache.high property
      * may be set and saved in the private system properties in the
      * sun.misc.VM class.
-     */
+     */</span>
 
-    private static class IntegerCache {
-        static final int low = -128;
-        static final int high;
-        static final Integer cache[];
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IntegerCache</span> <span class="o">{</span>
+        <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">low</span> <span class="o">=</span> <span class="o">-</span><span class="mi">128</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">high</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">cache</span><span class="o">[];</span>
 
-        static {
-            // high value may be configured by property
-            int h = 127;
-            String integerCacheHighPropValue =
-                sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
-            if (integerCacheHighPropValue != null) {
-                int i = parseInt(integerCacheHighPropValue);
-                i = Math.max(i, 127);
-                // Maximum array size is Integer.MAX_VALUE
-                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
-            }
-            high = h;
+        <span class="kd">static</span> <span class="o">{</span>
+            <span class="c1">// high value may be configured by property</span>
+            <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">127</span><span class="o">;</span>
+            <span class="n">String</span> <span class="n">integerCacheHighPropValue</span> <span class="o">=</span>
+                <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">VM</span><span class="o">.</span><span class="na">getSavedProperty</span><span class="o">(</span><span class="s">"java.lang.Integer.IntegerCache.high"</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">integerCacheHighPropValue</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">parseInt</span><span class="o">(</span><span class="n">integerCacheHighPropValue</span><span class="o">);</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="mi">127</span><span class="o">);</span>
+                <span class="c1">// Maximum array size is Integer.MAX_VALUE</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">-</span> <span class="o">(-</span><span class="n">low</span><span class="o">)</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="n">h</span><span class="o">;</span>
 
-            cache = new Integer[(high - low) + 1];
-            int j = low;
-            for(int k = 0; k &lt; cache.length; k++)
-                cache[k] = new Integer(j++);
-        }
+            <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">[(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">low</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">cache</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span>
+                <span class="n">cache</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">j</span><span class="o">++);</span>
+        <span class="o">}</span>
 
-        private IntegerCache() {}
-    }
-</code></pre>
+        <span class="kd">private</span> <span class="nf">IntegerCache</span><span class="o">()</span> <span class="o">{}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">    public static Integer valueOf(int i) {
-            assert IntegerCache.high &gt;= 127;
-            if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
-                return IntegerCache.cache[i + (-IntegerCache.low)];
-            return new Integer(i);
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Integer</span> <span class="nf">valueOf</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">assert</span> <span class="n">IntegerCache</span><span class="o">.</span><span class="na">high</span> <span class="o">&gt;=</span> <span class="mi">127</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">IntegerCache</span><span class="o">.</span><span class="na">low</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">IntegerCache</span><span class="o">.</span><span class="na">high</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">IntegerCache</span><span class="o">.</span><span class="na">cache</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="o">(-</span><span class="n">IntegerCache</span><span class="o">.</span><span class="na">low</span><span class="o">)];</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Integer</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 <p>代码描述的很清晰，如果整型字面量的值介于-128到127之间，就不会new一个新的Integer对象，而是直接引用常量池中的Integer对象，所以上面的运行结果是a==b=false，而c==d=true。</p>
 
 <h1 id="2-string比较">2. String比较</h1>
 
-<pre><code class="language-Java">public static void main(String[] args) {
-    String s1 = "abc";  
-    String s2 = "abc"; 
-    String s3 = new String("abc"); 
-    System.out.println(s1 == s2); 
-    System.out.println(s1 == s3);
-}
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">s1</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>  
+    <span class="n">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span> 
+    <span class="n">String</span> <span class="n">s3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span> 
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s1</span> <span class="o">==</span> <span class="n">s2</span><span class="o">);</span> 
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s1</span> <span class="o">==</span> <span class="n">s3</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
 <blockquote>
   <p><code class="highlighter-rouge">s1 == s2</code> –&gt; <code class="highlighter-rouge">true</code></p>
 </blockquote>
@@ -147,15 +147,15 @@ String s1 = “abc”；这样申明的字符串对象，其值就是存储在�
 <p>当我们创建引用String s2 = “abc” 的时候，Java底层会优先在常量池中查找是否存在”abc”，如果存在则让s2指向这个值，不会重新创建，如果常量池中没有则创建并添加的池中。这就是为什么答案是true 和false的原因。</p>
 
 <h1 id="3-integer与int比较">3. Integer与int比较</h1>
-<pre><code class="language-Java">    public static void main(String[] args) {
-        Integer a = new Integer(128);  
-        int b = 128; 
-        Integer c = new Integer(6); 
-        Integer d = new Integer(6); 
-        System.out.println(a == b); 
-        System.out.println(c == d); 
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="mi">128</span><span class="o">);</span>  
+        <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">128</span><span class="o">;</span> 
+        <span class="n">Integer</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span> 
+        <span class="n">Integer</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span> 
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">);</span> 
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">d</span><span class="o">);</span> 
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <blockquote>
   <p><code class="highlighter-rouge">a == b</code> –&gt; <code class="highlighter-rouge">true</code></p>

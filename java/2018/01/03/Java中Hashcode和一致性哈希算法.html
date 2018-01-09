@@ -78,30 +78,30 @@
 
 <h2 id="string应用">String应用</h2>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
      * 返回该字符串的哈希代码。 
      * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
      * s[i]代表字符串数组中的元素
      * 如果是空字符串，默认hash值是0.
      *
      * @return  a hash code value for this object.
-     */
-    public int hashCode() {
-        int h = hash;
-        if (h == 0 &amp;&amp; value.length &gt; 0) {
-            char val[] = value;
+     */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hash</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">val</span><span class="o">[]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
 
-            for (int i = 0; i &lt; value.length; i++) {
-                h = 31 * h + val[i];
-            }
-            hash = h;
-        }
-        return h;
-    }
-</code></pre>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="mi">31</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">val</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="n">h</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">h</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-Java">
-    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="cm">/**
      * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true
      *
      * @param  anObject
@@ -112,29 +112,29 @@
      *
      * @see  #compareTo(String)
      * @see  #equalsIgnoreCase(String)
-     */
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
-            return true;
-        }
-        if (anObject instanceof String) {
-            String anotherString = (String)anObject;
-            int n = value.length;
-            if (n == anotherString.value.length) {
-                char v1[] = value;
-                char v2[] = anotherString.value;
-                int i = 0;
-                while (n-- != 0) {
-                    if (v1[i] != v2[i])
-                        return false;
-                    i++;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">anObject</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">anotherString</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">anObject</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">v1</span><span class="o">[]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+                <span class="kt">char</span> <span class="n">v2</span><span class="o">[]</span> <span class="o">=</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">n</span><span class="o">--</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">v1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">v2</span><span class="o">[</span><span class="n">i</span><span class="o">])</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="n">i</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="一致性哈希算法">一致性哈希算法</h1>
 <h2 id="基本介绍">基本介绍</h2>
@@ -227,106 +227,106 @@ Hash(“192.168.1.100#2”); // NODE1-2</p>
 
 <h2 id="java实现">Java实现</h2>
 
-<pre><code class="language-Java">import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Iterator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.SortedMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.SortedSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TreeMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TreeSet</span><span class="o">;</span>
 
-public class ConsistentHash&lt;T&gt; {
-    private final HashFunction hashFunction;
-    private final int numberOfReplicas;// 节点的复制因子,实际节点个数 *  numberOfReplicas =
-                                        // 虚拟节点个数
-    private final SortedMap&lt;Long, T&gt; circle = new TreeMap&lt;Long, T&gt;();// 存储虚拟节点的hash值到真实节点的映射
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConsistentHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">HashFunction</span> <span class="n">hashFunction</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">numberOfReplicas</span><span class="o">;</span><span class="c1">// 节点的复制因子,实际节点个数 *  numberOfReplicas =</span>
+                                        <span class="c1">// 虚拟节点个数</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">SortedMap</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">circle</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeMap</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;();</span><span class="c1">// 存储虚拟节点的hash值到真实节点的映射</span>
 
-    public ConsistentHash(HashFunction hashFunction, int numberOfReplicas,
-            Collection&lt;T&gt; nodes) {
-        this.hashFunction = hashFunction;
-        this.numberOfReplicas = numberOfReplicas;
-        for (T node : nodes)
-            add(node);
-    }
+    <span class="kd">public</span> <span class="nf">ConsistentHash</span><span class="o">(</span><span class="n">HashFunction</span> <span class="n">hashFunction</span><span class="o">,</span> <span class="kt">int</span> <span class="n">numberOfReplicas</span><span class="o">,</span>
+            <span class="n">Collection</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">nodes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">hashFunction</span> <span class="o">=</span> <span class="n">hashFunction</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">numberOfReplicas</span> <span class="o">=</span> <span class="n">numberOfReplicas</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">T</span> <span class="n">node</span> <span class="o">:</span> <span class="n">nodes</span><span class="o">)</span>
+            <span class="n">add</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public void add(T node) {
-        for (int i = 0; i &lt; numberOfReplicas; i++)
-            // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点
-            /*
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">T</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numberOfReplicas</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+            <span class="c1">// 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点</span>
+            <span class="cm">/*
              * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node
              * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上
-             */
-            circle.put(hashFunction.hash(node.toString() + i), node);
-    }
+             */</span>
+            <span class="n">circle</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">hashFunction</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="n">i</span><span class="o">),</span> <span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public void remove(T node) {
-        for (int i = 0; i &lt; numberOfReplicas; i++)
-            circle.remove(hashFunction.hash(node.toString() + i));
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">T</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numberOfReplicas</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+            <span class="n">circle</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">hashFunction</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="n">i</span><span class="o">));</span>
+    <span class="o">}</span>
 
-    /*
+    <span class="cm">/*
      * 获得一个最近的顺时针节点,根据给定的key 取Hash
      * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点
      * 再从实际节点中取得 数据
-     */
-    public T get(Object key) {
-        if (circle.isEmpty())
-            return null;
-        long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode
-        if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器
-            SortedMap&lt;Long, T&gt; tailMap = circle.tailMap(hash);
-            hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
-        }
-        return circle.get(hash);
-    }
+     */</span>
+    <span class="kd">public</span> <span class="n">T</span> <span class="nf">get</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">circle</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hashFunction</span><span class="o">.</span><span class="na">hash</span><span class="o">((</span><span class="n">String</span><span class="o">)</span> <span class="n">key</span><span class="o">);</span><span class="c1">// node 用String来表示,获得node在哈希环中的hashCode</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">circle</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">hash</span><span class="o">))</span> <span class="o">{</span><span class="c1">//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器</span>
+            <span class="n">SortedMap</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">tailMap</span> <span class="o">=</span> <span class="n">circle</span><span class="o">.</span><span class="na">tailMap</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="n">tailMap</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="n">circle</span><span class="o">.</span><span class="na">firstKey</span><span class="o">()</span> <span class="o">:</span> <span class="n">tailMap</span><span class="o">.</span><span class="na">firstKey</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">circle</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public long getSize() {
-        return circle.size();
-    }
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">circle</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
     
-    /*
+    <span class="cm">/*
      * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置
-     */
-    public void testBalance(){
-        Set&lt;Long&gt; sets  = circle.keySet();//获得TreeMap中所有的Key
-        SortedSet&lt;Long&gt; sortedSets= new TreeSet&lt;Long&gt;(sets);//将获得的Key集合排序
-        for(Long hashCode : sortedSets){
-            System.out.println(hashCode);
-        }
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBalance</span><span class="o">(){</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">sets</span>  <span class="o">=</span> <span class="n">circle</span><span class="o">.</span><span class="na">keySet</span><span class="o">();</span><span class="c1">//获得TreeMap中所有的Key</span>
+        <span class="n">SortedSet</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">sortedSets</span><span class="o">=</span> <span class="k">new</span> <span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;(</span><span class="n">sets</span><span class="o">);</span><span class="c1">//将获得的Key集合排序</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Long</span> <span class="n">hashCode</span> <span class="o">:</span> <span class="n">sortedSets</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">hashCode</span><span class="o">);</span>
+        <span class="o">}</span>
         
-        System.out.println("----each location 's distance are follows: ----");
-        /*
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"----each location 's distance are follows: ----"</span><span class="o">);</span>
+        <span class="cm">/*
          * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值
-         */
-        Iterator&lt;Long&gt; it = sortedSets.iterator();
-        Iterator&lt;Long&gt; it2 = sortedSets.iterator();
-        if(it2.hasNext())
-            it2.next();
-        long keyPre, keyAfter;
-        while(it.hasNext() &amp;&amp; it2.hasNext()){
-            keyPre = it.next();
-            keyAfter = it2.next();
-            System.out.println(keyAfter - keyPre);
-        }
-    }
+         */</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">sortedSets</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">it2</span> <span class="o">=</span> <span class="n">sortedSets</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">it2</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>
+            <span class="n">it2</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">keyPre</span><span class="o">,</span> <span class="n">keyAfter</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">it2</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
+            <span class="n">keyPre</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">keyAfter</span> <span class="o">=</span> <span class="n">it2</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">keyAfter</span> <span class="o">-</span> <span class="n">keyPre</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
     
-    public static void main(String[] args) {
-        Set&lt;String&gt; nodes = new HashSet&lt;String&gt;();
-        nodes.add("A");
-        nodes.add("B");
-        nodes.add("C");
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"A"</span><span class="o">);</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"B"</span><span class="o">);</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"C"</span><span class="o">);</span>
         
-        ConsistentHash&lt;String&gt; consistentHash = new ConsistentHash&lt;String&gt;(new HashFunction(), 2, nodes);
-        consistentHash.add("D");
+        <span class="n">ConsistentHash</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">consistentHash</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConsistentHash</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span><span class="k">new</span> <span class="n">HashFunction</span><span class="o">(),</span> <span class="mi">2</span><span class="o">,</span> <span class="n">nodes</span><span class="o">);</span>
+        <span class="n">consistentHash</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"D"</span><span class="o">);</span>
         
-        System.out.println("hash circle size: " + consistentHash.getSize());
-        System.out.println("location of each node are follows: ");
-        consistentHash.testBalance();
-    }
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"hash circle size: "</span> <span class="o">+</span> <span class="n">consistentHash</span><span class="o">.</span><span class="na">getSize</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"location of each node are follows: "</span><span class="o">);</span>
+        <span class="n">consistentHash</span><span class="o">.</span><span class="na">testBalance</span><span class="o">();</span>
+    <span class="o">}</span>
     
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2018-01-03T17:13:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-03-Java中Hashcode和一致性哈希算法.md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />

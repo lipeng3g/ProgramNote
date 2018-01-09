@@ -79,82 +79,82 @@
 <p><img src="/ProgramNote/assets/Image/mybatis/23.png" alt="Mybatis" title="Mybatis" /></p>
 
 <p>PerpetualCache的实现代码</p>
-<pre><code class="language-Java">
-/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/**
  * @author Clinton Begin
- */
-public class PerpetualCache implements Cache {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PerpetualCache</span> <span class="kd">implements</span> <span class="n">Cache</span> <span class="o">{</span>
 
-  private final String id;
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">id</span><span class="o">;</span>
 
-  private Map&lt;Object, Object&gt; cache = new HashMap&lt;Object, Object&gt;();
+  <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;();</span>
 
-  public PerpetualCache(String id) {
-    this.id = id;
-  }
+  <span class="kd">public</span> <span class="nf">PerpetualCache</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public String getId() {
-    return id;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public int getSize() {
-    return cache.size();
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getSize</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">cache</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+  <span class="o">}</span>
 
-  @Override
-  public void putObject(Object key, Object value) {
-    cache.put(key, value);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">putObject</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public Object getObject(Object key) {
-    return cache.get(key);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getObject</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public Object removeObject(Object key) {
-    return cache.remove(key);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Object</span> <span class="nf">removeObject</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">cache</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public void clear() {
-    cache.clear();
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">clear</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">cache</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+  <span class="o">}</span>
 
-  @Override
-  public ReadWriteLock getReadWriteLock() {
-    return null;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">ReadWriteLock</span> <span class="nf">getReadWriteLock</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  @Override
-  public boolean equals(Object o) {
-    if (getId() == null) {
-      throw new CacheException("Cache instances require an ID.");
-    }
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Cache)) {
-      return false;
-    }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">getId</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">CacheException</span><span class="o">(</span><span class="s">"Cache instances require an ID."</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(!(</span><span class="n">o</span> <span class="k">instanceof</span> <span class="n">Cache</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    Cache otherCache = (Cache) o;
-    return getId().equals(otherCache.getId());
-  }
+    <span class="n">Cache</span> <span class="n">otherCache</span> <span class="o">=</span> <span class="o">(</span><span class="n">Cache</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nf">getId</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">otherCache</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+  <span class="o">}</span>
 
-  @Override
-  public int hashCode() {
-    if (getId() == null) {
-      throw new CacheException("Cache instances require an ID.");
-    }
-    return getId().hashCode();
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">getId</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">CacheException</span><span class="o">(</span><span class="s">"Cache instances require an ID."</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="nf">getId</span><span class="o">().</span><span class="na">hashCode</span><span class="o">();</span>
+  <span class="o">}</span>
 
-}
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <h1 id="3-一级缓存的生命周期">3. 一级缓存的生命周期</h1>
 
@@ -240,59 +240,59 @@ public class PerpetualCache implements Cache {
 
 <p>CacheKey的创建</p>
 
-<pre><code class="language-Java">
-  @Override
-  public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) {
-    if (closed) {
-      throw new ExecutorException("Executor was closed.");
-    }
-    CacheKey cacheKey = new CacheKey();
-    cacheKey.update(ms.getId());//StatementId
-    cacheKey.update(rowBounds.getOffset());//rowBounds.offset
-    cacheKey.update(rowBounds.getLimit());//rowBounds.limit
-    cacheKey.update(boundSql.getSql());//Sql
-    List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();//参数
-    TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
-    // mimic DefaultParameterHandler logic
-    for (ParameterMapping parameterMapping : parameterMappings) {
-      if (parameterMapping.getMode() != ParameterMode.OUT) {
-        Object value;
-        String propertyName = parameterMapping.getProperty();
-        if (boundSql.hasAdditionalParameter(propertyName)) {
-          value = boundSql.getAdditionalParameter(propertyName);
-        } else if (parameterObject == null) {
-          value = null;
-        } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
-          value = parameterObject;
-        } else {
-          MetaObject metaObject = configuration.newMetaObject(parameterObject);
-          value = metaObject.getValue(propertyName);
-        }
-        cacheKey.update(value);
-      }
-    }
-    if (configuration.getEnvironment() != null) {
-      // issue #176
-      cacheKey.update(configuration.getEnvironment().getId());
-    }
-    return cacheKey;
-  }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">CacheKey</span> <span class="nf">createCacheKey</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">Object</span> <span class="n">parameterObject</span><span class="o">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="o">,</span> <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">closed</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">ExecutorException</span><span class="o">(</span><span class="s">"Executor was closed."</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">CacheKey</span> <span class="n">cacheKey</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheKey</span><span class="o">();</span>
+    <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span><span class="c1">//StatementId</span>
+    <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">rowBounds</span><span class="o">.</span><span class="na">getOffset</span><span class="o">());</span><span class="c1">//rowBounds.offset</span>
+    <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">rowBounds</span><span class="o">.</span><span class="na">getLimit</span><span class="o">());</span><span class="c1">//rowBounds.limit</span>
+    <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">boundSql</span><span class="o">.</span><span class="na">getSql</span><span class="o">());</span><span class="c1">//Sql</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">ParameterMapping</span><span class="o">&gt;</span> <span class="n">parameterMappings</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getParameterMappings</span><span class="o">();</span><span class="c1">//参数</span>
+    <span class="n">TypeHandlerRegistry</span> <span class="n">typeHandlerRegistry</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">().</span><span class="na">getTypeHandlerRegistry</span><span class="o">();</span>
+    <span class="c1">// mimic DefaultParameterHandler logic</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">ParameterMapping</span> <span class="n">parameterMapping</span> <span class="o">:</span> <span class="n">parameterMappings</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">parameterMapping</span><span class="o">.</span><span class="na">getMode</span><span class="o">()</span> <span class="o">!=</span> <span class="n">ParameterMode</span><span class="o">.</span><span class="na">OUT</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">value</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">propertyName</span> <span class="o">=</span> <span class="n">parameterMapping</span><span class="o">.</span><span class="na">getProperty</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">boundSql</span><span class="o">.</span><span class="na">hasAdditionalParameter</span><span class="o">(</span><span class="n">propertyName</span><span class="o">))</span> <span class="o">{</span>
+          <span class="n">value</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getAdditionalParameter</span><span class="o">(</span><span class="n">propertyName</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">parameterObject</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">typeHandlerRegistry</span><span class="o">.</span><span class="na">hasTypeHandler</span><span class="o">(</span><span class="n">parameterObject</span><span class="o">.</span><span class="na">getClass</span><span class="o">()))</span> <span class="o">{</span>
+          <span class="n">value</span> <span class="o">=</span> <span class="n">parameterObject</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+          <span class="n">MetaObject</span> <span class="n">metaObject</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="na">newMetaObject</span><span class="o">(</span><span class="n">parameterObject</span><span class="o">);</span>
+          <span class="n">value</span> <span class="o">=</span> <span class="n">metaObject</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">propertyName</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">configuration</span><span class="o">.</span><span class="na">getEnvironment</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// issue #176</span>
+      <span class="n">cacheKey</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">configuration</span><span class="o">.</span><span class="na">getEnvironment</span><span class="o">().</span><span class="na">getId</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">cacheKey</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p>构建CacheKey的过程实际上就是构造其hashCode的过程。下面的代码就是CacheKey的核心hashcode生成算法.</p>
 
-<pre><code class="language-Java">  public void update(Object object) {
-    int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object); 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Object</span> <span class="n">object</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">baseHashCode</span> <span class="o">=</span> <span class="n">object</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">ArrayUtil</span><span class="o">.</span><span class="na">hashCode</span><span class="o">(</span><span class="n">object</span><span class="o">);</span> 
 
-    count++;
-    checksum += baseHashCode;
-    baseHashCode *= count;
+    <span class="n">count</span><span class="o">++;</span>
+    <span class="n">checksum</span> <span class="o">+=</span> <span class="n">baseHashCode</span><span class="o">;</span>
+    <span class="n">baseHashCode</span> <span class="o">*=</span> <span class="n">count</span><span class="o">;</span>
 
-    hashcode = multiplier * hashcode + baseHashCode;
+    <span class="n">hashcode</span> <span class="o">=</span> <span class="n">multiplier</span> <span class="o">*</span> <span class="n">hashcode</span> <span class="o">+</span> <span class="n">baseHashCode</span><span class="o">;</span>
 
-    updateList.add(object);
-  }
-</code></pre>
+    <span class="n">updateList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">object</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="6-性能问题">6. 性能问题</h1>
 

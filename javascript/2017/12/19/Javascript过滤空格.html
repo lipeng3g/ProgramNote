@@ -60,82 +60,82 @@
 <!-- /TOC -->
 <h2 id="循环检查">循环检查</h2>
 <p><strong>推荐 ☆☆☆</strong></p>
-<pre><code class="language-Javascript">//供使用者调用 
-function trim(s){ 
-  return trimRight(trimLeft(s)); 
-} 
-//去掉左边的空白 
-function trimLeft(s){ 
-  if(s == null) { 
-    return ""; 
-  } 
-  var whitespace = new String(" \t\n\r"); 
-  var str = new String(s); 
-  if (whitespace.indexOf(str.charAt(0)) != -1) { 
-    var j=0, i = str.length; 
-    while (j &lt; i &amp;&amp; whitespace.indexOf(str.charAt(j)) != -1){ 
-      j++; 
-    } 
-    str = str.substring(j, i); 
-  } 
-  return str; 
-} 
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//供使用者调用 </span>
+<span class="kd">function</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span> 
+  <span class="k">return</span> <span class="nx">trimRight</span><span class="p">(</span><span class="nx">trimLeft</span><span class="p">(</span><span class="nx">s</span><span class="p">));</span> 
+<span class="p">}</span> 
+<span class="c1">//去掉左边的空白 </span>
+<span class="kd">function</span> <span class="nx">trimLeft</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span> 
+  <span class="k">if</span><span class="p">(</span><span class="nx">s</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="s2">""</span><span class="p">;</span> 
+  <span class="p">}</span> 
+  <span class="kd">var</span> <span class="nx">whitespace</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s2">" </span><span class="err">\</span><span class="s2">t</span><span class="err">\</span><span class="s2">n</span><span class="err">\</span><span class="s2">r"</span><span class="p">);</span> 
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span> 
+  <span class="k">if</span> <span class="p">(</span><span class="nx">whitespace</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> 
+    <span class="k">while</span> <span class="p">(</span><span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">whitespace</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span> 
+      <span class="nx">j</span><span class="o">++</span><span class="p">;</span> 
+    <span class="p">}</span> 
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span> 
+  <span class="p">}</span> 
+  <span class="k">return</span> <span class="nx">str</span><span class="p">;</span> 
+<span class="p">}</span> 
 
-//去掉右边的空白
-function trimRight(s){ 
-  if(s == null) return ""; 
-  var whitespace = new String(" \t\n\r"); 
-  var str = new String(s); 
-  if (whitespace.indexOf(str.charAt(str.length-1)) != -1){ 
-    var i = str.length - 1; 
-    while (i &gt;= 0 &amp;&amp; whitespace.indexOf(str.charAt(i)) != -1){ 
-      i--; 
-    } 
-    str = str.substring(0, i+1); 
-  } 
-  return str; 
-}    
-</code></pre>
+<span class="c1">//去掉右边的空白</span>
+<span class="kd">function</span> <span class="nx">trimRight</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span> 
+  <span class="k">if</span><span class="p">(</span><span class="nx">s</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="k">return</span> <span class="s2">""</span><span class="p">;</span> 
+  <span class="kd">var</span> <span class="nx">whitespace</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s2">" </span><span class="err">\</span><span class="s2">t</span><span class="err">\</span><span class="s2">n</span><span class="err">\</span><span class="s2">r"</span><span class="p">);</span> 
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span> 
+  <span class="k">if</span> <span class="p">(</span><span class="nx">whitespace</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span> 
+    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> 
+    <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">whitespace</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span> 
+      <span class="nx">i</span><span class="o">--</span><span class="p">;</span> 
+    <span class="p">}</span> 
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> 
+  <span class="p">}</span> 
+  <span class="k">return</span> <span class="nx">str</span><span class="p">;</span> 
+<span class="p">}</span>    
+</code></pre></div></div>
 
 <h2 id="正则表达式替换">正则表达式替换</h2>
 <p><strong>推荐 ☆☆☆☆</strong></p>
-<pre><code class="language-Javascript">
-String.prototype.Trim = function() //去左右空格;
-{ 
-    return this.replace(/(^\s*)|(\s*$)/g, ""); 
-} 
-String.prototype.LTrim = function() //去左空格;
-{ 
-    return this.replace(/(^\s*)/g, ""); 
-} 
-String.prototype.RTrim = function() //去右空格;
-{ 
-    return this.replace(/(\s*$)/g, ""); 
-} 
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">Trim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="c1">//去左右空格;</span>
+<span class="p">{</span> 
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">^</span><span class="se">\s</span><span class="sr">*</span><span class="se">)</span><span class="sr">|</span><span class="se">(\s</span><span class="sr">*$</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span> 
+<span class="p">}</span> 
+<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">LTrim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="c1">//去左空格;</span>
+<span class="p">{</span> 
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">^</span><span class="se">\s</span><span class="sr">*</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span> 
+<span class="p">}</span> 
+<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">RTrim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="c1">//去右空格;</span>
+<span class="p">{</span> 
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(\s</span><span class="sr">*$</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span> 
+<span class="p">}</span> 
 
-//去左空格;
-function ltrim(s){
-    return s.replace(/(^\s*)/g, "");
-}
-//去右空格;
-function rtrim(s){
-    return s.replace(/(\s*$)/g, "");
-}
-//去左右空格;
-function trim(s){
-    return s.replace(/(^\s*)|(\s*$)/g, "");
-}
-</code></pre>
+<span class="c1">//去左空格;</span>
+<span class="kd">function</span> <span class="nx">ltrim</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">^</span><span class="se">\s</span><span class="sr">*</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//去右空格;</span>
+<span class="kd">function</span> <span class="nx">rtrim</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(\s</span><span class="sr">*$</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//去左右空格;</span>
+<span class="kd">function</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">^</span><span class="se">\s</span><span class="sr">*</span><span class="se">)</span><span class="sr">|</span><span class="se">(\s</span><span class="sr">*$</span><span class="se">)</span><span class="sr">/g</span><span class="p">,</span> <span class="s2">""</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h2 id="jquery">JQuery</h2>
 <p><strong>推荐 ☆☆☆☆☆</strong></p>
-<pre><code class="language-Javascript">// 使用方法
-$.trim(str) 
-// Jquery实现方法
-function trim(str){  
-    return str.replace(/^(\s|\u00A0)+/,'').replace(/(\s|\u00A0)+$/,'');  
-}
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 使用方法</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> 
+<span class="c1">// Jquery实现方法</span>
+<span class="kd">function</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">str</span><span class="p">){</span>  
+    <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^</span><span class="se">(\s</span><span class="sr">|</span><span class="se">\u</span><span class="sr">00A0</span><span class="se">)</span><span class="sr">+/</span><span class="p">,</span><span class="s1">''</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(\s</span><span class="sr">|</span><span class="se">\u</span><span class="sr">00A0</span><span class="se">)</span><span class="sr">+$/</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>  
+<span class="p">}</span>
+</code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2017-12-19T05:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix"><a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/02-Javascript/2017-12-19-Javascript过滤空格.md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />

@@ -91,24 +91,24 @@
 
 <h1 id="2-事件绑定">2. 事件绑定</h1>
 <h2 id="21-dom中直接绑定">2.1. DOM中直接绑定</h2>
-<pre><code class="language-Javascript">&lt;input type="button" value="click me" onclick="hello()"&gt;
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"click me"</span> <span class="nx">onclick</span><span class="o">=</span><span class="s2">"hello()"</span><span class="o">&gt;</span>
 
-&lt;script&gt;
-function hello(){
- alert("hello world!");
-}
-&lt;/script&gt;
-</code></pre>
+<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+<span class="kd">function</span> <span class="nx">hello</span><span class="p">(){</span>
+ <span class="nx">alert</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span></code></pre></div></div>
 
 <h2 id="22-js事件绑定">2.2. JS事件绑定</h2>
-<pre><code class="language-Javascript">&lt;input type="button" value="click me" id="btn"&gt;
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"click me"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"btn"</span><span class="o">&gt;</span>
 
-&lt;script&gt;
-document.getElementById("btn").onclick = function(){
- alert("hello world!");
-}
-&lt;/script&gt;
-</code></pre>
+<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"btn"</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+ <span class="nx">alert</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span></code></pre></div></div>
 
 <p>传统绑定的<code class="highlighter-rouge">优点</code></p>
 <ul>
@@ -131,7 +131,7 @@ document.getElementById("btn").onclick = function(){
 
 <h2 id="31-事件注册方式">3.1. 事件注册方式</h2>
 <h3 id="311-ie以外">3.1.1. IE以外</h3>
-<pre><code class="language-JavaScript">target.addEventListener(type,listener,useCapture) 
+<pre><code class="language-javaScript">target.addEventListener(type,listener,useCapture) 
 target.removeEventListener(type,listener,useCapture); 
 target ：文档节点、document、window 或 XMLHttpRequest。 
 type ：字符串，事件名称，不含“on”，比如“click”、“mouseover”、“keydown”等。 
@@ -139,7 +139,7 @@ listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。
 useCapture ：是否使用捕捉，一般用 false。
 </code></pre>
 <h3 id="312-ie">3.1.2. IE</h3>
-<pre><code class="language-JavaScript">target.attachEvent(type, listener); 
+<pre><code class="language-javaScript">target.attachEvent(type, listener); 
 target.detachEvent(type, listener); 
 target ：文档节点、document、window 或 XMLHttpRequest。 
 type ：字符串，事件名称，含“on”，比如“onclick”、“onmouseover”、“onkeydown”等。 
@@ -165,7 +165,7 @@ listener ：实现了 EventListener 接口或者是 JavaScript 中的函数。
 <p>执行顺序为<code class="highlighter-rouge">method1</code>-&gt;<code class="highlighter-rouge">method2</code>-&gt;<code class="highlighter-rouge">method3</code></p>
 
 <p>兼容后的方法</p>
-<pre><code class="language-JavaScript">var func = function() {};
+<pre><code class="language-javaScript">var func = function() {};
 //例：addEvent(window,"load",func) 
 function addEvent(elem, type, fn) {
     if (elem.attachEvent) {
@@ -188,7 +188,7 @@ function removeEvent(elem, type, fn) {
 }
 </code></pre>
 <h2 id="32-获取事件对象和事件源">3.2. 获取事件对象和事件源</h2>
-<pre><code class="language-JavaScript">function eventHandler(e){ 
+<pre><code class="language-javaScript">function eventHandler(e){ 
     //获取事件对象 
     e = e || window.event;//IE和Chrome下是window.event FF下是e 
     //获取事件源 
@@ -197,7 +197,7 @@ function removeEvent(elem, type, fn) {
 </code></pre>
 
 <h2 id="33-取消事件默认行为">3.3. 取消事件默认行为</h2>
-<pre><code class="language-JavaScript">function eventHandler(e) {
+<pre><code class="language-javaScript">function eventHandler(e) {
     e = e || window.event;
     // 防止默认行为 
     if (e.preventDefault) {
@@ -211,7 +211,7 @@ function removeEvent(elem, type, fn) {
 </code></pre>
 
 <h2 id="34-阻止事件冒泡">3.4. 阻止事件冒泡</h2>
-<pre><code class="language-JavaScript">function myParagraphEventHandler(e) {
+<pre><code class="language-javaScript">function myParagraphEventHandler(e) {
     e = e || window.event;
     if (e.stopPropagation) {
         e.stopPropagation(); //IE以外 
@@ -223,47 +223,47 @@ function removeEvent(elem, type, fn) {
 
 <h2 id="35-通用解决方案">3.5. 通用解决方案</h2>
 <p><a href="http://dean.edwards.name/my/events.js">传送门</a></p>
-<pre><code class="language-Javascript">function addEvent(element, type, handler) {
-  // assign each event handler a unique ID
-  if (!handler.$$guid) handler.$$guid = addEvent.guid++;
-  // create a hash table of event types for the element
-  if (!element.events) element.events = {};
-  // create a hash table of event handlers for each element/event pair
-  var handlers = element.events[type];
-  if (!handlers) {
-    handlers = element.events[type] = {};
-    // store the existing event handler (if there is one)
-    if (element["on" + type]) {
-      handlers[0] = element["on" + type];
-    }
-  }
-  // store the event handler in the hash table
-  handlers[handler.$$guid] = handler;
-  // assign a global event handler to do all the work
-  element["on" + type] = handleEvent;
-};
-// a counter used to create unique IDs
-addEvent.guid = 1;
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">addEvent</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// assign each event handler a unique ID</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">handler</span><span class="p">.</span><span class="nx">$$guid</span><span class="p">)</span> <span class="nx">handler</span><span class="p">.</span><span class="nx">$$guid</span> <span class="o">=</span> <span class="nx">addEvent</span><span class="p">.</span><span class="nx">guid</span><span class="o">++</span><span class="p">;</span>
+  <span class="c1">// create a hash table of event types for the element</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">element</span><span class="p">.</span><span class="nx">events</span><span class="p">)</span> <span class="nx">element</span><span class="p">.</span><span class="nx">events</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="c1">// create a hash table of event handlers for each element/event pair</span>
+  <span class="kd">var</span> <span class="nx">handlers</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">events</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">handlers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">handlers</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">events</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="c1">// store the existing event handler (if there is one)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">element</span><span class="p">[</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">type</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">handlers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">element</span><span class="p">[</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">type</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// store the event handler in the hash table</span>
+  <span class="nx">handlers</span><span class="p">[</span><span class="nx">handler</span><span class="p">.</span><span class="nx">$$guid</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
+  <span class="c1">// assign a global event handler to do all the work</span>
+  <span class="nx">element</span><span class="p">[</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handleEvent</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="c1">// a counter used to create unique IDs</span>
+<span class="nx">addEvent</span><span class="p">.</span><span class="nx">guid</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
-function removeEvent(element, type, handler) {
-  // delete the event handler from the hash table
-  if (element.events &amp;&amp; element.events[type]) {
-    delete element.events[type][handler.$$guid];
-  }
-};
+<span class="kd">function</span> <span class="nx">removeEvent</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// delete the event handler from the hash table</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">events</span> <span class="o">&amp;&amp;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">events</span><span class="p">[</span><span class="nx">type</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">delete</span> <span class="nx">element</span><span class="p">.</span><span class="nx">events</span><span class="p">[</span><span class="nx">type</span><span class="p">][</span><span class="nx">handler</span><span class="p">.</span><span class="nx">$$guid</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 
-function handleEvent(event) {
-  // grab the event object (IE uses a global event object)
-  event = event || window.event;
-  // get a reference to the hash table of event handlers
-  var handlers = this.events[event.type];
-  // execute each event handler
-  for (var i in handlers) {
-    this.$$handleEvent = handlers[i];
-    this.$$handleEvent(event);
-  }
-};
-</code></pre>
+<span class="kd">function</span> <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// grab the event object (IE uses a global event object)</span>
+  <span class="nx">event</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
+  <span class="c1">// get a reference to the hash table of event handlers</span>
+  <span class="kd">var</span> <span class="nx">handlers</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">events</span><span class="p">[</span><span class="nx">event</span><span class="p">.</span><span class="nx">type</span><span class="p">];</span>
+  <span class="c1">// execute each event handler</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">handlers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">$$handleEvent</span> <span class="o">=</span> <span class="nx">handlers</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">$$handleEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
 
 <h1 id="4-事件委托">4. 事件委托</h1>
 <p>例如，你有一个很多行的大表格，在每个&lt;tr&gt;上绑定点击事件是个非常危险的想法，因为性能是个大问题。流行的做法是使用<em>事件委托</em>。</p>
@@ -271,7 +271,7 @@ function handleEvent(event) {
 <p>事件委托描述的是将事件绑定在容器元素上，然后通过判断点击的target子元素的类型来触发相应的事件。</p>
 
 <p>事件委托依赖于事件冒泡，如果事件冒泡到table之前被禁用的话，那以下代码就无法工作了。</p>
-<pre><code class="language-JavaScript">myTable.onclick = function() {
+<pre><code class="language-javaScript">myTable.onclick = function() {
     e = e || window.event;
     var targetNode = e.target || e.srcElement;
     // 测试如果点击的是TR就触发 
@@ -283,30 +283,30 @@ function handleEvent(event) {
 
 <p>当你有一个<code class="highlighter-rouge">List</code>，需要动态添加<code class="highlighter-rouge">li标签</code>，标签又需要绑定事件时，使用事件委托，可以避免每次添加<code class="highlighter-rouge">li</code>后的动态绑定</p>
 
-<pre><code class="language-Javascript">&lt;ul id="list"&gt;
- &lt;li id="item1" &gt;item1&lt;/li&gt;
- &lt;li id="item2" &gt;item2&lt;/li&gt;
- &lt;li id="item3" &gt;item3&lt;/li&gt;
-&lt;/ul&gt;
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">ul</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"list"</span><span class="o">&gt;</span>
+ <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"item1"</span> <span class="o">&gt;</span><span class="nx">item1</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
+</span> <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"item2"</span> <span class="o">&gt;</span><span class="nx">item2</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
+</span> <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"item3"</span> <span class="o">&gt;</span><span class="nx">item3</span><span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/ul</span><span class="err">&gt;
+</span>
+<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"list"</span><span class="p">);</span>
 
-&lt;script&gt;
-var list = document.getElementById("list");
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+ <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">;</span>
+ <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">nodeName</span> <span class="o">==</span> <span class="s2">"LI"</span><span class="p">){</span>
+ <span class="nx">alert</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+ <span class="p">}</span>
+<span class="p">})</span>
 
-document.addEventListener("click",function(event){
- var target = event.target;
- if(target.nodeName == "LI"){
- alert(target.innerHTML);
- }
-})
+<span class="kd">var</span> <span class="nx">node</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"li"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">textnode</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">"item4"</span><span class="p">);</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">textnode</span><span class="p">);</span>
+<span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
 
-var node=document.createElement("li");
-var textnode=document.createTextNode("item4");
-node.appendChild(textnode);
-list.appendChild(node);
-
-&lt;/script&gt;
-
-</code></pre>
+<span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span>
+</code></pre></div></div>
 
 <p>当点击item4时，item4有事件响应。说明<code class="highlighter-rouge">事件委托可以为新添加的DOM元素动态的添加事件</code>。</p>
 
@@ -343,7 +343,7 @@ list.appendChild(node);
 </blockquote>
 
 <p>代码如下:</p>
-<pre><code class="language-JavaScript">&lt;div onclick=funcA()&gt; 
+<pre><code class="language-javaScript">&lt;div onclick=funcA()&gt; 
     &lt;button onclick=funcB()&gt;Click&lt;/button&gt; 
 &lt;/div&gt; 
 </code></pre>

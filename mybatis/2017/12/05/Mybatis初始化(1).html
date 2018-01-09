@@ -87,12 +87,12 @@
 <h1 id="mybatis基于xml配置文件创建configuration对象的过程">MyBatis基于XML配置文件创建Configuration对象的过程</h1>
 <p>现在就从使用MyBatis的简单例子入手，深入分析一下MyBatis是怎样完成初始化的，都初始化了什么。看以下代码：</p>
 
-<pre><code class="language-Java">String resource = "mybatis-config.xml";  
-InputStream inputStream = Resources.getResourceAsStream(resource);  
-SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);  
-SqlSession sqlSession = sqlSessionFactory.openSession();  
-List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">resource</span> <span class="o">=</span> <span class="s">"mybatis-config.xml"</span><span class="o">;</span>  
+<span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>  
+<span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>  
+<span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>  
+<span class="n">List</span> <span class="n">list</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"com.foo.bean.BlogMapper.queryAllBlogInfo"</span><span class="o">);</span>
+</code></pre></div></div>
 
 <p>有过MyBatis使用经验的读者会知道，上述语句的作用是执行<code class="highlighter-rouge">com.foo.bean.BlogMapper.queryAllBlogInfo</code> 定义的SQL语句，返回一个List结果集。总的来说，上述代码经历了<code class="highlighter-rouge">mybatis初始化 --&gt;创建SqlSession --&gt;执行SQL语句</code> 返回结果三个过程。</p>
 
@@ -151,11 +151,11 @@ List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");
 <span class="o">}</span>  
 </code></pre></div></div>
 <p>从此处可以看出，MyBatis内部通过Configuration对象来创建SqlSessionFactory,用户也可以自己通过API构造好Configuration对象，调用此方法创建SqlSessionFactory</p>
-<pre><code class="language-Java">public SqlSessionFactory build(Configuration config)  
-{  
-    return new DefaultSqlSessionFactory(config);  
-} 
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">build</span><span class="o">(</span><span class="n">Configuration</span> <span class="n">config</span><span class="o">)</span>  
+<span class="o">{</span>  
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">DefaultSqlSessionFactory</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>  
+<span class="o">}</span> 
+</code></pre></div></div>
 <p>上述的初始化过程中，涉及到了以下几个对象：</p>
 <ul>
   <li><code class="highlighter-rouge">SqlSessionFactoryBuilder</code> ： SqlSessionFactory的构造器，用于创建SqlSessionFactory，采用了Builder设计模式</li>
@@ -178,49 +178,49 @@ List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");
 
 <ol>
   <li>之后XMLConfigBuilder调用parse()方法：会从XPathParser中取出 <configuration>节点对应的Node对象，然后解析此Node节点的子Node：`properties, settings, typeAliases,typeHandlers, objectFactory, objectWrapperFactory, plugins, environments,databaseIdProvider, mappers`
-</configuration>    <pre><code class="language-Java">public Configuration parse()  
-{  
-    if (parsed)  
-    {  
-        throw new BuilderException("Each XMLConfigBuilder can only be used once.");  
-    }  
-    parsed = true;  
-    //源码中没有这一句，只有 parseConfiguration(parser.evalNode("/configuration"));  
-    //为了让读者看得更明晰，源码拆分为以下两句  
-    XNode configurationNode = parser.evalNode("/configuration");  
-    parseConfiguration(configurationNode);  
-    return configuration;  
-}  
-/* 
+</configuration>    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">Configuration</span> <span class="nf">parse</span><span class="o">()</span>  
+<span class="o">{</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">parsed</span><span class="o">)</span>  
+    <span class="o">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"Each XMLConfigBuilder can only be used once."</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="n">parsed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>  
+    <span class="c1">//源码中没有这一句，只有 parseConfiguration(parser.evalNode("/configuration"));  </span>
+    <span class="c1">//为了让读者看得更明晰，源码拆分为以下两句  </span>
+    <span class="n">XNode</span> <span class="n">configurationNode</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"/configuration"</span><span class="o">);</span>  
+    <span class="n">parseConfiguration</span><span class="o">(</span><span class="n">configurationNode</span><span class="o">);</span>  
+    <span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>  
+<span class="o">}</span>  
+<span class="cm">/* 
 解析 "/configuration"节点下的子节点信息，然后将解析的结果设置到Configuration对象中 
-*/  
-private void parseConfiguration(XNode root) {  
-    try {  
-        //1.首先处理properties 节点     
-        propertiesElement(root.evalNode("properties")); //issue #117 read properties first  
-        //2.处理typeAliases  
-        typeAliasesElement(root.evalNode("typeAliases"));  
-        //3.处理插件  
-        pluginElement(root.evalNode("plugins"));  
-        //4.处理objectFactory  
-        objectFactoryElement(root.evalNode("objectFactory"));  
-        //5.objectWrapperFactory  
-        objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));  
-        //6.settings  
-        settingsElement(root.evalNode("settings"));  
-        //7.处理environments  
-        environmentsElement(root.evalNode("environments")); // read it after objectFactory and objectWrapperFactory issue #631  
-        //8.database  
-        databaseIdProviderElement(root.evalNode("databaseIdProvider"));  
-        //9. typeHandlers  
-        typeHandlerElement(root.evalNode("typeHandlers"));  
-        //10 mappers  
-        mapperElement(root.evalNode("mappers"));  
-    } catch (Exception e) {  
-        throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);  
-    }  
-}  
-</code></pre>
+*/</span>  
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">parseConfiguration</span><span class="o">(</span><span class="n">XNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="k">try</span> <span class="o">{</span>  
+        <span class="c1">//1.首先处理properties 节点     </span>
+        <span class="n">propertiesElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"properties"</span><span class="o">));</span> <span class="c1">//issue #117 read properties first  </span>
+        <span class="c1">//2.处理typeAliases  </span>
+        <span class="n">typeAliasesElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"typeAliases"</span><span class="o">));</span>  
+        <span class="c1">//3.处理插件  </span>
+        <span class="n">pluginElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"plugins"</span><span class="o">));</span>  
+        <span class="c1">//4.处理objectFactory  </span>
+        <span class="n">objectFactoryElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"objectFactory"</span><span class="o">));</span>  
+        <span class="c1">//5.objectWrapperFactory  </span>
+        <span class="n">objectWrapperFactoryElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"objectWrapperFactory"</span><span class="o">));</span>  
+        <span class="c1">//6.settings  </span>
+        <span class="n">settingsElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"settings"</span><span class="o">));</span>  
+        <span class="c1">//7.处理environments  </span>
+        <span class="n">environmentsElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"environments"</span><span class="o">));</span> <span class="c1">// read it after objectFactory and objectWrapperFactory issue #631  </span>
+        <span class="c1">//8.database  </span>
+        <span class="n">databaseIdProviderElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"databaseIdProvider"</span><span class="o">));</span>  
+        <span class="c1">//9. typeHandlers  </span>
+        <span class="n">typeHandlerElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"typeHandlers"</span><span class="o">));</span>  
+        <span class="c1">//10 mappers  </span>
+        <span class="n">mapperElement</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"mappers"</span><span class="o">));</span>  
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"Error parsing SQL Mapper Configuration. Cause: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>  
+</code></pre></div>    </div>
   </li>
 </ol>
 
@@ -231,57 +231,57 @@ private void parseConfiguration(XNode root) {
 </ol>
 
 <p>解析子节点的过程这里就不一一介绍了，用户可以参照MyBatis源码仔细揣摩，我们就看上述的<code class="highlighter-rouge">environmentsElement(root.evalNode("environments"));</code> 方法是如何将environments的信息解析出来，设置到Configuration对象中的：</p>
-<pre><code class="language-Java">/* 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* 
    解析environments节点，并将结果设置到Configuration对象中 
    注意：创建envronment时，如果SqlSessionFactoryBuilder指定了特定的环境（即数据源）； 
          则返回指定环境（数据源）的Environment对象，否则返回默认的Environment对象； 
          这种方式实现了MyBatis可以连接多数据源 
-*/  
-private void environmentsElement(XNode context) throws Exception  
-{  
-    if (context != null)  
-    {  
-        if (environment == null)  
-        {  
-            environment = context.getStringAttribute("default");  
-        }  
-        for (XNode child : context.getChildren())  
-        {  
-            String id = child.getStringAttribute("id");  
-            if (isSpecifiedEnvironment(id))  
-            {  
-                //1.创建事务工厂 TransactionFactory  
-                TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));  
-                DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));  
-                //2.创建数据源DataSource  
-                DataSource dataSource = dsFactory.getDataSource();  
-                //3. 构造Environment对象  
-                Environment.Builder environmentBuilder = new Environment.Builder(id)  
-                .transactionFactory(txFactory)  
-                .dataSource(dataSource);  
-                //4. 将创建的Envronment对象设置到configuration 对象中  
-                configuration.setEnvironment(environmentBuilder.build());  
-            }  
-        }  
-    }  
-}  
-private boolean isSpecifiedEnvironment(String id)  
-{  
-    if (environment == null)  
-    {  
-        throw new BuilderException("No environment specified.");  
-    }  
-    else if (id == null)  
-    {  
-        throw new BuilderException("Environment requires an id attribute.");  
-    }  
-    else if (environment.equals(id))  
-    {  
-        return true;  
-    }  
-    return false;  
-}  
-</code></pre>
+*/</span>  
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">environmentsElement</span><span class="o">(</span><span class="n">XNode</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>  
+<span class="o">{</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>  
+    <span class="o">{</span>  
+        <span class="k">if</span> <span class="o">(</span><span class="n">environment</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>  
+        <span class="o">{</span>  
+            <span class="n">environment</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"default"</span><span class="o">);</span>  
+        <span class="o">}</span>  
+        <span class="k">for</span> <span class="o">(</span><span class="n">XNode</span> <span class="n">child</span> <span class="o">:</span> <span class="n">context</span><span class="o">.</span><span class="na">getChildren</span><span class="o">())</span>  
+        <span class="o">{</span>  
+            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"id"</span><span class="o">);</span>  
+            <span class="k">if</span> <span class="o">(</span><span class="n">isSpecifiedEnvironment</span><span class="o">(</span><span class="n">id</span><span class="o">))</span>  
+            <span class="o">{</span>  
+                <span class="c1">//1.创建事务工厂 TransactionFactory  </span>
+                <span class="n">TransactionFactory</span> <span class="n">txFactory</span> <span class="o">=</span> <span class="n">transactionManagerElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"transactionManager"</span><span class="o">));</span>  
+                <span class="n">DataSourceFactory</span> <span class="n">dsFactory</span> <span class="o">=</span> <span class="n">dataSourceElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"dataSource"</span><span class="o">));</span>  
+                <span class="c1">//2.创建数据源DataSource  </span>
+                <span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="n">dsFactory</span><span class="o">.</span><span class="na">getDataSource</span><span class="o">();</span>  
+                <span class="c1">//3. 构造Environment对象  </span>
+                <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span> <span class="n">environmentBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>  
+                <span class="o">.</span><span class="na">transactionFactory</span><span class="o">(</span><span class="n">txFactory</span><span class="o">)</span>  
+                <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>  
+                <span class="c1">//4. 将创建的Envronment对象设置到configuration 对象中  </span>
+                <span class="n">configuration</span><span class="o">.</span><span class="na">setEnvironment</span><span class="o">(</span><span class="n">environmentBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">());</span>  
+            <span class="o">}</span>  
+        <span class="o">}</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>  
+<span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isSpecifiedEnvironment</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span>  
+<span class="o">{</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">environment</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>  
+    <span class="o">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"No environment specified."</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>  
+    <span class="o">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BuilderException</span><span class="o">(</span><span class="s">"Environment requires an id attribute."</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">id</span><span class="o">))</span>  
+    <span class="o">{</span>  
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  
+    <span class="o">}</span>  
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>  
+<span class="o">}</span>  
+</code></pre></div></div>
 <ol>
   <li>返回Configuration对象
 我们将上述的MyBatis初始化基本过程的序列图细化，</li>
@@ -290,7 +290,7 @@ private boolean isSpecifiedEnvironment(String id)
 <p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/mybatis5.png" alt="alt text" title="Title" /></p>
 
 <h1 id="手动加载xml配置文件创建configuration对象完成初始化创建并使用sqlsessionfactory对象">手动加载XML配置文件创建Configuration对象完成初始化，创建并使用SqlSessionFactory对象</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>我们可以使用XMLConfigBuilder手动解析XML配置文件来创建Configuration对象，代码如下： ```Java String resource = "mybatis-config.xml";   InputStream inputStream = Resources.getResourceAsStream(resource);   //手动创建XMLConfigBuilder，并解析创建Configuration对象   XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, null,null);   Configuration configuration=parse();   //使用Configuration对象创建SqlSessionFactory   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);   //使用MyBatis   SqlSession sqlSession = sqlSessionFactory.openSession();   List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");   ``` # 涉及到的设计模式
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>我们可以使用XMLConfigBuilder手动解析XML配置文件来创建Configuration对象，代码如下： ```java String resource = "mybatis-config.xml";   InputStream inputStream = Resources.getResourceAsStream(resource);   //手动创建XMLConfigBuilder，并解析创建Configuration对象   XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, null,null);   Configuration configuration=parse();   //使用Configuration对象创建SqlSessionFactory   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);   //使用MyBatis   SqlSession sqlSession = sqlSessionFactory.openSession();   List list = sqlSession.selectList("com.foo.bean.BlogMapper.queryAllBlogInfo");   ``` # 涉及到的设计模式
 
 初始化的过程涉及到创建各种对象，所以会使用一些创建型的设计模式。在初始化的过程中，Builder模式运用的比较多。
 </code></pre></div></div>
@@ -308,93 +308,93 @@ private boolean isSpecifiedEnvironment(String id)
 
 <h2 id="builder模式应用2-数据库连接环境environment对象的创建">Builder模式应用2： 数据库连接环境Environment对象的创建</h2>
 <p>在构建Configuration对象的过程中，XMLConfigParser解析 mybatis XML配置文件节点<environment>节点时，会有以下相应的代码：</environment></p>
-<pre><code class="language-Java">private void environmentsElement(XNode context) throws Exception {  
-  if (context != null) {  
-    if (environment == null) {  
-      environment = context.getStringAttribute("default");  
-    }  
-    for (XNode child : context.getChildren()) {  
-      String id = child.getStringAttribute("id");  
-      //是和默认的环境相同时，解析之  
-      if (isSpecifiedEnvironment(id)) {  
-        TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));  
-        DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));  
-        DataSource dataSource = dsFactory.getDataSource();  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">environmentsElement</span><span class="o">(</span><span class="n">XNode</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+  <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">environment</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="n">environment</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"default"</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">for</span> <span class="o">(</span><span class="n">XNode</span> <span class="n">child</span> <span class="o">:</span> <span class="n">context</span><span class="o">.</span><span class="na">getChildren</span><span class="o">())</span> <span class="o">{</span>  
+      <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getStringAttribute</span><span class="o">(</span><span class="s">"id"</span><span class="o">);</span>  
+      <span class="c1">//是和默认的环境相同时，解析之  </span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">isSpecifiedEnvironment</span><span class="o">(</span><span class="n">id</span><span class="o">))</span> <span class="o">{</span>  
+        <span class="n">TransactionFactory</span> <span class="n">txFactory</span> <span class="o">=</span> <span class="n">transactionManagerElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"transactionManager"</span><span class="o">));</span>  
+        <span class="n">DataSourceFactory</span> <span class="n">dsFactory</span> <span class="o">=</span> <span class="n">dataSourceElement</span><span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">evalNode</span><span class="o">(</span><span class="s">"dataSource"</span><span class="o">));</span>  
+        <span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="n">dsFactory</span><span class="o">.</span><span class="na">getDataSource</span><span class="o">();</span>  
   
-        //使用了Environment内置的构造器Builder，传递id 事务工厂和数据源  
-        Environment.Builder environmentBuilder = new Environment.Builder(id)  
-            .transactionFactory(txFactory)  
-            .dataSource(dataSource);  
-        configuration.setEnvironment(environmentBuilder.build());  
-      }  
-    }  
-  }  
-}  
-</code></pre>
+        <span class="c1">//使用了Environment内置的构造器Builder，传递id 事务工厂和数据源  </span>
+        <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span> <span class="n">environmentBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Environment</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>  
+            <span class="o">.</span><span class="na">transactionFactory</span><span class="o">(</span><span class="n">txFactory</span><span class="o">)</span>  
+            <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>  
+        <span class="n">configuration</span><span class="o">.</span><span class="na">setEnvironment</span><span class="o">(</span><span class="n">environmentBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">());</span>  
+      <span class="o">}</span>  
+    <span class="o">}</span>  
+  <span class="o">}</span>  
+<span class="o">}</span>  
+</code></pre></div></div>
 <p>在Environment内部，定义了静态内部Builder类：</p>
-<pre><code class="language-Java">public final class Environment {  
-  private final String id;  
-  private final TransactionFactory transactionFactory;  
-  private final DataSource dataSource;  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Environment</span> <span class="o">{</span>  
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">id</span><span class="o">;</span>  
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">TransactionFactory</span> <span class="n">transactionFactory</span><span class="o">;</span>  
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>  
   
-  public Environment(String id, TransactionFactory transactionFactory, DataSource dataSource) {  
-    if (id == null) {  
-      throw new IllegalArgumentException("Parameter 'id' must not be null");  
-    }  
-    if (transactionFactory == null) {  
-        throw new IllegalArgumentException("Parameter 'transactionFactory' must not be null");  
-    }  
-    this.id = id;  
-    if (dataSource == null) {  
-      throw new IllegalArgumentException("Parameter 'dataSource' must not be null");  
-    }  
-    this.transactionFactory = transactionFactory;  
-    this.dataSource = dataSource;  
-  }  
+  <span class="kd">public</span> <span class="nf">Environment</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">,</span> <span class="n">TransactionFactory</span> <span class="n">transactionFactory</span><span class="o">,</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Parameter 'id' must not be null"</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">transactionFactory</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Parameter 'transactionFactory' must not be null"</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">dataSource</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Parameter 'dataSource' must not be null"</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="k">this</span><span class="o">.</span><span class="na">transactionFactory</span> <span class="o">=</span> <span class="n">transactionFactory</span><span class="o">;</span>  
+    <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span> <span class="o">=</span> <span class="n">dataSource</span><span class="o">;</span>  
+  <span class="o">}</span>  
   
-  public static class Builder {  
-      private String id;  
-      private TransactionFactory transactionFactory;  
-      private DataSource dataSource;  
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="o">{</span>  
+      <span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="o">;</span>  
+      <span class="kd">private</span> <span class="n">TransactionFactory</span> <span class="n">transactionFactory</span><span class="o">;</span>  
+      <span class="kd">private</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>  
   
-    public Builder(String id) {  
-      this.id = id;  
-    }  
+    <span class="kd">public</span> <span class="nf">Builder</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>  
+    <span class="o">}</span>  
   
-    public Builder transactionFactory(TransactionFactory transactionFactory) {  
-      this.transactionFactory = transactionFactory;  
-      return this;  
-    }  
+    <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">transactionFactory</span><span class="o">(</span><span class="n">TransactionFactory</span> <span class="n">transactionFactory</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="k">this</span><span class="o">.</span><span class="na">transactionFactory</span> <span class="o">=</span> <span class="n">transactionFactory</span><span class="o">;</span>  
+      <span class="k">return</span> <span class="k">this</span><span class="o">;</span>  
+    <span class="o">}</span>  
   
-    public Builder dataSource(DataSource dataSource) {  
-      this.dataSource = dataSource;  
-      return this;  
-    }  
+    <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">dataSource</span><span class="o">(</span><span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>  
+      <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span> <span class="o">=</span> <span class="n">dataSource</span><span class="o">;</span>  
+      <span class="k">return</span> <span class="k">this</span><span class="o">;</span>  
+    <span class="o">}</span>  
   
-    public String id() {  
-      return this.id;  
-    }  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">id</span><span class="o">()</span> <span class="o">{</span>  
+      <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>  
+    <span class="o">}</span>  
   
-    public Environment build() {  
-      return new Environment(this.id, this.transactionFactory, this.dataSource);  
-    }  
+    <span class="kd">public</span> <span class="n">Environment</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>  
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Environment</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">transactionFactory</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span><span class="o">);</span>  
+    <span class="o">}</span>  
   
-  }  
+  <span class="o">}</span>  
   
-  public String getId() {  
-    return this.id;  
-  }  
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>  
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>  
+  <span class="o">}</span>  
   
-  public TransactionFactory getTransactionFactory() {  
-    return this.transactionFactory;  
-  }  
+  <span class="kd">public</span> <span class="n">TransactionFactory</span> <span class="nf">getTransactionFactory</span><span class="o">()</span> <span class="o">{</span>  
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">transactionFactory</span><span class="o">;</span>  
+  <span class="o">}</span>  
   
-  public DataSource getDataSource() {  
-    return this.dataSource;  
-  }  
+  <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">getDataSource</span><span class="o">()</span> <span class="o">{</span>  
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span><span class="o">;</span>  
+  <span class="o">}</span>  
   
-}  
-</code></pre>
+<span class="o">}</span>  
+</code></pre></div></div>
 
 <p><a href="http://blog.csdn.net/luanlouis/article/details/37744073#">原文地址http://blog.csdn.net/luanlouis/article/details/37744073#</a></p>
 </div>

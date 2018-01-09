@@ -50,7 +50,7 @@
 
 <h1 id="equals方法详解">equals()方法详解</h1>
 <p>先看java.lang.Object的默认实现，部分内容进行了翻译。</p>
-<pre><code class="language-Java">   /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="cm">/**
      * 表示某个其他对象是否“等于”这一个。
      * &lt;p&gt;
      * equals方法在非null对象引用上实现等价关系
@@ -69,85 +69,85 @@
      *          argument; false} otherwise.
      * @see     #hashCode()
      * @see     java.util.HashMap
-     */
-    public boolean equals(Object obj) {
-        return (this == obj);
-    }
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">obj</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。</p>
 
 <p>但是，很多时候，equals方法会被重写，例如 java.lang.String</p>
 
-<pre><code class="language-Java">public boolean equals(Object anObject) {
-        if (this == anObject) {
-            return true;
-        }
-        if (anObject instanceof String) {
-            String anotherString = (String) anObject;
-            int n = value.length;
-            if (n == anotherString.value.length) {
-                char v1[] = value;
-                char v2[] = anotherString.value;
-                int i = 0;
-                while (n-- != 0) {
-                    if (v1[i] != v2[i])
-                            return false;
-                    i++;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">anObject</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">anotherString</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">anObject</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">char</span> <span class="n">v1</span><span class="o">[]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+                <span class="kt">char</span> <span class="n">v2</span><span class="o">[]</span> <span class="o">=</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">n</span><span class="o">--</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">v1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">v2</span><span class="o">[</span><span class="n">i</span><span class="o">])</span>
+                            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="n">i</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>java.lang.String的equals方法不是进行引用地址比较，而是内容比较。</p>
 
 <p>下面举个形象的例子</p>
-<pre><code class="language-Java">public class User {
-    private int id;
-    private String name;
-    private String password;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
 
-    &lt;get and set&gt;
-}
-</code></pre>
+    <span class="o">&lt;</span><span class="n">get</span> <span class="n">and</span> <span class="n">set</span><span class="o">&gt;</span>
+<span class="o">}</span>
+</code></pre></div></div>
 <p>测试方法</p>
-<pre><code class="language-Java">    User user1 = new User();
-    User user2 = new User();
-    assert user1.equals(user2);
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">User</span> <span class="n">user1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
+    <span class="n">User</span> <span class="n">user2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
+    <span class="k">assert</span> <span class="n">user1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">user2</span><span class="o">);</span>
+</code></pre></div></div>
 <p>如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。</p>
 
-<pre><code class="language-Java">public class User {
-    private int id;
-    private String name;
-    private String password;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
 
-    &lt;get and set&gt;
+    <span class="o">&lt;</span><span class="n">get</span> <span class="n">and</span> <span class="n">set</span><span class="o">&gt;</span>
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return id == user.id &amp;&amp;
-                Objects.equals(name, user.name) &amp;&amp;
-                Objects.equals(password, user.password);
-    }
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">o</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">getClass</span><span class="o">()</span> <span class="o">!=</span> <span class="n">o</span><span class="o">.</span><span class="na">getClass</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="na">id</span> <span class="o">&amp;&amp;</span>
+                <span class="n">Objects</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">user</span><span class="o">.</span><span class="na">name</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+                <span class="n">Objects</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">password</span><span class="o">,</span> <span class="n">user</span><span class="o">.</span><span class="na">password</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    @Override
-    public int hashCode() {
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
 
-        return Objects.hash(id, name, password);
-    }
-}
-</code></pre>
+        <span class="k">return</span> <span class="n">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。</p>
 
@@ -155,7 +155,7 @@
 
 <h1 id="hashcode">hashCode()</h1>
 <p>先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc</p>
-<pre><code class="language-Java">  /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/**
      * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。
      * &lt;p&gt;
      * hashCode通常情况下遵守的合约是：
@@ -170,24 +170,24 @@
      * @return  a hash code value for this object.
      * @see     java.lang.Object#equals(java.lang.Object)
      * @see     java.lang.System#identityHashCode
-     */
-    public native int hashCode();
-</code></pre>
+     */</span>
+    <span class="kd">public</span> <span class="kd">native</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">();</span>
+</code></pre></div></div>
 
 <p>通常情况下，String等对象类型会重写这些方法，例如</p>
-<pre><code class="language-Java">    public int hashCode() {
-        int h = hash;
-        if (h == 0 &amp;&amp; value.length &gt; 0) {
-            char val[] = value;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hash</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">val</span><span class="o">[]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
 
-            for (int i = 0; i &lt; value.length; i++) {
-                h = 31 * h + val[i];
-            }
-            hash = h;
-        }
-        return h;
-    }
-</code></pre>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="mi">31</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">val</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="n">h</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">h</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>简单理解就是 String 使用 <code class="highlighter-rouge">s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]</code>重写了hashcode 的值。</p>
 

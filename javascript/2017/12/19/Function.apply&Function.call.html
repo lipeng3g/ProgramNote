@@ -67,13 +67,13 @@
 <p>函数是独立的(例如，有一个alert()函数)，而方法在对象的字典中是函数，我们通过对象引用调用它们。</p>
 
 <p>例如，每个JavaScript对象都有一个toString()方法，我们可以在函数对象上使用toString()方法来查看它的源代码：</p>
-<pre><code class="language-Javascript">function foo()
-{
-    alert('x');
-}
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">'x'</span><span class="p">);</span>
+<span class="p">}</span>
  
-alert(foo.toString());
-</code></pre>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">foo</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+</code></pre></div></div>
 
 <p>上面的执行结果是(请注意，这是一个字符串)
 <code class="highlighter-rouge">function foo()
@@ -86,7 +86,7 @@ alert(foo.toString());
 “函数当做数据”是很重要的，但是现在我们将重点讨论函数的两个方法:apply()和它的对应函数:call()。</p>
 
 <p>让我们从下面的代码开始：</p>
-<pre><code class="language-JavaScript">var x = 10;
+<pre><code class="language-javaScript">var x = 10;
  
 function f()
 {
@@ -101,7 +101,7 @@ f();
 
 <p>call()和apply()都是我们可以用来在方法调用期间分配这个指针的方法。
 例如，下面是我们如何使用call()方法:</p>
-<pre><code class="language-JavaScript">var x = 10;
+<pre><code class="language-javaScript">var x = 10;
 var o = { x: 15 };
  
 function f()
@@ -119,21 +119,21 @@ f.call(o);
 <p>摆弄这个指针可能听起来很滑稽，甚至是有悖常理的，对c++、Java和c#程序员来说都是如此。</p>
 
 <p>我们还可以通过call()将参数传递给目标函数:</p>
-<pre><code class="language-Javascript">var x = 10;
-var o = { x: 15 };
-function f(message)
-{
-    alert(message);
-    alert(this.x);
-}
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span> <span class="na">x</span><span class="p">:</span> <span class="mi">15</span> <span class="p">};</span>
+<span class="kd">function</span> <span class="nx">f</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>
+<span class="p">}</span>
  
-f("invoking f");
-f.call(o, "invoking f via call");
-</code></pre>
+<span class="nx">f</span><span class="p">(</span><span class="s2">"invoking f"</span><span class="p">);</span>
+<span class="nx">f</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="s2">"invoking f via call"</span><span class="p">);</span>
+</code></pre></div></div>
 
 <h2 id="apply">Apply()</h2>
 <p>apply()方法与call()相同，但是apply()需要一个数组作为第二个参数。该数组表示目标方法的参数。</p>
-<pre><code class="language-JavaScript">var x = 10;
+<pre><code class="language-javaScript">var x = 10;
 var o = { x: 15 };
 function f(message)
 {
@@ -147,33 +147,33 @@ f.apply(o, ["invoking f through apply"]);
 
 <p>apply()方法是有用的，因为我们可以不关心目标方法的签名。可以使用apply()将所有额外参数通过数组传递给目标方法。</p>
 
-<pre><code class="language-Javascript">var o = { x: 15 };
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span> <span class="na">x</span><span class="p">:</span> <span class="mi">15</span> <span class="p">};</span>
  
-function f1(message1)
-{
-    alert(message1 + this.x);
-}
+<span class="kd">function</span> <span class="nx">f1</span><span class="p">(</span><span class="nx">message1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">message1</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>
+<span class="p">}</span>
  
-function f2(message1, message2)
-{
-    alert(message1 + (this.x * this.x) + message2);
-}
+<span class="kd">function</span> <span class="nx">f2</span><span class="p">(</span><span class="nx">message1</span><span class="p">,</span> <span class="nx">message2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">message1</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">+</span> <span class="nx">message2</span><span class="p">);</span>
+<span class="p">}</span>
  
-function g(object, func, args)
-{
-    func.apply(object, args);
-}
+<span class="kd">function</span> <span class="nx">g</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">func</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">func</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+<span class="p">}</span>
  
-g(o, f1, ["the value of x = "]);
-g(o, f2, ["the value of x squared = ", ". Wow!"]);
-</code></pre>
+<span class="nx">g</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">f1</span><span class="p">,</span> <span class="p">[</span><span class="s2">"the value of x = "</span><span class="p">]);</span>
+<span class="nx">g</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">f2</span><span class="p">,</span> <span class="p">[</span><span class="s2">"the value of x squared = "</span><span class="p">,</span> <span class="s2">". Wow!"</span><span class="p">]);</span>
+</code></pre></div></div>
 
 <h2 id="参数">参数</h2>
 <p>上面的方法是有效的，但是很笨拙，用户必须把参数输入到一个数组中。幸运的是，有一种方法可以简化语法，但是我们必须引入一个更重要的主题:参数标识符。</p>
 
 <p>在JavaScript中，每个函数本质上都有一个可变长度参数列表。即使函数只使用一个参数，也可以将5个参数传递给函数。下面的操作没有错误，并显示“H”:</p>
 
-<pre><code class="language-JavaScript">function f(message)
+<pre><code class="language-javaScript">function f(message)
 {
     alert(message);
 }
@@ -182,7 +182,7 @@ f("H", "e", "l", "l", "o");
 </code></pre>
 
 <p>如果我们确实想从f()中访问其他参数，我们可以使用参数关键字。参数引用一个参数对象，它有一个长度属性，感觉就像一个数组。</p>
-<pre><code class="language-JavaScript">function f(message)
+<pre><code class="language-javaScript">function f(message)
 {
     // message param is the same as arguments[0]    
     // 注意，下面是从 1 开始拼接的，因为message和 下标为 0 的数据是相同的
@@ -201,30 +201,30 @@ f("H", "e", "l", "l", "o");
 <p>你知道，从技术上讲，arguments 不是一个数组，即使它的特征非常像一个数组。arguments 有一个长度属性，但没有 split、 push 或 pop 方法。
 在我们之前的g（）函数中，我们可以做的是将参数[1]后面的传入参数复制到我们传递的数组对象中。</p>
 
-<pre><code class="language-Javascript">var o = { x: 15 };
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span> <span class="na">x</span><span class="p">:</span> <span class="mi">15</span> <span class="p">};</span>
  
-function f(message1, message2)
-{
-    alert(message1 + (this.x * this.x) + message2);
-}
+<span class="kd">function</span> <span class="nx">f</span><span class="p">(</span><span class="nx">message1</span><span class="p">,</span> <span class="nx">message2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">message1</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">+</span> <span class="nx">message2</span><span class="p">);</span>
+<span class="p">}</span>
  
-function g(object, func)
-{           
-    // arguments[0] == object
-    // arguments[1] == func
+<span class="kd">function</span> <span class="nx">g</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">func</span><span class="p">)</span>
+<span class="p">{</span>           
+    <span class="c1">// arguments[0] == object</span>
+    <span class="c1">// arguments[1] == func</span>
     
-    var args = []; // empty array
-    // copy all other arguments we want to "pass through" 
-    for(var i = 2; i &lt; arguments.length; i++)
-    {
-        args.push(arguments[i]);
-    }
+    <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// empty array</span>
+    <span class="c1">// copy all other arguments we want to "pass through" </span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="kr">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">args</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kr">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+    <span class="p">}</span>
  
-    func.apply(object, args);
-}
+    <span class="nx">func</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+<span class="p">}</span>
  
-g(o, f, "The value of x squared = ", ". Wow!");
-</code></pre>
+<span class="nx">g</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">f</span><span class="p">,</span> <span class="s2">"The value of x squared = "</span><span class="p">,</span> <span class="s2">". Wow!"</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>当我们调用g()时，我们可以将附加的参数作为参数传递，而不是将参数填充到数组中。</p>
 

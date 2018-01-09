@@ -131,14 +131,14 @@
 
 <h2 id="22-创建模式">2.2. 创建模式</h2>
 <p>Mybatis通过工厂模式来创建DataSource对象，Mybatis定义了<code class="highlighter-rouge">org.apache.ibatis.datasource.DataSourceFactory</code>接口，通过<code class="highlighter-rouge">getDataSource()</code> 方法返回数据源。</p>
-<pre><code class="language-Java">public interface DataSourceFactory {
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DataSourceFactory</span> <span class="o">{</span>
 
-  void setProperties(Properties props);
+  <span class="kt">void</span> <span class="nf">setProperties</span><span class="o">(</span><span class="n">Properties</span> <span class="n">props</span><span class="o">);</span>
 
-  DataSource getDataSource();
+  <span class="n">DataSource</span> <span class="nf">getDataSource</span><span class="o">();</span>
 
-}
-</code></pre>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>针对三种类型的Type，对应有三种实现工厂</p>
 <ul>
@@ -155,74 +155,74 @@
 <h1 id="3-datasource什么时候创建connection对象">3. DataSource什么时候创建Connection对象</h1>
 <p>当需要创建SqlSession对象并且需要执行SQL语句的时候，Mybatis才会调用DataSource对象创建Connection对象。</p>
 
-<pre><code class="language-Java">String resource = "mybatis-config.xml";  
-InputStream inputStream = Resources.getResourceAsStream(resource);  
-SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);  
-SqlSession sqlSession = sqlSessionFactory.openSession();  
-sqlSession.selectList("SELECT * FROM STUDENTS");  
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">resource</span> <span class="o">=</span> <span class="s">"mybatis-config.xml"</span><span class="o">;</span>  
+<span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>  
+<span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>  
+<span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>  
+<span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"SELECT * FROM STUDENTS"</span><span class="o">);</span>  
+</code></pre></div></div>
 <p>上面的代码一直到了<code class="highlighter-rouge">sqlSession.selectList("SELECT * FROM STUDENTS");</code>才会创建Connection。</p>
 
-<pre><code class="language-Java">  protected void openConnection() throws SQLException {
-    if (log.isDebugEnabled()) {
-      log.debug("Opening JDBC Connection");
-    }
-    connection = dataSource.getConnection();
-    if (level != null) {
-      connection.setTransactionIsolation(level.getLevel());
-    }
-    setDesiredAutoCommit(autoCommmit);
-  }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">openConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Opening JDBC Connection"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">dataSource</span><span class="o">.</span><span class="na">getConnection</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">level</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">connection</span><span class="o">.</span><span class="na">setTransactionIsolation</span><span class="o">(</span><span class="n">level</span><span class="o">.</span><span class="na">getLevel</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="n">setDesiredAutoCommit</span><span class="o">(</span><span class="n">autoCommmit</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="4-unpooleddatasource">4. UnpooledDataSource</h1>
 <p>当DataSource的type属性配置成<strong>UNPOOLED</strong>，MyBatis首先会实例化一个<strong>UnpooledDataSourceFactory</strong>工厂实例，然后通过.getDataSource()方法返回一个UnpooledDataSource实例对象引用，我们假定为dataSource。
 使用UnpooledDataSource的getConnection(),每调用一次就会产生一个新的Connection实例对象。</p>
 
-<pre><code class="language-Java">
-  @Override
-  public Connection getConnection() throws SQLException {
-    return doGetConnection(username, password);
-  }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">doGetConnection</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  @Override
-  public Connection getConnection(String username, String password) throws SQLException {
-    return doGetConnection(username, password);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">doGetConnection</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  private Connection doGetConnection(String username, String password) throws SQLException {
-    Properties props = new Properties();
-    if (driverProperties != null) {
-      props.putAll(driverProperties);
-    }
-    if (username != null) {
-      props.setProperty("user", username);
-    }
-    if (password != null) {
-      props.setProperty("password", password);
-    }
-    return doGetConnection(props);
-  }
+  <span class="kd">private</span> <span class="n">Connection</span> <span class="nf">doGetConnection</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="n">Properties</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">driverProperties</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">props</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">driverProperties</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">username</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">props</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"user"</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">password</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">props</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"password"</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="nf">doGetConnection</span><span class="o">(</span><span class="n">props</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  private Connection doGetConnection(Properties properties) throws SQLException {
-    //初始化驱动
-    initializeDriver();
-    //获取连接，获取新的Connection对象
-    Connection connection = DriverManager.getConnection(url, properties);
-    //配置Connection
-    configureConnection(connection);
-    return connection;
-  }
+  <span class="kd">private</span> <span class="n">Connection</span> <span class="nf">doGetConnection</span><span class="o">(</span><span class="n">Properties</span> <span class="n">properties</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="c1">//初始化驱动</span>
+    <span class="n">initializeDriver</span><span class="o">();</span>
+    <span class="c1">//获取连接，获取新的Connection对象</span>
+    <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">properties</span><span class="o">);</span>
+    <span class="c1">//配置Connection</span>
+    <span class="n">configureConnection</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  private void configureConnection(Connection conn) throws SQLException {
-    if (autoCommit != null &amp;&amp; autoCommit != conn.getAutoCommit()) {
-      conn.setAutoCommit(autoCommit);
-    }
-    if (defaultTransactionIsolationLevel != null) {
-      conn.setTransactionIsolation(defaultTransactionIsolationLevel);
-    }
-  }
-</code></pre>
+  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">configureConnection</span><span class="o">(</span><span class="n">Connection</span> <span class="n">conn</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">autoCommit</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">autoCommit</span> <span class="o">!=</span> <span class="n">conn</span><span class="o">.</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">conn</span><span class="o">.</span><span class="na">setAutoCommit</span><span class="o">(</span><span class="n">autoCommit</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">defaultTransactionIsolationLevel</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">conn</span><span class="o">.</span><span class="na">setTransactionIsolation</span><span class="o">(</span><span class="n">defaultTransactionIsolationLevel</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <h2 id="41-创建connection过程">4.1. 创建Connection过程</h2>
 <ol>
@@ -238,41 +238,41 @@ sqlSession.selectList("SELECT * FROM STUDENTS");
 
 <h1 id="5-使用连接池">5. 使用连接池</h1>
 
-<pre><code class="language-Java">public static void main(String[] args) throws Exception
-{
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>
+<span class="o">{</span>
 
-    String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
-    PreparedStatement st = null;
-    ResultSet rs = null;
+    <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">"select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?"</span><span class="o">;</span>
+    <span class="n">PreparedStatement</span> <span class="n">st</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-    long beforeTimeOffset = -1L; //创建Connection对象前时间
-    long afterTimeOffset = -1L; //创建Connection对象后时间
-    long executeTimeOffset = -1L; //创建Connection对象后时间
+    <span class="kt">long</span> <span class="n">beforeTimeOffset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1L</span><span class="o">;</span> <span class="c1">//创建Connection对象前时间</span>
+    <span class="kt">long</span> <span class="n">afterTimeOffset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1L</span><span class="o">;</span> <span class="c1">//创建Connection对象后时间</span>
+    <span class="kt">long</span> <span class="n">executeTimeOffset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1L</span><span class="o">;</span> <span class="c1">//创建Connection对象后时间</span>
 
-    Connection con = null;
-    Class.forName("oracle.jdbc.driver.OracleDriver");
+    <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"oracle.jdbc.driver.OracleDriver"</span><span class="o">);</span>
 
-    beforeTimeOffset = new Date().getTime();
-    System.out.println("before:\t" + beforeTimeOffset);
+    <span class="n">beforeTimeOffset</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">().</span><span class="na">getTime</span><span class="o">();</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"before:\t"</span> <span class="o">+</span> <span class="n">beforeTimeOffset</span><span class="o">);</span>
 
-    con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
+    <span class="n">con</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:oracle:thin:@127.0.0.1:1521:xe"</span><span class="o">,</span> <span class="s">"louluan"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">);</span>
 
-    afterTimeOffset = new Date().getTime();
-    System.out.println("after:\t\t" + afterTimeOffset);
-    System.out.println("Create Costs:\t\t" + (afterTimeOffset - beforeTimeOffset) + " ms");
+    <span class="n">afterTimeOffset</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">().</span><span class="na">getTime</span><span class="o">();</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"after:\t\t"</span> <span class="o">+</span> <span class="n">afterTimeOffset</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Create Costs:\t\t"</span> <span class="o">+</span> <span class="o">(</span><span class="n">afterTimeOffset</span> <span class="o">-</span> <span class="n">beforeTimeOffset</span><span class="o">)</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
 
-    st = con.prepareStatement(sql);
-    //设置参数
-    st.setInt(1, 101);
-    st.setInt(2, 0);
-    //查询，得出结果集
-    rs = st.executeQuery();
-    executeTimeOffset = new Date().getTime();
-    System.out.println("Exec Costs:\t\t" + (executeTimeOffset - afterTimeOffset) + " ms");
+    <span class="n">st</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+    <span class="c1">//设置参数</span>
+    <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">101</span><span class="o">);</span>
+    <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="c1">//查询，得出结果集</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+    <span class="n">executeTimeOffset</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">().</span><span class="na">getTime</span><span class="o">();</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Exec Costs:\t\t"</span> <span class="o">+</span> <span class="o">(</span><span class="n">executeTimeOffset</span> <span class="o">-</span> <span class="n">afterTimeOffset</span><span class="o">)</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
 
-}
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>执行结果：</p>
 
@@ -315,16 +315,16 @@ sqlSession.selectList("SELECT * FROM STUDENTS");
 
 <h2 id="62-获取javasqlconnection对象">6.2. 获取java.sql.Connection对象</h2>
 <p>获取Connection的实现代码：</p>
-<pre><code class="language-Java">  @Override
-  public Connection getConnection() throws SQLException {
-    return popConnection(dataSource.getUsername(), dataSource.getPassword()).getProxyConnection();
-  }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">popConnection</span><span class="o">(</span><span class="n">dataSource</span><span class="o">.</span><span class="na">getUsername</span><span class="o">(),</span> <span class="n">dataSource</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()).</span><span class="na">getProxyConnection</span><span class="o">();</span>
+  <span class="o">}</span>
 
-  @Override
-  public Connection getConnection(String username, String password) throws SQLException {
-    return popConnection(username, password).getProxyConnection();
-  }
-</code></pre>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">popConnection</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">).</span><span class="na">getProxyConnection</span><span class="o">();</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <p>上面的popConnection()会从连接池返回一个PooledConnection对象，然后调用getProxyConnection()获取最终的Connection对象。（getProxyConnection()稍后在介绍）</p>
 
@@ -336,291 +336,291 @@ sqlSession.selectList("SELECT * FROM STUDENTS");
   <li>线程等待，循环2步</li>
 </ol>
 
-<pre><code class="language-Java">  private final PoolState state = new PoolState(this);
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">PoolState</span> <span class="n">state</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PoolState</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-  private final UnpooledDataSource dataSource;
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">UnpooledDataSource</span> <span class="n">dataSource</span><span class="o">;</span>
   
-  private PooledConnection popConnection(String username, String password) throws SQLException {
-    boolean countedWait = false;
-    PooledConnection conn = null;
-    long t = System.currentTimeMillis();
-    int localBadConnectionCount = 0;
+  <span class="kd">private</span> <span class="n">PooledConnection</span> <span class="nf">popConnection</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="n">countedWait</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="n">PooledConnection</span> <span class="n">conn</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">localBadConnectionCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
 
-    while (conn == null) {
-      synchronized (state) {
-        if (!state.idleConnections.isEmpty()) {
-          // idelConnections中有空闲的Connection对象，直接取出使用
-          conn = state.idleConnections.remove(0);
-          if (log.isDebugEnabled()) {
-            log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");
-          }
-        } else {
-          // idelConnections中没有空闲的Connection对象，但是activeConnections还没有达到最大活动上限
-          if (state.activeConnections.size() &lt; poolMaximumActiveConnections) {
-            // 创建一个新的Connection
-            conn = new PooledConnection(dataSource.getConnection(), this);
-            if (log.isDebugEnabled()) {
-              log.debug("Created connection " + conn.getRealHashCode() + ".");
-            }
-          } else {
-            // activeConnections已经达到最大活动上限，不能创建新的
-            // 获取最老的活动连接，检查超时
-            PooledConnection oldestActiveConnection = state.activeConnections.get(0);
-            long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
-            if (longestCheckoutTime &gt; poolMaximumCheckoutTime) {
-              // 最老的活动连接判定超时
-              state.claimedOverdueConnectionCount++;
-              state.accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
-              state.accumulatedCheckoutTime += longestCheckoutTime;
-              state.activeConnections.remove(oldestActiveConnection);
-              if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {
-                try {
-                  oldestActiveConnection.getRealConnection().rollback();
-                } catch (SQLException e) {
-                  /*
+    <span class="k">while</span> <span class="o">(</span><span class="n">conn</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">synchronized</span> <span class="o">(</span><span class="n">state</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">state</span><span class="o">.</span><span class="na">idleConnections</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+          <span class="c1">// idelConnections中有空闲的Connection对象，直接取出使用</span>
+          <span class="n">conn</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="na">idleConnections</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Checked out connection "</span> <span class="o">+</span> <span class="n">conn</span><span class="o">.</span><span class="na">getRealHashCode</span><span class="o">()</span> <span class="o">+</span> <span class="s">" from pool."</span><span class="o">);</span>
+          <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+          <span class="c1">// idelConnections中没有空闲的Connection对象，但是activeConnections还没有达到最大活动上限</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">state</span><span class="o">.</span><span class="na">activeConnections</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&lt;</span> <span class="n">poolMaximumActiveConnections</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 创建一个新的Connection</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PooledConnection</span><span class="o">(</span><span class="n">dataSource</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(),</span> <span class="k">this</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+              <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Created connection "</span> <span class="o">+</span> <span class="n">conn</span><span class="o">.</span><span class="na">getRealHashCode</span><span class="o">()</span> <span class="o">+</span> <span class="s">"."</span><span class="o">);</span>
+            <span class="o">}</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="c1">// activeConnections已经达到最大活动上限，不能创建新的</span>
+            <span class="c1">// 获取最老的活动连接，检查超时</span>
+            <span class="n">PooledConnection</span> <span class="n">oldestActiveConnection</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="na">activeConnections</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">longestCheckoutTime</span> <span class="o">=</span> <span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getCheckoutTime</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">longestCheckoutTime</span> <span class="o">&gt;</span> <span class="n">poolMaximumCheckoutTime</span><span class="o">)</span> <span class="o">{</span>
+              <span class="c1">// 最老的活动连接判定超时</span>
+              <span class="n">state</span><span class="o">.</span><span class="na">claimedOverdueConnectionCount</span><span class="o">++;</span>
+              <span class="n">state</span><span class="o">.</span><span class="na">accumulatedCheckoutTimeOfOverdueConnections</span> <span class="o">+=</span> <span class="n">longestCheckoutTime</span><span class="o">;</span>
+              <span class="n">state</span><span class="o">.</span><span class="na">accumulatedCheckoutTime</span> <span class="o">+=</span> <span class="n">longestCheckoutTime</span><span class="o">;</span>
+              <span class="n">state</span><span class="o">.</span><span class="na">activeConnections</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">oldestActiveConnection</span><span class="o">);</span>
+              <span class="k">if</span> <span class="o">(!</span><span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getRealConnection</span><span class="o">().</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                  <span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getRealConnection</span><span class="o">().</span><span class="na">rollback</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="cm">/*
                      只需为debug记录一条消息，并继续执行下面的语句，就像没有发生任何事情一样。
                      用一个新的Pooled连接包装the bad connection，这将有助于不影响当前的执行线程，
                      并给当前线程一个机会，使其能够与另一个valid/good database
                      connection一起参加下一个竞争。在这个循环结束时，bad {@link @conn}将被设置为null。
-                   */
-                  log.debug("Bad connection. Could not roll back");
-                }  
-              }
-              conn = new PooledConnection(oldestActiveConnection.getRealConnection(), this);
-              conn.setCreatedTimestamp(oldestActiveConnection.getCreatedTimestamp());
-              conn.setLastUsedTimestamp(oldestActiveConnection.getLastUsedTimestamp());
-              oldestActiveConnection.invalidate();
-              if (log.isDebugEnabled()) {
-                log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
-              }
-            } else {
-              // 上面的条件都不符合，需要循环等待
-              try {
-                if (!countedWait) {
-                  state.hadToWaitCount++;
-                  countedWait = true;
-                }
-                if (log.isDebugEnabled()) {
-                  log.debug("Waiting as long as " + poolTimeToWait + " milliseconds for connection.");
-                }
-                long wt = System.currentTimeMillis();
-                state.wait(poolTimeToWait);
-                state.accumulatedWaitTime += System.currentTimeMillis() - wt;
-              } catch (InterruptedException e) {
-                break;
-              }
-            }
-          }
-        }
-        if (conn != null) {
-          // ping to server and 检查Connection是否有效，无效的话badConnectionCount加一个
-          if (conn.isValid()) {
-            if (!conn.getRealConnection().getAutoCommit()) {//我的理解：如果连接不是自动提交，那么连接中可能有未完成的操作，需要手动回滚，如果自动提交，那么这个操作就没有意义了，所以不需要执行
-              conn.getRealConnection().rollback();
-            }
-            conn.setConnectionTypeCode(assembleConnectionTypeCode(dataSource.getUrl(), username, password));
-            conn.setCheckoutTimestamp(System.currentTimeMillis());
-            conn.setLastUsedTimestamp(System.currentTimeMillis());
-            state.activeConnections.add(conn);
-            state.requestCount++;
-            state.accumulatedRequestTime += System.currentTimeMillis() - t;
-          } else {
-            if (log.isDebugEnabled()) {
-              log.debug("A bad connection (" + conn.getRealHashCode() + ") was returned from the pool, getting another connection.");
-            }
-            state.badConnectionCount++;
-            localBadConnectionCount++;
-            conn = null;
-            if (localBadConnectionCount &gt; (poolMaximumIdleConnections + poolMaximumLocalBadConnectionTolerance)) {
-              if (log.isDebugEnabled()) {
-                log.debug("PooledDataSource: Could not get a good connection to the database.");
-              }
-              throw new SQLException("PooledDataSource: Could not get a good connection to the database.");
-            }
-          }
-        }
-      }
+                   */</span>
+                  <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Bad connection. Could not roll back"</span><span class="o">);</span>
+                <span class="o">}</span>  
+              <span class="o">}</span>
+              <span class="n">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PooledConnection</span><span class="o">(</span><span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getRealConnection</span><span class="o">(),</span> <span class="k">this</span><span class="o">);</span>
+              <span class="n">conn</span><span class="o">.</span><span class="na">setCreatedTimestamp</span><span class="o">(</span><span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getCreatedTimestamp</span><span class="o">());</span>
+              <span class="n">conn</span><span class="o">.</span><span class="na">setLastUsedTimestamp</span><span class="o">(</span><span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">getLastUsedTimestamp</span><span class="o">());</span>
+              <span class="n">oldestActiveConnection</span><span class="o">.</span><span class="na">invalidate</span><span class="o">();</span>
+              <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Claimed overdue connection "</span> <span class="o">+</span> <span class="n">conn</span><span class="o">.</span><span class="na">getRealHashCode</span><span class="o">()</span> <span class="o">+</span> <span class="s">"."</span><span class="o">);</span>
+              <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+              <span class="c1">// 上面的条件都不符合，需要循环等待</span>
+              <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">countedWait</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="n">state</span><span class="o">.</span><span class="na">hadToWaitCount</span><span class="o">++;</span>
+                  <span class="n">countedWait</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+                  <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Waiting as long as "</span> <span class="o">+</span> <span class="n">poolTimeToWait</span> <span class="o">+</span> <span class="s">" milliseconds for connection."</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="kt">long</span> <span class="n">wt</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+                <span class="n">state</span><span class="o">.</span><span class="na">wait</span><span class="o">(</span><span class="n">poolTimeToWait</span><span class="o">);</span>
+                <span class="n">state</span><span class="o">.</span><span class="na">accumulatedWaitTime</span> <span class="o">+=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">wt</span><span class="o">;</span>
+              <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+              <span class="o">}</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">conn</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="c1">// ping to server and 检查Connection是否有效，无效的话badConnectionCount加一个</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">conn</span><span class="o">.</span><span class="na">isValid</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">conn</span><span class="o">.</span><span class="na">getRealConnection</span><span class="o">().</span><span class="na">getAutoCommit</span><span class="o">())</span> <span class="o">{</span><span class="c1">//我的理解：如果连接不是自动提交，那么连接中可能有未完成的操作，需要手动回滚，如果自动提交，那么这个操作就没有意义了，所以不需要执行</span>
+              <span class="n">conn</span><span class="o">.</span><span class="na">getRealConnection</span><span class="o">().</span><span class="na">rollback</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="n">conn</span><span class="o">.</span><span class="na">setConnectionTypeCode</span><span class="o">(</span><span class="n">assembleConnectionTypeCode</span><span class="o">(</span><span class="n">dataSource</span><span class="o">.</span><span class="na">getUrl</span><span class="o">(),</span> <span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">));</span>
+            <span class="n">conn</span><span class="o">.</span><span class="na">setCheckoutTimestamp</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">());</span>
+            <span class="n">conn</span><span class="o">.</span><span class="na">setLastUsedTimestamp</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">());</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">activeConnections</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">conn</span><span class="o">);</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">requestCount</span><span class="o">++;</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">accumulatedRequestTime</span> <span class="o">+=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t</span><span class="o">;</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+              <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"A bad connection ("</span> <span class="o">+</span> <span class="n">conn</span><span class="o">.</span><span class="na">getRealHashCode</span><span class="o">()</span> <span class="o">+</span> <span class="s">") was returned from the pool, getting another connection."</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">state</span><span class="o">.</span><span class="na">badConnectionCount</span><span class="o">++;</span>
+            <span class="n">localBadConnectionCount</span><span class="o">++;</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">localBadConnectionCount</span> <span class="o">&gt;</span> <span class="o">(</span><span class="n">poolMaximumIdleConnections</span> <span class="o">+</span> <span class="n">poolMaximumLocalBadConnectionTolerance</span><span class="o">))</span> <span class="o">{</span>
+              <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"PooledDataSource: Could not get a good connection to the database."</span><span class="o">);</span>
+              <span class="o">}</span>
+              <span class="k">throw</span> <span class="k">new</span> <span class="nf">SQLException</span><span class="o">(</span><span class="s">"PooledDataSource: Could not get a good connection to the database."</span><span class="o">);</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
 
-    }
+    <span class="o">}</span>
 
-    if (conn == null) {
-      if (log.isDebugEnabled()) {
-        log.debug("PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
-      }
-      throw new SQLException("PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
-    }
+    <span class="k">if</span> <span class="o">(</span><span class="n">conn</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection."</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">SQLException</span><span class="o">(</span><span class="s">"PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection."</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    return conn;
-  }12
+    <span class="k">return</span> <span class="n">conn</span><span class="o">;</span>
+  <span class="o">}</span><span class="mi">12</span>
 
-</code></pre>
+</code></pre></div></div>
 <p>流程图
 <img src="/ProgramNote/assets/Image/mybatis/12.png" alt="流程图" title="流程图" /></p>
 
 <h2 id="63-javasqlconnection对象回收">6.3. java.sql.Connection对象回收</h2>
 
 <p>通常情况下释放Connection连接使用的是connection.close()，关闭Connection，释放资源。</p>
-<pre><code class="language-Java">private void test() throws ClassNotFoundException, SQLException
-{
-    String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
-    PreparedStatement st = null;
-    ResultSet rs = null;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span><span class="o">,</span> <span class="n">SQLException</span>
+<span class="o">{</span>
+    <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">"select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?"</span><span class="o">;</span>
+    <span class="n">PreparedStatement</span> <span class="n">st</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-    Connection con = null;
-    Class.forName("oracle.jdbc.driver.OracleDriver");
-    try
-    {
-        con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
-        st = con.prepareStatement(sql);
-        //设置参数
-        st.setInt(1, 101);
-        st.setInt(2, 0);
-        //查询，得出结果集
-        rs = st.executeQuery();
-        //取数据，省略
-        //关闭，释放资源
-        con.close();
-    }
-    catch (SQLException e)
-    {
-        con.close();
-        e.printStackTrace();
-    }
-}
+    <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"oracle.jdbc.driver.OracleDriver"</span><span class="o">);</span>
+    <span class="k">try</span>
+    <span class="o">{</span>
+        <span class="n">con</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:oracle:thin:@127.0.0.1:1521:xe"</span><span class="o">,</span> <span class="s">"louluan"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">);</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+        <span class="c1">//设置参数</span>
+        <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">101</span><span class="o">);</span>
+        <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="c1">//查询，得出结果集</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+        <span class="c1">//取数据，省略</span>
+        <span class="c1">//关闭，释放资源</span>
+        <span class="n">con</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">con</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 <p><strong>调用了Connection的Close()方法以后，对象资源被释放，对象也就无法使用了，但是使用连接池以后需要放到连接池以后供后续使用，该怎么做呢？</strong></p>
 
 <p>先使用下面的代码实现一个简单的连接池</p>
 
-<pre><code class="language-Java">
-package com.foo.jdbc;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">jdbc</span><span class="o">;</span>
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Vector;
+<span class="kn">import</span> <span class="nn">java.sql.Connection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.DriverManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.SQLException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Vector</span><span class="o">;</span>
 
-/**
+<span class="cm">/**
  * 
  * 一个线程安全的简易连接池实现，此连接池是单例的
  *  putConnection()将Connection添加到连接池中
  *  getConnection()返回一个Connection对象
- */
-public class Pool {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Pool</span> <span class="o">{</span>
 
-    private static Vector&lt;Connection&gt; pool = new Vector&lt;Connection&gt;();
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span> <span class="n">pool</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;();</span>
     
-    private static int MAX_CONNECTION =100;
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">MAX_CONNECTION</span> <span class="o">=</span><span class="mi">100</span><span class="o">;</span>
     
-    private static String DRIVER="oracle.jdbc.driver.OracleDriver";
-    private static String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
-    private static String USERNAME = "louluan";
-    private static String PASSWROD = "123456";
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">DRIVER</span><span class="o">=</span><span class="s">"oracle.jdbc.driver.OracleDriver"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">URL</span> <span class="o">=</span> <span class="s">"jdbc:oracle:thin:@127.0.0.1:1521:xe"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">USERNAME</span> <span class="o">=</span> <span class="s">"louluan"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">PASSWROD</span> <span class="o">=</span> <span class="s">"123456"</span><span class="o">;</span>
     
-    static {
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    <span class="kd">static</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">DRIVER</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
     
-    /**
+    <span class="cm">/**
      * 将一个Connection对象放置到连接池中 
-     */
-    public static  void putConnection(Connection connection){
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span>  <span class="kt">void</span> <span class="nf">putConnection</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">){</span>
         
-        synchronized(pool)
-        {
-            if(pool.size()&lt;MAX_CONNECTION)
-            {
-                pool.add(connection);       
-            }
-        }
-    }
+        <span class="kd">synchronized</span><span class="o">(</span><span class="n">pool</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">pool</span><span class="o">.</span><span class="na">size</span><span class="o">()&lt;</span><span class="n">MAX_CONNECTION</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="n">pool</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span>       
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
     
     
-    /**
+    <span class="cm">/**
      * 返回一个Connection对象，如果连接池内有元素，则pop出第一个元素；
      * 如果连接池Pool中没有元素，则创建一个connection对象，然后添加到pool中
      * @return Connection
-     */
-    public static Connection getConnection(){
-        Connection connection = null;
-        synchronized(pool)
-        {
-            if(pool.size()&gt;0)
-            {
-                connection = pool.get(0);
-                pool.remove(0);
-            }
-            else
-            {
-                connection = createConnection();
-                pool.add(connection);
-            }
-        }
-        return connection;
-    }
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">(){</span>
+        <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="kd">synchronized</span><span class="o">(</span><span class="n">pool</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">pool</span><span class="o">.</span><span class="na">size</span><span class="o">()&gt;</span><span class="mi">0</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="n">connection</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+                <span class="n">pool</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+            <span class="o">{</span>
+                <span class="n">connection</span> <span class="o">=</span> <span class="n">createConnection</span><span class="o">();</span>
+                <span class="n">pool</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">;</span>
+    <span class="o">}</span>
     
-    /**
+    <span class="cm">/**
      * 创建一个新的Connection对象
-     */
-    private static Connection createConnection()
-    {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(URL, USERNAME,PASSWROD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Connection</span> <span class="nf">createConnection</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">connection</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">URL</span><span class="o">,</span> <span class="n">USERNAME</span><span class="o">,</span><span class="n">PASSWROD</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">;</span>
+    <span class="o">}</span>
     
-}
+<span class="o">}</span>
 
-package com.foo.jdbc;
+<span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">jdbc</span><span class="o">;</span>
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Vector;
+<span class="kn">import</span> <span class="nn">java.sql.Connection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.DriverManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.PreparedStatement</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.ResultSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.SQLException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Vector</span><span class="o">;</span>
 
-public class PoolTest
-{
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PoolTest</span>
+<span class="o">{</span>
 
-    private void test() throws ClassNotFoundException, SQLException
-    {
-        String sql = "select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?";
-        PreparedStatement st = null;
-        ResultSet rs = null;
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span><span class="o">,</span> <span class="n">SQLException</span>
+    <span class="o">{</span>
+        <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">"select * from hr.employees where employee_id &lt; ? and employee_id &gt;= ?"</span><span class="o">;</span>
+        <span class="n">PreparedStatement</span> <span class="n">st</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-        Connection con = null;
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        try
-        {
-            con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "louluan", "123456");
-            st = con.prepareStatement(sql);
-            //设置参数
-            st.setInt(1, 101);
-            st.setInt(2, 0);
-            //查询，得出结果集
-            rs = st.executeQuery();
-            //取数据，省略
-            //将不再使用的Connection对象放到连接池中，供以后使用
-            Pool.putConnection(con);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
-}
+        <span class="n">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"oracle.jdbc.driver.OracleDriver"</span><span class="o">);</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">con</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:oracle:thin:@127.0.0.1:1521:xe"</span><span class="o">,</span> <span class="s">"louluan"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">);</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+            <span class="c1">//设置参数</span>
+            <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">101</span><span class="o">);</span>
+            <span class="n">st</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+            <span class="c1">//查询，得出结果集</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+            <span class="c1">//取数据，省略</span>
+            <span class="c1">//将不再使用的Connection对象放到连接池中，供以后使用</span>
+            <span class="n">Pool</span><span class="o">.</span><span class="na">putConnection</span><span class="o">(</span><span class="n">con</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">SQLException</span> <span class="n">e</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p><strong>上述代码可以实现使用完成一个Connection以后放到Pool中，但是不优雅，通常我们调用的都是Close释放资源，为了保持一致，代理机制就顺理成章的出现了。</strong></p>
 
@@ -632,145 +632,145 @@ public class PoolTest
 
 <p>PooledConnection对象内持有一个真正的数据库连接java.sql.Connection实例对象和一个java.sql.Connection的代理.</p>
 
-<pre><code class="language-Java">
-/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/**
  * @author Clinton Begin
- */
-class PooledConnection implements InvocationHandler {
+ */</span>
+<span class="kd">class</span> <span class="nc">PooledConnection</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span> <span class="o">{</span>
 
-  private static final String CLOSE = "close";
-  private static final Class&lt;?&gt;[] IFACES = new Class&lt;?&gt;[] { Connection.class };
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">CLOSE</span> <span class="o">=</span> <span class="s">"close"</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">IFACES</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="o">{</span> <span class="n">Connection</span><span class="o">.</span><span class="na">class</span> <span class="o">};</span>
 
-  private final int hashCode;
-  private final PooledDataSource dataSource;
-  private final Connection realConnection;
-  private final Connection proxyConnection;
-  private long checkoutTimestamp;
-  private long createdTimestamp;
-  private long lastUsedTimestamp;
-  private int connectionTypeCode;
-  private boolean valid;
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">hashCode</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">PooledDataSource</span> <span class="n">dataSource</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Connection</span> <span class="n">realConnection</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Connection</span> <span class="n">proxyConnection</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">long</span> <span class="n">checkoutTimestamp</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">long</span> <span class="n">createdTimestamp</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">long</span> <span class="n">lastUsedTimestamp</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">int</span> <span class="n">connectionTypeCode</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">valid</span><span class="o">;</span>
 
-  /*
+  <span class="cm">/*
    * Constructor for SimplePooledConnection that uses the Connection and PooledDataSource passed in
    *
    * @param connection - the connection that is to be presented as a pooled connection
    * @param dataSource - the dataSource that the connection is from
-   */
-  public PooledConnection(Connection connection, PooledDataSource dataSource) {
-    this.hashCode = connection.hashCode();
-    this.realConnection = connection;
-    this.dataSource = dataSource;
-    this.createdTimestamp = System.currentTimeMillis();
-    this.lastUsedTimestamp = System.currentTimeMillis();
-    this.valid = true;
-    this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);
-  }
+   */</span>
+  <span class="kd">public</span> <span class="nf">PooledConnection</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">,</span> <span class="n">PooledDataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">hashCode</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">realConnection</span> <span class="o">=</span> <span class="n">connection</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">dataSource</span> <span class="o">=</span> <span class="n">dataSource</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">createdTimestamp</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">lastUsedTimestamp</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">proxyConnection</span> <span class="o">=</span> <span class="o">(</span><span class="n">Connection</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">Connection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="n">IFACES</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  ...
-}
-</code></pre>
+  <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>PooledConenction实现了InvocationHandler接口，并且，proxyConnection对象也是根据这个它来生成的代理对象</p>
 
-<pre><code class="language-Java">    this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">this</span><span class="o">.</span><span class="na">proxyConnection</span> <span class="o">=</span> <span class="o">(</span><span class="n">Connection</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">Connection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="n">IFACES</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>  
 
-</code></pre>
+</code></pre></div></div>
 <p>当我们调用此proxyConnection对象上的任何方法时，都会调用PooledConnection对象内invoke()方法。</p>
 
-<pre><code class="language-Java">  /*
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/*
    * Required for InvocationHandler implementation.
    *
    * @param proxy  - not used
    * @param method - the method to be executed
    * @param args   - the parameters to be passed to the method
    * @see java.lang.reflect.InvocationHandler#invoke(Object, java.lang.reflect.Method, Object[])
-   */
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    String methodName = method.getName();
-    if (CLOSE.hashCode() == methodName.hashCode() &amp;&amp; CLOSE.equals(methodName)) {
-      dataSource.pushConnection(this);
-      return null;
-    } else {
-      try {
-        if (!Object.class.equals(method.getDeclaringClass())) {
-          // issue #579 toString() should never fail
-          // throw an SQLException instead of a Runtime
-          checkConnection();
-        }
-        return method.invoke(realConnection, args);
-      } catch (Throwable t) {
-        throw ExceptionUtil.unwrapThrowable(t);
-      }
-    }
-  }
-</code></pre>
+   */</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">methodName</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">CLOSE</span><span class="o">.</span><span class="na">hashCode</span><span class="o">()</span> <span class="o">==</span> <span class="n">methodName</span><span class="o">.</span><span class="na">hashCode</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">CLOSE</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">methodName</span><span class="o">))</span> <span class="o">{</span>
+      <span class="n">dataSource</span><span class="o">.</span><span class="na">pushConnection</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">method</span><span class="o">.</span><span class="na">getDeclaringClass</span><span class="o">()))</span> <span class="o">{</span>
+          <span class="c1">// issue #579 toString() should never fail</span>
+          <span class="c1">// throw an SQLException instead of a Runtime</span>
+          <span class="n">checkConnection</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">realConnection</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="n">ExceptionUtil</span><span class="o">.</span><span class="na">unwrapThrowable</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
 
 <h1 id="7-jndi类型的数据源datasource">7. JNDI类型的数据源DataSource</h1>
 
 <h2 id="71-mybatis-jndi数据源实现">7.1. Mybatis JNDI数据源实现</h2>
 <p>对于JNDI类型的数据源DataSource的获取就比较简单，MyBatis定义了一个JndiDataSourceFactory工厂来创建通过JNDI形式生成的DataSource。</p>
 
-<pre><code class="language-Java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * @author Clinton Begin
- */
-public class JndiDataSourceFactory implements DataSourceFactory {
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JndiDataSourceFactory</span> <span class="kd">implements</span> <span class="n">DataSourceFactory</span> <span class="o">{</span>
 
-  public static final String INITIAL_CONTEXT = "initial_context";
-  public static final String DATA_SOURCE = "data_source";
-  public static final String ENV_PREFIX = "env.";
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">INITIAL_CONTEXT</span> <span class="o">=</span> <span class="s">"initial_context"</span><span class="o">;</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">DATA_SOURCE</span> <span class="o">=</span> <span class="s">"data_source"</span><span class="o">;</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">ENV_PREFIX</span> <span class="o">=</span> <span class="s">"env."</span><span class="o">;</span>
 
-  private DataSource dataSource;
+  <span class="kd">private</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>
 
-  @Override
-  public void setProperties(Properties properties) {
-    try {
-      InitialContext initCtx;
-      Properties env = getEnvProperties(properties);
-      if (env == null) {
-        initCtx = new InitialContext();
-      } else {
-        initCtx = new InitialContext(env);
-      }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setProperties</span><span class="o">(</span><span class="n">Properties</span> <span class="n">properties</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">InitialContext</span> <span class="n">initCtx</span><span class="o">;</span>
+      <span class="n">Properties</span> <span class="n">env</span> <span class="o">=</span> <span class="n">getEnvProperties</span><span class="o">(</span><span class="n">properties</span><span class="o">);</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">env</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">initCtx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InitialContext</span><span class="o">();</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">initCtx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InitialContext</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+      <span class="o">}</span>
 
-      if (properties.containsKey(INITIAL_CONTEXT)
-          &amp;&amp; properties.containsKey(DATA_SOURCE)) {
-        Context ctx = (Context) initCtx.lookup(properties.getProperty(INITIAL_CONTEXT));
-        dataSource = (DataSource) ctx.lookup(properties.getProperty(DATA_SOURCE));
-      } else if (properties.containsKey(DATA_SOURCE)) {
-        dataSource = (DataSource) initCtx.lookup(properties.getProperty(DATA_SOURCE));
-      }
+      <span class="k">if</span> <span class="o">(</span><span class="n">properties</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">INITIAL_CONTEXT</span><span class="o">)</span>
+          <span class="o">&amp;&amp;</span> <span class="n">properties</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">DATA_SOURCE</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">Context</span> <span class="n">ctx</span> <span class="o">=</span> <span class="o">(</span><span class="n">Context</span><span class="o">)</span> <span class="n">initCtx</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">properties</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="n">INITIAL_CONTEXT</span><span class="o">));</span>
+        <span class="n">dataSource</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataSource</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">properties</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="n">DATA_SOURCE</span><span class="o">));</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">properties</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">DATA_SOURCE</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">dataSource</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataSource</span><span class="o">)</span> <span class="n">initCtx</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">properties</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="n">DATA_SOURCE</span><span class="o">));</span>
+      <span class="o">}</span>
 
-    } catch (NamingException e) {
-      throw new DataSourceException("There was an error configuring JndiDataSourceTransactionPool. Cause: " + e, e);
-    }
-  }
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NamingException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">DataSourceException</span><span class="o">(</span><span class="s">"There was an error configuring JndiDataSourceTransactionPool. Cause: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  @Override
-  public DataSource getDataSource() {
-    return dataSource;
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">getDataSource</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+  <span class="o">}</span>
 
-  private static Properties getEnvProperties(Properties allProps) {
-    final String PREFIX = ENV_PREFIX;
-    Properties contextProperties = null;
-    for (Entry&lt;Object, Object&gt; entry : allProps.entrySet()) {
-      String key = (String) entry.getKey();
-      String value = (String) entry.getValue();
-      if (key.startsWith(PREFIX)) {
-        if (contextProperties == null) {
-          contextProperties = new Properties();
-        }
-        contextProperties.put(key.substring(PREFIX.length()), value);
-      }
-    }
-    return contextProperties;
-  }
+  <span class="kd">private</span> <span class="kd">static</span> <span class="n">Properties</span> <span class="nf">getEnvProperties</span><span class="o">(</span><span class="n">Properties</span> <span class="n">allProps</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">String</span> <span class="n">PREFIX</span> <span class="o">=</span> <span class="n">ENV_PREFIX</span><span class="o">;</span>
+    <span class="n">Properties</span> <span class="n">contextProperties</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">allProps</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+      <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+      <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">PREFIX</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">contextProperties</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">contextProperties</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">contextProperties</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">PREFIX</span><span class="o">.</span><span class="na">length</span><span class="o">()),</span> <span class="n">value</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">contextProperties</span><span class="o">;</span>
+  <span class="o">}</span>
 
-}
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <h2 id="72-为什么使用jndi">7.2. 为什么使用JNDI</h2>
 
