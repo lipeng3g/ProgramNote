@@ -31,7 +31,28 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html">component-scan总结</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
+          <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
+
+
+
+当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中
+
+配置如下
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;spring&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/pa...</div><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月14日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/spring/2017/12/12/component-scan%E6%80%BB%E7%BB%93.html">component-scan总结</a></h1>
           <div class="m-article-content">今天偶然看到了原有的一个项目中有这样的配置信息
 
 配置文件spring-config.xml
@@ -146,31 +167,7 @@ Mybatis事务管理分为JdbcTransaction和ManagedTransaction：
       </div><div class="date-wrapper"><span class="article-meta">2017年 12月07日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">Mybatis初始化(1)</a></h1>
-          <div class="m-article-content">对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。
-
-
-MyBatis的初始化做了什么
-任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：
-× configuration 配置
-    × properties 属性
-    × settings 设置
-    × typeAliases 类型命名
-    × typeHandlers 类型处理器
-    × plugins 插件
-    × objectFactory 对象工厂
-    × reflectorFactory
-    × environments 环境
-        × environment 环境变量
-        × tr...</div><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月05日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 35 篇文章, 7 页。</p>
+</article></div><nav class="m-pagination"><p>共计 36 篇文章, 8 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page3">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -190,6 +187,8 @@ MyBatis的初始化做了什么
                 <a class="round-button" href="/ProgramNote/blog/page6"><span>6</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page7"><span>7</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page8"><span>8</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page5">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
