@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="zh">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>LinkedHashTable源码解析(JDK1.8.0_131) - lipeng's blog</title>
-<meta name="description" content="1. 数据结构LinkedHashMap底层实现是HashMap，和HashMap比较起来，增加了一个类似全局的链表，之前HashMap中是有链表的，在table中存储着很多链表，在LinkedHashMap中通过每个节点记录前后节点的方法，实现了把单个链表链接在一起成为一个整的链表，这样我们就可以按照访问顺序或...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/11/LinkedHashTable%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>LinkedHashMap源码解析(JDK1.8.0_131) - lipeng's blog</title>
+<meta name="description" content="1. 数据结构LinkedHashMap底层实现是HashMap，和HashMap比较起来，增加了一个类似全局的链表。双链表，一个是通常所说的Table桶中存储着一个一个的链表（也可能是红黑树），另一个是一个对于所有 node 或者 entry （也就是具体的每个存储对象）中都存储着befor和after属性，分...">
+<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/11/LinkedHashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -35,10 +35,10 @@
 		<div class="col-1">
 			<article itemscope itemtype="http://schema.org/BlogPosting">
 				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
-				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">LinkedHashTable源码解析(JDK1.8.0_131)</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">LinkedHashMap源码解析(JDK1.8.0_131)</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-linkedhashtable_source_jdk8">0
+        <span class="article-view" id="post-key-linkedhashmap_source_jdk8">0
         </span> views
       </div><div class="date-wrapper"><time class="article-meta" datetime="2018-01-11T18:05:36+08:00"
           itemprop="datePublished">2018年 01月11日
@@ -47,7 +47,9 @@
 </div>
 </header>
 				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-数据结构">1. 数据结构</h1>
-<p><code class="highlighter-rouge">LinkedHashMap</code>底层实现是<code class="highlighter-rouge">HashMap</code>，和<code class="highlighter-rouge">HashMap</code>比较起来，增加了一个类似全局的链表，之前<code class="highlighter-rouge">HashMap</code>中是有链表的，在<code class="highlighter-rouge">table</code>中存储着很多链表，在<code class="highlighter-rouge">LinkedHashMap</code>中通过每个节点记录前后节点的方法，实现了把单个链表链接在一起成为一个整的链表，这样我们就可以按照访问顺序或者按照插入顺序来访问节点数据。</p>
+<p><code class="highlighter-rouge">LinkedHashMap</code>底层实现是<code class="highlighter-rouge">HashMap</code>，和<code class="highlighter-rouge">HashMap</code>比较起来，增加了一个类似全局的链表。</p>
+
+<p>双链表，一个是通常所说的<code class="highlighter-rouge">Table</code>桶中存储着一个一个的链表（也可能是红黑树），另一个是一个对于所有 node 或者 entry （也就是具体的每个存储对象）中都存储着befor和after属性，分别指向了前后节点，另外定义了一个head和tail存储 node 或者 entry，这样就形成了一个完成的包含所有存储对象的链表。我们就可以按照访问顺序或者按照插入顺序来访问节点数据。</p>
 
 <p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/linkedhashmap.png" alt="hashmap" title="hashmap" /></p>
 
@@ -399,9 +401,9 @@ LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHash
 </code></pre></div></div>
 </div>
 				<footer><meta itemprop="dateModified" content="2018-01-11T18:05:36+08:00"><div class="article-license"><div class="m-license"><div class="clearfix">
-    <!--<a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-11-LinkedHashTable源码解析(JDK1.8.0_131).md">
+    <!--<a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-11-LinkedHashMap源码解析(JDK1.8.0_131).md">
         <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
-      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-11-LinkedHashTable源码解析(JDK1.8.0_131).md">在 Github 上查阅此文。</a></p>--><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/04-Java/2018-01-11-LinkedHashMap源码解析(JDK1.8.0_131).md">在 Github 上查阅此文。</a></p>--><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
       <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
     </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
   </div>
@@ -414,8 +416,8 @@ LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHash
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
     var disqus_config = function () {
-        this.page.url = 'http://localhost:4000/ProgramNote/java/2018/01/11/LinkedHashTable%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html';
-        this.page.identifier = 'linkedhashtable_source_jdk8';
+        this.page.url = 'http://localhost:4000/ProgramNote/java/2018/01/11/LinkedHashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html';
+        this.page.identifier = 'linkedhashmap_source_jdk8';
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE
@@ -548,7 +550,7 @@ LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHash
 			});
 			// 查询
 			var query = new AV.Query('WMCiMSk0m4BjqiUFfg8HeVwN');
-			query.equalTo('key', 'linkedhashtable_source_jdk8');
+			query.equalTo('key', 'linkedhashmap_source_jdk8');
 			query.first().then(function(result) {
 				if (result) {
 					addOne(result)
@@ -556,8 +558,8 @@ LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHash
 					//新建
 					var Blog = AV.Object.extend('WMCiMSk0m4BjqiUFfg8HeVwN');
 					var blog = new Blog();
-					blog.set('title', 'LinkedHashTable源码解析(JDK1.8.0_131)');
-					blog.set('key', 'linkedhashtable_source_jdk8');
+					blog.set('title', 'LinkedHashMap源码解析(JDK1.8.0_131)');
+					blog.set('key', 'linkedhashmap_source_jdk8');
 					blog.set('views', 0);
 					blog.save().then(function(page) {
 						addOne(page)
@@ -572,7 +574,7 @@ LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHash
 					page.increment('views', 1);
 					page.fetchWhenSave(true);
 					page.save().then(function(page) {
-						$("#post-key-linkedhashtable_source_jdk8").text(page.attributes.views);
+						$("#post-key-linkedhashmap_source_jdk8").text(page.attributes.views);
 					}, function(error) {
 						if (error) {
 							throw error;
