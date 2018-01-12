@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>LinkedHashSet源码解析(JDK1.8.0_131) - lipeng's blog</title>
-<meta name="description" content="数据结构LinkedHashSet继承了HashSet，也就是说从基本的方法上来说，他首先是一个HashSet，那么他就具有了HashSet的所有特性，存储的每个对象中，只是用了key，value都是相同的对象，不对map有具体影响。那么两者有哪些不同呢，我们需要从具体方法进行分析。构造函数构造方法基本都是一个套...">
+<meta name="description" content="1. 数据结构LinkedHashSet继承了HashSet，也就是说从基本的方法上来说，他首先是一个HashSet，那么他就具有了HashSet的所有特性，存储的每个对象中，只是用了key，value都是相同的对象，不对map有具体影响。那么两者有哪些不同呢，我们需要从具体方法进行分析。2. 构造函数构造方法基...">
 <link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -46,7 +46,7 @@
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="数据结构">数据结构</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-数据结构">1. 数据结构</h1>
 
 <p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/linkedhashmap.png" alt="hashmap" title="hashmap" /></p>
 
@@ -54,7 +54,7 @@
 
 <p>那么两者有哪些不同呢，我们需要从具体方法进行分析。</p>
 
-<h1 id="构造函数">构造函数</h1>
+<h1 id="2-构造函数">2. 构造函数</h1>
 <p>构造方法基本都是一个套路，调用了HashSet的私有的构造器，之前有一个私有的HashSet构造函数一直没有具体分析，在这里具体看一下</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
     <span class="kd">public</span> <span class="nf">LinkedHashSet</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">)</span> <span class="o">{</span>
@@ -81,7 +81,7 @@
 </code></pre></div></div>
 <p>请注意，这里和HashSet有了本质的区别，HashSet的实例化对象都是HashMap，但是这里的实例化对象都是LinkedHashMap，那么这两个不同的实例化对象对于 新增、获取、删除 元素有什么影响呢？</p>
 
-<h1 id="新增">新增</h1>
+<h1 id="3-新增">3. 新增</h1>
 
 <p>我们已经知道了HashSet是一个存储着key和相同value的哈希表，但是LinkedHashSet是怎么实现按照插入顺序来迭代的呢？<br />
 首先，创建一个实例对象，调用 add方法添加数据。</p>
@@ -124,7 +124,7 @@
 </code></pre></div></div>
 <p>上面有两个地方 标注了 <code class="highlighter-rouge">//这里不同，这里不同，这里不同</code>，原因是因为，上面我们说LinkedHashSet的实例化对象时LinkedHashMap，上面标注的几个方法在LinkedHashMap是有具体实现的，对于 newNode ，LinkedHashMap有具体的实现，这里不做详细介绍，简单说就是记录了前后节点，也就是标注了before和after，使LinkedHashSet可以按照顺序迭代数据。对于后面的两个地方，具体实现确实不同，但是由于 <code class="highlighter-rouge">accessOrder</code> 一直是false，所以LindedHashSet只能按照插入顺序迭代，不能按照访问顺序迭代。</p>
 
-<p>#其他</p>
+<h1 id="4-其他">4. 其他</h1>
 
 <p>对于 remove、get等方法，过程基本类似，由于LinkedHashMap实现了很多的方法，才导致LinkedHashSet和HashSet不同。而最根本的，是因为两者存储的对象不同。</p>
 

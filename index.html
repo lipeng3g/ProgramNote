@@ -32,7 +32,7 @@
 <div class="m-page-main"><div class="m-home">
   <div class="main">
     <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashSet源码解析(JDK1.8.0_131)</a></h1>
-          <div class="m-article-content">数据结构
+          <div class="m-article-content">1. 数据结构
 
 
 
@@ -40,14 +40,12 @@ LinkedHashSet继承了HashSet，也就是说从基本的方法上来说，他首
 
 那么两者有哪些不同呢，我们需要从具体方法进行分析。
 
-构造函数
+2. 构造函数
 构造方法基本都是一个套路，调用了HashSet的私有的构造器，之前有一个私有的HashSet构造函数一直没有具体分析，在这里具体看一下
 
     public LinkedHashSet(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor, true);
-    }
-
-...</div><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+ ...</div><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
         <span class="article-view" id="post-key-linkedhashset_source_jdk8">0
