@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>博客 - lipeng's blog</title>
 <meta name="description" content="lipeng's Blog
 ">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,7 +31,27 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashSet源码解析(JDK1.8.0_131)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">ArrayList源码解析(JDK1.8.0_131)</a></h1>
+          <div class="m-article-content">1. 数据结构
+ArrayList 的实现是依靠数组来完成的。
+List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。）
+Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。
+
+2. 构造函数
+成员变量
+
+    /**
+     * 默认的初始化容量
+     */
+    private sta...</div><a href="/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-arraylist_source_jdk8">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 01月12日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashSet源码解析(JDK1.8.0_131)</a></h1>
           <div class="m-article-content">1. 数据结构
 
 
@@ -117,30 +137,7 @@ HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了Ha
       </div><div class="date-wrapper"><span class="article-meta">2018年 01月09日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashMap源码解析(JDK1.8.0_131)</a></h1>
-          <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，前面已经简单分析了1.7的部分代码，这里以1.8.0_131的源码再次进行分析，思路仍然按照之前的思路，看一下1.8中有哪些不同
-
-1. 数据存储结构
-才用的结构和1.7类似，但是有些不同的是 数组+单向链表以后，为了提高链表的效率，在链表长度超过一定值（8）以后，链表转换成 红黑树。
-
-
-关于默认值需要注意下面的部分
-
-    /**
-     * 默认初始容量——必须是2的幂。
-     */
-    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16
-
-    /**
-     * 最大容量，如果任何一...</div><a href="/ProgramNote/java/2018/01/07/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-hashmap_source_jdk8">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月07日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 37 篇文章, 8 页。</p>
+</article></div><nav class="m-pagination"><p>共计 38 篇文章, 8 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -199,7 +196,7 @@ HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了Ha
   <div class="main">
     <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="lipeng">
-    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+    <link itemprop="url" href="https://lipeng3g.github.io/"><li title="在 Github 上关注我。">
         <div class="round-button github">
           <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
             <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">

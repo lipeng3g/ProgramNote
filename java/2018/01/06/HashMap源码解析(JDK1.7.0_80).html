@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HashMap源码解析(JDK1.7.0_80) - lipeng's blog</title>
 <meta name="description" content="写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录1. 数据存储结构采用双表结构：数组+单向链表    /**     * 一个空的表实例，用于在表未膨胀时共享。     */    static final ...">
-<link rel="canonical" href="http://localhost:4000/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="http://localhost:4000/ProgramNote/feed.xml">
+<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -450,7 +450,7 @@
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
     var disqus_config = function () {
-        this.page.url = 'http://localhost:4000/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html';
+        this.page.url = 'https://lipeng3g.github.io/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html';
         this.page.identifier = 'hashmap_source_jdk7';
     };
 
@@ -627,7 +627,7 @@
   <div class="main">
     <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="lipeng">
-    <link itemprop="url" href="http://localhost:4000/"><li title="在 Github 上关注我。">
+    <link itemprop="url" href="https://lipeng3g.github.io/"><li title="在 Github 上关注我。">
         <div class="round-button github">
           <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
             <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">

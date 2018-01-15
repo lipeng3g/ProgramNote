@@ -1,1 +1,1 @@
-Sitemap: http://localhost:4000/ProgramNote/sitemap.xml
+Sitemap: https://lipeng3g.github.io/ProgramNote/sitemap.xml
