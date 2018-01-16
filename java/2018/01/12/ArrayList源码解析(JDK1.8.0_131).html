@@ -52,7 +52,7 @@ List接口的可调整大小的实现。实现List的所有可选操作，并允
 Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。</p>
 
 <h1 id="2-构造函数">2. 构造函数</h1>
-<h2 id="成员变量">成员变量</h2>
+<h2 id="21-成员变量">2.1. 成员变量</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
     <span class="cm">/**
      * 默认的初始化容量
@@ -84,8 +84,8 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
 </code></pre></div></div>
 
-<h2 id="构造函数">构造函数</h2>
-<h3 id="arraylist">ArrayList()</h3>
+<h2 id="22-构造函数">2.2. 构造函数</h2>
+<h3 id="221-arraylist">2.2.1. ArrayList()</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 使用默认的空对象初始化
      */</span>
@@ -93,7 +93,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         <span class="k">this</span><span class="o">.</span><span class="na">elementData</span> <span class="o">=</span> <span class="n">DEFAULTCAPACITY_EMPTY_ELEMENTDATA</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h3 id="arraylistint-initialcapacity">ArrayList(int initialCapacity)</h3>
+<h3 id="222-arraylistint-initialcapacity">2.2.2. ArrayList(int initialCapacity)</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 使用指定的大小初始化对象
      *
@@ -114,7 +114,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         <span class="o">}</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h3 id="arraylistcollection-extends-e-c">ArrayList(Collection&lt;? extends E&gt; c)</h3>
+<h3 id="223-arraylistcollection-extends-e-c">2.2.3. ArrayList(Collection&lt;? extends E&gt; c)</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 构造一个包含初始化元素的list。
      * 元素的顺序是由初始化元素的迭代顺序来决定的。
@@ -149,7 +149,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
 
 <h1 id="3-新增">3. 新增</h1>
 
-<h2 id="adde-e">add(E e)</h2>
+<h2 id="31-adde-e">3.1. add(E e)</h2>
 
 <p>add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。<br />
 添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。</p>
@@ -212,7 +212,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
             <span class="n">MAX_ARRAY_SIZE</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="addint-index-e-element">add(int index, E element)</h2>
+<h2 id="32-addint-index-e-element">3.2. add(int index, E element)</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。
      *
@@ -247,7 +247,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">IndexOutOfBoundsException</span><span class="o">(</span><span class="n">outOfBoundsMsg</span><span class="o">(</span><span class="n">index</span><span class="o">));</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="addallcollection-extends-e-c">addAll(Collection&lt;? extends E&gt; c)</h2>
+<h2 id="33-addallcollection-extends-e-c">3.3. addAll(Collection&lt;? extends E&gt; c)</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">addAll</span><span class="o">(</span><span class="n">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//源集合转换成数组</span>
         <span class="n">Object</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">toArray</span><span class="o">();</span>
@@ -261,7 +261,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         <span class="k">return</span> <span class="n">numNew</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="addallint-index-collection-extends-e-c">addAll(int index, Collection&lt;? extends E&gt; c)</h2>
+<h2 id="34-addallint-index-collection-extends-e-c">3.4. addAll(int index, Collection&lt;? extends E&gt; c)</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">addAll</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="n">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//检测插入的index目标值有效</span>
         <span class="n">rangeCheckForAdd</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
@@ -281,7 +281,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="获取">获取</h1>
+<h1 id="4-获取">4. 获取</h1>
 <p>ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">E</span> <span class="nf">get</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//校验index值有效</span>
@@ -291,8 +291,8 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="删除">删除</h1>
-<h2 id="removeint-index">remove(int index)</h2>
+<h1 id="5-删除">5. 删除</h1>
+<h2 id="51-removeint-index">5.1. remove(int index)</h2>
 <p>删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
      * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。
@@ -316,7 +316,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="removeobject-o">remove(Object o)</h2>
+<h2 id="52-removeobject-o">5.2. remove(Object o)</h2>
 <p>如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
@@ -349,7 +349,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="复制">复制</h1>
+<h1 id="6-复制">6. 复制</h1>
 <p>从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 返回这个&lt; tt &gt;数组列表&lt;/ tt &gt;实例的一个浅拷贝。(这些元素本身并没有被复制。)
@@ -369,12 +369,12 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="扩容">扩容</h1>
+<h1 id="7-扩容">7. 扩容</h1>
 <p>这里不再重复介绍了，前面已经在<code class="highlighter-rouge">add</code>方法中进行了介绍。</p>
 
-<h1 id="迭代">迭代</h1>
+<h1 id="8-迭代">8. 迭代</h1>
 
-<h2 id="foreachconsumer-super-e-action">forEach(Consumer&lt;? super E&gt; action)</h2>
+<h2 id="81-foreachconsumer-super-e-action">8.1. forEach(Consumer&lt;? super E&gt; action)</h2>
 <p>这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">forEach</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">action</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">action</span><span class="o">);</span>
@@ -428,14 +428,14 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
 Processing Task 200
 Processing Task 300
 </code></pre></div></div>
-<h1 id="4-其他">4. 其他</h1>
+<h1 id="9-其他">9. 其他</h1>
 
-<h2 id="线程安全">线程安全</h2>
+<h2 id="91-线程安全">9.1. 线程安全</h2>
 <p>ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span> <span class="n">list</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">synchronizedList</span><span class="o">(</span><span class="k">new</span> <span class="n">ArrayList</span><span class="o">(...));</span>
 </code></pre></div></div>
 
-<h2 id="fail-fast">fail-fast</h2>
+<h2 id="92-fail-fast">9.2. fail-fast</h2>
 <p>这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。</p>
 
 <p>因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。</p>

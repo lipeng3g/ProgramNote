@@ -1,11 +1,321 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-15T11:55:16+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">ArrayList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="ArrayList源码解析(JDK1.8.0_131)" /><published>2018-01-12T20:29:18+08:00</published><updated>2018-01-12T20:29:18+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-16T22:28:03+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">LinkedList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="LinkedList源码解析(JDK1.8.0_131)" /><published>2018-01-16T19:52:06+08:00</published><updated>2018-01-16T19:52:06+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
+&lt;p&gt;LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。&lt;br /&gt;
+这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。&lt;/p&gt;
+
+&lt;p&gt;下面简单的代码就可以说明链表的基本的实现结构：&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * 链表的节点数量
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 指向第一个节点的指针。
+     * Invariant: (first == null &amp;amp;&amp;amp; last == null) ||
+     *            (first.prev == null &amp;amp;&amp;amp; first.item != null)
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 指向最后一个节点的指针。
+     * Invariant: (first == null &amp;amp;&amp;amp; last == null) ||
+     *            (last.next == null &amp;amp;&amp;amp; last.item != null)
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+    * 链表节点类，记录了自身和前后节点
+    */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;2-构造函数&quot;&gt;2. 构造函数&lt;/h1&gt;
+&lt;p&gt;构造方法有两个，而且非常简单，默认的构造方法没有任何实现，而使用集合构造时，只是调用了 addAll 方法进行实现。&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;LinkedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;LinkedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//这里有一点儿需要注意，初始化后的链表顺序是 c 原本的迭代顺序&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;3-新增&quot;&gt;3. 新增&lt;/h1&gt;
+&lt;h2 id=&quot;adde-e&quot;&gt;add(E e)&lt;/h2&gt;
+&lt;p&gt;把指定的元素追加到结尾，修改原来结尾元素的next指向。 元素个数加1。&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * 将指定的元素追加到列表的末尾。
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;linkLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 把e作为最后一个元素
+     */&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;linkLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//取出最后一个节点&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//定义新节点，l节点作为前一个，后一个为null&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//给last赋值&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//当最后一个为空，说明原来是空表，新元素为头&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//否则，旧元素的next指向新元素&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//元素个数加1&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;addint-index-e-element&quot;&gt;add(int index, E element)&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * 将指定的元素插入该列表中的指定位置。将当前位置的元素(如果有)和任何后续元素移到右边(将一个元素添加到它们的索引中)。
+     *
+     * @param index index at which the specified element is to be inserted
+     * @param element element to be inserted
+     * @throws IndexOutOfBoundsException {@inheritDoc}
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//检测插入位置合法性&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;checkPositionIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//如果index == size， 插入到最后，否则，执行正常插入操作&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;linkLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;nf&quot;&gt;linkBefore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkPositionIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isPositionIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexOutOfBoundsException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outOfBoundsMsg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isPositionIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//index不为负数，并且 index 不大于 size&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 在非空节点succ之前插入元素e。
+     */&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;linkBefore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// assert succ != null;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//获取succ的前一个元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//构造新元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//succ的前一个指向新元素&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// pred为空说明新元素时头，否则，succ原来的前一个元素的next指向新元素&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;addall&quot;&gt;addAll&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * 将指定集合中的所有元素追加到该列表的末尾，按指定集合的迭代器返回的顺序排列。
+     * 请注意，这里需要注意并发的问题。
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 将指定集合中的所有元素插入到列表中，从指定的位置开始。 将当前在该位置的元素（如果有的话）和随后的元素移到右侧（增加它们的索引）。 新元素将按照指定集合的迭代器返回的顺序出现在列表中。
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//验证index合法性&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;checkPositionIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//集合转成数组&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//获取插入点的前后元素&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//依次插入元素&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nd&quot;&gt;@SuppressWarnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;unchecked&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//恢复插入点前后的链表结构&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;succ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;addfirst--addlast&quot;&gt;addFirst &amp;amp; addLast&lt;/h2&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;linkFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;linkLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;linkFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//获取头元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//定义新的元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//头元素赋值&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//原先的头元素为空，说明表为空，last赋值为当前元素&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//否则原来的头元素的前元素指向新的头元素&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;set&quot;&gt;set&lt;/h2&gt;
+&lt;p&gt;set方法不添加新的值，使用当前元素覆盖原有的元素。这里和add有些许的区别，举例，当前链表长度时3，那么元素为[0],[1],[2],如果是add，index可以为3，但是如果是 set，index最大值只能是2，因为是覆盖。必须保证元素已存在。&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
+     * 用指定元素替换该列表中指定位置的元素。
+     *
+     * @param index index of the element to replace
+     * @param element element to be stored at the specified position
+     * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException {@inheritDoc}
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;checkElementIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldVal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldVal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkElementIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isElementIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexOutOfBoundsException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outOfBoundsMsg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isElementIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//请注意，这里和前面的判断有区别，这里 index 必须小于 size，否则溢出&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;4-获取&quot;&gt;4. 获取&lt;/h1&gt;
+&lt;h2 id=&quot;get&quot;&gt;get&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//检查index的合法性&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;checkElementIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//返回元素的存储对象&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;getfirst&quot;&gt;getFirst&lt;/h2&gt;
+&lt;p&gt;返回链表的头元素的存储对象&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NoSuchElementException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;getlast&quot;&gt;getLast&lt;/h2&gt;
+&lt;p&gt;返回链表的尾元素的存储对象&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getLast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NoSuchElementException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;5-删除&quot;&gt;5. 删除&lt;/h1&gt;
+&lt;p&gt;remove &amp;amp; removeFirst 
+默认情况下，链表删除的时候从头元素开始删除，先进先出。&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;removeFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;removeFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//获取头元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//头元素为空，抛出异常（空链表不能remove）&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NoSuchElementException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;unlinkFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 移除非空的第一个元素
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;unlinkFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// assert f == first &amp;amp;&amp;amp; f != null;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//取当前元素和下一个元素&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// help GC&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//头元素赋值&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//链表数量更新&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;6-复制&quot;&gt;6. 复制&lt;/h1&gt;
+
+&lt;h1 id=&quot;7-扩容&quot;&gt;7. 扩容&lt;/h1&gt;
+
+&lt;h1 id=&quot;8-迭代&quot;&gt;8. 迭代&lt;/h1&gt;
+
+&lt;h1 id=&quot;9-其他&quot;&gt;9. 其他&lt;/h1&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。 这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。 下面简单的代码就可以说明链表的基本的实现结构： /** * 链表的节点数量 */ transient int size = 0; /** * 指向第一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (first.prev == null &amp;amp;&amp;amp; first.item != null) */ transient Node&amp;lt;E&amp;gt; first; /** * 指向最后一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (last.next == null &amp;amp;&amp;amp; last.item != null) */ transient Node&amp;lt;E&amp;gt; last; /** * 链表节点类，记录了自身和前后节点 */ private static class Node&amp;lt;E&amp;gt; { E item; Node&amp;lt;E&amp;gt; next; Node&amp;lt;E&amp;gt; prev; Node(Node&amp;lt;E&amp;gt; prev, E element, Node&amp;lt;E&amp;gt; next) { this.item = element; this.next = next; this.prev = prev; } } 2. 构造函数 构造方法有两个，而且非常简单，默认的构造方法没有任何实现，而使用集合构造时，只是调用了 addAll 方法进行实现。 public LinkedList() { } public LinkedList(Collection&amp;lt;? extends E&amp;gt; c) { this(); //这里有一点儿需要注意，初始化后的链表顺序是 c 原本的迭代顺序 addAll(c); } 3. 新增 add(E e) 把指定的元素追加到结尾，修改原来结尾元素的next指向。 元素个数加1。 /** * 将指定的元素追加到列表的末尾。 */ public boolean add(E e) { linkLast(e); return true; } /** * 把e作为最后一个元素 */ void linkLast(E e) { //取出最后一个节点 final Node&amp;lt;E&amp;gt; l = last; //定义新节点，l节点作为前一个，后一个为null final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(l, e, null); //给last赋值 last = newNode; if (l == null) //当最后一个为空，说明原来是空表，新元素为头 first = newNode; else //否则，旧元素的next指向新元素 l.next = newNode; //元素个数加1 size++; modCount++; } add(int index, E element) /** * 将指定的元素插入该列表中的指定位置。将当前位置的元素(如果有)和任何后续元素移到右边(将一个元素添加到它们的索引中)。 * * @param index index at which the specified element is to be inserted * @param element element to be inserted * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //检测插入位置合法性 checkPositionIndex(index); //如果index == size， 插入到最后，否则，执行正常插入操作 if (index == size) linkLast(element); else linkBefore(element, node(index)); } private void checkPositionIndex(int index) { if (!isPositionIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isPositionIndex(int index) { //index不为负数，并且 index 不大于 size return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt;= size; } /** * 在非空节点succ之前插入元素e。 */ void linkBefore(E e, Node&amp;lt;E&amp;gt; succ) { // assert succ != null; //获取succ的前一个元素 final Node&amp;lt;E&amp;gt; pred = succ.prev; //构造新元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, succ); //succ的前一个指向新元素 succ.prev = newNode; // pred为空说明新元素时头，否则，succ原来的前一个元素的next指向新元素 if (pred == null) first = newNode; else pred.next = newNode; size++; modCount++; } addAll /** * 将指定集合中的所有元素追加到该列表的末尾，按指定集合的迭代器返回的顺序排列。 * 请注意，这里需要注意并发的问题。 */ public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { return addAll(size, c); } /** * 将指定集合中的所有元素插入到列表中，从指定的位置开始。 将当前在该位置的元素（如果有的话）和随后的元素移到右侧（增加它们的索引）。 新元素将按照指定集合的迭代器返回的顺序出现在列表中。 */ public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //验证index合法性 checkPositionIndex(index); //集合转成数组 Object[] a = c.toArray(); int numNew = a.length; if (numNew == 0) return false; //获取插入点的前后元素 Node&amp;lt;E&amp;gt; pred, succ; if (index == size) { succ = null; pred = last; } else { succ = node(index); pred = succ.prev; } //依次插入元素 for (Object o : a) { @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o; Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, null); if (pred == null) first = newNode; else pred.next = newNode; pred = newNode; } //恢复插入点前后的链表结构 if (succ == null) { last = pred; } else { pred.next = succ; succ.prev = pred; } size += numNew; modCount++; return true; } addFirst &amp;amp; addLast public void addFirst(E e) { linkFirst(e); } public void addLast(E e) { linkLast(e); } private void linkFirst(E e) { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //定义新的元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(null, e, f); //头元素赋值 first = newNode; if (f == null) //原先的头元素为空，说明表为空，last赋值为当前元素 last = newNode; else //否则原来的头元素的前元素指向新的头元素 f.prev = newNode; size++; modCount++; } set set方法不添加新的值，使用当前元素覆盖原有的元素。这里和add有些许的区别，举例，当前链表长度时3，那么元素为[0],[1],[2],如果是add，index可以为3，但是如果是 set，index最大值只能是2，因为是覆盖。必须保证元素已存在。 /** * 用指定元素替换该列表中指定位置的元素。 * * @param index index of the element to replace * @param element element to be stored at the specified position * @return the element previously at the specified position * @throws IndexOutOfBoundsException {@inheritDoc} */ public E set(int index, E element) { checkElementIndex(index); Node&amp;lt;E&amp;gt; x = node(index); E oldVal = x.item; x.item = element; return oldVal; } private void checkElementIndex(int index) { if (!isElementIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isElementIndex(int index) { //请注意，这里和前面的判断有区别，这里 index 必须小于 size，否则溢出 return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt; size; } 4. 获取 get public E get(int index) { //检查index的合法性 checkElementIndex(index); //返回元素的存储对象 return node(index).item; } getFirst 返回链表的头元素的存储对象 public E getFirst() { final Node&amp;lt;E&amp;gt; f = first; if (f == null) throw new NoSuchElementException(); return f.item; } getLast 返回链表的尾元素的存储对象 public E getLast() { final Node&amp;lt;E&amp;gt; l = last; if (l == null) throw new NoSuchElementException(); return l.item; } 5. 删除 remove &amp;amp; removeFirst 默认情况下，链表删除的时候从头元素开始删除，先进先出。 public E remove() { return removeFirst(); } public E removeFirst() { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //头元素为空，抛出异常（空链表不能remove） if (f == null) throw new NoSuchElementException(); return unlinkFirst(f); } /** * 移除非空的第一个元素 */ private E unlinkFirst(Node&amp;lt;E&amp;gt; f) { // assert f == first &amp;amp;&amp;amp; f != null; //取当前元素和下一个元素 final E element = f.item; final Node&amp;lt;E&amp;gt; next = f.next; f.item = null; f.next = null; // help GC //头元素赋值 first = next; if (next == null) last = null; else next.prev = null; //链表数量更新 size--; modCount++; return element; } 6. 复制 7. 扩容 8. 迭代 9. 其他</summary></entry><entry><title type="html">ArrayList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="ArrayList源码解析(JDK1.8.0_131)" /><published>2018-01-12T20:29:18+08:00</published><updated>2018-01-12T20:29:18+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
 &lt;p&gt;ArrayList 的实现是依靠数组来完成的。&lt;br /&gt;
 List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。）&lt;br /&gt;
 Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。&lt;/p&gt;
 
 &lt;h1 id=&quot;2-构造函数&quot;&gt;2. 构造函数&lt;/h1&gt;
-&lt;h2 id=&quot;成员变量&quot;&gt;成员变量&lt;/h2&gt;
+&lt;h2 id=&quot;21-成员变量&quot;&gt;2.1. 成员变量&lt;/h2&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
     &lt;span class=&quot;cm&quot;&gt;/**
      * 默认的初始化容量
@@ -37,8 +347,8 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;构造函数&quot;&gt;构造函数&lt;/h2&gt;
-&lt;h3 id=&quot;arraylist&quot;&gt;ArrayList()&lt;/h3&gt;
+&lt;h2 id=&quot;22-构造函数&quot;&gt;2.2. 构造函数&lt;/h2&gt;
+&lt;h3 id=&quot;221-arraylist&quot;&gt;2.2.1. ArrayList()&lt;/h3&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
      * 使用默认的空对象初始化
      */&lt;/span&gt;
@@ -46,7 +356,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEFAULTCAPACITY_EMPTY_ELEMENTDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;arraylistint-initialcapacity&quot;&gt;ArrayList(int initialCapacity)&lt;/h3&gt;
+&lt;h3 id=&quot;222-arraylistint-initialcapacity&quot;&gt;2.2.2. ArrayList(int initialCapacity)&lt;/h3&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
      * 使用指定的大小初始化对象
      *
@@ -67,7 +377,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;arraylistcollection-extends-e-c&quot;&gt;ArrayList(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h3&gt;
+&lt;h3 id=&quot;223-arraylistcollection-extends-e-c&quot;&gt;2.2.3. ArrayList(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h3&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
      * 构造一个包含初始化元素的list。
      * 元素的顺序是由初始化元素的迭代顺序来决定的。
@@ -102,7 +412,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
 
 &lt;h1 id=&quot;3-新增&quot;&gt;3. 新增&lt;/h1&gt;
 
-&lt;h2 id=&quot;adde-e&quot;&gt;add(E e)&lt;/h2&gt;
+&lt;h2 id=&quot;31-adde-e&quot;&gt;3.1. add(E e)&lt;/h2&gt;
 
 &lt;p&gt;add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。&lt;br /&gt;
 添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。&lt;/p&gt;
@@ -165,7 +475,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
             &lt;span class=&quot;n&quot;&gt;MAX_ARRAY_SIZE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;addint-index-e-element&quot;&gt;add(int index, E element)&lt;/h2&gt;
+&lt;h2 id=&quot;32-addint-index-e-element&quot;&gt;3.2. add(int index, E element)&lt;/h2&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
      * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。
      *
@@ -200,7 +510,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
             &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexOutOfBoundsException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outOfBoundsMsg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;addallcollection-extends-e-c&quot;&gt;addAll(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
+&lt;h2 id=&quot;33-addallcollection-extends-e-c&quot;&gt;3.3. addAll(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;//源集合转换成数组&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
@@ -214,7 +524,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;addallint-index-collection-extends-e-c&quot;&gt;addAll(int index, Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
+&lt;h2 id=&quot;34-addallint-index-collection-extends-e-c&quot;&gt;3.4. addAll(int index, Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;//检测插入的index目标值有效&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;rangeCheckForAdd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -234,7 +544,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;获取&quot;&gt;获取&lt;/h1&gt;
+&lt;h1 id=&quot;4-获取&quot;&gt;4. 获取&lt;/h1&gt;
 &lt;p&gt;ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;//校验index值有效&lt;/span&gt;
@@ -244,8 +554,8 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;删除&quot;&gt;删除&lt;/h1&gt;
-&lt;h2 id=&quot;removeint-index&quot;&gt;remove(int index)&lt;/h2&gt;
+&lt;h1 id=&quot;5-删除&quot;&gt;5. 删除&lt;/h1&gt;
+&lt;h2 id=&quot;51-removeint-index&quot;&gt;5.1. remove(int index)&lt;/h2&gt;
 &lt;p&gt;删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
      * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。
@@ -269,7 +579,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;removeobject-o&quot;&gt;remove(Object o)&lt;/h2&gt;
+&lt;h2 id=&quot;52-removeobject-o&quot;&gt;5.2. remove(Object o)&lt;/h2&gt;
 &lt;p&gt;如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -302,7 +612,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;复制&quot;&gt;复制&lt;/h1&gt;
+&lt;h1 id=&quot;6-复制&quot;&gt;6. 复制&lt;/h1&gt;
 &lt;p&gt;从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
      * 返回这个&amp;lt; tt &amp;gt;数组列表&amp;lt;/ tt &amp;gt;实例的一个浅拷贝。(这些元素本身并没有被复制。)
@@ -322,12 +632,12 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;扩容&quot;&gt;扩容&lt;/h1&gt;
+&lt;h1 id=&quot;7-扩容&quot;&gt;7. 扩容&lt;/h1&gt;
 &lt;p&gt;这里不再重复介绍了，前面已经在&lt;code class=&quot;highlighter-rouge&quot;&gt;add&lt;/code&gt;方法中进行了介绍。&lt;/p&gt;
 
-&lt;h1 id=&quot;迭代&quot;&gt;迭代&lt;/h1&gt;
+&lt;h1 id=&quot;8-迭代&quot;&gt;8. 迭代&lt;/h1&gt;
 
-&lt;h2 id=&quot;foreachconsumer-super-e-action&quot;&gt;forEach(Consumer&amp;lt;? super E&amp;gt; action)&lt;/h2&gt;
+&lt;h2 id=&quot;81-foreachconsumer-super-e-action&quot;&gt;8.1. forEach(Consumer&amp;lt;? super E&amp;gt; action)&lt;/h2&gt;
 &lt;p&gt;这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;Objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requireNonNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -381,19 +691,19 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
 Processing Task 200
 Processing Task 300
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h1 id=&quot;4-其他&quot;&gt;4. 其他&lt;/h1&gt;
+&lt;h1 id=&quot;9-其他&quot;&gt;9. 其他&lt;/h1&gt;
 
-&lt;h2 id=&quot;线程安全&quot;&gt;线程安全&lt;/h2&gt;
+&lt;h2 id=&quot;91-线程安全&quot;&gt;9.1. 线程安全&lt;/h2&gt;
 &lt;p&gt;ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;synchronizedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...));&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;fail-fast&quot;&gt;fail-fast&lt;/h2&gt;
+&lt;h2 id=&quot;92-fail-fast&quot;&gt;9.2. fail-fast&lt;/h2&gt;
 &lt;p&gt;这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。&lt;/p&gt;
 
 &lt;p&gt;因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。&lt;/p&gt;
 
-&lt;p&gt;请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 ArrayList 的实现是依靠数组来完成的。 List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。） Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。 add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。 2. 构造函数 成员变量 /** * 默认的初始化容量 */ private static final int DEFAULT_CAPACITY = 10; /** * 用于空实例的共享空数组实例。（比如，初始化的容量为0时，初始化对象就会直接被赋值成 EMPTY_ELEMENTDATA） */ private static final Object[] EMPTY_ELEMENTDATA = {}; /** * 共享空数组实例，用于默认大小的空实例。我们将其与空的ELEMENTDATA区分开来，以便在添加第一个元素时知道要膨胀多少。 */ private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {}; /** * 存储数组列表元素的数组缓冲区。 * 数组列表的容量是这个数组缓冲区的长度。 * 空的ArrayList（elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA），当添加第一个元素时，将会被扩展成 DEFAULT_CAPACITY。 */ transient Object[] elementData; // non-private to simplify nested class access /** * 数组列表的大小(它包含的元素的数量)。 * * @serial */ private int size; 构造函数 ArrayList() /** * 使用默认的空对象初始化 */ public ArrayList() { this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA; } ArrayList(int initialCapacity) /** * 使用指定的大小初始化对象 * * @param initialCapacity list的初始化大小 * @throws IllegalArgumentException 如果指定的初始容量为负。 */ public ArrayList(int initialCapacity) { if (initialCapacity &amp;gt; 0) { //如果初始化大小大于0，那么生成一个Object数组，大小为 initialCapacity this.elementData = new Object[initialCapacity]; } else if (initialCapacity == 0) { //如果初始化大小为0，使用 EMPTY_ELEMENTDATA 初始化 this.elementData = EMPTY_ELEMENTDATA; } else { //如果为负数，抛出异常 throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+ initialCapacity); } } ArrayList(Collection&amp;lt;? extends E&amp;gt; c) /** * 构造一个包含初始化元素的list。 * 元素的顺序是由初始化元素的迭代顺序来决定的。 * @param c 将被放置到这个列表中的集合。 * @throws NullPointerException 集合为空时抛出异常 */ public ArrayList(Collection&amp;lt;? extends E&amp;gt; c) { //传入参数，转成新的数组对象，赋值给 elementData elementData = c.toArray(); if ((size = elementData.length) != 0) { // c.toArray might (incorrectly) not return Object[] (see 6260652) // 关于上面这个6260652bug，大体的意思是，如果集合元素是Object的子类，如String,toArray返回的数组也是String,而不是Object,所以这里需要进一步的转成Object类型 if (elementData.getClass() != Object[].class) elementData = Arrays.copyOf(elementData, size, Object[].class); } else { // 数组长度为0，使用默认的空对象代替 this.elementData = EMPTY_ELEMENTDATA; } } 这里需要看一下toArray方法，这是所有实现Collection接口的集合中都存在的方法，ArrayList实现了List接口，List继承了Collection接口，所以不例外的ArrayList中也实现了toArray方法，我们这里看一下ArrayList具体的实现方法。简单的说就是返回了一个新的数组对象。 /** * 以适当的顺序（从第一个元素到最后一个元素）返回包含此列表中所有元素的数组。 * 返回的数组将是“安全的”，因为这个列表没有引用它。 （换句话说，这个方法必须分配一个新的数组）。 调用者可以自由修改返回的数组。 * 此方法充当基于数组和基于集合的API之间的桥梁。 */ public Object[] toArray() { return Arrays.copyOf(elementData, size); } 3. 新增 add(E e) add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。 添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。 /** * 将指定的元素附加到此列表的末尾。 * * @param e 将要添加的元素 * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; (as specified by {@link Collection#add}) */ public boolean add(E e) { //确保数组可以容纳新的元素（size是当前的数组大小，size + 1表示添加新元素需要的容量） ensureCapacityInternal(size + 1); // Increments modCount!! //把新元素放在数组的末尾 elementData[size++] = e; return true; } private void ensureCapacityInternal(int minCapacity) { //如果当前是默认的空对象，重新定义最小值，最小值不应该小于默认值10 if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) { minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity); } //扩展容量 ensureExplicitCapacity(minCapacity); } private void ensureExplicitCapacity(int minCapacity) { modCount++; // overflow-conscious code //如果目标最小容量大于当前数组长度，进行扩容 if (minCapacity - elementData.length &amp;gt; 0) grow(minCapacity); } private void grow(int minCapacity) { // overflow-conscious code int oldCapacity = elementData.length; // 新的容量是当前的 1.5 倍 int newCapacity = oldCapacity + (oldCapacity &amp;gt;&amp;gt; 1); // 如果新容量小于目标最小容量，那么直接把最小目标容量赋值给新容量 if (newCapacity - minCapacity &amp;lt; 0) newCapacity = minCapacity; 如果超过最大容量 2^31 - 8 if (newCapacity - MAX_ARRAY_SIZE &amp;gt; 0) newCapacity = hugeCapacity(minCapacity); // minCapacity is usually close to size, so this is a win: // 请注意，执行Arrays.copyOf后，对象成了一个新的对象，和原来的对象没有引用关系 elementData = Arrays.copyOf(elementData, newCapacity); } private static int hugeCapacity(int minCapacity) { //如果目标最小容量为负值，说明溢出了，超过了2^31-1以后为负值，抛出异常 if (minCapacity &amp;lt; 0) // overflow throw new OutOfMemoryError(); //如果只是大于默认的最大值，赋值为Int的最大值（注意，这里JavaDoc中描述，有些虚拟机在超过 2^31 - 8 会出现OutOfMemoryError） return (minCapacity &amp;gt; MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE; } add(int index, E element) /** * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。 * * @param index 指定元素将要被插入的位置 * @param element 将要插入的元素 * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //保证index是有效值 rangeCheckForAdd(index); //确保数组的容量足够容纳 size + 1 个元素，否则进行扩展 ensureCapacityInternal(size + 1); // Increments modCount!! // 复制，下面依次是参数的含义 // 源数组 // 需要复制的源数组数据的index开始值 // 目标数组 // 复制数据到目标数组的index开始值 // 需要复制大目标数据的元素数量 System.arraycopy(elementData, index, elementData, index + 1, size - index); 复制以后，index位置直接赋值 elementData[index] = element; size++; } /** * 用于添加和添加所有内容的范围检查的版本。 */ private void rangeCheckForAdd(int index) { //保证插入的index值是有效的 if (index &amp;gt; size || index &amp;lt; 0) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } addAll(Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { //源集合转换成数组 Object[] a = c.toArray(); int numNew = a.length; //确保目标容量，如果不足，进行扩容 ensureCapacityInternal(size + numNew); // Increments modCount //同上，复制数组 System.arraycopy(a, 0, elementData, size, numNew); //元素数量更新 size += numNew; return numNew != 0; } addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //检测插入的index目标值有效 rangeCheckForAdd(index); Object[] a = c.toArray(); int numNew = a.length; ensureCapacityInternal(size + numNew); // Increments modCount //计算需要移动的数组元素数量，如果需要，进行元素移动 int numMoved = size - index; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index, elementData, index + numNew, numMoved); //把新插入元素复制到目标位置 System.arraycopy(a, 0, elementData, index, numNew); size += numNew; return numNew != 0; } 获取 ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据 public E get(int index) { //校验index值有效 rangeCheck(index); //直接返回数组元素 return elementData(index); } 删除 remove(int index) 删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。 /** * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。 * * @param index the index of the element to be removed * @return the element that was removed from the list * @throws IndexOutOfBoundsException {@inheritDoc} */ public E remove(int index) { rangeCheck(index); modCount++; E oldValue = elementData(index); int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work return oldValue; } remove(Object o) 如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。 public boolean remove(Object o) { if (o == null) { for (int index = 0; index &amp;lt; size; index++) if (elementData[index] == null) { fastRemove(index); return true; } } else { for (int index = 0; index &amp;lt; size; index++) if (o.equals(elementData[index])) { fastRemove(index); return true; } } return false; } /* * 私有删除方法，跳过边界检查，不返回删除的值。（这里基本类似上上面的 remove(index)方法 ） */ private void fastRemove(int index) { modCount++; int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work } 复制 从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。 /** * 返回这个&amp;lt; tt &amp;gt;数组列表&amp;lt;/ tt &amp;gt;实例的一个浅拷贝。(这些元素本身并没有被复制。) * * @return a clone of this &amp;lt;tt&amp;gt;ArrayList&amp;lt;/tt&amp;gt; instance */ public Object clone() { try { ArrayList&amp;lt;?&amp;gt; v = (ArrayList&amp;lt;?&amp;gt;) super.clone(); v.elementData = Arrays.copyOf(elementData, size); v.modCount = 0; return v; } catch (CloneNotSupportedException e) { // this shouldn't happen, since we are Cloneable throw new InternalError(e); } } 扩容 这里不再重复介绍了，前面已经在add方法中进行了介绍。 迭代 forEach(Consumer&amp;lt;? super E&amp;gt; action) 这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。 public void forEach(Consumer&amp;lt;? super E&amp;gt; action) { Objects.requireNonNull(action); final int expectedModCount = modCount; @SuppressWarnings(&quot;unchecked&quot;) final E[] elementData = (E[]) this.elementData; final int size = this.size; for (int i=0; modCount == expectedModCount &amp;amp;&amp;amp; i &amp;lt; size; i++) { action.accept(elementData[i]); } if (modCount != expectedModCount) { throw new ConcurrentModificationException(); } } 这里有一个例子： import java.util.*; import java.util.function.*; class MyConsumer&amp;lt;T&amp;gt; implements Consumer&amp;lt;T&amp;gt;{ public void accept(T ctask){ System.out.println(&quot;Processing Task &quot; + ctask); } } import java.util.*; public class test { public static void main(String[] args) { ArrayList&amp;lt;Integer&amp;gt; myList; MyConsumer&amp;lt;Integer&amp;gt; mcons; myList = new ArrayList&amp;lt;&amp;gt; (); mcons = new MyConsumer&amp;lt;Integer&amp;gt;(); myList.add(100); myList.add(200); myList.add(300); myList.forEach(mcons); } } 结果： Processing Task 100 Processing Task 200 Processing Task 300 4. 其他 线程安全 ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例 List list = Collections.synchronizedList(new ArrayList(...)); fail-fast 这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。 因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。 请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。</summary></entry><entry><title type="html">LinkedHashSet源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="LinkedHashSet源码解析(JDK1.8.0_131)" /><published>2018-01-12T10:51:28+08:00</published><updated>2018-01-12T10:51:28+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
+&lt;p&gt;请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 ArrayList 的实现是依靠数组来完成的。 List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。） Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。 add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。 2. 构造函数 2.1. 成员变量 /** * 默认的初始化容量 */ private static final int DEFAULT_CAPACITY = 10; /** * 用于空实例的共享空数组实例。（比如，初始化的容量为0时，初始化对象就会直接被赋值成 EMPTY_ELEMENTDATA） */ private static final Object[] EMPTY_ELEMENTDATA = {}; /** * 共享空数组实例，用于默认大小的空实例。我们将其与空的ELEMENTDATA区分开来，以便在添加第一个元素时知道要膨胀多少。 */ private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {}; /** * 存储数组列表元素的数组缓冲区。 * 数组列表的容量是这个数组缓冲区的长度。 * 空的ArrayList（elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA），当添加第一个元素时，将会被扩展成 DEFAULT_CAPACITY。 */ transient Object[] elementData; // non-private to simplify nested class access /** * 数组列表的大小(它包含的元素的数量)。 * * @serial */ private int size; 2.2. 构造函数 2.2.1. ArrayList() /** * 使用默认的空对象初始化 */ public ArrayList() { this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA; } 2.2.2. ArrayList(int initialCapacity) /** * 使用指定的大小初始化对象 * * @param initialCapacity list的初始化大小 * @throws IllegalArgumentException 如果指定的初始容量为负。 */ public ArrayList(int initialCapacity) { if (initialCapacity &amp;gt; 0) { //如果初始化大小大于0，那么生成一个Object数组，大小为 initialCapacity this.elementData = new Object[initialCapacity]; } else if (initialCapacity == 0) { //如果初始化大小为0，使用 EMPTY_ELEMENTDATA 初始化 this.elementData = EMPTY_ELEMENTDATA; } else { //如果为负数，抛出异常 throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+ initialCapacity); } } 2.2.3. ArrayList(Collection&amp;lt;? extends E&amp;gt; c) /** * 构造一个包含初始化元素的list。 * 元素的顺序是由初始化元素的迭代顺序来决定的。 * @param c 将被放置到这个列表中的集合。 * @throws NullPointerException 集合为空时抛出异常 */ public ArrayList(Collection&amp;lt;? extends E&amp;gt; c) { //传入参数，转成新的数组对象，赋值给 elementData elementData = c.toArray(); if ((size = elementData.length) != 0) { // c.toArray might (incorrectly) not return Object[] (see 6260652) // 关于上面这个6260652bug，大体的意思是，如果集合元素是Object的子类，如String,toArray返回的数组也是String,而不是Object,所以这里需要进一步的转成Object类型 if (elementData.getClass() != Object[].class) elementData = Arrays.copyOf(elementData, size, Object[].class); } else { // 数组长度为0，使用默认的空对象代替 this.elementData = EMPTY_ELEMENTDATA; } } 这里需要看一下toArray方法，这是所有实现Collection接口的集合中都存在的方法，ArrayList实现了List接口，List继承了Collection接口，所以不例外的ArrayList中也实现了toArray方法，我们这里看一下ArrayList具体的实现方法。简单的说就是返回了一个新的数组对象。 /** * 以适当的顺序（从第一个元素到最后一个元素）返回包含此列表中所有元素的数组。 * 返回的数组将是“安全的”，因为这个列表没有引用它。 （换句话说，这个方法必须分配一个新的数组）。 调用者可以自由修改返回的数组。 * 此方法充当基于数组和基于集合的API之间的桥梁。 */ public Object[] toArray() { return Arrays.copyOf(elementData, size); } 3. 新增 3.1. add(E e) add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。 添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。 /** * 将指定的元素附加到此列表的末尾。 * * @param e 将要添加的元素 * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; (as specified by {@link Collection#add}) */ public boolean add(E e) { //确保数组可以容纳新的元素（size是当前的数组大小，size + 1表示添加新元素需要的容量） ensureCapacityInternal(size + 1); // Increments modCount!! //把新元素放在数组的末尾 elementData[size++] = e; return true; } private void ensureCapacityInternal(int minCapacity) { //如果当前是默认的空对象，重新定义最小值，最小值不应该小于默认值10 if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) { minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity); } //扩展容量 ensureExplicitCapacity(minCapacity); } private void ensureExplicitCapacity(int minCapacity) { modCount++; // overflow-conscious code //如果目标最小容量大于当前数组长度，进行扩容 if (minCapacity - elementData.length &amp;gt; 0) grow(minCapacity); } private void grow(int minCapacity) { // overflow-conscious code int oldCapacity = elementData.length; // 新的容量是当前的 1.5 倍 int newCapacity = oldCapacity + (oldCapacity &amp;gt;&amp;gt; 1); // 如果新容量小于目标最小容量，那么直接把最小目标容量赋值给新容量 if (newCapacity - minCapacity &amp;lt; 0) newCapacity = minCapacity; 如果超过最大容量 2^31 - 8 if (newCapacity - MAX_ARRAY_SIZE &amp;gt; 0) newCapacity = hugeCapacity(minCapacity); // minCapacity is usually close to size, so this is a win: // 请注意，执行Arrays.copyOf后，对象成了一个新的对象，和原来的对象没有引用关系 elementData = Arrays.copyOf(elementData, newCapacity); } private static int hugeCapacity(int minCapacity) { //如果目标最小容量为负值，说明溢出了，超过了2^31-1以后为负值，抛出异常 if (minCapacity &amp;lt; 0) // overflow throw new OutOfMemoryError(); //如果只是大于默认的最大值，赋值为Int的最大值（注意，这里JavaDoc中描述，有些虚拟机在超过 2^31 - 8 会出现OutOfMemoryError） return (minCapacity &amp;gt; MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE; } 3.2. add(int index, E element) /** * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。 * * @param index 指定元素将要被插入的位置 * @param element 将要插入的元素 * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //保证index是有效值 rangeCheckForAdd(index); //确保数组的容量足够容纳 size + 1 个元素，否则进行扩展 ensureCapacityInternal(size + 1); // Increments modCount!! // 复制，下面依次是参数的含义 // 源数组 // 需要复制的源数组数据的index开始值 // 目标数组 // 复制数据到目标数组的index开始值 // 需要复制大目标数据的元素数量 System.arraycopy(elementData, index, elementData, index + 1, size - index); 复制以后，index位置直接赋值 elementData[index] = element; size++; } /** * 用于添加和添加所有内容的范围检查的版本。 */ private void rangeCheckForAdd(int index) { //保证插入的index值是有效的 if (index &amp;gt; size || index &amp;lt; 0) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } 3.3. addAll(Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { //源集合转换成数组 Object[] a = c.toArray(); int numNew = a.length; //确保目标容量，如果不足，进行扩容 ensureCapacityInternal(size + numNew); // Increments modCount //同上，复制数组 System.arraycopy(a, 0, elementData, size, numNew); //元素数量更新 size += numNew; return numNew != 0; } 3.4. addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //检测插入的index目标值有效 rangeCheckForAdd(index); Object[] a = c.toArray(); int numNew = a.length; ensureCapacityInternal(size + numNew); // Increments modCount //计算需要移动的数组元素数量，如果需要，进行元素移动 int numMoved = size - index; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index, elementData, index + numNew, numMoved); //把新插入元素复制到目标位置 System.arraycopy(a, 0, elementData, index, numNew); size += numNew; return numNew != 0; } 4. 获取 ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据 public E get(int index) { //校验index值有效 rangeCheck(index); //直接返回数组元素 return elementData(index); } 5. 删除 5.1. remove(int index) 删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。 /** * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。 * * @param index the index of the element to be removed * @return the element that was removed from the list * @throws IndexOutOfBoundsException {@inheritDoc} */ public E remove(int index) { rangeCheck(index); modCount++; E oldValue = elementData(index); int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work return oldValue; } 5.2. remove(Object o) 如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。 public boolean remove(Object o) { if (o == null) { for (int index = 0; index &amp;lt; size; index++) if (elementData[index] == null) { fastRemove(index); return true; } } else { for (int index = 0; index &amp;lt; size; index++) if (o.equals(elementData[index])) { fastRemove(index); return true; } } return false; } /* * 私有删除方法，跳过边界检查，不返回删除的值。（这里基本类似上上面的 remove(index)方法 ） */ private void fastRemove(int index) { modCount++; int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work } 6. 复制 从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。 /** * 返回这个&amp;lt; tt &amp;gt;数组列表&amp;lt;/ tt &amp;gt;实例的一个浅拷贝。(这些元素本身并没有被复制。) * * @return a clone of this &amp;lt;tt&amp;gt;ArrayList&amp;lt;/tt&amp;gt; instance */ public Object clone() { try { ArrayList&amp;lt;?&amp;gt; v = (ArrayList&amp;lt;?&amp;gt;) super.clone(); v.elementData = Arrays.copyOf(elementData, size); v.modCount = 0; return v; } catch (CloneNotSupportedException e) { // this shouldn't happen, since we are Cloneable throw new InternalError(e); } } 7. 扩容 这里不再重复介绍了，前面已经在add方法中进行了介绍。 8. 迭代 8.1. forEach(Consumer&amp;lt;? super E&amp;gt; action) 这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。 public void forEach(Consumer&amp;lt;? super E&amp;gt; action) { Objects.requireNonNull(action); final int expectedModCount = modCount; @SuppressWarnings(&quot;unchecked&quot;) final E[] elementData = (E[]) this.elementData; final int size = this.size; for (int i=0; modCount == expectedModCount &amp;amp;&amp;amp; i &amp;lt; size; i++) { action.accept(elementData[i]); } if (modCount != expectedModCount) { throw new ConcurrentModificationException(); } } 这里有一个例子： import java.util.*; import java.util.function.*; class MyConsumer&amp;lt;T&amp;gt; implements Consumer&amp;lt;T&amp;gt;{ public void accept(T ctask){ System.out.println(&quot;Processing Task &quot; + ctask); } } import java.util.*; public class test { public static void main(String[] args) { ArrayList&amp;lt;Integer&amp;gt; myList; MyConsumer&amp;lt;Integer&amp;gt; mcons; myList = new ArrayList&amp;lt;&amp;gt; (); mcons = new MyConsumer&amp;lt;Integer&amp;gt;(); myList.add(100); myList.add(200); myList.add(300); myList.forEach(mcons); } } 结果： Processing Task 100 Processing Task 200 Processing Task 300 9. 其他 9.1. 线程安全 ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例 List list = Collections.synchronizedList(new ArrayList(...)); 9.2. fail-fast 这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。 因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。 请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。</summary></entry><entry><title type="html">LinkedHashSet源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="LinkedHashSet源码解析(JDK1.8.0_131)" /><published>2018-01-12T10:51:28+08:00</published><updated>2018-01-12T10:51:28+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/linkedhashmap.png&quot; alt=&quot;hashmap&quot; title=&quot;hashmap&quot; /&gt;&lt;/p&gt;
 
@@ -2604,298 +2914,4 @@ Hash(“192.168.1.100#2”); // NODE1-2&lt;/p&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
     
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">哈希算法 什么是哈希算法 哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。 哈希算法的特点 哈希值是二进制值 哈希值具有一定的唯一性 哈希值极其紧凑 要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的 正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。 哈希表 哈希表是一种数据机构。 哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。 哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。 数据库索引也是用空间换时间的做法。 Java应用 HashMap应用 java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。 从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，首先，调用hashcode()方法，判断元素A在容器中是否已经存在。如果A元素的hashcode值在HashMap中不存在，则直接插入。否则，接着调用equals()方法，判断A元素在容器中是否已经存在。 hashcode()的时间复杂度为O(1)，equals()方法的时间复杂度为O(m)，整体的时间复杂度就是：O(1) + O(m)。 其中，m是桶的深度。 桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。 一个好的哈希算法应该尽量减少哈希碰撞的次数。 关于hashmap中详细的计算方式以后在集合中慢慢学习。 String应用 /** * 返回该字符串的哈希代码。 * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] * s[i]代表字符串数组中的元素 * 如果是空字符串，默认hash值是0. * * @return a hash code value for this object. */ public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } /** * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true * * @param anObject * The object to compare this {@code String} against * * @return {@code true} if the given object represents a {@code String} * equivalent to this string, {@code false} otherwise * * @see #compareTo(String) * @see #equalsIgnoreCase(String) */ public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String)anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } 一致性哈希算法 基本介绍 多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。 一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。 参考标准 平衡性(Balance) 平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。 单调性(Monotonicity) 单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。 分散性(Spread) 在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。 负载(Load) 负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。 实现过程 环形Hash空间 按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图 把数据通过一定的hash算法处理后映射到环上 现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图： Hash(object1) = key1； Hash(object2) = key2； Hash(object3) = key3； Hash(object4) = key4； 将机器通过hash算法映射到环上 在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。 假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下： Hash(NODE1) = KEY1; Hash(NODE2) = KEY2; Hash(NODE3) = KEY3; 通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。 机器的删除与添加 普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。 节点（机器）的删除 以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;) 节点（机器）的添加 如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;) 通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。 平衡性 根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。 “虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。 以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下： 根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图： “虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值： Hash(“192.168.1.100”); 引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值： Hash(“192.168.1.100#1”); // NODE1-1 Hash(“192.168.1.100#2”); // NODE1-2 Java实现 import java.util.Collection; import java.util.HashSet; import java.util.Iterator; import java.util.Set; import java.util.SortedMap; import java.util.SortedSet; import java.util.TreeMap; import java.util.TreeSet; public class ConsistentHash&amp;lt;T&amp;gt; { private final HashFunction hashFunction; private final int numberOfReplicas;// 节点的复制因子,实际节点个数 * numberOfReplicas = // 虚拟节点个数 private final SortedMap&amp;lt;Long, T&amp;gt; circle = new TreeMap&amp;lt;Long, T&amp;gt;();// 存储虚拟节点的hash值到真实节点的映射 public ConsistentHash(HashFunction hashFunction, int numberOfReplicas, Collection&amp;lt;T&amp;gt; nodes) { this.hashFunction = hashFunction; this.numberOfReplicas = numberOfReplicas; for (T node : nodes) add(node); } public void add(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点 /* * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上 */ circle.put(hashFunction.hash(node.toString() + i), node); } public void remove(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) circle.remove(hashFunction.hash(node.toString() + i)); } /* * 获得一个最近的顺时针节点,根据给定的key 取Hash * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点 * 再从实际节点中取得 数据 */ public T get(Object key) { if (circle.isEmpty()) return null; long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器 SortedMap&amp;lt;Long, T&amp;gt; tailMap = circle.tailMap(hash); hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey(); } return circle.get(hash); } public long getSize() { return circle.size(); } /* * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置 */ public void testBalance(){ Set&amp;lt;Long&amp;gt; sets = circle.keySet();//获得TreeMap中所有的Key SortedSet&amp;lt;Long&amp;gt; sortedSets= new TreeSet&amp;lt;Long&amp;gt;(sets);//将获得的Key集合排序 for(Long hashCode : sortedSets){ System.out.println(hashCode); } System.out.println(&quot;----each location 's distance are follows: ----&quot;); /* * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值 */ Iterator&amp;lt;Long&amp;gt; it = sortedSets.iterator(); Iterator&amp;lt;Long&amp;gt; it2 = sortedSets.iterator(); if(it2.hasNext()) it2.next(); long keyPre, keyAfter; while(it.hasNext() &amp;amp;&amp;amp; it2.hasNext()){ keyPre = it.next(); keyAfter = it2.next(); System.out.println(keyAfter - keyPre); } } public static void main(String[] args) { Set&amp;lt;String&amp;gt; nodes = new HashSet&amp;lt;String&amp;gt;(); nodes.add(&quot;A&quot;); nodes.add(&quot;B&quot;); nodes.add(&quot;C&quot;); ConsistentHash&amp;lt;String&amp;gt; consistentHash = new ConsistentHash&amp;lt;String&amp;gt;(new HashFunction(), 2, nodes); consistentHash.add(&quot;D&quot;); System.out.println(&quot;hash circle size: &quot; + consistentHash.getSize()); System.out.println(&quot;location of each node are follows: &quot;); consistentHash.testBalance(); } }</summary></entry><entry><title type="html">Java常用关键字总结</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html" rel="alternate" type="text/html" title="Java常用关键字总结" /><published>2018-01-02T16:47:46+08:00</published><updated>2018-01-02T16:47:46+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">&lt;h1 id=&quot;abstrate&quot;&gt;abstrate&lt;/h1&gt;
-&lt;h2 id=&quot;说明&quot;&gt;说明&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;abstract 关键字可以&lt;strong&gt;修改类或方法&lt;/strong&gt;。&lt;/li&gt;
-  &lt;li&gt;abstract 类可以扩展（增加子类），但&lt;strong&gt;不能直接实例化&lt;/strong&gt;。&lt;/li&gt;
-  &lt;li&gt;abstract 方法必须在某个子类中重写，abstract 方法的类本来就是抽象类，并且必须声明为 abstract。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;仅当 abstract 类的子类实现其超类的所有 abstract 方法时，才能实例化 abstract 类的子类。这种类称为具体类，以区别于 abstract 类 。&lt;/p&gt;
-
-&lt;p&gt;如果 abstract 类的子类没有实现其超类的所有 abstract 方法，该子类也是 abstract 类。&lt;/p&gt;
-
-&lt;p&gt;abstract 关键字不能应用于 static、private 或 final 方法，因为这些方法不能被重写，因此，不能在子类中实现。&lt;/p&gt;
-
-&lt;p&gt;final 类的方法都不能是 abstract，因为 final 类不能有子类。&lt;/p&gt;
-
-&lt;h1 id=&quot;break&quot;&gt;break&lt;/h1&gt;
-&lt;h2 id=&quot;说明-1&quot;&gt;说明&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;用于提前退出 for、while 或 do 循环，或者在 switch 语句中用来结束 case 块。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;总结-1&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;break 总是退出最深层的 while、for、do 或 switch 语句。&lt;/p&gt;
-
-&lt;h1 id=&quot;case&quot;&gt;case&lt;/h1&gt;
-&lt;h2 id=&quot;说明-2&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;用来标记 switch 语句中的每个分支。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-2&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;case 块没有隐式结束点。&lt;/p&gt;
-
-&lt;p&gt;break 语句通常在每个 case 块末尾使用，用于退出 switch 语句。&lt;/p&gt;
-
-&lt;p&gt;如果没有 break 语句，执行流将进入所有后面的 case 和/或 default 块。&lt;/p&gt;
-
-&lt;h1 id=&quot;catch&quot;&gt;catch&lt;/h1&gt;
-&lt;h2 id=&quot;说明-3&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;catch 关键字用来在 try-catch 或 try-catch-finally 语句中定义异常处理块&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-3&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;开始和结束标记 { 和 } 是 catch 子句语法的一部分，即使该子句只包含一个语句，也不能省略这两个标记。&lt;br /&gt;
-每个 try 块都必须至少有一个 catch 或 finally 子句。&lt;br /&gt;
-如果某个特定异常类未被任何 catch 子句处理，该异常将沿着调用栈递归地传播到下一个封闭 try 块。&lt;br /&gt;
-如果任何封闭 try 块都未捕获到异常，Java 解释器将退出，并显示错误消息和堆栈跟踪信息。&lt;/p&gt;
-
-&lt;h1 id=&quot;continue&quot;&gt;continue&lt;/h1&gt;
-&lt;h2 id=&quot;说明-4&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;continue 关键字用来跳转到 for、while 或 do 循环的下一个迭代。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-4&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;continue 总是跳到最深层 while、for 或 do 语句的下一个迭代。&lt;/p&gt;
-
-&lt;h1 id=&quot;extends&quot;&gt;extends&lt;/h1&gt;
-&lt;h2 id=&quot;说明-5&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;用在 class 或 interface 声明中，用于指示所声明的类或接口是其名称后跟有 extends 关键字的类或接口的子类。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-5&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;一个类只能扩展一个其他类。&lt;/p&gt;
-
-&lt;h1 id=&quot;final&quot;&gt;final&lt;/h1&gt;
-&lt;h2 id=&quot;说明-6&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;final 关键字可以应用于类，以指示不能扩展该类（不能有子类）。&lt;br /&gt;
-final 关键字可以应用于方法，以指示不能重写任何子类中的方法。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-6&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;一个类不能同时是 abstract 又是 final。abstract 意味着必须扩展类，final 意味着不能扩展类。&lt;/p&gt;
-
-&lt;p&gt;一个方法不能同时是 abstract 又是 final。abstract 意味着必须重写方法，final 意味着不能重写方法。&lt;/p&gt;
-
-&lt;h1 id=&quot;finally&quot;&gt;finally&lt;/h1&gt;
-&lt;h2 id=&quot;说明-7&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;finally 关键字用来定义始终在 try-catch-finally 语句中执行的块。&lt;br /&gt;
-finally 块通常包含清理代码，用在部分执行 try 块后恢复正常运行。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-7&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;开始和结束标记 { 和 } 是 finally 子句语法的一部分，即使该子句只包含一个语句，也不能省略这两个标记。&lt;br /&gt;
-每个 try 块都必须至少有一个 catch 或 finally 子句。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;finally语句在return语句执行之后return返回之前执行的。&lt;/li&gt;
-  &lt;li&gt;finally块中的return语句会覆盖try块中的return返回。&lt;/li&gt;
-  &lt;li&gt;如果finally语句中没有return语句覆盖返回值，那么原来的返回值可能因为finally里的修改而改变也可能不变。（涉及到Java传值得问题）&lt;/li&gt;
-  &lt;li&gt;try块里的return语句在异常的情况下不会被执行，这样具体返回哪个看情况。&lt;/li&gt;
-  &lt;li&gt;当发生异常后，catch中的return执行情况与未发生异常时try中return的执行情况完全一样。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.cnblogs.com/lanxuezaipiao/p/3440471.html&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;implements&quot;&gt;implements&lt;/h1&gt;
-&lt;h2 id=&quot;说明-8&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;implements 关键字在 class 声明中使用，以指示所声明的类提供了在 implements 关键字后面的名称所指定的接口中所声明的所有方法的实现。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-8&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;子类必须提供在 接口中所声明的所有方法的实现。&lt;br /&gt;
-子类可以声明其他方法和变量，并扩展另一个类。&lt;br /&gt;
-一个类可以实现多个接口。&lt;/p&gt;
-
-&lt;h1 id=&quot;instanceof&quot;&gt;instanceof&lt;/h1&gt;
-&lt;h2 id=&quot;说明-9&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;instanceof 关键字用来确定对象所属的类。&lt;/p&gt;
-
-&lt;h1 id=&quot;interface&quot;&gt;interface&lt;/h1&gt;
-&lt;h2 id=&quot;说明-10&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;interface 关键字用来声明新的 Java 接口，接口是方法的集合。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-9&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;实现了接口的任何类都必须提供在该接口中的所有方法的实现。&lt;br /&gt;
-一个类可以实现多个接口。&lt;/p&gt;
-
-&lt;h1 id=&quot;native&quot;&gt;native&lt;/h1&gt;
-&lt;h2 id=&quot;说明-11&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;native 关键字可以应用于方法，以指示该方法是用 Java 以外的语言实现的。&lt;/p&gt;
-
-&lt;h1 id=&quot;private&quot;&gt;private&lt;/h1&gt;
-&lt;h2 id=&quot;说明-12&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;private 关键字是访问控制修饰符，可以应用于类、方法或字段（在类中声明的变量）。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPublicClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPrivateClass&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;总结-10&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;只能在声明 private（内部）类、方法或字段的类中引用这些类、方法或字段。在类的外部或者对于子类而言，它们是不可见的。&lt;br /&gt;
-所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。&lt;/p&gt;
-
-&lt;h1 id=&quot;protected&quot;&gt;protected&lt;/h1&gt;
-&lt;h2 id=&quot;说明-13&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;protected 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPublicClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPrivateClass&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;总结-11&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;可以在声明 protected 类、方法或字段的类、同一个包中的其他任何类以及任何子类（无论子类是在哪个包中声明的）中引用这些类、方法或字段。&lt;br /&gt;
-所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。&lt;/p&gt;
-
-&lt;h1 id=&quot;public&quot;&gt;public&lt;/h1&gt;
-&lt;h2 id=&quot;说明-14&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;public 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPublicClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPrivateClass&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;总结-12&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;可以在其他任何类或包中引用 public 类、方法或字段。&lt;/p&gt;
-
-&lt;h1 id=&quot;static&quot;&gt;static&lt;/h1&gt;
-&lt;h2 id=&quot;说明-15&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;static 关键字可以应用于内部类（在另一个类中定义的类）、方法或字段（类的成员变量）。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyPublicClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAX_OBJECTS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_numObjects&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyStaticClass&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-      &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getNumObjects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;总结-13&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;通常，static 关键字意味着应用它的实体在声明该实体的类的任何特定实例外部可用。&lt;br /&gt;
-static（内部）类可以被其他类实例化和引用（即使它是顶级类）。在上面的示例中，另一个类中的代码可以实例化 MyStaticClass 类，方法是用包含它的类名来限定其名称，如 MyClass.MyStaticClass。&lt;br /&gt;
-static 字段（类的成员变量）在类的所有实例中只存在一次。&lt;br /&gt;
-可以从类的外部调用 static 方法，而不用首先实例化该类。这样的引用始终包括类名作为方法调用的限定符。在上面的示例中，MyClass 类外部的代码以 MyClass.getNumObjects() 的形式调用 getNumObjects() static 方法。&lt;br /&gt;
-模式：&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;public final static &amp;lt;type&amp;gt; varName = &amp;lt;value&amp;gt;; &lt;/code&gt;&lt;br /&gt;
-通常用于声明可以在类的外部使用的类常量。在引用这样的类常量时需要用类名加以限定。在上面的示例中，另一个类可以用 MyClass.MAX_OBJECTS 形式来引用 MAX_OBJECTS 常量。&lt;/p&gt;
-
-&lt;h1 id=&quot;super&quot;&gt;super&lt;/h1&gt;
-&lt;h2 id=&quot;说明-16&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;super 关键字用于引用使用该关键字的类的超类。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-         &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myStringMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;otherStringMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;总结-14&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;作为独立语句出现的 super 表示调用超类的构造方法。&lt;br /&gt;
-super.&lt;methodName&gt;() 表示调用超类的方法。&lt;/methodName&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;synchronized&quot;&gt;synchronized&lt;/h1&gt;
-&lt;h2 id=&quot;说明-17&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;synchronized 关键字可以应用于方法或语句块，并为一次只应由一个线程执行的关键代码段提供保护。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mySyncStaticMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mySyncMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyOtherClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;someObj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-         &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-         &lt;span class=&quot;nf&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;someObj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-         &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affecting&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;someObj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;总结-15&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;synchronized 关键字可防止代码的关键代码段一次被多个线程执行。&lt;br /&gt;
-如果应用于静态方法（如上例中的 MySyncStaticMethod），那么，当该方法一次由一个线程执行时，整个类将被锁定。&lt;br /&gt;
-如果应用于实例方法（如上例中的 MySyncMethod），那么，当该方法一次由一个线程访问时，该实例将被锁定。&lt;br /&gt;
-如果应用于对象或数组，当关联的代码块一次由一个线程执行时，对象或数组将被锁定。  &lt;br /&gt;
-每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。   &lt;br /&gt;
-实现同步是要很大的系统开销作为代价的，甚至可能造成死锁，所以尽量避免无谓的同步控制。&lt;/p&gt;
-
-&lt;h1 id=&quot;transient&quot;&gt;transient&lt;/h1&gt;
-&lt;h2 id=&quot;说明-18&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;transient 关键字可以应用于类的成员变量，以便指出该成员变量不应在包含它的类实例已序列化时被序列化。&lt;/p&gt;
-
-&lt;h2 id=&quot;总结-16&quot;&gt;总结&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;一旦变量被transient修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。&lt;/li&gt;
-  &lt;li&gt;transient关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被transient关键字修饰的。变量如果是用户自定义类变量，则该类需要实现Serializable接口。&lt;/li&gt;
-  &lt;li&gt;被transient关键字修饰的变量不再能被序列化，一个静态变量不管是否被transient修饰，均不能被序列化。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;特殊说明&quot;&gt;特殊说明&lt;/h2&gt;
-&lt;p&gt;对象的序列化可以通过实现两种接口来实现，若实现的是Serializable接口，则所有的序列化将会自动进行。&lt;br /&gt;
-若实现的是Externalizable接口，则没有任何东西可以自动序列化，需要在writeExternal方法中进行手工指定所要序列化的变量，这与是否被transient修饰无关。&lt;/p&gt;
-
-&lt;h1 id=&quot;volatile&quot;&gt;volatile&lt;/h1&gt;
-&lt;h2 id=&quot;说明-19&quot;&gt;说明&lt;/h2&gt;
-&lt;p&gt;volatile 关键字用于表示可以被多个线程异步修改的成员变量。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyClass&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sharedValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;总结-17&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;volatile 的目标用途是为了确保所有线程所看到的指定变量的值都是相同的。&lt;/p&gt;
-
-&lt;p&gt;当一个变量定义为 volatile 之后，将具备两种特性：&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;保证此变量对所有的线程的可见性，这里的“可见性”，当一个线程修改了这个变量的值，volatile 保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，普通变量的值在线程间传递均需要通过主内存来完成。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load addl $0x0, (%esp)”操作，这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），只有一个CPU访问内存时，并不需要内存屏障。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;volatile 性能：
-　　volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。&lt;/p&gt;
-
-&lt;p&gt;在访问volatile变量时不会执行加锁操作，因此也就不会使执行线程阻塞，因此volatile变量是一种比sychronized关键字更轻量级的同步机制。&lt;/p&gt;
-
-&lt;h2 id=&quot;特殊说明-1&quot;&gt;特殊说明&lt;/h2&gt;
-&lt;p&gt;volatile 关键字在许多 Java 虚拟机中都没有实现。&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">abstrate 说明 abstract 关键字可以修改类或方法。 abstract 类可以扩展（增加子类），但不能直接实例化。 abstract 方法必须在某个子类中重写，abstract 方法的类本来就是抽象类，并且必须声明为 abstract。 总结 仅当 abstract 类的子类实现其超类的所有 abstract 方法时，才能实例化 abstract 类的子类。这种类称为具体类，以区别于 abstract 类 。 如果 abstract 类的子类没有实现其超类的所有 abstract 方法，该子类也是 abstract 类。 abstract 关键字不能应用于 static、private 或 final 方法，因为这些方法不能被重写，因此，不能在子类中实现。 final 类的方法都不能是 abstract，因为 final 类不能有子类。 break 说明 用于提前退出 for、while 或 do 循环，或者在 switch 语句中用来结束 case 块。 总结 break 总是退出最深层的 while、for、do 或 switch 语句。 case 说明 用来标记 switch 语句中的每个分支。 总结 case 块没有隐式结束点。 break 语句通常在每个 case 块末尾使用，用于退出 switch 语句。 如果没有 break 语句，执行流将进入所有后面的 case 和/或 default 块。 catch 说明 catch 关键字用来在 try-catch 或 try-catch-finally 语句中定义异常处理块 总结 开始和结束标记 { 和 } 是 catch 子句语法的一部分，即使该子句只包含一个语句，也不能省略这两个标记。 每个 try 块都必须至少有一个 catch 或 finally 子句。 如果某个特定异常类未被任何 catch 子句处理，该异常将沿着调用栈递归地传播到下一个封闭 try 块。 如果任何封闭 try 块都未捕获到异常，Java 解释器将退出，并显示错误消息和堆栈跟踪信息。 continue 说明 continue 关键字用来跳转到 for、while 或 do 循环的下一个迭代。 总结 continue 总是跳到最深层 while、for 或 do 语句的下一个迭代。 extends 说明 用在 class 或 interface 声明中，用于指示所声明的类或接口是其名称后跟有 extends 关键字的类或接口的子类。 总结 一个类只能扩展一个其他类。 final 说明 final 关键字可以应用于类，以指示不能扩展该类（不能有子类）。 final 关键字可以应用于方法，以指示不能重写任何子类中的方法。 总结 一个类不能同时是 abstract 又是 final。abstract 意味着必须扩展类，final 意味着不能扩展类。 一个方法不能同时是 abstract 又是 final。abstract 意味着必须重写方法，final 意味着不能重写方法。 finally 说明 finally 关键字用来定义始终在 try-catch-finally 语句中执行的块。 finally 块通常包含清理代码，用在部分执行 try 块后恢复正常运行。 总结 开始和结束标记 { 和 } 是 finally 子句语法的一部分，即使该子句只包含一个语句，也不能省略这两个标记。 每个 try 块都必须至少有一个 catch 或 finally 子句。 finally语句在return语句执行之后return返回之前执行的。 finally块中的return语句会覆盖try块中的return返回。 如果finally语句中没有return语句覆盖返回值，那么原来的返回值可能因为finally里的修改而改变也可能不变。（涉及到Java传值得问题） try块里的return语句在异常的情况下不会被执行，这样具体返回哪个看情况。 当发生异常后，catch中的return执行情况与未发生异常时try中return的执行情况完全一样。 阅读更多 implements 说明 implements 关键字在 class 声明中使用，以指示所声明的类提供了在 implements 关键字后面的名称所指定的接口中所声明的所有方法的实现。 总结 子类必须提供在 接口中所声明的所有方法的实现。 子类可以声明其他方法和变量，并扩展另一个类。 一个类可以实现多个接口。 instanceof 说明 instanceof 关键字用来确定对象所属的类。 interface 说明 interface 关键字用来声明新的 Java 接口，接口是方法的集合。 总结 实现了接口的任何类都必须提供在该接口中的所有方法的实现。 一个类可以实现多个接口。 native 说明 native 关键字可以应用于方法，以指示该方法是用 Java 以外的语言实现的。 private 说明 private 关键字是访问控制修饰符，可以应用于类、方法或字段（在类中声明的变量）。 public class MyPublicClass { private class MyPrivateClass { } private int i; private String myMethod() { &amp;lt;statements&amp;gt; } } 总结 只能在声明 private（内部）类、方法或字段的类中引用这些类、方法或字段。在类的外部或者对于子类而言，它们是不可见的。 所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。 protected 说明 protected 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。 public class MyPublicClass { protected class MyPrivateClass { } protected int i; protected String myMethod() { &amp;lt;statements&amp;gt; } } 总结 可以在声明 protected 类、方法或字段的类、同一个包中的其他任何类以及任何子类（无论子类是在哪个包中声明的）中引用这些类、方法或字段。 所有类成员的默认访问范围都是 package 访问，也就是说，除非存在特定的访问控制修饰符，否则，可以从同一个包中的任何类访问类成员。 public 说明 public 关键字是可以应用于类、方法或字段（在类中声明的变量）的访问控制修饰符。 public class MyPublicClass { public class MyPrivateClass { } public int i; public String myMethod() { &amp;lt;statements&amp;gt; } } 总结 可以在其他任何类或包中引用 public 类、方法或字段。 static 说明 static 关键字可以应用于内部类（在另一个类中定义的类）、方法或字段（类的成员变量）。 public class MyPublicClass { public final static int MAX_OBJECTS = 100; static int _numObjects = 0; static class MyStaticClass { } static int getNumObjects() { } } 总结 通常，static 关键字意味着应用它的实体在声明该实体的类的任何特定实例外部可用。 static（内部）类可以被其他类实例化和引用（即使它是顶级类）。在上面的示例中，另一个类中的代码可以实例化 MyStaticClass 类，方法是用包含它的类名来限定其名称，如 MyClass.MyStaticClass。 static 字段（类的成员变量）在类的所有实例中只存在一次。 可以从类的外部调用 static 方法，而不用首先实例化该类。这样的引用始终包括类名作为方法调用的限定符。在上面的示例中，MyClass 类外部的代码以 MyClass.getNumObjects() 的形式调用 getNumObjects() static 方法。 模式： public final static &amp;lt;type&amp;gt; varName = &amp;lt;value&amp;gt;; 通常用于声明可以在类的外部使用的类常量。在引用这样的类常量时需要用类名加以限定。在上面的示例中，另一个类可以用 MyClass.MAX_OBJECTS 形式来引用 MAX_OBJECTS 常量。 super 说明 super 关键字用于引用使用该关键字的类的超类。 public class MyClass { public MyClass(String arg) { super(arg); } public String myStringMethod() { return super.otherStringMethod(); } } 总结 作为独立语句出现的 super 表示调用超类的构造方法。 super.() 表示调用超类的方法。 synchronized 说明 synchronized 关键字可以应用于方法或语句块，并为一次只应由一个线程执行的关键代码段提供保护。 public class MyClass { public synchronized static String mySyncStaticMethod() { } public synchronized String mySyncMethod() { } { public class MyOtherClass { Object someObj; public String myMethod() { &amp;lt;statements&amp;gt; synchronized (someObj) { &amp;lt;statements affecting someObj&amp;gt; } } } 总结 synchronized 关键字可防止代码的关键代码段一次被多个线程执行。 如果应用于静态方法（如上例中的 MySyncStaticMethod），那么，当该方法一次由一个线程执行时，整个类将被锁定。 如果应用于实例方法（如上例中的 MySyncMethod），那么，当该方法一次由一个线程访问时，该实例将被锁定。 如果应用于对象或数组，当关联的代码块一次由一个线程执行时，对象或数组将被锁定。 每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。 实现同步是要很大的系统开销作为代价的，甚至可能造成死锁，所以尽量避免无谓的同步控制。 transient 说明 transient 关键字可以应用于类的成员变量，以便指出该成员变量不应在包含它的类实例已序列化时被序列化。 总结 一旦变量被transient修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。 transient关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被transient关键字修饰的。变量如果是用户自定义类变量，则该类需要实现Serializable接口。 被transient关键字修饰的变量不再能被序列化，一个静态变量不管是否被transient修饰，均不能被序列化。 特殊说明 对象的序列化可以通过实现两种接口来实现，若实现的是Serializable接口，则所有的序列化将会自动进行。 若实现的是Externalizable接口，则没有任何东西可以自动序列化，需要在writeExternal方法中进行手工指定所要序列化的变量，这与是否被transient修饰无关。 volatile 说明 volatile 关键字用于表示可以被多个线程异步修改的成员变量。 public class MyClass { volatile int sharedValue; } 总结 volatile 的目标用途是为了确保所有线程所看到的指定变量的值都是相同的。 当一个变量定义为 volatile 之后，将具备两种特性： 保证此变量对所有的线程的可见性，这里的“可见性”，当一个线程修改了这个变量的值，volatile 保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，普通变量的值在线程间传递均需要通过主内存来完成。 禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load addl $0x0, (%esp)”操作，这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），只有一个CPU访问内存时，并不需要内存屏障。 volatile 性能： 　　volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。 在访问volatile变量时不会执行加锁操作，因此也就不会使执行线程阻塞，因此volatile变量是一种比sychronized关键字更轻量级的同步机制。 特殊说明 volatile 关键字在许多 Java 虚拟机中都没有实现。</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">哈希算法 什么是哈希算法 哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。 哈希算法的特点 哈希值是二进制值 哈希值具有一定的唯一性 哈希值极其紧凑 要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的 正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。 哈希表 哈希表是一种数据机构。 哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。 哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。 数据库索引也是用空间换时间的做法。 Java应用 HashMap应用 java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。 从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，首先，调用hashcode()方法，判断元素A在容器中是否已经存在。如果A元素的hashcode值在HashMap中不存在，则直接插入。否则，接着调用equals()方法，判断A元素在容器中是否已经存在。 hashcode()的时间复杂度为O(1)，equals()方法的时间复杂度为O(m)，整体的时间复杂度就是：O(1) + O(m)。 其中，m是桶的深度。 桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。 一个好的哈希算法应该尽量减少哈希碰撞的次数。 关于hashmap中详细的计算方式以后在集合中慢慢学习。 String应用 /** * 返回该字符串的哈希代码。 * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] * s[i]代表字符串数组中的元素 * 如果是空字符串，默认hash值是0. * * @return a hash code value for this object. */ public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } /** * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true * * @param anObject * The object to compare this {@code String} against * * @return {@code true} if the given object represents a {@code String} * equivalent to this string, {@code false} otherwise * * @see #compareTo(String) * @see #equalsIgnoreCase(String) */ public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String)anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } 一致性哈希算法 基本介绍 多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。 一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。 参考标准 平衡性(Balance) 平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。 单调性(Monotonicity) 单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。 分散性(Spread) 在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。 负载(Load) 负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。 实现过程 环形Hash空间 按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图 把数据通过一定的hash算法处理后映射到环上 现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图： Hash(object1) = key1； Hash(object2) = key2； Hash(object3) = key3； Hash(object4) = key4； 将机器通过hash算法映射到环上 在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。 假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下： Hash(NODE1) = KEY1; Hash(NODE2) = KEY2; Hash(NODE3) = KEY3; 通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。 机器的删除与添加 普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。 节点（机器）的删除 以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;) 节点（机器）的添加 如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;) 通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。 平衡性 根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。 “虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。 以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下： 根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图： “虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值： Hash(“192.168.1.100”); 引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值： Hash(“192.168.1.100#1”); // NODE1-1 Hash(“192.168.1.100#2”); // NODE1-2 Java实现 import java.util.Collection; import java.util.HashSet; import java.util.Iterator; import java.util.Set; import java.util.SortedMap; import java.util.SortedSet; import java.util.TreeMap; import java.util.TreeSet; public class ConsistentHash&amp;lt;T&amp;gt; { private final HashFunction hashFunction; private final int numberOfReplicas;// 节点的复制因子,实际节点个数 * numberOfReplicas = // 虚拟节点个数 private final SortedMap&amp;lt;Long, T&amp;gt; circle = new TreeMap&amp;lt;Long, T&amp;gt;();// 存储虚拟节点的hash值到真实节点的映射 public ConsistentHash(HashFunction hashFunction, int numberOfReplicas, Collection&amp;lt;T&amp;gt; nodes) { this.hashFunction = hashFunction; this.numberOfReplicas = numberOfReplicas; for (T node : nodes) add(node); } public void add(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点 /* * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上 */ circle.put(hashFunction.hash(node.toString() + i), node); } public void remove(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) circle.remove(hashFunction.hash(node.toString() + i)); } /* * 获得一个最近的顺时针节点,根据给定的key 取Hash * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点 * 再从实际节点中取得 数据 */ public T get(Object key) { if (circle.isEmpty()) return null; long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器 SortedMap&amp;lt;Long, T&amp;gt; tailMap = circle.tailMap(hash); hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey(); } return circle.get(hash); } public long getSize() { return circle.size(); } /* * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置 */ public void testBalance(){ Set&amp;lt;Long&amp;gt; sets = circle.keySet();//获得TreeMap中所有的Key SortedSet&amp;lt;Long&amp;gt; sortedSets= new TreeSet&amp;lt;Long&amp;gt;(sets);//将获得的Key集合排序 for(Long hashCode : sortedSets){ System.out.println(hashCode); } System.out.println(&quot;----each location 's distance are follows: ----&quot;); /* * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值 */ Iterator&amp;lt;Long&amp;gt; it = sortedSets.iterator(); Iterator&amp;lt;Long&amp;gt; it2 = sortedSets.iterator(); if(it2.hasNext()) it2.next(); long keyPre, keyAfter; while(it.hasNext() &amp;amp;&amp;amp; it2.hasNext()){ keyPre = it.next(); keyAfter = it2.next(); System.out.println(keyAfter - keyPre); } } public static void main(String[] args) { Set&amp;lt;String&amp;gt; nodes = new HashSet&amp;lt;String&amp;gt;(); nodes.add(&quot;A&quot;); nodes.add(&quot;B&quot;); nodes.add(&quot;C&quot;); ConsistentHash&amp;lt;String&amp;gt; consistentHash = new ConsistentHash&amp;lt;String&amp;gt;(new HashFunction(), 2, nodes); consistentHash.add(&quot;D&quot;); System.out.println(&quot;hash circle size: &quot; + consistentHash.getSize()); System.out.println(&quot;location of each node are follows: &quot;); consistentHash.testBalance(); } }</summary></entry></feed>
