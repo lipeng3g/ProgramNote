@@ -431,7 +431,7 @@
         <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="removefirstoccurrence--removelastoccurrence">removeFirstOccurrence &amp; removeLastOccurrence</h2>
+<h2 id="53-removefirstoccurrence--removelastoccurrence">5.3. removeFirstOccurrence &amp; removeLastOccurrence</h2>
 <p>删除第一个指定元素 &amp; 删除最后一个指定元素，这两个方法基本相同，前一个方法就是上面我们分析的，从头部开始，删除第一个相等的元素，至于后一个方法，也是一样的，只不过时从面开始查找，删除从后面开始的第一次出现的元素。同样判断了是否为空。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 删除该列表中指定元素的第一次出现(当从头到尾遍历列表时)。如果列表中不包含元素，那么它是不变的。
@@ -563,7 +563,7 @@
 <p>前面介绍的方法大部分都是集合的方法，像是 add、get、remove等，由于LinkedList还是一个双向链表，实现了 <strong>Deque</strong> 接口，所以，它还实现了很多双端队列的方法。</p>
 
 <p>前面已经介绍过几个了，像是addFirst、addLast等都是，这里不在每一个都分析了，简单分析几个，由于底层实现前面都介绍了，所以队列的很多方法的实现大都时类似的。</p>
-<h2 id="offere-e">offer(E e)</h2>
+<h2 id="91-offere-e">9.1. offer(E e)</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 将指定的元素添加为该列表的尾部(最后一个元素)。
      */</span>
@@ -571,7 +571,7 @@
         <span class="k">return</span> <span class="nf">add</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="peek">peek()</h2>
+<h2 id="92-peek">9.2. peek()</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 检索，但不删除该列表的头(第一个元素)。
      */</span>
@@ -580,7 +580,7 @@
         <span class="k">return</span> <span class="o">(</span><span class="n">f</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="n">f</span><span class="o">.</span><span class="na">item</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="poll">poll()</h2>
+<h2 id="93-poll">9.3. poll()</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 检索并删除该列表的头(第一个元素)。
      */</span>
@@ -590,7 +590,7 @@
     <span class="o">}</span>
 </code></pre></div></div>
 
-<h2 id="pop">pop()</h2>
+<h2 id="94-pop">9.4. pop()</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 从该列表表示的堆栈中弹出一个元素。 
      * 换句话说，删除并返回此列表的第一个元素。
@@ -600,7 +600,7 @@
         <span class="k">return</span> <span class="nf">removeFirst</span><span class="o">();</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="pushe-e">push(E e)</h2>
+<h2 id="95-pushe-e">9.5. push(E e)</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 将元素推送到由此列表表示的堆栈上。 
      * 换句话说，插入元素在这个列表的前面。
