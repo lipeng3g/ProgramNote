@@ -1,5 +1,160 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-01-17T20:58:49+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">LinkedList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="LinkedList源码解析(JDK1.8.0_131)" /><published>2018-01-16T19:52:06+08:00</published><updated>2018-01-16T19:52:06+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-02-22T16:45:50+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Java多线程和并发性</title><link href="https://lipeng3g.github.io/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7.html" rel="alternate" type="text/html" title="Java多线程和并发性" /><published>2018-02-10T10:52:02+08:00</published><updated>2018-02-10T10:52:02+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7.html">&lt;h1 id=&quot;1-多任务和多线程&quot;&gt;1. 多任务和多线程&lt;/h1&gt;
+&lt;h2 id=&quot;11-多任务&quot;&gt;1.1. 多任务&lt;/h2&gt;
+&lt;p&gt;在单CPU时代，一个时间点只能执行一个单一程序，后续发展为多任务，同一时间执行多个任务，但是这不是真正的同一时间，是操作系统分时调度cpu来完成多任务切换，每个任务都获得一定的运行时间。&lt;/p&gt;
+
+&lt;h2 id=&quot;12-多线程&quot;&gt;1.2. 多线程&lt;/h2&gt;
+&lt;p&gt;计算机发展到现在，一个程序内部可以有多个线程并行执行，一个线程可以认为是一个CPU在执行该程序。&lt;/p&gt;
+
+&lt;p&gt;从单任务到多任务，程序不再独享cpu时间、内存等资源，需要合理的使用和释放资源。从多任务到多线程，由于同一个程序内部并行执行，因此会有更多的问题，例如内存的并发读写操作。这也引发了更多的问题。&lt;/p&gt;
+
+&lt;h1 id=&quot;2-多线程的优点代价&quot;&gt;2. 多线程的优点&amp;amp;代价&lt;/h1&gt;
+
+&lt;h2 id=&quot;21-优点&quot;&gt;2.1. 优点&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;资源利用率高&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  例如：读取文件需要5秒，处理文件需要2秒，那么通常情况下是这样的：
+  5秒读取文件A
+  2秒处理文件A
+  5秒读取文件B
+  2秒处理文件B
+  ---------------------
+  总共需要14秒
+
+  但是如果使用多线程处理，那么可以这样：
+  5秒读取文件A
+  5秒读取文件B + 2秒处理文件A
+  2秒处理文件B
+  ---------------------
+  总共需要12秒
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;程序设计在某些情况下简化&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。  
+  相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。  
+  线程会在等待磁盘读取文件的过程中被阻塞。  
+  在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。  
+  其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。  
+  这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;程序响应快&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  举例：当前有一个服务器应用，监听请求，然后做出响应。  
+  如果是单线程程序，那么首先获取第一个请求信息，做出响应，然后继续监听，获取第二个请求信息，继续响应……  
+  如果是多线程程序，那么首先获取第一个请求信息，启动一个线程去处理请求，然后迅速返回去监听下一个请求……  
+  很明显，多线程可以获得更快的响应速度  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;22-代价&quot;&gt;2.2. 代价&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;设计更复杂&lt;br /&gt;
+  多线程程序涉及到共享数据的时候，交互往往比较复杂，不正确的线程同步产生的问题难以发现且难以重现和修复。&lt;/li&gt;
+  &lt;li&gt;上下文切换开销&lt;br /&gt;
+  CPU在执行线程切换的时候，需要先保存当前线程的数据和状态，然后载入另一个线程的数据和状态后，才开始执行，这称作为&lt;code class=&quot;highlighter-rouge&quot;&gt;上下文切换&lt;/code&gt;，上下文切换会产生消耗，影响多线程的效率，应尽量减少。&lt;/li&gt;
+  &lt;li&gt;增加资源消耗&lt;br /&gt;
+  线程在运行的时候需要从计算机获取资源，除了cpu之外，还需要内存等维持本地堆栈。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;3-并发编程模型&quot;&gt;3. 并发编程模型&lt;/h1&gt;
+&lt;p&gt;并发系统中线程之间可以相互通讯，分布式系统中进程之间也可以相互通讯（进程可能再不同的机器中），线程和进程有很多相似的特性，所以，并发模型通常类似于各种分布式系统构架。&lt;/p&gt;
+
+&lt;p&gt;当然，分布式系统还要处理网络失效、主机或者进程宕掉等问题。&lt;/p&gt;
+
+&lt;h2 id=&quot;31-并行工作者&quot;&gt;3.1. 并行工作者&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-1.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;并行工作者模型中，委派者将传入的作业分配给不同的工作者。每个工作者完成整个任务，并行运作在不同的线程，甚至不同的cpu上。&lt;br /&gt;
+如果是汽车厂生产汽车的车间的话，装配汽车的操作分配个每个工作者，每个工作者都会自己装配自己的汽车，完成从头到尾的所有操作。&lt;/p&gt;
+
+&lt;h3 id=&quot;311-优点&quot;&gt;3.1.1. 优点&lt;/h3&gt;
+&lt;p&gt;容易理解。添加更多的工作者就可以提高系统的并行度（当然，不能无限度提高，需要考虑资源的消耗和效率）&lt;/p&gt;
+
+&lt;h3 id=&quot;312-缺点&quot;&gt;3.1.2. 缺点&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;共享状态复杂&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  共享工作者经常需要访问以下共享数据，这使得情况变得很复杂。线程需要以某种方式存取共享数据，保证当前修改对其他线程可见。
+    
+  线程需要避免竟态、死锁等并发问题。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;无状态的工作者&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  共享状态能够被系统中的其他线程修改，所以工作者每次都需要重新读取状态，以确保是最新数据状态，这样会影响执行效率。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;任务顺序不确定&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  作业执行顺序是不确定的，无法保证执行的先后。  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;32-流水线模式&quot;&gt;3.2. 流水线模式&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-3.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;类似于工厂中生产线上的工人们那样组织工作者。每个工作者只负责作业中的部分工作。当完成了自己的这部分工作时工作者会将作业转发给下一个工作者。每个工作者在自己的线程中运行，并且不会和其他工作者共享状态。有时也被成为无共享并行模型。&lt;/p&gt;
+
+&lt;p&gt;通常使用非阻塞的IO来设计使用流水线并发模型的系统。非阻塞IO意味着，一旦某个工作者开始一个IO操作的时候（比如读取文件或从网络连接中读取数据），这个工作者不会一直等待IO操作的结束。IO操作速度很慢，所以等待IO操作结束很浪费CPU时间。此时CPU可以做一些其他事情。当IO操作完成的时候，IO操作的结果（比如读出的数据或者数据写完的状态）被传递给下一个工作者。&lt;/p&gt;
+
+&lt;p&gt;有了非阻塞IO，就可以使用IO操作确定工作者之间的边界。工作者会尽可能多运行直到遇到并启动一个IO操作。然后交出作业的控制权。当IO操作完成的时候，在流水线上的下一个工作者继续进行操作，直到它也遇到并启动一个IO操作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-4.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在实际应用中，作业有可能不会沿着单一流水线进行。由于大多数系统可以执行多个作业，作业从一个工作者流向另一个工作者取决于作业需要做的工作。在实际中可能会有多个不同的虚拟流水线同时运行。这是现实当中作业在流水线系统中可能的移动情况：&lt;br /&gt;
+&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-5.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;作业甚至也有可能被转发到超过一个工作者上并发处理。比如说，作业有可能被同时转发到作业执行器和作业日志器。下图说明了三条流水线是如何通过将作业转发给同一个工作者（中间流水线的最后一个工作者）来完成作业:
+&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-6.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;流水线有时候比这个情况更加复杂。&lt;/p&gt;
+
+&lt;h3 id=&quot;321-反应器事件驱动系统&quot;&gt;3.2.1. 反应器，事件驱动系统&lt;/h3&gt;
+&lt;p&gt;采用流水线并发模型的系统有时候也称为反应器系统或事件驱动系统。系统内的工作者对系统内出现的事件做出反应，这些事件也有可能来自于外部世界或者发自其他工作者。事件可以是传入的HTTP请求，也可以是某个文件成功加载到内存中等。&lt;/p&gt;
+
+&lt;h3 id=&quot;322-actors-和-channels&quot;&gt;3.2.2. Actors 和 Channels&lt;/h3&gt;
+&lt;p&gt;Actors 和 channels 是两种比较类似的流水线（或反应器/事件驱动）模型。&lt;/p&gt;
+
+&lt;p&gt;在Actor模型中每个工作者被称为actor。Actor之间可以直接异步地发送和处理消息。Actor可以被用来实现一个或多个像前文描述的那样的作业处理流水线。&lt;br /&gt;
+Actor模型：
+&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-7.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;而在Channel模型中，工作者之间不直接进行通信。相反，它们在不同的通道中发布自己的消息（事件）。其他工作者们可以在这些通道上监听消息，发送者无需知道谁在监听。&lt;br /&gt;
+Channel模型：&lt;br /&gt;
+&lt;img src=&quot;http://tutorials.jenkov.com/images/java-concurrency/concurrency-models-8.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一个工作者无需知道谁在后面的流水线上处理作业。只需知道作业（或消息等）需要转发给哪个通道。通道上的监听者可以随意订阅或者取消订阅，并不会影响向这个通道发送消息的工作者。这使得工作者之间具有松散的耦合。&lt;/p&gt;
+
+&lt;h3 id=&quot;323-优点&quot;&gt;3.2.3. 优点&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;无需共享的状态&lt;/li&gt;
+  &lt;li&gt;有状态的工作者&lt;/li&gt;
+  &lt;li&gt;合理的作业顺序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;324-缺点&quot;&gt;3.2.4. 缺点&lt;/h3&gt;
+&lt;p&gt;流水线并发模型最大的缺点是作业的执行往往分布到多个工作者上，并因此分布到项目中的多个类上。这样导致在追踪某个作业到底被什么代码执行时变得困难。&lt;/p&gt;
+
+&lt;h2 id=&quot;33-函数式并行functional-parallelism&quot;&gt;3.3. 函数式并行（Functional Parallelism）&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;待学习&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://ifeve.com/java-concurrency-thread-directory&quot;&gt;原文地址&lt;/a&gt;&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Concurrency" /><summary type="html">1. 多任务和多线程 1.1. 多任务 在单CPU时代，一个时间点只能执行一个单一程序，后续发展为多任务，同一时间执行多个任务，但是这不是真正的同一时间，是操作系统分时调度cpu来完成多任务切换，每个任务都获得一定的运行时间。 1.2. 多线程 计算机发展到现在，一个程序内部可以有多个线程并行执行，一个线程可以认为是一个CPU在执行该程序。 从单任务到多任务，程序不再独享cpu时间、内存等资源，需要合理的使用和释放资源。从多任务到多线程，由于同一个程序内部并行执行，因此会有更多的问题，例如内存的并发读写操作。这也引发了更多的问题。 2. 多线程的优点&amp;amp;代价 2.1. 优点 资源利用率高 例如：读取文件需要5秒，处理文件需要2秒，那么通常情况下是这样的： 5秒读取文件A 2秒处理文件A 5秒读取文件B 2秒处理文件B --------------------- 总共需要14秒 但是如果使用多线程处理，那么可以这样： 5秒读取文件A 5秒读取文件B + 2秒处理文件A 2秒处理文件B --------------------- 总共需要12秒 程序设计在某些情况下简化 在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。 相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。 线程会在等待磁盘读取文件的过程中被阻塞。 在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。 其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。 这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。 程序响应快 举例：当前有一个服务器应用，监听请求，然后做出响应。 如果是单线程程序，那么首先获取第一个请求信息，做出响应，然后继续监听，获取第二个请求信息，继续响应…… 如果是多线程程序，那么首先获取第一个请求信息，启动一个线程去处理请求，然后迅速返回去监听下一个请求…… 很明显，多线程可以获得更快的响应速度 2.2. 代价 设计更复杂 多线程程序涉及到共享数据的时候，交互往往比较复杂，不正确的线程同步产生的问题难以发现且难以重现和修复。 上下文切换开销 CPU在执行线程切换的时候，需要先保存当前线程的数据和状态，然后载入另一个线程的数据和状态后，才开始执行，这称作为上下文切换，上下文切换会产生消耗，影响多线程的效率，应尽量减少。 增加资源消耗 线程在运行的时候需要从计算机获取资源，除了cpu之外，还需要内存等维持本地堆栈。 3. 并发编程模型 并发系统中线程之间可以相互通讯，分布式系统中进程之间也可以相互通讯（进程可能再不同的机器中），线程和进程有很多相似的特性，所以，并发模型通常类似于各种分布式系统构架。 当然，分布式系统还要处理网络失效、主机或者进程宕掉等问题。 3.1. 并行工作者 并行工作者模型中，委派者将传入的作业分配给不同的工作者。每个工作者完成整个任务，并行运作在不同的线程，甚至不同的cpu上。 如果是汽车厂生产汽车的车间的话，装配汽车的操作分配个每个工作者，每个工作者都会自己装配自己的汽车，完成从头到尾的所有操作。 3.1.1. 优点 容易理解。添加更多的工作者就可以提高系统的并行度（当然，不能无限度提高，需要考虑资源的消耗和效率） 3.1.2. 缺点 共享状态复杂 共享工作者经常需要访问以下共享数据，这使得情况变得很复杂。线程需要以某种方式存取共享数据，保证当前修改对其他线程可见。 线程需要避免竟态、死锁等并发问题。 无状态的工作者 共享状态能够被系统中的其他线程修改，所以工作者每次都需要重新读取状态，以确保是最新数据状态，这样会影响执行效率。 任务顺序不确定 作业执行顺序是不确定的，无法保证执行的先后。 3.2. 流水线模式 类似于工厂中生产线上的工人们那样组织工作者。每个工作者只负责作业中的部分工作。当完成了自己的这部分工作时工作者会将作业转发给下一个工作者。每个工作者在自己的线程中运行，并且不会和其他工作者共享状态。有时也被成为无共享并行模型。 通常使用非阻塞的IO来设计使用流水线并发模型的系统。非阻塞IO意味着，一旦某个工作者开始一个IO操作的时候（比如读取文件或从网络连接中读取数据），这个工作者不会一直等待IO操作的结束。IO操作速度很慢，所以等待IO操作结束很浪费CPU时间。此时CPU可以做一些其他事情。当IO操作完成的时候，IO操作的结果（比如读出的数据或者数据写完的状态）被传递给下一个工作者。 有了非阻塞IO，就可以使用IO操作确定工作者之间的边界。工作者会尽可能多运行直到遇到并启动一个IO操作。然后交出作业的控制权。当IO操作完成的时候，在流水线上的下一个工作者继续进行操作，直到它也遇到并启动一个IO操作。 在实际应用中，作业有可能不会沿着单一流水线进行。由于大多数系统可以执行多个作业，作业从一个工作者流向另一个工作者取决于作业需要做的工作。在实际中可能会有多个不同的虚拟流水线同时运行。这是现实当中作业在流水线系统中可能的移动情况： 作业甚至也有可能被转发到超过一个工作者上并发处理。比如说，作业有可能被同时转发到作业执行器和作业日志器。下图说明了三条流水线是如何通过将作业转发给同一个工作者（中间流水线的最后一个工作者）来完成作业: 流水线有时候比这个情况更加复杂。 3.2.1. 反应器，事件驱动系统 采用流水线并发模型的系统有时候也称为反应器系统或事件驱动系统。系统内的工作者对系统内出现的事件做出反应，这些事件也有可能来自于外部世界或者发自其他工作者。事件可以是传入的HTTP请求，也可以是某个文件成功加载到内存中等。 3.2.2. Actors 和 Channels Actors 和 channels 是两种比较类似的流水线（或反应器/事件驱动）模型。 在Actor模型中每个工作者被称为actor。Actor之间可以直接异步地发送和处理消息。Actor可以被用来实现一个或多个像前文描述的那样的作业处理流水线。 Actor模型： 而在Channel模型中，工作者之间不直接进行通信。相反，它们在不同的通道中发布自己的消息（事件）。其他工作者们可以在这些通道上监听消息，发送者无需知道谁在监听。 Channel模型： 一个工作者无需知道谁在后面的流水线上处理作业。只需知道作业（或消息等）需要转发给哪个通道。通道上的监听者可以随意订阅或者取消订阅，并不会影响向这个通道发送消息的工作者。这使得工作者之间具有松散的耦合。 3.2.3. 优点 无需共享的状态 有状态的工作者 合理的作业顺序 3.2.4. 缺点 流水线并发模型最大的缺点是作业的执行往往分布到多个工作者上，并因此分布到项目中的多个类上。这样导致在追踪某个作业到底被什么代码执行时变得困难。 3.3. 函数式并行（Functional Parallelism） 待学习 原文地址</summary></entry><entry><title type="html">LinkedList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="LinkedList源码解析(JDK1.8.0_131)" /><published>2018-01-16T19:52:06+08:00</published><updated>2018-01-16T19:52:06+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
 &lt;p&gt;LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。&lt;br /&gt;
 这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。&lt;/p&gt;
 
@@ -2885,286 +3040,4 @@ resize后，key所在bucket的节点位置保持不变。&lt;br /&gt;
 
 &lt;h1 id=&quot;答案&quot;&gt;答案&lt;/h1&gt;
 
-&lt;p&gt;&lt;strong&gt;两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等&lt;/strong&gt;&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">问题 两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。 equals()方法详解 先看java.lang.Object的默认实现，部分内容进行了翻译。 /** * 表示某个其他对象是否“等于”这一个。 * &amp;lt;p&amp;gt; * equals方法在非null对象引用上实现等价关系 * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。 * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回true * 传递: 对任何非空的引用值 x, y, z, 如果 x.equals(y)返回 true ，y.equals(z)返回 true, 那么 x.equals(z)也必须返回true * 一致: 如果x.equals(y)返回是true，只要x和y内容一直不变，不管你重复x.equals(y)多少次，返回都是true。 * 任何情况下，x.equals(null)，永远返回是“false”；x.equals(和x不同类型的对象)永远返回是“false”。 * &amp;lt;p&amp;gt; * Object类的equals方法实现了对象上最可能的等价关系;也就是说，对于任何非null的引用值x和y，当且仅当x和y引用同一个对象x == y时返回 true。 * &amp;lt;p&amp;gt; * 请注意，无论何时重写此方法，通常都必须重写hashCode方法，以维护hashCode方法的一般约定，该方法声明相等的对象必须具有相同的哈希码。 * * @param obj the reference object with which to compare. * @return true} if this object is the same as the obj * argument; false} otherwise. * @see #hashCode() * @see java.util.HashMap */ public boolean equals(Object obj) { return (this == obj); } 通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。 但是，很多时候，equals方法会被重写，例如 java.lang.String public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String) anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } java.lang.String的equals方法不是进行引用地址比较，而是内容比较。 下面举个形象的例子 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; } 测试方法 User user1 = new User(); User user2 = new User(); assert user1.equals(user2); 如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; @Override public boolean equals(Object o) { if (this == o) { return true; } if (o == null || getClass() != o.getClass()) { return false; } User user = (User) o; return id == user.id &amp;amp;&amp;amp; Objects.equals(name, user.name) &amp;amp;&amp;amp; Objects.equals(password, user.password); } @Override public int hashCode() { return Objects.hash(id, name, password); } } 上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。 需要注意的是，上面同时重写了 equals 和 Hashcode 方法，在这个简单对象中不重写可能不会有太大的问题，但是后面再集合中，如果不重写可能会导致意想不到的问题发生。 hashCode() 先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc /** * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。 * &amp;lt;p&amp;gt; * hashCode通常情况下遵守的合约是： * &amp;lt;ul&amp;gt; * &amp;lt;li&amp;gt;只要在Java应用程序的执行过程中多次调用同一个对象，{@code hashCode}方法必须始终返回相同的整数，前提是在对象上的比较中没有使用任何信息被修改。 从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。 * &amp;lt;li&amp;gt;如果两个对象根据equals方法相等，则在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。 * &amp;lt;li&amp;gt;如果两个对象根据equals（Object）方法不相等，则不要求对两个对象中的每一个调用hashCode方法都必须产生不同的整数结果。 但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。 * &amp;lt;/ul&amp;gt; * &amp;lt;p&amp;gt; * 尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。 （这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。） * * @return a hash code value for this object. * @see java.lang.Object#equals(java.lang.Object) * @see java.lang.System#identityHashCode */ public native int hashCode(); 通常情况下，String等对象类型会重写这些方法，例如 public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } 简单理解就是 String 使用 s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]重写了hashcode 的值。 请注意，下面只是简单介绍集合的存储原理，关于地址值的部分不准备，这部分等我看完jdk8的代码以后再修改 想要弄明白hashCode的作用，必须要先知道Java中的集合。　　 总的来说，Java中的集合（Collection）有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。这里就引出一个问题：要想保证元素不重复，可两个元素是否重复应该依据什么来判断呢？ 这就是Object.equals方法了。但是，如果每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说，如果集合中现在已经有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。哈希（Hash）实际上是个人名，由于他提出一哈希算法的概念，所以就以他的名字命名了。哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上，这个地址上的key值就是hashcode值，而value值则记录了这个对象存储的真是地址。 这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。所以这里存在一个冲突解决的问题。这样一来实际调用equals方法的次数就大大降低了，几乎只需要一两次。 所以，Java对于eqauls方法和hashCode方法是这样规定的： 1.如果两个对象相同，那么它们的hashCode值一定要相同； 2.如果两个对象的hashCode相同，它们并不一定相同（这里说的对象相同指的是用eqauls方法比较）。 如不按要求去做了，会发现相同的对象可以出现在Set集合中，同时，增加新元素的效率会大大下降。 3.equals()相等的两个对象，hashcode()一定相等；equals()不相等的两个对象，却并不能证明他们的hashcode()不相等。 换句话说，equals()方法不相等的两个对象，hashcode()有可能相等（我的理解是由于哈希码在生成的时候产生冲突造成的）。反过来，hashcode()不等，一定能推出equals()也不等；hashcode()相等，equals()可能相等，也可能不等。 在object类中，hashcode()方法是本地方法，返回的是对象的地址值，而object类中的equals()方法比较的也是两个对象的地址值，如果equals()相等，说明两个对象地址值也相等，当然hashcode()也就相等了；在String类中，equals()返回的是两个对象内容的比较，当两个对象内容相等时，Hashcode()方法根据String类的重写代码的分析，也可知道hashcode()返回结果也会相等。以此类推，可以知道Integer、Double等封装类中经过重写的equals()和hashcode()方法也同样适合于这个原则。当然没有经过重写的类，在继承了object类的equals()和hashcode()方法后，也会遵守这个原则。 Hashset、Hashmap、Hashtable与hashcode()和equals()的密切关系 Hashset是继承Set接口，Set接口又实现Collection接口，这是层次关系。那么Hashset、Hashmap、Hashtable中的存储操作是根据什么原理来存取对象的呢？ 以HashSet为例，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是： 1.判断两个对象的hashCode是否相等 如果不相等，认为两个对象也不相等，完毕 如果相等，转入2 (这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。） 2.判断两个对象用equals运算是否相等 如果不相等，认为两个对象也不相等 如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键） 为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。 答案 两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等</summary></entry><entry><title type="html">Java中hashcode和一致性哈希算法</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html" rel="alternate" type="text/html" title="Java中hashcode和一致性哈希算法" /><published>2018-01-03T17:13:29+08:00</published><updated>2018-01-03T17:13:29+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">&lt;h1 id=&quot;哈希算法&quot;&gt;哈希算法&lt;/h1&gt;
-&lt;h2 id=&quot;什么是哈希算法&quot;&gt;什么是哈希算法&lt;/h2&gt;
-&lt;p&gt;哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。&lt;/p&gt;
-
-&lt;h2 id=&quot;哈希算法的特点&quot;&gt;哈希算法的特点&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;哈希值是二进制值&lt;/li&gt;
-  &lt;li&gt;哈希值具有一定的唯一性&lt;/li&gt;
-  &lt;li&gt;哈希值极其紧凑&lt;/li&gt;
-  &lt;li&gt;要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。&lt;/p&gt;
-
-&lt;h2 id=&quot;哈希表&quot;&gt;哈希表&lt;/h2&gt;
-&lt;p&gt;哈希表是一种数据机构。&lt;br /&gt;
-哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。&lt;br /&gt;
-哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。&lt;br /&gt;
-数据库索引也是用空间换时间的做法。&lt;/p&gt;
-
-&lt;h1 id=&quot;java应用&quot;&gt;Java应用&lt;/h1&gt;
-&lt;h2 id=&quot;hashmap应用&quot;&gt;HashMap应用&lt;/h2&gt;
-
-&lt;p&gt;java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。&lt;br /&gt;
-从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，&lt;strong&gt;首先&lt;/strong&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;调用hashcode()方法，判断元素A在容器中是否已经存在&lt;/code&gt;。如果A元素的hashcode值在HashMap中不存在，则直接插入。&lt;strong&gt;否则&lt;/strong&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;接着调用equals()方法，判断A元素在容器中是否已经存在&lt;/code&gt;。&lt;br /&gt;
-&lt;strong&gt;hashcode()的时间复杂度为O(1)&lt;/strong&gt;，&lt;strong&gt;equals()方法的时间复杂度为O(m)&lt;/strong&gt;，整体的时间复杂度就是：&lt;strong&gt;O(1) + O(m)&lt;/strong&gt;。  其中，m是桶的深度。&lt;br /&gt;
-桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;一个好的哈希算法应该尽量减少哈希碰撞的次数。&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;关于hashmap中详细的计算方式以后在集合中慢慢学习。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;string应用&quot;&gt;String应用&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
-     * 返回该字符串的哈希代码。 
-     * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
-     * s[i]代表字符串数组中的元素
-     * 如果是空字符串，默认hash值是0.
-     *
-     * @return  a hash code value for this object.
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true
-     *
-     * @param  anObject
-     *         The object to compare this {@code String} against
-     *
-     * @return  {@code true} if the given object represents a {@code String}
-     *          equivalent to this string, {@code false} otherwise
-     *
-     * @see  #compareTo(String)
-     * @see  #equalsIgnoreCase(String)
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;anObject&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anotherString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;anObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anotherString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anotherString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;一致性哈希算法&quot;&gt;一致性哈希算法&lt;/h1&gt;
-&lt;h2 id=&quot;基本介绍&quot;&gt;基本介绍&lt;/h2&gt;
-&lt;p&gt;多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。&lt;/p&gt;
-
-&lt;p&gt;一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。&lt;/p&gt;
-&lt;h2 id=&quot;参考标准&quot;&gt;参考标准&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;平衡性(Balance)
-    &lt;ul&gt;
-      &lt;li&gt;平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;单调性(Monotonicity)
-    &lt;ul&gt;
-      &lt;li&gt;单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;分散性(Spread)
-    &lt;ul&gt;
-      &lt;li&gt;在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;负载(Load)
-    &lt;ul&gt;
-      &lt;li&gt;负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;实现过程&quot;&gt;实现过程&lt;/h2&gt;
-
-&lt;h3 id=&quot;环形hash空间&quot;&gt;环形Hash空间&lt;/h3&gt;
-&lt;p&gt;按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_001.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;把数据通过一定的hash算法处理后映射到环上&quot;&gt;把数据通过一定的hash算法处理后映射到环上&lt;/h3&gt;
-&lt;p&gt;现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图：&lt;br /&gt;
-&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_002.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hash(object1) = key1；
-Hash(object2) = key2；
-Hash(object3) = key3；
-Hash(object4) = key4；
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;将机器通过hash算法映射到环上&quot;&gt;将机器通过hash算法映射到环上&lt;/h3&gt;
-&lt;p&gt;在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。
-假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下：  &lt;br /&gt;
-&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_003.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hash(NODE1) = KEY1;
-Hash(NODE2) = KEY2;
-Hash(NODE3) = KEY3;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。&lt;/p&gt;
-
-&lt;h3 id=&quot;机器的删除与添加&quot;&gt;机器的删除与添加&lt;/h3&gt;
-&lt;p&gt;普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。&lt;/p&gt;
-&lt;h4 id=&quot;节点机器的删除&quot;&gt;节点（机器）的删除&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;)  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;节点机器的添加&quot;&gt;节点（机器）的添加&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图：   ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;)  
-                                                          
-通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;平衡性&quot;&gt;平衡性&lt;/h3&gt;
-&lt;p&gt;根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;“虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下：&lt;br /&gt;
-&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_006.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图：&lt;br /&gt;
-&lt;img src=&quot;http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_007.jpg&quot; alt=&quot;Alt text&quot; title=&quot;title&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值：
-Hash(“192.168.1.100”);
-引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值：
-Hash(“192.168.1.100#1”); // NODE1-1
-Hash(“192.168.1.100#2”); // NODE1-2&lt;/p&gt;
-
-&lt;h2 id=&quot;java实现&quot;&gt;Java实现&lt;/h2&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.HashSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.SortedMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.SortedSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.TreeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.TreeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConsistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashFunction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numberOfReplicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;// 节点的复制因子,实际节点个数 *  numberOfReplicas =&lt;/span&gt;
-                                        &lt;span class=&quot;c1&quot;&gt;// 虚拟节点个数&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SortedMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;// 存储虚拟节点的hash值到真实节点的映射&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConsistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HashFunction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numberOfReplicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hashFunction&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;numberOfReplicas&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numberOfReplicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numberOfReplicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点&lt;/span&gt;
-            &lt;span class=&quot;cm&quot;&gt;/*
-             * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node
-             * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上
-             */&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numberOfReplicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/*
-     * 获得一个最近的顺时针节点,根据给定的key 取Hash
-     * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点
-     * 再从实际节点中取得 数据
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;// node 用String来表示,获得node在哈希环中的hashCode&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;containsKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;SortedMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tailMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tailMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tailMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;firstKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tailMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;firstKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-    &lt;span class=&quot;cm&quot;&gt;/*
-     * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testBalance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sets&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;circle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;keySet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//获得TreeMap中所有的Key&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;SortedSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sortedSets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//将获得的Key集合排序&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashCode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sortedSets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;----each location 's distance are follows: ----&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;cm&quot;&gt;/*
-         * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值
-         */&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sortedSets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sortedSets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;it2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyPre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyAfter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;keyPre&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;keyAfter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyAfter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyPre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;B&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        
-        &lt;span class=&quot;n&quot;&gt;ConsistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consistentHash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConsistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;consistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;D&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hash circle size: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;location of each node are follows: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;consistentHash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;testBalance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">哈希算法 什么是哈希算法 哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。 哈希算法的特点 哈希值是二进制值 哈希值具有一定的唯一性 哈希值极其紧凑 要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的 正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。 哈希表 哈希表是一种数据机构。 哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希表存储了多余的key（我们本可以只存储值的），是一种用空间换时间的做法。在内存足够的情况下，这种“空间换时间”的做法是值得的。 哈希表的产生，灵感来源于数组。我们知道，数组号称查询效率最高的数据结构，因为不管数组的容量多大，查询的时间复杂度都是O(1)。如果所有的key都是不重复的整数，那么这就完美了，不需要新增一张哈希表，来做关键字（key）到值（value）的映射。但是，如果key是字符串，情况就不一样了。我们必须要来建一张哈希表，进行映射。数据库索引的原理，其实和哈希表是相同的。 数据库索引也是用空间换时间的做法。 Java应用 HashMap应用 java中的集合，比如HashMap/Hashtable/HashSet等，在实现时，都用到了哈希算法。当我们向容器中添加元素时，我们有必要知道这个元素是否已经存在。 从实现上来说，java是借助hashcode()方法和equals()方法来实现判断元素是否已经存在的。当我们向HashMap中插入元素A时，首先，调用hashcode()方法，判断元素A在容器中是否已经存在。如果A元素的hashcode值在HashMap中不存在，则直接插入。否则，接着调用equals()方法，判断A元素在容器中是否已经存在。 hashcode()的时间复杂度为O(1)，equals()方法的时间复杂度为O(m)，整体的时间复杂度就是：O(1) + O(m)。 其中，m是桶的深度。 桶的深度是一个什么概念呢，桶的深度是指具有相同hashcode值得元素的个数，也就是发生哈希碰撞的元素的个数。 一个好的哈希算法应该尽量减少哈希碰撞的次数。 关于hashmap中详细的计算方式以后在集合中慢慢学习。 String应用 /** * 返回该字符串的哈希代码。 * 哈希值的计算方式 ： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] * s[i]代表字符串数组中的元素 * 如果是空字符串，默认hash值是0. * * @return a hash code value for this object. */ public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } /** * 将此字符串与指定的对象进行比较。只有参数不是 null，并且和该对象字符序列相同的时候结果是true * * @param anObject * The object to compare this {@code String} against * * @return {@code true} if the given object represents a {@code String} * equivalent to this string, {@code false} otherwise * * @see #compareTo(String) * @see #equalsIgnoreCase(String) */ public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String)anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } 一致性哈希算法 基本介绍 多台机器需要协同作业，保证数据在分布式环境下的一致性，就成为了亟待解决的问题。一致性哈希算法，就是为了解决多台机器，在动态增删的情况下，能够最大限度地保证信息的一致性。 一致性哈希算法是一种分布式哈希算法，设计目标是为了解决互联网中的热点(Hot spot)问题。 参考标准 平衡性(Balance) 平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。 单调性(Monotonicity) 单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。 分散性(Spread) 在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。 负载(Load) 负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。 实现过程 环形Hash空间 按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图 把数据通过一定的hash算法处理后映射到环上 现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图： Hash(object1) = key1； Hash(object2) = key2； Hash(object3) = key3； Hash(object4) = key4； 将机器通过hash算法映射到环上 在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。 假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下： Hash(NODE1) = KEY1; Hash(NODE2) = KEY2; Hash(NODE3) = KEY3; 通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。 机器的删除与添加 普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。 节点（机器）的删除 以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_004.jpg &quot;title&quot;) 节点（机器）的添加 如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图： ![Alt text](http://on8ygi8ap.bkt.clouddn.com/image/blog/pic_005.jpg &quot;title&quot;) 通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。 平衡性 根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。在一致性哈希算法中，为了尽可能的满足平衡性，其引入了虚拟节点。 “虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）,实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。 以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下： 根据上图可知对象的映射关系：object1-&amp;gt;NODE1-1，object2-&amp;gt;NODE1-2，object3-&amp;gt;NODE3-2，object4-&amp;gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图： “虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值： Hash(“192.168.1.100”); 引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值： Hash(“192.168.1.100#1”); // NODE1-1 Hash(“192.168.1.100#2”); // NODE1-2 Java实现 import java.util.Collection; import java.util.HashSet; import java.util.Iterator; import java.util.Set; import java.util.SortedMap; import java.util.SortedSet; import java.util.TreeMap; import java.util.TreeSet; public class ConsistentHash&amp;lt;T&amp;gt; { private final HashFunction hashFunction; private final int numberOfReplicas;// 节点的复制因子,实际节点个数 * numberOfReplicas = // 虚拟节点个数 private final SortedMap&amp;lt;Long, T&amp;gt; circle = new TreeMap&amp;lt;Long, T&amp;gt;();// 存储虚拟节点的hash值到真实节点的映射 public ConsistentHash(HashFunction hashFunction, int numberOfReplicas, Collection&amp;lt;T&amp;gt; nodes) { this.hashFunction = hashFunction; this.numberOfReplicas = numberOfReplicas; for (T node : nodes) add(node); } public void add(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) // 对于一个实际机器节点 node, 对应 numberOfReplicas 个虚拟节点 /* * 不同的虚拟节点(i不同)有不同的hash值,但都对应同一个实际机器node * 虚拟node一般是均衡分布在环上的,数据存储在顺时针方向的虚拟node上 */ circle.put(hashFunction.hash(node.toString() + i), node); } public void remove(T node) { for (int i = 0; i &amp;lt; numberOfReplicas; i++) circle.remove(hashFunction.hash(node.toString() + i)); } /* * 获得一个最近的顺时针节点,根据给定的key 取Hash * 然后再取得顺时针方向上最近的一个虚拟节点对应的实际节点 * 再从实际节点中取得 数据 */ public T get(Object key) { if (circle.isEmpty()) return null; long hash = hashFunction.hash((String) key);// node 用String来表示,获得node在哈希环中的hashCode if (!circle.containsKey(hash)) {//数据映射在两台虚拟机器所在环之间,就需要按顺时针方向寻找机器 SortedMap&amp;lt;Long, T&amp;gt; tailMap = circle.tailMap(hash); hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey(); } return circle.get(hash); } public long getSize() { return circle.size(); } /* * 查看MD5算法生成的hashCode值---表示整个哈希环中各个虚拟节点位置 */ public void testBalance(){ Set&amp;lt;Long&amp;gt; sets = circle.keySet();//获得TreeMap中所有的Key SortedSet&amp;lt;Long&amp;gt; sortedSets= new TreeSet&amp;lt;Long&amp;gt;(sets);//将获得的Key集合排序 for(Long hashCode : sortedSets){ System.out.println(hashCode); } System.out.println(&quot;----each location 's distance are follows: ----&quot;); /* * 查看用MD5算法生成的long hashCode 相邻两个hashCode的差值 */ Iterator&amp;lt;Long&amp;gt; it = sortedSets.iterator(); Iterator&amp;lt;Long&amp;gt; it2 = sortedSets.iterator(); if(it2.hasNext()) it2.next(); long keyPre, keyAfter; while(it.hasNext() &amp;amp;&amp;amp; it2.hasNext()){ keyPre = it.next(); keyAfter = it2.next(); System.out.println(keyAfter - keyPre); } } public static void main(String[] args) { Set&amp;lt;String&amp;gt; nodes = new HashSet&amp;lt;String&amp;gt;(); nodes.add(&quot;A&quot;); nodes.add(&quot;B&quot;); nodes.add(&quot;C&quot;); ConsistentHash&amp;lt;String&amp;gt; consistentHash = new ConsistentHash&amp;lt;String&amp;gt;(new HashFunction(), 2, nodes); consistentHash.add(&quot;D&quot;); System.out.println(&quot;hash circle size: &quot; + consistentHash.getSize()); System.out.println(&quot;location of each node are follows: &quot;); consistentHash.testBalance(); } }</summary></entry></feed>
+&lt;p&gt;&lt;strong&gt;两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等&lt;/strong&gt;&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">问题 两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。 equals()方法详解 先看java.lang.Object的默认实现，部分内容进行了翻译。 /** * 表示某个其他对象是否“等于”这一个。 * &amp;lt;p&amp;gt; * equals方法在非null对象引用上实现等价关系 * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。 * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回true * 传递: 对任何非空的引用值 x, y, z, 如果 x.equals(y)返回 true ，y.equals(z)返回 true, 那么 x.equals(z)也必须返回true * 一致: 如果x.equals(y)返回是true，只要x和y内容一直不变，不管你重复x.equals(y)多少次，返回都是true。 * 任何情况下，x.equals(null)，永远返回是“false”；x.equals(和x不同类型的对象)永远返回是“false”。 * &amp;lt;p&amp;gt; * Object类的equals方法实现了对象上最可能的等价关系;也就是说，对于任何非null的引用值x和y，当且仅当x和y引用同一个对象x == y时返回 true。 * &amp;lt;p&amp;gt; * 请注意，无论何时重写此方法，通常都必须重写hashCode方法，以维护hashCode方法的一般约定，该方法声明相等的对象必须具有相同的哈希码。 * * @param obj the reference object with which to compare. * @return true} if this object is the same as the obj * argument; false} otherwise. * @see #hashCode() * @see java.util.HashMap */ public boolean equals(Object obj) { return (this == obj); } 通常情况下，非空的对象只有引用地址相同的情况下，equals 才会返回 true，上面说的很清晰 “ == “表示的就是引用地址的比较。 但是，很多时候，equals方法会被重写，例如 java.lang.String public boolean equals(Object anObject) { if (this == anObject) { return true; } if (anObject instanceof String) { String anotherString = (String) anObject; int n = value.length; if (n == anotherString.value.length) { char v1[] = value; char v2[] = anotherString.value; int i = 0; while (n-- != 0) { if (v1[i] != v2[i]) return false; i++; } return true; } } return false; } java.lang.String的equals方法不是进行引用地址比较，而是内容比较。 下面举个形象的例子 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; } 测试方法 User user1 = new User(); User user2 = new User(); assert user1.equals(user2); 如果直接运行上面的内容，会显示异常java.lang.AssertionError，表示两个对象不一样，因为这个时候equals方法是最初的java.lang.Object的 “==” 比较。 public class User { private int id; private String name; private String password; &amp;lt;get and set&amp;gt; @Override public boolean equals(Object o) { if (this == o) { return true; } if (o == null || getClass() != o.getClass()) { return false; } User user = (User) o; return id == user.id &amp;amp;&amp;amp; Objects.equals(name, user.name) &amp;amp;&amp;amp; Objects.equals(password, user.password); } @Override public int hashCode() { return Objects.hash(id, name, password); } } 上面重写了 equals方法，此时再次进行比较的时候，从引用值比较改成了内容比较，此时返回的就是true了。 需要注意的是，上面同时重写了 equals 和 Hashcode 方法，在这个简单对象中不重写可能不会有太大的问题，但是后面再集合中，如果不重写可能会导致意想不到的问题发生。 hashCode() 先看java.lang.Object的实现，这里native表示是本地方法，有java以外的语言实现，重点看javaDoc /** * 返回该对象的哈希码值。 这种方法支持哈希表，如由{@link java.util.HashMap}提供的哈希表。 * &amp;lt;p&amp;gt; * hashCode通常情况下遵守的合约是： * &amp;lt;ul&amp;gt; * &amp;lt;li&amp;gt;只要在Java应用程序的执行过程中多次调用同一个对象，{@code hashCode}方法必须始终返回相同的整数，前提是在对象上的比较中没有使用任何信息被修改。 从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。 * &amp;lt;li&amp;gt;如果两个对象根据equals方法相等，则在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。 * &amp;lt;li&amp;gt;如果两个对象根据equals（Object）方法不相等，则不要求对两个对象中的每一个调用hashCode方法都必须产生不同的整数结果。 但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。 * &amp;lt;/ul&amp;gt; * &amp;lt;p&amp;gt; * 尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。 （这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。） * * @return a hash code value for this object. * @see java.lang.Object#equals(java.lang.Object) * @see java.lang.System#identityHashCode */ public native int hashCode(); 通常情况下，String等对象类型会重写这些方法，例如 public int hashCode() { int h = hash; if (h == 0 &amp;amp;&amp;amp; value.length &amp;gt; 0) { char val[] = value; for (int i = 0; i &amp;lt; value.length; i++) { h = 31 * h + val[i]; } hash = h; } return h; } 简单理解就是 String 使用 s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]重写了hashcode 的值。 请注意，下面只是简单介绍集合的存储原理，关于地址值的部分不准备，这部分等我看完jdk8的代码以后再修改 想要弄明白hashCode的作用，必须要先知道Java中的集合。　　 总的来说，Java中的集合（Collection）有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。这里就引出一个问题：要想保证元素不重复，可两个元素是否重复应该依据什么来判断呢？ 这就是Object.equals方法了。但是，如果每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说，如果集合中现在已经有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。哈希（Hash）实际上是个人名，由于他提出一哈希算法的概念，所以就以他的名字命名了。哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上，这个地址上的key值就是hashcode值，而value值则记录了这个对象存储的真是地址。 这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的位置上。如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。所以这里存在一个冲突解决的问题。这样一来实际调用equals方法的次数就大大降低了，几乎只需要一两次。 所以，Java对于eqauls方法和hashCode方法是这样规定的： 1.如果两个对象相同，那么它们的hashCode值一定要相同； 2.如果两个对象的hashCode相同，它们并不一定相同（这里说的对象相同指的是用eqauls方法比较）。 如不按要求去做了，会发现相同的对象可以出现在Set集合中，同时，增加新元素的效率会大大下降。 3.equals()相等的两个对象，hashcode()一定相等；equals()不相等的两个对象，却并不能证明他们的hashcode()不相等。 换句话说，equals()方法不相等的两个对象，hashcode()有可能相等（我的理解是由于哈希码在生成的时候产生冲突造成的）。反过来，hashcode()不等，一定能推出equals()也不等；hashcode()相等，equals()可能相等，也可能不等。 在object类中，hashcode()方法是本地方法，返回的是对象的地址值，而object类中的equals()方法比较的也是两个对象的地址值，如果equals()相等，说明两个对象地址值也相等，当然hashcode()也就相等了；在String类中，equals()返回的是两个对象内容的比较，当两个对象内容相等时，Hashcode()方法根据String类的重写代码的分析，也可知道hashcode()返回结果也会相等。以此类推，可以知道Integer、Double等封装类中经过重写的equals()和hashcode()方法也同样适合于这个原则。当然没有经过重写的类，在继承了object类的equals()和hashcode()方法后，也会遵守这个原则。 Hashset、Hashmap、Hashtable与hashcode()和equals()的密切关系 Hashset是继承Set接口，Set接口又实现Collection接口，这是层次关系。那么Hashset、Hashmap、Hashtable中的存储操作是根据什么原理来存取对象的呢？ 以HashSet为例，我们都知道：在hashset中不允许出现重复对象，元素的位置也是不确定的。在hashset中又是怎样判定元素是否重复的呢？在java的集合中，判断两个对象是否相等的规则是： 1.判断两个对象的hashCode是否相等 如果不相等，认为两个对象也不相等，完毕 如果相等，转入2 (这一点只是为了提高存储效率而要求的，其实理论上没有也可以，但如果没有，实际使用时效率会大大降低，所以我们这里将其做为必需的。） 2.判断两个对象用equals运算是否相等 如果不相等，认为两个对象也不相等 如果相等，认为两个对象相等（equals()是判断两个对象是否相等的关键） 为什么是两条准则，难道用第一条不行吗？不行，因为前面已经说了，hashcode()相等时，equals()方法也可能不等，所以必须用第2条准则进行限制，才能保证加入的为非重复元素。 答案 两个对象的hashcode相同，对象不一定相等，如果hashcode一致，比较equals，equals返回true，可以判定两者相等</summary></entry></feed>

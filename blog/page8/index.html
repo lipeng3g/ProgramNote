@@ -31,7 +31,38 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">JavaScript 中的 Hoisting 机制</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/server/2017/09/09/Redis%E5%AE%89%E8%A3%85(MacOs).html">Redis安装</a></h1>
+          <div class="m-article-content"># 安装和启动
+ ## 下载 redis
+
+  略
+ ## 修改文件夹名
+   mv redis-x.x.x redis
+  
+  ## 编译
+   cd redis/
+ sudo make
+ sudo make test
+ sudo make isntall
+  
+  ## 配置
+ 你会在redis 目录里找到一个 redis.conf 的配置文件,打开编辑此配置文件,找到 dir  .  这一行配置.
+
+
+此配置是将内存中的数据写入一个文件,这个数据库文件要保存到什么地方 就是这个配置项起到的作用.
+
+我在/usr/local/redis目录下创建了 db 的文件夹(注意此文件夹必须有可读写权限)
+ cd redis/
+ mkdir db
+ chmod 777 /usr/local...</div><a href="/ProgramNote/server/2017/09/09/Redis%E5%AE%89%E8%A3%85(MacOs).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Server">Server</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 09月09日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/javascript/2017/09/08/Hosting%E6%9C%BA%E5%88%B6.html">JavaScript 中的 Hoisting 机制</a></h1>
           <div class="m-article-content">JavaScript 中的 Hoisting 机制
 
   JavaScript 中的 Hoisting 一般称之为变量声明提升机制。就是说，JavaScript 引擎在执行的时候，会把所有变量的声明都会被提升到当前作用域的最前面，注意，这里被提升的仅仅是声明。怎么理解呢，看下面例子：
@@ -123,7 +154,7 @@ preferences --&gt; Version Control --&gt; Subversion --&gt; Use Command line cli
       </div><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
   </div>
 </div>
-</article></div><nav class="m-pagination"><p>共计 39 篇文章, 8 页。</p>
+</article></div><nav class="m-pagination"><p>共计 40 篇文章, 8 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page7">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

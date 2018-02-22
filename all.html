@@ -34,9 +34,13 @@
   <ul class="inline-list">
     <li>
       <button type="button" class="js-article-tag js-tag-show-all all round-rect-button" onclick="tagSelect('')">Show All
-        <div class="tag-count">39</div>
+        <div class="tag-count">40</div>
       </button>
     </li><li><button type="button" class="js-article-tag tag-1 round-rect-button"
+        data-tag="Concurrency" onclick="tagSelect('Concurrency')">
+          <span>Concurrency</span><div class="tag-count">1</div>
+        </button>
+      </li><li><button type="button" class="js-article-tag tag-1 round-rect-button"
         data-tag="IDE" onclick="tagSelect('IDE')">
           <span>IDE</span><div class="tag-count">1</div>
         </button>
@@ -69,7 +73,10 @@
 <!--group by year: http://stackoverflow.com/questions/19086284/jekyll-liquid-templating-how-to-group-blog-posts-by-year-->
     <section class="js-year-wrapper"><section id="2018">
           <h2 class="year-title" id="year-2018">2018</h2>
-          <ul class="year-list"><li class="js-post-block" data-tag="Java">
+          <ul class="year-list"><li class="js-post-block" data-tag="Concurrency">
+          <span class="post-date">02月10日</span>
+          <a class="post-link" href="/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7.html">Java多线程和并发性</a>
+        </li><li class="js-post-block" data-tag="Java">
           <span class="post-date">01月16日</span>
           <a class="post-link" href="/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedList源码解析(JDK1.8.0_131)</a>
         </li><li class="js-post-block" data-tag="Java">

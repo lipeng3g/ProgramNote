@@ -31,7 +31,32 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">Java中hashcode和一致性哈希算法</a></h1>
+          <div class="m-article-content">哈希算法
+什么是哈希算法
+哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。
+
+哈希算法的特点
+
+  哈希值是二进制值
+  哈希值具有一定的唯一性
+  哈希值极其紧凑
+  要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的
+
+
+正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。
+
+哈希表
+哈希表是一种数据机构。
+哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希...</div><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 01月03日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
           <div class="m-article-content">abstrate
 说明
 
@@ -129,47 +154,7 @@ public class Product {
       </div><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
-          <div class="m-article-content">装饰者模式
-
-
-
-  装饰者模式
-    
-      基本描述
-      代码实例
-    
-  
-
-
-
-基本描述
-目的
-
-  给对象动态地添加附加功能。
-  装饰者提供了一个灵活的拓展子类功能的备选方案。
-
-
-代码实例
-公司当前有不同的程序猿，每个程序猿都会写程序，但是不同程序猿有不同的要求，有的安安静静写代码，有的说我要换个机械键盘在写，有的说我要换个笔记本，这个笔记本不好用，面对这些要求，公司管理者要尽量满足才能保证程序猿们写出高质量的代码（当然，现实中领导不会管你的，写不出来就换人。。。。）
-
-
-  定义一个程序猿
-    /**
- * 程序员
- */
-public class Coder {
-
- public void coding() {
-     System.out...</div><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 39 篇文章, 8 页。</p>
+</article></div><nav class="m-pagination"><p>共计 40 篇文章, 8 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page2">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
