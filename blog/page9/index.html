@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>博客 - lipeng's blog</title>
 <meta name="description" content="lipeng's Blog
 ">
-<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/blog/page3/"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
+<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/blog/page9/"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
@@ -31,120 +31,25 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">Hashcode和equals</a></h1>
-          <div class="m-article-content">问题
-两个对象的Hashcode相同，相象是否相相等？equals呢？ 为了解决这个问题，先要了解一下`java.lang.Object`的`Hashcode`和`equals`方法。
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html">IDEA关联SVN项目</a></h1>
+          <div class="m-article-content">SVN管理 + CornerStone检出 + IDEA关联
 
 
-equals()方法详解
-先看java.lang.Object的默认实现，部分内容进行了翻译。
-   /**
-     * 表示某个其他对象是否“等于”这一个。
-     * &lt;p&gt;
-     * equals方法在非null对象引用上实现等价关系
-     * 自反: 对于任何非null的引用值 x，x.equals(x) 应该返回 true。
-     * 对称: 对任何非空的引用值 x 和 y, 如果 y.equals(x) 返回true， 那么x.equals(y)必须返回tru...</div><a href="/ProgramNote/java/2018/01/04/Hashcode%E5%92%8Cequals.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+  CornerStone –&gt; CheckOut项目完整目录
+  IDEA导入项目
+  IDEA 
+preferences --&gt; Version Control --&gt; Subversion --&gt; Use Command line client 取消对勾（后面两个都取消）
+
+</div><a href="/ProgramNote/ide/2017/09/08/IDEA%E5%85%B3%E8%81%94SVN%E9%A1%B9%E7%9B%AE.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=IDE">IDE</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
         <span class="article-view" id="post-key-">0
         </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月04日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">Java中hashcode和一致性哈希算法</a></h1>
-          <div class="m-article-content">哈希算法
-什么是哈希算法
-哈希算法可以将任意长度的二进制值映射为较短的，固定长度的二进制值。我们把这个二进制值成为哈希值。
-
-哈希算法的特点
-
-  哈希值是二进制值
-  哈希值具有一定的唯一性
-  哈希值极其紧凑
-  要找到生成同一个哈希值的两个不同输入，在一定时间范围内容是不可能的
-
-
-正因为哈希值的这些特点，使得哈希算法应用在加密领域成为可能。哈希算法在加密领域的应用，源于哈希算法的不可逆性，对于用户输入的密码，通过哈希算法可以得到一个哈希值。并且，同一个密码，生成的哈希值总是相等的。这样，服务器就可以在不知道用户输入的密码的情况下，判断用户输入的密码是否正确。
-
-哈希表
-哈希表是一种数据机构。
-哈希表根据关键字（key），生成关键字的哈希值，然后通过哈希值映射关键字对应的值。哈希...</div><a href="/ProgramNote/java/2018/01/03/Java%E4%B8%ADHashcode%E5%92%8C%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月03日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">Java常用关键字总结</a></h1>
-          <div class="m-article-content">abstrate
-说明
-
-  abstract 关键字可以修改类或方法。
-  abstract 类可以扩展（增加子类），但不能直接实例化。
-  abstract 方法必须在某个子类中重写，abstract 方法的类本来就是抽象类，并且必须声明为 abstract。
-
-
-总结
-仅当 abstract 类的子类实现其超类的所有 abstract 方法时，才能实例化 abstract 类的子类。这种类称为具体类，以区别于 abstract 类 。
-
-如果 abstract 类的子类没有实现其超类的所有 abstract 方法，该子类也是 abstract 类。
-
-abstract 关键字不能应用于 static、private 或 final 方法，因为这些方法不能被重写，因此，不能在子类中...</div><a href="/ProgramNote/java/2018/01/02/Java%E5%85%B3%E9%94%AE%E5%AD%97.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月02日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/25/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(2).html">Mybatis初始化(2)</a></h1>
-          <div class="m-article-content">MyBatis源码解析(一)——MyBatis初始化过程解析
-
-1. 准备工作
-
-为了看清楚MyBatis的整个初始化过程，先创建一个简单的Java项目，目录结构如下图所示：
-
-
-
-1.1 Product 产品实体类
-
-public class Product {
-    private long id;
-    private String productName;
-    private String productContent;
-    private String price;
-    private int sort;
-    private int falseSales;
-    private long category_id;
-    private byte typ...</div><a href="/ProgramNote/mybatis/2017/12/25/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(2).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月25日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">Spring手动提交事务</a></h1>
-          <div class="m-article-content">开篇之前先说一下问题来源，我是用了redisson作为项目的分布式锁，程序中使用分布式锁来锁定 对象A， 然后锁定对象A 下的 对象B，然后再对对象B 做业务操作。
-
-	RLock ALock = redissonClient.getLock("AAAAA");
-	if (ALock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-		RLock BLock = redissonClient.getLock("BBBBB");
-		if (BLock.tryLock(10000, 10000, TimeUnit.MILLISECONDS)) {
-			// 吧啦吧啦
-			// 这里是业务逻辑代码
-			// 修改对象状态等等
-		} e...</div><a href="/ProgramNote/spring/2017/12/23/Spring%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E4%BA%8B%E5%8A%A1.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月23日</span></div>
+      </div><div class="date-wrapper"><span class="article-meta">2017年 09月08日</span></div>
   </div>
 </div>
 </article></div><nav class="m-pagination"><p>共计 41 篇文章, 9 页。</p>
-          <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page2">
+          <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page8">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
 </svg>
@@ -154,7 +59,7 @@ public class Product {
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page2"><span>2</span></a>
               </li><li>
-                <div class="round-button cur"><span>3</span></div>
+                <a class="round-button" href="/ProgramNote/blog/page3"><span>3</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page4"><span>4</span></a>
               </li><li>
@@ -166,15 +71,13 @@ public class Product {
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page8"><span>8</span></a>
               </li><li>
-                <a class="round-button" href="/ProgramNote/blog/page9"><span>9</span></a>
-              </li><li>
-              <a class="round-button" href="/ProgramNote/blog/page4">
+                <div class="round-button cur"><span>9</span></div>
+              </li><li><div class="round-button inactive">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
 </svg>
 </div>
-              </a>
-            </li></ul>
+                </div></li></ul>
         </nav></div>
 </div><script src="https://cdn1.lncld.net/static/js/3.4.1/av-min.js"></script>
   <script>
