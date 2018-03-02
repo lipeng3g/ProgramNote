@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Java创建并且运行线程 - lipeng's blog</title>
-<meta name="description" content="原文地址">
+<meta name="description" content="Java线程类也是一个object类,它的实例都继承自java.lang.Thread或其子类。 可以用如下方式用java中创建并且执行一个线程：Tread thread = new Thread();thread.start();在上面的例子中，我们并没有为线程编写运行代码，因此调用该方法后线程就终止了。编写线...">
 <link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -46,7 +46,150 @@
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><hr />
+				<div class="m-article-content js-article-content" itemprop="articleBody"><p>Java线程类也是一个object类,它的实例都继承自java.lang.Thread或其子类。 可以用如下方式用java中创建并且执行一个线程：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Tread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">();</span>
+<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>在上面的例子中，我们并没有为线程编写运行代码，因此调用该方法后线程就终止了。</p>
+
+<p>编写线程运行时执行的代码有两种方式：一种是创建Thread子类的一个实例并重写run方法，第二种是创建类的时候实现Runnable接口。</p>
+
+<h1 id="1-创建thread的子类">1. 创建Thread的子类</h1>
+
+<p>创建Thread子类的一个实例并重写run方法，run方法会在调用start()方法之后被执行。例子如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyThread</span> <span class="kd">extends</span> <span class="n">Thread</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"MyThread running"</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>可以用如下方式创建并运行上述Thread子类</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MyThread</span> <span class="n">myThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyThread</span><span class="o">();</span>
+<span class="n">myTread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>一旦线程启动后start方法就会立即返回，而不会等待到run方法执行完毕才返回。就好像run方法是在另外一个cpu上执行一样。当run方法执行后，将会打印出字符串<code class="highlighter-rouge">MyThread running</code>。</p>
+
+<p>你也可以如下创建一个Thread的匿名子类：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(){</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Thread Running"</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">};</span>
+<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>当新的线程的run方法执行以后，计算机将会打印出字符串<code class="highlighter-rouge">Thread Running</code>。</p>
+
+<h1 id="2-实现runnable接口">2. 实现Runnable接口</h1>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRunnable</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"MyRunnable running"</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>为了使线程能够执行run()方法，需要在Thread类的构造函数中传入 MyRunnable的实例对象。示例如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">MyRunnable</span><span class="o">());</span>
+<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</code></pre></div></div>
+<p>当线程运行时，它将会调用实现了Runnable接口的run方法。上例中将会打印出”MyRunnable running”。</p>
+
+<p>同样，也可以创建一个实现了Runnable接口的匿名类，如下所示：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Runnable</span> <span class="n">myRunnable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">(){</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Runnable running"</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+<span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">myRunnable</span><span class="o">);</span>
+<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h1 id="3-常见错误调用run方法而非start方法">3. 常见错误：调用run()方法而非start()方法</h1>
+
+<p>创建并运行一个线程所犯的常见错误是调用线程的run()方法而非start()方法，如下所示：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">newThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">MyRunnable</span><span class="o">());</span>
+<span class="n">newThread</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>  <span class="c1">//should be start();</span>
+</code></pre></div></div>
+
+<p>起初你并不会感觉到有什么不妥，因为run()方法的确如你所愿的被调用了。但是，事实上,run()方法并非是由刚创建的新线程所执行的，而是被创建新线程的当前线程所执行了。也就是被执行上面两行代码的线程所执行的。想要让创建的新线程执行run()方法，必须调用新线程的start方法。</p>
+
+<h1 id="4-线程名">4. 线程名</h1>
+
+<p>当创建一个线程的时候，可以给线程起一个名字。它有助于我们区分不同的线程。例如：如果有多个线程写入System.out，我们就能够通过线程名容易的找出是哪个线程正在输出。例子如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MyRunnable</span> <span class="n">runnable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyRunnable</span><span class="o">();</span>
+<span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">runnable</span><span class="o">,</span> <span class="s">"New Thread"</span><span class="o">);</span>
+<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">thread</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</code></pre></div></div>
+<p>需要注意的是，因为MyRunnable并非Thread的子类，所以MyRunnable类并没有getName()方法。可以通过以下方式得到当前线程的引用：</p>
+
+<p><code class="highlighter-rouge">Thread.currentThread();</code></p>
+
+<p>因此，通过如下代码可以得到当前线程的名字：</p>
+
+<p><code class="highlighter-rouge">String threadName = Thread.currentThread().getName();</code></p>
+
+<p>线程代码举例：
+这里是一个小小的例子。首先输出执行main()方法线程名字。这个线程JVM分配的。然后开启10个线程，命名为1~10。每个线程输出自己的名字后就退出。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadExample</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+         <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="s">""</span> <span class="o">+</span> <span class="n">i</span><span class="o">){</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Thread: "</span> <span class="o">+</span> <span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"running"</span><span class="o">);</span>
+            <span class="o">}</span>
+         <span class="o">}.</span><span class="na">start</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>需要注意的是，尽管启动线程的顺序是有序的，但是执行的顺序并非是有序的。也就是说，1号线程并不一定是第一个将自己名字输出到控制台的线程。这是因为线程是并行执行而非顺序的。Jvm和操作系统一起决定了线程的执行顺序，他和线程的启动顺序并非一定是一致的。</p>
+
+<h1 id="5-创建子类还是实现runnable接口">5. 创建子类还是实现Runnable接口？</h1>
+
+<p>对于这两种方式哪种好并没有一个确定的答案，它们都能满足要求。就我个人意见，我更倾向于实现Runnable接口这种方法。因为线程池可以有效的管理实现了Runnable接口的线程，如果线程池满了，新的线程就会排队等候执行，直到线程池空闲出来为止。而如果线程是通过实现Thread子类实现的，这将会复杂一些。</p>
+
+<p>创建线程池主要有三个静态方法供我们使用，由Executors来进行创建相应的线程池：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorSevice</span> <span class="nf">newSingleThreadExecutor</span><span class="o">()</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorSevice</span> <span class="nf">newFixedThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">nThreads</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorSevice</span> <span class="nf">newCachedThreadPool</span><span class="o">()</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="n">ScheduledExecutorService</span> <span class="nf">newScheduledThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">corePoolSize</span><span class="o">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>newSingleThreadExecutor
+    <ul>
+      <li>返回以个包含单线程的Executor,将多个任务交给此Exector时，这个线程处理完一个任务后接着处理下一个任务，若该线程出现异常，将会有一个新的线程来替代。</li>
+    </ul>
+  </li>
+  <li>newFixedThreadPool
+    <ul>
+      <li>返回一个包含指定数目线程的线程池，如果任务数量多于线程数量，那么没有执行的任务必须等待，直到有任务完成为止。</li>
+    </ul>
+  </li>
+  <li>newCachedThreadPool
+    <ul>
+      <li>根据用户的任务数创建相应的线程来处理，该线程池不会对线程数目加以限制，完全依赖于JVM能创建线程的数量，可能引起内存不足。</li>
+    </ul>
+  </li>
+  <li>newScheduledThreadPool
+    <ul>
+      <li>创建一个至少有n个线程空间大小的线程池。此线程池支持定时以及周期性执行任务的需求。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>我们只需要把实现了Runnable的类的对象实例放入线程池，那么线程池就自动维护线程的启动、运行、销毁。我们不需要自行调用start()方法来开启这个线程。线程放入线程池之后会处于等待状态直到有足够空间时会唤醒这个线程。</p>
+
+<p>有时我们要同时融合实现Runnable接口和Thread子类两种方式。例如，实现了Thread子类的实例可以执行多个实现了Runnable接口的线程。一个典型的应用就是线程池。</p>
+
+<p><strong>java不允许多继承，因此实现了Runnable接口的类可以再继承其他类。</strong></p>
+
+<hr />
 
 <p><a href="http://ifeve.com/java-concurrency-thread-directory">原文地址</a></p>
 

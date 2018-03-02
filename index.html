@@ -32,11 +32,21 @@
 <div class="m-page-main"><div class="m-home">
   <div class="main">
     <div class="m-post-list"><article><h1><a href="/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html">Java创建并且运行线程</a></h1>
-          <div class="m-article-content">
+          <div class="m-article-content">Java线程类也是一个object类,它的实例都继承自java.lang.Thread或其子类。 可以用如下方式用java中创建并且执行一个线程：
 
-原文地址
+Tread thread = new Thread();
+thread.start();
 
-</div><a href="/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+
+在上面的例子中，我们并没有为线程编写运行代码，因此调用该方法后线程就终止了。
+
+编写线程运行时执行的代码有两种方式：一种是创建Thread子类的一个实例并重写run方法，第二种是创建类的时候实现Runnable接口。
+
+1. 创建Thread的子类
+
+创建Thread子类的一个实例并重写run方法，run方法会在调用start()方法之后被执行。例子如下：
+public class MyThread extends Thread {
+   pub...</div><a href="/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Concurrency">Concurrency</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
         <span class="article-view" id="post-key-java-concurrency-start">0
