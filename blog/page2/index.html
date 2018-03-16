@@ -31,7 +31,30 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">ArrayList源码解析(JDK1.8.0_131)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedList源码解析(JDK1.8.0_131)</a></h1>
+          <div class="m-article-content">1. 数据结构
+LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。
+这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。
+
+下面简单的代码就可以说明链表的基本的实现结构：
+
+    /**
+     * 链表的节点数量
+     */
+    transient int size = 0;
+
+    /**
+     * 指向第一个节点的指针。
+     * Invariant: (first == null &amp;&amp; last == null) ||
+     *            (first.prev == null &amp;&amp; fi...</div><a href="/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-linkedlist_source_jdk8">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 01月16日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">ArrayList源码解析(JDK1.8.0_131)</a></h1>
           <div class="m-article-content">1. 数据结构
 ArrayList 的实现是依靠数组来完成的。
 List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。）
@@ -110,34 +133,7 @@ HashTable一共有四个构造函数，先从简单的看起
       </div><div class="date-wrapper"><span class="article-meta">2018年 01月09日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashSet源码解析(JDK1.8.0_131)</a></h1>
-          <div class="m-article-content">1. 数据结构
-HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了HashMap的key，value统一设置为相同的值，这样由于HashMap中的key是唯一的，HashSet就实现了不能重复存储的功能。
-
-集成关系
-
-
-2. 构造函数
-
-
-
-可以看到，HashSet一共有四个构造函数（其实是5个，有一个私有的，仅供LinkedHashSet使用，这里暂时不介绍）
-
-先看最简单的3个构造方法，都是直接调用HashMap的构造方法。
-
-    /**
-     * 构造一个新的空set,返回一个使用默认的容量16和负载因子0.75的HashMap实例
-     */
-    public HashSet() {
-        map = new HashM...</div><a href="/ProgramNote/java/2018/01/09/HashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-hashset_source_jdk8">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月09日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 43 篇文章, 9 页。</p>
+</article></div><nav class="m-pagination"><p>共计 44 篇文章, 9 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
