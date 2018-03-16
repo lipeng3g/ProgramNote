@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Java泛型 - lipeng's blog</title>
-<meta name="description" content="概述什么是泛型？泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。为什么使用泛型？...">
+<meta name="description" content="1. 概述1.1. 什么是泛型？泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。...">
 <link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/java/2018/03/16/Java%E6%B3%9B%E5%9E%8B.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -46,15 +46,15 @@
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="概述">概述</h1>
-<h2 id="什么是泛型">什么是泛型？</h2>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-概述">1. 概述</h1>
+<h2 id="11-什么是泛型">1.1. 什么是泛型？</h2>
 
 <p>泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。</p>
 
-<h2 id="为什么使用泛型">为什么使用泛型？</h2>
+<h2 id="12-为什么使用泛型">1.2. 为什么使用泛型？</h2>
 <p>泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。</p>
 
-<h2 id="栗子">栗子</h2>
+<h2 id="13-栗子">1.3. 栗子</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span> <span class="n">arrayList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">();</span>
 <span class="n">arrayList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"aaaa"</span><span class="o">);</span>
 <span class="n">arrayList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
@@ -75,7 +75,7 @@
 <span class="c1">//arrayList.add(100); 在编译阶段，编译器就会报错</span>
 </code></pre></div></div>
 
-<h2 id="特性">特性</h2>
+<h2 id="14-特性">1.4. 特性</h2>
 <p><strong>泛型只在编译阶段有效</strong></p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">stringArrayList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
@@ -101,7 +101,7 @@ class java.util.ArrayList
 
 <p>泛型类型在逻辑上看以看成是多个不同的类型，实际上都是相同的类型。</p>
 
-<h1 id="泛型类">泛型类</h1>
+<h1 id="2-泛型类">2. 泛型类</h1>
 <p>泛型类型用于类的定义中，被称为泛型类。通过泛型可以完成对一组类的操作对外开放相同的接口。最典型的就是各种容器类，如：List、Set、Map。</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型</span>
@@ -158,7 +158,7 @@ D/泛型测试: key is false
   <li>泛型的类型参数只能是类类型，不能是简单类型。</li>
   <li>不能对确切的泛型类型使用instanceof操作。如下面的操作是非法的，编译时会出错。
   **if(ex_num instanceof Generic<Number>){   }**
-</Number>    <h1 id="泛型接口">泛型接口</h1>
+</Number>    <h1 id="3-泛型接口">3. 泛型接口</h1>
     <p>泛型接口与泛型类的定义及使用基本相同。泛型接口常被用在各种类的生产器中，可以看一个例子</p>
   </li>
 </ul>
@@ -204,7 +204,7 @@ D/泛型测试: key is false
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="泛型方法">泛型方法</h1>
+<h1 id="4-泛型方法">4. 泛型方法</h1>
 <p>泛型类，是在实例化类的时候指明泛型的具体类型；泛型方法，是在调用方法的时候指明泛型的具体类型 。</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
@@ -223,7 +223,7 @@ D/泛型测试: key is false
         <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
 <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="基本用法">基本用法</h2>
+<h2 id="41-基本用法">4.1. 基本用法</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GenericTest</span> <span class="o">{</span>
    <span class="c1">//这个类是个泛型类，在上面已经介绍过</span>
    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Generic</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;{</span>     
@@ -300,7 +300,7 @@ D/泛型测试: key is false
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="类中的泛型方法">类中的泛型方法</h2>
+<h2 id="42-类中的泛型方法">4.2. 类中的泛型方法</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GenericFruit</span> <span class="o">{</span>
     <span class="kd">class</span> <span class="nc">Fruit</span><span class="o">{</span>
         <span class="nd">@Override</span>
@@ -360,7 +360,7 @@ D/泛型测试: key is false
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
-<h2 id="可变参数">可变参数</h2>
+<h2 id="43-可变参数">4.3. 可变参数</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">printMsg</span><span class="o">(</span> <span class="n">T</span><span class="o">...</span> <span class="n">args</span><span class="o">){</span>
     <span class="k">for</span><span class="o">(</span><span class="n">T</span> <span class="n">t</span> <span class="o">:</span> <span class="n">args</span><span class="o">){</span>
         <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">"泛型测试"</span><span class="o">,</span><span class="s">"t is "</span> <span class="o">+</span> <span class="n">t</span><span class="o">);</span>
@@ -371,7 +371,7 @@ D/泛型测试: key is false
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>printMsg("111",222,"aaaa","2323.4",55.55);
 </code></pre></div></div>
 
-<h2 id="静态方法">静态方法</h2>
+<h2 id="44-静态方法">4.4. 静态方法</h2>
 <p>静态方法有一种情况需要注意一下，那就是在类中的静态方法使用泛型：静态方法无法访问类上定义的泛型；如果静态方法操作的引用数据类型不确定的时候，必须要将泛型定义在方法上。</p>
 
 <p>即：<strong>如果静态方法要使用泛型的话，必须将静态方法也定义成泛型方法 。</strong></p>
@@ -391,7 +391,7 @@ D/泛型测试: key is false
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h1 id="泛型通配符">泛型通配符</h1>
+<h1 id="5-泛型通配符">5. 泛型通配符</h1>
 <p>我们知道<strong>Ingeter</strong>是<strong>Number</strong>的一个子类，同时在特性章节中我们也验证过**Generic<Ingeter>**与**Generic<Number>**实际上是相同的一种基本类型。那么问题来了，在使用**Generic<Number>**作为形参的方法中，能否使用**Generic<Ingeter>**的实例传入呢？在逻辑上类似于**Generic<Number>**和**Generic<Ingeter>**是否可以看成具有父子关系的泛型类型呢？</Ingeter></Number></Ingeter></Number></Number></Ingeter></p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">showKeyValue</span><span class="o">(</span><span class="n">Generic</span><span class="o">&lt;</span><span class="n">Number</span><span class="o">&gt;</span> <span class="n">obj</span><span class="o">){</span>
@@ -426,7 +426,7 @@ D/泛型测试: key is false
   <li>当操作类型时，不需要使用类型的具体功能时，只使用Object类中的功能。那么可以用 <strong>?</strong> 通配符来表未知类型。</li>
 </ul>
 
-<h1 id="泛型数组">泛型数组</h1>
+<h1 id="6-泛型数组">6. 泛型数组</h1>
 <p>看到了很多文章中都会提起泛型数组，经过查看sun的说明文档，在java中是”<strong>不能创建一个确切的泛型类型的数组</strong>”的。</p>
 
 <p>也就是说下面的这个例子是不可以的：
@@ -474,7 +474,7 @@ D/泛型测试: key is false
 <p>但是，由于编译器知道它总是Fruit的子类型，因此我们总可以从中读取出Fruit对象：<br />
 <code class="highlighter-rouge">Fruit fruit = fruits.get(0);</code></p>
 
-<h2 id="-super">? super</h2>
+<h2 id="61--super">6.1. ? super</h2>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">fruits</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;();</span>
 <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Apple</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">fruits</span><span class="o">;</span>
 <span class="n">fruits</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Apple</span><span class="o">());</span>                 <span class="c1">//work</span>
@@ -486,7 +486,7 @@ D/泛型测试: key is false
 
 <p>而当我们读取的时候，编译器在不知道是什么类型的情况下只能返回Object对象，因为Object是任何Java类的最终祖先类。</p>
 
-<h2 id="pecs原则总结">PECS原则总结</h2>
+<h2 id="62-pecs原则总结">6.2. PECS原则总结</h2>
 
 <p>如果要从集合中读取类型T的数据，并且不能写入，可以使用 ? extends 通配符；(Producer Extends)</p>
 
