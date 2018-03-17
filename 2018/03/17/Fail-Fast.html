@@ -1,0 +1,175 @@
+
+<hr />
+<p>layout: post
+title: ‘Java Fail-fast’
+subtitle: ‘Java Fail-fast’
+date: 2018-03-17 10:35:16 +0800
+categories: Java
+author: lipeng
+cover: ‘’
+tags: Java
+key: ‘java_jihe_fail_fast’
+picture_frame: ‘shadow’
+comment: ‘true’
+—</p>
+<h1 id="什么是-fail-fast">什么是 fail-fast</h1>
+<p>ArrayList的java-doc文档中有下面的描述（已翻译为中文）：</p>
+
+<p>这个类返回的迭代器和 listIterator方法 是快速失败的（fail-fast）:如果列表结构修改创建迭代器后,任何时候以任何方式（除非通过迭代器的删除或添加方法）,迭代器将抛出ConcurrentModificationException。<br />
+在并发修改的情况下，迭代器会快速而干净地失败，而不是在将来某个未确定的时间冒任意的、不确定的行为。 <br />
+请注意，迭代器的fail-fast行为不能得到保证，一般来说，在不同步的并发修改存在的情况下，不可能做出任何硬的保证。快速失败迭代器尽最大可能抛出ConcurrentModificationException。因此，编写一个依赖于此异常的程序是错误的:迭代器的fail-fast行为应该只用于检测错误。</p>
+
+<p>更形象的说法是，如果两个线程同时访问并修改两个集合，一个线程修改了集合，而另一个就会发现，自己修改的次数和当前集合修改的次数不一致了，这时候就会抛出 ConcurrentModificationException。这只是一种可能的情况，还有很多种原因可能引起异常。但抛出该异常的原因大都是一样的，记录的修改次数和预期的次数不一致，单线程也有可能出现该异常。</p>
+
+<h1 id="简单实例">简单实例</h1>
+<p>创建两个线程，线程一对集合进行遍历，线程二同样对集合进行遍历，但是在遍历中对集合进行了remove操作，线程启动以后，就会抛出异常。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">threadOne</span> <span class="kd">extends</span> <span class="n">Thread</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ThreadOne 遍历:"</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">threadTwo</span> <span class="kd">extends</span> <span class="n">Thread</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="o">){</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ThreadTwo run："</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="o">){</span>
+                    <span class="n">list</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span><span class="n">i</span><span class="o">++){</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">new</span> <span class="nf">threadOne</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+        <span class="k">new</span> <span class="nf">threadTwo</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>执行结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ThreadOne 遍历:0
+Exception in thread "Thread-0" java.util.ConcurrentModificationException
+ThreadTwo run：0
+	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)
+ThreadTwo run：1
+	at java.util.ArrayList$Itr.next(ArrayList.java:851)
+ThreadTwo run：2
+ThreadTwo run：3
+	at com.test.elwin.ThreadTest$threadOne.run(ThreadTest.java:23)
+ThreadTwo run：4
+ThreadTwo run：5
+
+</code></pre></div></div>
+
+<h1 id="fail-fast产生的原因">fail-fast产生的原因</h1>
+
+<p>先看 ArrayList 中迭代器的实现（代码取自jdk1.8）：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">class</span> <span class="nc">Itr</span> <span class="kd">implements</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">cursor</span><span class="o">;</span>       <span class="c1">// index of next element to return</span>
+        <span class="kt">int</span> <span class="n">lastRet</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="c1">// index of last element returned; -1 if no such</span>
+        <span class="c1">// 注意，这里在每次实例化的时候创建了一个新的变量 expectedModCount，期望的修改次数，并使用当前的修改次数进行初始化赋值。</span>
+        <span class="kt">int</span> <span class="n">expectedModCount</span> <span class="o">=</span> <span class="n">modCount</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasNext</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">cursor</span> <span class="o">!=</span> <span class="n">size</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+        <span class="kd">public</span> <span class="n">E</span> <span class="nf">next</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// 这里每次获取下一个元素的时候检查是否需要 fail-fast</span>
+            <span class="n">checkForComodification</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="o">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoSuchElementException</span><span class="o">();</span>
+            <span class="n">Object</span><span class="o">[]</span> <span class="n">elementData</span> <span class="o">=</span> <span class="n">ArrayList</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">elementData</span><span class="o">;</span>
+            <span class="c1">// 如果游标值超过数据长度，也会抛出 fail-fast</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConcurrentModificationException</span><span class="o">();</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">E</span><span class="o">)</span> <span class="n">elementData</span><span class="o">[</span><span class="n">lastRet</span> <span class="o">=</span> <span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lastRet</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">();</span>
+            <span class="c1">// 删除元素，检查是否抛出 fail-fast</span>
+            <span class="n">checkForComodification</span><span class="o">();</span>
+
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">ArrayList</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">lastRet</span><span class="o">);</span>
+                <span class="n">cursor</span> <span class="o">=</span> <span class="n">lastRet</span><span class="o">;</span>
+                <span class="n">lastRet</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">expectedModCount</span> <span class="o">=</span> <span class="n">modCount</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IndexOutOfBoundsException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 删除元素时，index值超过实际长度，抛出 fail-fast异常</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConcurrentModificationException</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">forEachRemaining</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">consumer</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">consumer</span><span class="o">);</span>
+            <span class="kd">final</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">ArrayList</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">size</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kd">final</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">elementData</span> <span class="o">=</span> <span class="n">ArrayList</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">elementData</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">elementData</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 遍历时，元素长度异常抛出 fail-fast异常</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConcurrentModificationException</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">size</span> <span class="o">&amp;&amp;</span> <span class="n">modCount</span> <span class="o">==</span> <span class="n">expectedModCount</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">consumer</span><span class="o">.</span><span class="na">accept</span><span class="o">((</span><span class="n">E</span><span class="o">)</span> <span class="n">elementData</span><span class="o">[</span><span class="n">i</span><span class="o">++]);</span>
+            <span class="o">}</span>
+            <span class="c1">// update once at end of iteration to reduce heap write traffic</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="n">lastRet</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="c1">// 遍历时检测是否需要抛出 fail-fast异常</span>
+            <span class="n">checkForComodification</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="kd">final</span> <span class="kt">void</span> <span class="nf">checkForComodification</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// 抛出 fail-fast的一个异常条件（也是主要条件），当前修改次数和预期的修改次数不一致！！</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">modCount</span> <span class="o">!=</span> <span class="n">expectedModCount</span><span class="o">)</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConcurrentModificationException</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>上面的代码中，请主要看中文注释中标记抛出异常的部分代码， ArrayList集合在进行迭代操作时，会修改 modCount并同步expectedModCount，但是如果多个线程或者单个线程本身在迭代中对集合进行了修改导致了修改次数不一致就会抛出异常。</p>
+
+<p>可以详细查看ArrayList源码来查看具体哪些地方修改了 modCount。</p>
+
+<h1 id="解决方法">解决方法</h1>
+<h2 id="方案一">方案一</h2>
+<p>java-doc中有下面的描述：</p>
+
+<p>注意，此实现不同步。如果多个线程并发访问ArrayList实例，并且至少有一个线程在结构上修改了列表，那么它必须在外部同步。(结构修改是任何添加或删除一个或多个元素，或显式调整支持数组的操作;仅仅设置元素的值不是结构修改。）</p>
+
+<p>同时，给出了下面的解决方法：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span> <span class="n">list</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">synchronizedList</span><span class="o">(</span><span class="k">new</span> <span class="n">ArrayList</span><span class="o">(...));</span>
+</code></pre></div></div>
+
+<h2 id="方案二">方案二</h2>
+<p>使用 CopyOnWriteArrayList ，关于 CopyOnWriteArrayList 的详细介绍将在并发系列中介绍。</p>
+

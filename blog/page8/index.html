@@ -31,7 +31,35 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/09/20/Mybatis%E4%BC%A0%E5%8F%82OrderBy%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2.html">Mybatis传参OrderBy和字符串替换</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2017/10/11/%E4%BD%BF%E7%94%A8%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%88%9D%E5%A7%8B%E5%8C%96ArrayList.html">使用一行代码初始化ArrayList</a></h1>
+          <div class="m-article-content">
+
+
+  1. 问题
+  2. 答案一
+  3. 答案二
+  4. 答案其他
+
+
+
+1. 问题
+问题来源：当创建一个List并且塞入一串测试数据的时候，我需要下面这种代码来完成
+ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;();
+places.add("Buenos Aires");
+places.add("Córdoba");
+places.add("La Plata");
+
+可以使用下面的代码来完成
+
+ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"))...</div><a href="/ProgramNote/java/2017/10/11/%E4%BD%BF%E7%94%A8%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%88%9D%E5%A7%8B%E5%8C%96ArrayList.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 10月11日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/mybatis/2017/09/20/Mybatis%E4%BC%A0%E5%8F%82OrderBy%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2.html">Mybatis传参OrderBy和字符串替换</a></h1>
           <div class="m-article-content">1. Mybatis 传参OrderBy和字符串替换
 
 
@@ -181,38 +209,7 @@ public static void main(String[] args) {
       </div><div class="date-wrapper"><span class="article-meta">2017年 09月09日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/server/2017/09/09/Redis%E5%AE%89%E8%A3%85(MacOs).html">Redis安装</a></h1>
-          <div class="m-article-content"># 安装和启动
- ## 下载 redis
-
-  略
- ## 修改文件夹名
-   mv redis-x.x.x redis
-  
-  ## 编译
-   cd redis/
- sudo make
- sudo make test
- sudo make isntall
-  
-  ## 配置
- 你会在redis 目录里找到一个 redis.conf 的配置文件,打开编辑此配置文件,找到 dir  .  这一行配置.
-
-
-此配置是将内存中的数据写入一个文件,这个数据库文件要保存到什么地方 就是这个配置项起到的作用.
-
-我在/usr/local/redis目录下创建了 db 的文件夹(注意此文件夹必须有可读写权限)
- cd redis/
- mkdir db
- chmod 777 /usr/local...</div><a href="/ProgramNote/server/2017/09/09/Redis%E5%AE%89%E8%A3%85(MacOs).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Server">Server</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 09月09日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 44 篇文章, 9 页。</p>
+</article></div><nav class="m-pagination"><p>共计 45 篇文章, 9 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page7">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
