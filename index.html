@@ -31,26 +31,16 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/2018/03/17/Fail-Fast.html">Fail Fast</a></h1>
-          <div class="m-article-content">
-
-layout: post
-title: ‘Java Fail-fast’
-subtitle: ‘Java Fail-fast’
-date: 2018-03-17 10:35:16 +0800
-categories: Java
-author: lipeng
-cover: ‘’
-tags: Java
-key: ‘java_jihe_fail_fast’
-picture_frame: ‘shadow’
-comment: ‘true’
-—
-什么是 fail-fast
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/03/17/Fail-Fast.html">Java Fail-fast</a></h1>
+          <div class="m-article-content">什么是 fail-fast
 ArrayList的java-doc文档中有下面的描述（已翻译为中文）：
 
-这个类返回的迭代器和 listIterator方法 是快速失败的（fail-fast）:如果列表结构修改创建迭代器后,任何时候以任何方式（除非通过迭代...</div><a href="/ProgramNote/2018/03/17/Fail-Fast.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
+这个类返回的迭代器和 listIterator方法 是快速失败的（fail-fast）:如果列表结构修改创建迭代器后,任何时候以任何方式（除非通过迭代器的删除或添加方法）,迭代器将抛出ConcurrentModificationException。
+在并发修改的情况下，迭代器会快速而干净地失败，而不是在将来某个未确定的时间冒任意的、不确定的行为。 
+请注意，迭代器的fail-fast行为不能得到保证，一般来说，在不同步的并发修改存在的情况下，不可能做出任何硬的保证。快速失败迭代器尽最大可能抛出ConcurrentModificationException。因此，编写一个依赖于此异常的...</div><a href="/ProgramNote/java/2018/03/17/Fail-Fast.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java_jihe_fail_fast">0
         </span> views
       </div><div class="date-wrapper"><span class="article-meta">2018年 03月17日</span></div>
   </div>
