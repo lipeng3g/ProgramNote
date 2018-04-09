@@ -31,7 +31,31 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/mysql/2017/11/20/MySQL5.7%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE.html">Mysql5.7权限配置</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">Mybatis初始化(1)</a></h1>
+          <div class="m-article-content">对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。
+
+
+MyBatis的初始化做了什么
+任何框架的初始化，无非是加载自己运行时所需要的配置信息。MyBatis的配置信息，大概包含以下信息，其高层级结构如下：
+× configuration 配置
+    × properties 属性
+    × settings 设置
+    × typeAliases 类型命名
+    × typeHandlers 类型处理器
+    × plugins 插件
+    × objectFactory 对象工厂
+    × reflectorFactory
+    × environments 环境
+        × environment 环境变量
+        × tr...</div><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月05日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/mysql/2017/11/20/MySQL5.7%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE.html">Mysql5.7权限配置</a></h1>
           <div class="m-article-content">Mysql5.7 新增、修改、授权用户
 
 
@@ -165,29 +189,7 @@ Serialization（序列化）是一种将对象以一连串的字节描述的过�
       </div><div class="date-wrapper"><span class="article-meta">2017年 11月04日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/server/2017/11/01/Tomcat%E5%9F%9F%E5%90%8D%E5%92%8C%E7%AB%AF%E5%8F%A3%E8%AE%BE%E7%BD%AE.html">Tomcat域名和端口设置</a></h1>
-          <div class="m-article-content">Tomcat域名和端口设置
-
-准备工作
-
-1.下载并安装Tomcat
-2.Tomcat下Webapps目录下增加两个项目，分别为app01 app02,项目内容自定义，本例中两个项目中只包含index.html
-
-
-设置多个端口访问同一个WebApp
-默认情况下，server.xml中只包含8080的端口配置，浏览器访问http://localhost:8080/app01/index.html时候会跳转到app01程序的index页面
-
-按照下面的配置修改server.xml
-
-&lt;Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"  executor="t...</div><a href="/ProgramNote/server/2017/11/01/Tomcat%E5%9F%9F%E5%90%8D%E5%92%8C%E7%AB%AF%E5%8F%A3%E8%AE%BE%E7%BD%AE.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Server">Server</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 11月01日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 45 篇文章, 9 页。</p>
+</article></div><nav class="m-pagination"><p>共计 46 篇文章, 10 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page6">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -211,6 +213,8 @@ Serialization（序列化）是一种将对象以一连串的字节描述的过�
                 <a class="round-button" href="/ProgramNote/blog/page8"><span>8</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page9"><span>9</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page10"><span>10</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page8">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

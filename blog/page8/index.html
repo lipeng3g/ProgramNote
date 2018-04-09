@@ -31,7 +31,29 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2017/10/11/%E4%BD%BF%E7%94%A8%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%88%9D%E5%A7%8B%E5%8C%96ArrayList.html">使用一行代码初始化ArrayList</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/server/2017/11/01/Tomcat%E5%9F%9F%E5%90%8D%E5%92%8C%E7%AB%AF%E5%8F%A3%E8%AE%BE%E7%BD%AE.html">Tomcat域名和端口设置</a></h1>
+          <div class="m-article-content">Tomcat域名和端口设置
+
+准备工作
+
+1.下载并安装Tomcat
+2.Tomcat下Webapps目录下增加两个项目，分别为app01 app02,项目内容自定义，本例中两个项目中只包含index.html
+
+
+设置多个端口访问同一个WebApp
+默认情况下，server.xml中只包含8080的端口配置，浏览器访问http://localhost:8080/app01/index.html时候会跳转到app01程序的index页面
+
+按照下面的配置修改server.xml
+
+&lt;Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"  executor="t...</div><a href="/ProgramNote/server/2017/11/01/Tomcat%E5%9F%9F%E5%90%8D%E5%92%8C%E7%AB%AF%E5%8F%A3%E8%AE%BE%E7%BD%AE.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Server">Server</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 11月01日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2017/10/11/%E4%BD%BF%E7%94%A8%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%88%9D%E5%A7%8B%E5%8C%96ArrayList.html">使用一行代码初始化ArrayList</a></h1>
           <div class="m-article-content">
 
 
@@ -172,44 +194,7 @@ ArrayList&lt;Stringplaces = new ArrayList&lt;String&gt;(Arrays.asList("Buenos Ai
       </div><div class="date-wrapper"><span class="article-meta">2017年 09月10日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2017/09/09/Integer%E5%92%8CString%E7%B1%BB%E5%9E%8B%E5%9F%BA%E7%A1%80.html">Integer和String类型基础</a></h1>
-          <div class="m-article-content">
-
-
-  1. Integer比较
-  2. String比较
-  3. Integer与int比较
-
-
-
-1. Integer比较
-public static void main(String[] args) {
-        Integer a = 128,b=128;  
-        Integer c = 127,d=127;
-              
-        System.out.println(a==b);  
-        System.out.println(c==d);
-}
-
-
-  a==b –&gt; false
-
-
-
-  c==d –&gt; true
-
-
-结果解释
-
-其实当我们给一个Integer对象赋一个int值的时候，会调用Integer...</div><a href="/ProgramNote/java/2017/09/09/Integer%E5%92%8CString%E7%B1%BB%E5%9E%8B%E5%9F%BA%E7%A1%80.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 09月09日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 45 篇文章, 9 页。</p>
+</article></div><nav class="m-pagination"><p>共计 46 篇文章, 10 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page7">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -233,6 +218,8 @@ public static void main(String[] args) {
                 <div class="round-button cur"><span>8</span></div>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page9"><span>9</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page10"><span>10</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page9">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
