@@ -9,7 +9,9 @@
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
 <!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
 <meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
-    <style></style>
+    <style>.m-article-content img:not(.emoji) {
+        box-shadow: 0 0 5px rgba(0, 0, 0, .4);
+      }</style>
     <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script type="text/javascript" async
     src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
 </script></head>
@@ -36,7 +38,7 @@
 				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">DispatcherServlet探究</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
+        <span class="article-view" id="post-key-spring-dispatcherservlet-ex">0
         </span> views
       </div><div class="date-wrapper"><time class="article-meta" datetime="2017-12-14T23:51:29+08:00"
           itemprop="datePublished">2017年 12月14日
@@ -46,7 +48,7 @@
 </header>
 				<div class="m-article-content js-article-content" itemprop="articleBody"><p><code class="highlighter-rouge">DispatcherServlet</code>是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。</p>
 
-<p><img src="/ProgramNote/assets/Image/spring/01.png" alt="分析图" title="分析图" /></p>
+<p><img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/spring/01.png" alt="分析图" title="分析图" /></p>
 
 <p>当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中</p>
 
@@ -71,17 +73,20 @@
 
 <p><strong>请注意，DispatcherServlet可以配置多个，有自己的上下文容器。</strong></p>
 
+<p>DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法</p>
+
+<p><code class="highlighter-rouge">init</code>方法主要做了下面的几个操作</p>
 <ol>
-  <li>PropertyValues初始化 ServletConfigPropertyValues是一个内部类</li>
+  <li>PropertyValues初始化
+    <ul>
+      <li>ServletConfigPropertyValues是一个内部类</li>
+    </ul>
+  </li>
   <li>封装了bean的行为，提供了设置和获取属性值</li>
   <li>加载资源文件</li>
   <li>注册属性编辑</li>
   <li>初始化beanWrapper</li>
 </ol>
-
-<p>项目启动</p>
-
-<p>DispatcherServlet继承了FrameworkServlet，FrameworkServlet继承了HttpServletBean，HttpServletBean继承了HttpServlet 类，而HttpServletBean类有一个入口点就是重写了init方法</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
     <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
@@ -118,13 +123,29 @@
 
 </code></pre></div></div>
 
-<p>PropertyValues初始化</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ServletConfigPropertyValues</span> <span class="kd">extends</span> <span class="n">MutablePropertyValues</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="nf">ServletConfigPropertyValues</span><span class="o">(</span><span class="n">ServletConfig</span> <span class="n">config</span><span class="o">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">requiredProperties</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
-            <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">missingProps</span> <span class="o">=</span> <span class="n">requiredProperties</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">requiredProperties</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">(</span><span class="n">requiredProperties</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
-            <span class="c1">//获取init-param中的数值对</span>
-            <span class="n">Enumeration</span> <span class="n">paramNames</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameterNames</span><span class="o">();</span>
+<p>PropertyValues初始化
+初始化的时候有两个参数，一个是ServletConfig，另一个是requiredProperties，对于后一个，HttpServletBean中提供了下面的方法：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="cm">/**
+	 * 子类可以调用此方法来指定此属性(必须匹配它们所公开的JavaBean属性)是强制的，并且必须作为配置参数提供。这应该从子类的构造函数中调用。
+	 * &lt;p&gt;这种方法仅在由ServletConfig实例驱动的传统初始化的情况下才有意义
+	 * @param property name of the required property
+	 */</span>
+	<span class="kd">protected</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">addRequiredProperty</span><span class="o">(</span><span class="n">String</span> <span class="n">property</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">requiredProperties</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">property</span><span class="o">);</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+<p>所以<code class="highlighter-rouge">requiredProperties</code>的简单理解就是，这里面的参数必须在Init的时候添加进去，否则就会报错，下面有更详细的说明。</p>
 
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="cm">/**
+	 * 请注意，这是一个内部类，继承MutablePropertyValues（PropertyValues的默认实现）
+	 */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ServletConfigPropertyValues</span> <span class="kd">extends</span> <span class="n">MutablePropertyValues</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">ServletConfigPropertyValues</span><span class="o">(</span><span class="n">ServletConfig</span> <span class="n">config</span><span class="o">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">requiredProperties</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+			<span class="c1">// 获取是否有必须初始化的参数</span>
+            <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">missingProps</span> <span class="o">=</span> <span class="n">requiredProperties</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">requiredProperties</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">(</span><span class="n">requiredProperties</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// 获取init-param中的数值对</span>
+            <span class="n">Enumeration</span> <span class="n">paramNames</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameterNames</span><span class="o">();</span>
+			<span class="c1">// 把初始化参数放入propertyValueList（该属性继承自MutablePropertyValues）中，然后从必须的参数中删除，表示已经有对应的值</span>
             <span class="k">while</span><span class="o">(</span><span class="n">paramNames</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
                 <span class="n">String</span> <span class="n">property</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">paramNames</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
                 <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="n">property</span><span class="o">);</span>
@@ -133,7 +154,7 @@
                     <span class="n">missingProps</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">property</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
-
+			<span class="c1">// 如果必须初始化的集合中依然有未初始化的值，抛出异常</span>
             <span class="k">if</span> <span class="o">(!</span><span class="n">CollectionUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">missingProps</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nf">ServletException</span><span class="o">(</span><span class="s">"Initialization from ServletConfig for servlet '"</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="na">getServletName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"' failed; the following required properties were missing: "</span> <span class="o">+</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">collectionToDelimitedString</span><span class="o">(</span><span class="n">missingProps</span><span class="o">,</span> <span class="s">", "</span><span class="o">));</span>
             <span class="o">}</span>
@@ -141,13 +162,18 @@
     <span class="o">}</span>
 </code></pre></div></div>
 <p>如下图所示，获取init-param中的配置参数，写入PropertyValues
-<img src="/ProgramNote/assets/Image/spring/02.png" alt="分析图" title="分析图" /></p>
+<img src="http://on8ygi8ap.bkt.clouddn.com/image/blog/spring/02.png" alt="分析图" title="分析图" /></p>
 
 <p>BeanWrapper实现对bean行为的封装</p>
-
-<p><a href="http://blog.csdn.net/zhiweianran/article/details/7919129">待学习</a></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BeanWrapper</span> <span class="n">bw</span> <span class="o">=</span> <span class="n">PropertyAccessorFactory</span><span class="o">.</span><span class="na">forBeanPropertyAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="n">ResourceLoader</span> <span class="n">resourceLoader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServletContextResourceLoader</span><span class="o">(</span><span class="n">getServletContext</span><span class="o">());</span>
+<span class="n">bw</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">Resource</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ResourceEditor</span><span class="o">(</span><span class="n">resourceLoader</span><span class="o">,</span> <span class="n">getEnvironment</span><span class="o">()));</span>
+<span class="n">initBeanWrapper</span><span class="o">(</span><span class="n">bw</span><span class="o">);</span>
+<span class="n">bw</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">pvs</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+</code></pre></div></div>
 
 <p>ResourceLoader加载资源文件比较简单</p>
+
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServletContextResourceLoader</span> <span class="kd">extends</span> <span class="n">DefaultResourceLoader</span> <span class="o">{</span>
 
 	<span class="kd">private</span> <span class="kd">final</span> <span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">;</span>
@@ -172,6 +198,15 @@
 
 <span class="o">}</span>
 </code></pre></div></div>
+
+<p>ResourceLoader接口仅有一个getResource(String location)的方法，可以根据一个资源地址加载文件资源。<br />
+classpath:这种方式指定SpringMVC框架bean配置文件的来源。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ResourcePatternResolver</span> <span class="n">resolver</span> <span class="o">=</span><span class="k">new</span> <span class="n">PathMatchingResourcePatternResolver</span><span class="o">();</span>
+<span class="n">resolver</span><span class="o">.</span><span class="na">getResources</span><span class="o">(</span><span class="s">"classpath:spring-mvc.xml"</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>至此，实现了先通过PropertyValues获取web.xml文件init-param的参数值，然后通过ResourceLoader读取.xml配置信息，BeanWrapper对配置的标签进行解析和将系统默认的bean的各种属性设置到对应的bean属性。</p>
 
 <p>initServletBean的介绍</p>
 
@@ -279,11 +314,53 @@
 		<span class="k">return</span> <span class="n">wac</span><span class="o">;</span>
 	<span class="o">}</span>
 </code></pre></div></div>
-<p>本文地址：
-http://blog.csdn.net/congcong68/article/details/40451233</p>
 
-<p>需要学的
-http://blog.csdn.net/congcong68/article/details/40650143</p>
+<ol>
+  <li>获取ContextLoaderListener加载的上下文并标示为跟上下文，如果是编程式传入，没初始化，以根节点为父上文，并设置ID等信息，然后初始化。</li>
+  <li>如果上下文是为空的，Servlet不是由编程式注册到容器中，查找servletContext中已经注册的WebApplicationContext作为上下文，如果都没找到时，就用根上下文就创建一个上下文有ID，在上下文关闭的情况下调用refesh可启动应用上下文，在已经启动的状态下，调用refresh则清除缓存并重新装载配置信息</li>
+  <li>对不同的请求对应的DispatherServlet有不同的WebApplicationContext、并且都存放在ServletContext中。以servlet-name为key保存在severtContext，前面有配置了两个DispatherServlet，都有各自的上下文容器</li>
+</ol>
+
+<p>回调函数onRefresh还做了一些提供了SpringMVC各种编程元素的初始化工作， onRefresh在为子类提供模版、让子类根据自己的需求实现不同的onRefresh的初始化工作，这边是由FrameworkServlet的子类DispatcherServlet来实现的</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="cm">/**
+	 * This implementation calls {@link #initStrategies}.
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onRefresh</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">initStrategies</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Initialize the strategy objects that this servlet uses.
+	 * &lt;p&gt;May be overridden in subclasses in order to initialize further strategy objects.
+	 */</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initStrategies</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// 初始化上传文件解析器</span>
+		<span class="n">initMultipartResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化本地解析器</span>
+		<span class="n">initLocaleResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化主题解析器</span>
+		<span class="n">initThemeResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化映射处理器</span>
+		<span class="n">initHandlerMappings</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化适配器处理器</span>
+		<span class="n">initHandlerAdapters</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化异常处理器</span>
+		<span class="n">initHandlerExceptionResolvers</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化请求到视图名翻译器</span>
+		<span class="n">initRequestToViewNameTranslator</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="c1">// 初始化视图解析器</span>
+		<span class="n">initViewResolvers</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="n">initFlashMapManager</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<p>总结</p>
+
+<p>HttpServletBean、FrameworkServlet、DispatcherServlet三个不同的类层次，SpringMVC对三个以抽象和继承来实现不用的功能，分工合作，实现了解耦的设计原则。</p>
+
+<p>HttpServletBean是实现了获取web.xml中的<init-param>配置元素的值；FrameworkServlet实现了SpringMVC上下文并根据不同的DispatcherServlet放在以servlet-name为key值severtContext中；DispatcherServlet主要实现了初始化SpringMVC组件元素。</init-param></p>
 
 </div>
 				<footer><meta itemprop="dateModified" content="2017-12-14T23:51:29+08:00"><div class="article-license"><div class="m-license"><div class="clearfix">
@@ -294,7 +371,26 @@ http://blog.csdn.net/congcong68/article/details/40650143</p>
     </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
   </div>
 </div></div>
-				</footer><section></section></article>
+				</footer><section><div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+        this.page.url = 'https://lipeng3g.github.io/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html';
+        this.page.identifier = 'spring-dispatcherservlet-ex';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://https-lipeng3g-github-io-programnote.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></section></article>
 		</div>
 		<div class="col-2">
 			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
@@ -407,7 +503,54 @@ http://blog.csdn.net/congcong68/article/details/40650143</p>
 	    'container': '.js-article-content',
 	  });
 	});
-</script></div>
+</script><script src="https://cdn1.lncld.net/static/js/3.4.1/av-min.js"></script>
+  <script type="text/javascript">
+		$(function() {
+			// 初始化
+			AV.init({
+				appId: 'Vg4CDT3raC2rXnQ1QkQARVP7-gzGzoHsz',
+				appKey: '5J0nOQP5ng1xVl8oUFwUC3OT'
+			});
+			// 查询
+			var query = new AV.Query('WMCiMSk0m4BjqiUFfg8HeVwN');
+			query.equalTo('key', 'spring-dispatcherservlet-ex');
+			query.first().then(function(result) {
+				if (result) {
+					addOne(result)
+				} else {
+					//新建
+					var Blog = AV.Object.extend('WMCiMSk0m4BjqiUFfg8HeVwN');
+					var blog = new Blog();
+					blog.set('title', 'DispatcherServlet探究');
+					blog.set('key', 'spring-dispatcherservlet-ex');
+					blog.set('views', 0);
+					blog.save().then(function(page) {
+						addOne(page)
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+
+				function addOne(page) {
+					page.increment('views', 1);
+					page.fetchWhenSave(true);
+					page.save().then(function(page) {
+						$("#post-key-spring-dispatcherservlet-ex").text(page.attributes.views);
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+			}, function(error) {
+				if (error) {
+					throw error;
+				}
+			});
+		});
+	</script></div>
 </div>
 </div><div class="m-page-footer js-page-footer">
   <div class="main">
