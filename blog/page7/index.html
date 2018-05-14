@@ -31,7 +31,42 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">Mybatis初始化(1)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Mybatis数据源和连接池</a></h1>
+          <div class="m-article-content">对于ORM框架而言，数据源的组织是一个非常重要的一部分，这直接影响到框架的性能问题。
+
+
+
+  1. MyBatis数据源DataSource分类
+  2. DataSource的创建过程
+    
+      2.1. 文件解析
+      2.2. 创建模式
+      2.3. 存储
+    
+  
+  3. DataSource什么时候创建Connection对象
+  4. UnpooledDataSource
+    
+      4.1. 创建Connection过程
+    
+  
+  5. 使用连接池
+    
+      5.1. 分析
+    
+  
+  6. PooledDataSource
+    
+      6.1. 基本原理
+      6.2. 获取ja...</div><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月07日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/mybatis/2017/12/05/Mybatis%E5%88%9D%E5%A7%8B%E5%8C%96(1).html">Mybatis初始化(1)</a></h1>
           <div class="m-article-content">对于任何框架而言，在使用前都要进行一系列的初始化，MyBatis也不例外。
 
 
@@ -155,41 +190,7 @@ CREATE USER 'username'@'host' IDENTIFIED ...</div><a href="/ProgramNote/mysql/20
       </div><div class="date-wrapper"><span class="article-meta">2017年 11月07日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2017/11/04/Java%E5%BA%8F%E5%88%97%E5%8C%96Serializable%E8%AF%A6%E8%A7%A3.html">Java序列化Serializable详解</a></h1>
-          <div class="m-article-content">
-
-
-  1. 什么是序列化和反序列化
-  2. 什么情况下需要序列化
-  3. 如何实现序列化
-  4. 序列化和反序列化例子
-  5. 序列化ID
-  6. 序列化前和序列化后的对象的关系
-    
-      6.1. 是 “==”还是equal？ or 是浅复制还是深复制？
-    
-  
-  7. 静态变量能否序列化
-  8. 总结:
-
-
-
-1. 什么是序列化和反序列化
-Serialization（序列化）是一种将对象以一连串的字节描述的过程；反序列化deserialization是一种将这些字节重建成一个对象的过程。
-
-2. 什么情况下需要序列化
-
-  当你想把的内存中的对象保存到一个文件中或者数据库中时候；
-  当你想用套接字在网络上传送对象的时候；
-  当你想通过RMI...</div><a href="/ProgramNote/java/2017/11/04/Java%E5%BA%8F%E5%88%97%E5%8C%96Serializable%E8%AF%A6%E8%A7%A3.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 11月04日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 46 篇文章, 10 页。</p>
+</article></div><nav class="m-pagination"><p>共计 47 篇文章, 10 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page6">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

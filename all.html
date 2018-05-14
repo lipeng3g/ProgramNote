@@ -34,7 +34,7 @@
   <ul class="inline-list">
     <li>
       <button type="button" class="js-article-tag js-tag-show-all all round-rect-button" onclick="tagSelect('')">Show All
-        <div class="tag-count">46</div>
+        <div class="tag-count">47</div>
       </button>
     </li><li><button type="button" class="js-article-tag tag-2 round-rect-button"
         data-tag="Concurrency" onclick="tagSelect('Concurrency')">
@@ -52,6 +52,10 @@
         data-tag="JavaScript" onclick="tagSelect('JavaScript')">
           <span>JavaScript</span><div class="tag-count">8</div>
         </button>
+      </li><li><button type="button" class="js-article-tag tag-1 round-rect-button"
+        data-tag="Javascript" onclick="tagSelect('Javascript')">
+          <span>Javascript</span><div class="tag-count">1</div>
+        </button>
       </li><li><button type="button" class="js-article-tag tag-2 round-rect-button"
         data-tag="Mybatis" onclick="tagSelect('Mybatis')">
           <span>Mybatis</span><div class="tag-count">8</div>
@@ -68,12 +72,19 @@
         data-tag="Spring" onclick="tagSelect('Spring')">
           <span>Spring</span><div class="tag-count">3</div>
         </button>
+      </li><li><button type="button" class="js-article-tag tag-1 round-rect-button"
+        data-tag="Vue" onclick="tagSelect('Vue')">
+          <span>Vue</span><div class="tag-count">1</div>
+        </button>
       </li></ul>
 </div>
 <!--group by year: http://stackoverflow.com/questions/19086284/jekyll-liquid-templating-how-to-group-blog-posts-by-year-->
     <section class="js-year-wrapper"><section id="2018">
           <h2 class="year-title" id="year-2018">2018</h2>
-          <ul class="year-list"><li class="js-post-block" data-tag="Concurrency">
+          <ul class="year-list"><li class="js-post-block" data-tag="Javascript,Vue">
+          <span class="post-date">05月14日</span>
+          <a class="post-link" href="/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">Vue-Cli学习笔记</a>
+        </li><li class="js-post-block" data-tag="Concurrency">
           <span class="post-date">04月09日</span>
           <a class="post-link" href="/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">多线程常用实例</a>
         </li><li class="js-post-block" data-tag="Java">
