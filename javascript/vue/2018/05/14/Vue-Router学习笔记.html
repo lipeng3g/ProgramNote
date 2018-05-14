@@ -205,34 +205,48 @@ export default {
 }
 </code></pre></div>    </div>
   </li>
-  <li>
-    <p>创建组件</p>
-  </li>
-  <li><code class="highlighter-rouge">&lt;router-link&gt;</code>跳转<br />
-<code class="highlighter-rouge">&lt;router-link to="/params/198/jspang website is very good"&gt;params&lt;/router-link&gt; |</code></li>
+  <li>创建组件<br />
+```</li>
 </ul>
+<template>
+    <div>
+        <h2></h2>
+        <p>新闻ID：</p>
+        <p>新闻标题：</p>
+    </div>
+</template>
+<script>
+export default {
+  name: 'params',
+  data () {
+    return {
+      msg: 'params page'
+    }
+  }
+}
+</script>
 
-<p>说明： <code class="highlighter-rouge">path</code> 支持正则表达式，例如<code class="highlighter-rouge">path:'/params/:newsId(\\d+)/:newsTitle',</code>，限制<code class="highlighter-rouge">newsId</code>为数字类型</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+- `&lt;router-link&gt;`跳转  
+  `&lt;router-link to="/params/198/jspang website is very good"&gt;params&lt;/router-link&gt; |`
 
-<h1 id="6-多路由区域">6. 多路由区域</h1>
-<ul>
-  <li>创建多路由标签</li>
-</ul>
+说明： `path` 支持正则表达式，例如`path:'/params/:newsId(\\d+)/:newsTitle',`，限制`newsId`为数字类型  
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;router-view &gt;&lt;/router-view&gt;
-&lt;router-view name="left" style="float:left;width:50%;background-color:#ccc;height:300px;"&gt;&lt;/router-view&gt;
-&lt;router-view name="right" style="float:right;width:50%;background-color:#c0c;height:300px;"&gt;&lt;/router-view&gt;
+# 6. 多路由区域
+- 创建多路由标签  
+  
 </code></pre></div></div>
-
-<ul>
-  <li>路由配置样例<br />
-```
-import Vue from ‘vue’
+<router-view></router-view>
+<router-view name="left" style="float:left;width:50%;background-color:#ccc;height:300px;"></router-view>
+<router-view name="right" style="float:right;width:50%;background-color:#c0c;height:300px;"></router-view>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+- 路由配置样例     
+</code></pre></div></div>
+<p>import Vue from ‘vue’
 import Router from ‘vue-router’
 import Hello from ‘@/components/Hello’
 import Hi1 from ‘@/components/Hi1’
-import Hi2 from ‘@/components/Hi2’</li>
-</ul>
+import Hi2 from ‘@/components/Hi2’</p>
 
 <p>Vue.use(Router)</p>
 
