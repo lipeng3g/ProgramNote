@@ -1,5 +1,253 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T15:31:58+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Vue-Cli学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Cli学习笔记" /><published>2018-05-14T15:29:40+08:00</published><updated>2018-05-14T15:29:40+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html"></content><author><name>lipeng</name></author><category term="Javascript" /><category term="Vue" /><summary type="html"></summary></entry><entry><title type="html">多线程常用实例</title><link href="https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html" rel="alternate" type="text/html" title="多线程常用实例" /><published>2018-04-09T22:05:39+08:00</published><updated>2018-04-09T22:05:39+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">&lt;!-- TOC --&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T16:36:41+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Vue-Cli学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Cli学习笔记" /><published>2018-05-14T15:29:40+08:00</published><updated>2018-05-14T15:29:40+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">&lt;h1 id=&quot;1-安装vue-cli&quot;&gt;1. 安装vue-cli&lt;/h1&gt;
+&lt;p&gt;安装命令 &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;npm install vue-cli -g&lt;/code&gt;   &lt;br /&gt;
+-g :代表全局安装&lt;br /&gt;
+查看版本号   &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;vue -V&lt;/code&gt;&lt;br /&gt;
+注意： &lt;code class=&quot;highlighter-rouge&quot;&gt;V&lt;/code&gt;是大写。&lt;/p&gt;
+
+&lt;h1 id=&quot;2-初始化项目&quot;&gt;2. 初始化项目&lt;/h1&gt;
+&lt;h2 id=&quot;21-初始化命令&quot;&gt;2.1. 初始化命令&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;vue init &amp;lt;template-name&amp;gt; &amp;lt;project-name&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;init：表示我要用vue-cli来初始化项目&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&amp;lt;template-name&amp;gt;：表示模板名称，vue-cli官方为我们提供了5种模板，&lt;/p&gt;
+
+    &lt;p&gt;webpack-一个全面的webpack+vue-loader的模板，功能包括热加载，linting,检测和CSS扩展。&lt;/p&gt;
+
+    &lt;p&gt;webpack-simple-一个简单webpack+vue-loader的模板，不包含其他功能，让你快速的搭建vue的开发环境。&lt;/p&gt;
+
+    &lt;p&gt;browserify-一个全面的Browserify+vueify 的模板，功能包括热加载，linting,单元检测。&lt;/p&gt;
+
+    &lt;p&gt;browserify-simple-一个简单Browserify+vueify的模板，不包含其他功能，让你快速的搭建vue的开发环境。&lt;/p&gt;
+
+    &lt;p&gt;simple-一个最简单的单页应用模板。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&amp;lt;project-name&amp;gt;：标识项目名称，这个你可以根据自己的项目来起名字。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;实际开发时一般使用webpack模板，使用下面的命令初始化：&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;vue init webpack vuecliTest&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;22-相关选项说明&quot;&gt;2.2. 相关选项说明&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Project name :项目名称 ，如果不需要更改直接回车就可以了。注意：这里不能使用大写，所以我把名称改成了vueclitest&lt;/li&gt;
+  &lt;li&gt;Project description:项目描述，默认为A Vue.js project,直接回车，不用编写。&lt;/li&gt;
+  &lt;li&gt;Author：作者，如果你有配置git的作者，他会读取。&lt;/li&gt;
+  &lt;li&gt;Install  vue-router? 是否安装vue的路由插件，我们这里需要安装，所以选择Y&lt;/li&gt;
+  &lt;li&gt;Use ESLint to lint your code? 是否用ESLint来限制你的代码错误和风格。我们这里不需要输入n，如果你是大型团队开发，最好是进行配置。&lt;/li&gt;
+  &lt;li&gt;setup unit tests with  Karma + Mocha? 是否需要安装单元测试工具Karma+Mocha，我们这里不需要，所以输入n。&lt;/li&gt;
+  &lt;li&gt;Setup e2e tests with Nightwatch?是否安装e2e来进行用户行为模拟测试，我们这里不需要，所以输入n。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;23-初始化以后的操作&quot;&gt;2.3. 初始化以后的操作&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;cd vuecliTest  进入我们的vue项目目录。&lt;/li&gt;
+  &lt;li&gt;npm install  安装我们的项目依赖包，也就是安装package.json里的包，如果你网速不好，你也可以使用cnpm来安装。&lt;/li&gt;
+  &lt;li&gt;npm run dev 开发模式下运行我们的程序。给我们自动构建了开发用的服务器环境和在浏览器中打开，并实时监视我们的代码更改，即时呈现给我们。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;3-目录结构&quot;&gt;3. 目录结构&lt;/h1&gt;
+
+&lt;h2 id=&quot;31-基本目录结构&quot;&gt;3.1. 基本目录结构&lt;/h2&gt;
+&lt;p&gt;由于版本不同、模板选项不同等因素可能导致有所差别。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+|-- build                            // 项目构建(webpack)相关代码
+|   |-- build.js                     // 生产环境构建代码
+|   |-- check-version.js             // 检查node、npm等版本
+|   |-- dev-client.js                // 热重载相关
+|   |-- dev-server.js                // 构建本地服务器
+|   |-- utils.js                     // 构建工具相关
+|   |-- webpack.base.conf.js         // webpack基础配置
+|   |-- webpack.dev.conf.js          // webpack开发环境配置
+|   |-- webpack.prod.conf.js         // webpack生产环境配置
+|-- config                           // 项目开发环境配置
+|   |-- dev.env.js                   // 开发环境变量
+|   |-- index.js                     // 项目一些配置变量
+|   |-- prod.env.js                  // 生产环境变量
+|   |-- test.env.js                  // 测试环境变量
+|-- src                              // 源码目录
+|   |-- components                     // vue公共组件
+|   |-- store                          // vuex的状态管理
+|   |-- App.vue                        // 页面入口文件
+|   |-- main.js                        // 程序入口文件，加载各种公共组件
+|-- static                           // 静态文件，比如一些图片，json数据等
+|   |-- data                           // 群聊分析得到的数据用于数据可视化
+|-- .babelrc                         // ES6语法编译配置
+|-- .editorconfig                    // 定义代码格式
+|-- .gitignore                       // git上传需要忽略的文件格式
+|-- README.md                        // 项目说明
+|-- favicon.ico 
+|-- index.html                       // 入口页面
+|-- package.json                     // 项目基本信息
+.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;32-重点文件讲解&quot;&gt;3.2. 重点文件讲解&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;package.json  &lt;br /&gt;
+  package.json文件是项目根目录下的一个文件，定义该项目开发所需要的各种模块以及一些项目配置信息（如项目名称、版本、描述、作者等）。
+    &lt;ul&gt;
+      &lt;li&gt;scripts 定义了你可以用npm运行的命令&lt;/li&gt;
+      &lt;li&gt;dependencies 项目运行时所依赖的模块&lt;/li&gt;
+      &lt;li&gt;devDependencies 项目开发时所依赖的模块&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;webpack
+    &lt;ul&gt;
+      &lt;li&gt;dev-server.js&lt;/li&gt;
+      &lt;li&gt;webpack.base.confg.js   webpack的基础配置文件&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;.babelrc&lt;br /&gt;
+  Babel解释器的配置文件，存放在根目录下。Babel是一个转码器，项目里需要用它将ES6代码转为ES5代码。&lt;/li&gt;
+  &lt;li&gt;.editorconfig&lt;br /&gt;
+  该文件定义项目的编码规范，编译器的行为会与.editorconfig文件中定义的一致，并且其优先级比编译器自身的设置要高，这在多人合作开发项目时十分有用而且必要。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;4-模板介绍&quot;&gt;4. 模板介绍&lt;/h1&gt;
+&lt;h2 id=&quot;41-npm-run-build&quot;&gt;4.1. npm run build&lt;/h2&gt;
+&lt;p&gt;执行完&lt;code class=&quot;highlighter-rouge&quot;&gt;npm run build&lt;/code&gt;命令后，在项目根目录生成了&lt;code class=&quot;highlighter-rouge&quot;&gt;dist&lt;/code&gt;文件夹，这个文件夹里边就是我们要传到服务器上的文件。
+dist文件夹下目录包括&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;index.html 主页文件:因为我们开发的是单页web应用，所以说一般只有一个html文件。&lt;/li&gt;
+  &lt;li&gt;static 静态资源文件夹：里边js、CSS和一些图片。
+    &lt;h2 id=&quot;42-mainjs&quot;&gt;4.2. main.js&lt;/h2&gt;
+    &lt;p&gt;main.js是整个项目的入口文件,在src文件夹下：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import Vue from 'vue'      
+import App from './App'
+import router from './router'
+ 
+Vue.config.productionTip = false   //生产环境提示，这里设置成了false
+ 
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  template: '&amp;lt;App/&amp;gt;',
+  components: { App }
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;43-appvue&quot;&gt;4.3. App.vue&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;template&amp;gt;
+  &amp;lt;div id=&quot;app&quot;&amp;gt;
+    &amp;lt;img src=&quot;./assets/logo.png&quot;&amp;gt;
+    &amp;lt;router-view&amp;gt;&amp;lt;/router-view&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+ 
+&amp;lt;script&amp;gt;
+export default {
+  name: 'app'
+}
+&amp;lt;/script&amp;gt;
+ 
+&amp;lt;style&amp;gt;
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+&amp;lt;/style&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;app.vue文件我们可以分成三部分解读，&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;template&amp;gt;&amp;lt;/template&amp;gt;&lt;/code&gt;标签包裹的内容：这是模板的HTMLDom结构，里边引入了一张图片和&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;router-view&amp;gt;&amp;lt;/router-view&amp;gt;&lt;/code&gt;标签，&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;router-view&amp;gt;&lt;/code&gt;标签说明使用了路由机制。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;标签包括的js内容：你可以在这里些一些页面的动态效果和Vue的逻辑代码。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;style&amp;gt;&amp;lt;/style&amp;gt;&lt;/code&gt;标签包裹的css内容：这里就是你平时写的CSS样式，对页面样子进行装饰用的，需要特别说明的是你可以用 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;style scoped&amp;gt;&amp;lt;/style&amp;gt;&lt;/code&gt;来声明这些css样式只在本模板中起作用。
+    &lt;h2 id=&quot;44-routerindexjs&quot;&gt;4.4. router/index.js&lt;/h2&gt;
+    &lt;p&gt;```
+import Vue from ‘vue’
+import Router from ‘vue-router’
+import Hello from ‘@/components/Hello’&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Vue.use(Router)&lt;/p&gt;
+
+&lt;p&gt;export default new Router({
+  routes: [
+    {
+      path: ‘/’,
+      name: ‘Hello’,
+      component: Hello
+    }
+  ]
+})&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 4.5. Hello.vue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;template&gt;
+  &lt;div class=&quot;hello&quot;&gt;
+    &lt;h1&gt;&lt;/h1&gt;
+    &lt;h2&gt;Essential Links&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://vuejs.org&quot; target=&quot;_blank&quot;&gt;Core Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://forum.vuejs.org&quot; target=&quot;_blank&quot;&gt;Forum&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://gitter.im/vuejs/vue&quot; target=&quot;_blank&quot;&gt;Gitter Chat&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://twitter.com/vuejs&quot; target=&quot;_blank&quot;&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;br /&gt;
+      &lt;li&gt;&lt;a href=&quot;http://vuejs-templates.github.io/webpack/&quot; target=&quot;_blank&quot;&gt;Docs for This Template&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h2&gt;Ecosystem&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://router.vuejs.org/&quot; target=&quot;_blank&quot;&gt;vue-router&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://vuex.vuejs.org/&quot; target=&quot;_blank&quot;&gt;vuex&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://vue-loader.vuejs.org/&quot; target=&quot;_blank&quot;&gt;vue-loader&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://github.com/vuejs/awesome-vue&quot; target=&quot;_blank&quot;&gt;awesome-vue&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'hello',
+  data () {
+    return {
+      msg: 'Welcome to Your Vue.js App'
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- Add &quot;scoped&quot; attribute to limit CSS to this component only --&gt;
+&lt;style scoped=&quot;&quot;&gt;
+h1, h2 {
+  font-weight: normal;
+}
+ 
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+ 
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+ 
+a {
+  color: #42b983;
+}
+&lt;/style&gt;
+
+&lt;p&gt;```&lt;/p&gt;</content><author><name>lipeng</name></author><category term="JavaScript" /><category term="Vue" /><summary type="html">1. 安装vue-cli 安装命令 npm install vue-cli -g -g :代表全局安装 查看版本号 vue -V 注意： V是大写。 2. 初始化项目 2.1. 初始化命令 vue init &amp;lt;template-name&amp;gt; &amp;lt;project-name&amp;gt; init：表示我要用vue-cli来初始化项目 &amp;lt;template-name&amp;gt;：表示模板名称，vue-cli官方为我们提供了5种模板， webpack-一个全面的webpack+vue-loader的模板，功能包括热加载，linting,检测和CSS扩展。 webpack-simple-一个简单webpack+vue-loader的模板，不包含其他功能，让你快速的搭建vue的开发环境。 browserify-一个全面的Browserify+vueify 的模板，功能包括热加载，linting,单元检测。 browserify-simple-一个简单Browserify+vueify的模板，不包含其他功能，让你快速的搭建vue的开发环境。 simple-一个最简单的单页应用模板。 &amp;lt;project-name&amp;gt;：标识项目名称，这个你可以根据自己的项目来起名字。 实际开发时一般使用webpack模板，使用下面的命令初始化： vue init webpack vuecliTest 2.2. 相关选项说明 Project name :项目名称 ，如果不需要更改直接回车就可以了。注意：这里不能使用大写，所以我把名称改成了vueclitest Project description:项目描述，默认为A Vue.js project,直接回车，不用编写。 Author：作者，如果你有配置git的作者，他会读取。 Install vue-router? 是否安装vue的路由插件，我们这里需要安装，所以选择Y Use ESLint to lint your code? 是否用ESLint来限制你的代码错误和风格。我们这里不需要输入n，如果你是大型团队开发，最好是进行配置。 setup unit tests with Karma + Mocha? 是否需要安装单元测试工具Karma+Mocha，我们这里不需要，所以输入n。 Setup e2e tests with Nightwatch?是否安装e2e来进行用户行为模拟测试，我们这里不需要，所以输入n。 2.3. 初始化以后的操作 cd vuecliTest 进入我们的vue项目目录。 npm install 安装我们的项目依赖包，也就是安装package.json里的包，如果你网速不好，你也可以使用cnpm来安装。 npm run dev 开发模式下运行我们的程序。给我们自动构建了开发用的服务器环境和在浏览器中打开，并实时监视我们的代码更改，即时呈现给我们。 3. 目录结构 3.1. 基本目录结构 由于版本不同、模板选项不同等因素可能导致有所差别。 . |-- build // 项目构建(webpack)相关代码 | |-- build.js // 生产环境构建代码 | |-- check-version.js // 检查node、npm等版本 | |-- dev-client.js // 热重载相关 | |-- dev-server.js // 构建本地服务器 | |-- utils.js // 构建工具相关 | |-- webpack.base.conf.js // webpack基础配置 | |-- webpack.dev.conf.js // webpack开发环境配置 | |-- webpack.prod.conf.js // webpack生产环境配置 |-- config // 项目开发环境配置 | |-- dev.env.js // 开发环境变量 | |-- index.js // 项目一些配置变量 | |-- prod.env.js // 生产环境变量 | |-- test.env.js // 测试环境变量 |-- src // 源码目录 | |-- components // vue公共组件 | |-- store // vuex的状态管理 | |-- App.vue // 页面入口文件 | |-- main.js // 程序入口文件，加载各种公共组件 |-- static // 静态文件，比如一些图片，json数据等 | |-- data // 群聊分析得到的数据用于数据可视化 |-- .babelrc // ES6语法编译配置 |-- .editorconfig // 定义代码格式 |-- .gitignore // git上传需要忽略的文件格式 |-- README.md // 项目说明 |-- favicon.ico |-- index.html // 入口页面 |-- package.json // 项目基本信息 . 3.2. 重点文件讲解 package.json package.json文件是项目根目录下的一个文件，定义该项目开发所需要的各种模块以及一些项目配置信息（如项目名称、版本、描述、作者等）。 scripts 定义了你可以用npm运行的命令 dependencies 项目运行时所依赖的模块 devDependencies 项目开发时所依赖的模块 webpack dev-server.js webpack.base.confg.js webpack的基础配置文件 .babelrc Babel解释器的配置文件，存放在根目录下。Babel是一个转码器，项目里需要用它将ES6代码转为ES5代码。 .editorconfig 该文件定义项目的编码规范，编译器的行为会与.editorconfig文件中定义的一致，并且其优先级比编译器自身的设置要高，这在多人合作开发项目时十分有用而且必要。 4. 模板介绍 4.1. npm run build 执行完npm run build命令后，在项目根目录生成了dist文件夹，这个文件夹里边就是我们要传到服务器上的文件。 dist文件夹下目录包括 index.html 主页文件:因为我们开发的是单页web应用，所以说一般只有一个html文件。 static 静态资源文件夹：里边js、CSS和一些图片。 4.2. main.js main.js是整个项目的入口文件,在src文件夹下： import Vue from 'vue' import App from './App' import router from './router' Vue.config.productionTip = false //生产环境提示，这里设置成了false /* eslint-disable no-new */ new Vue({ el: '#app', router, template: '&amp;lt;App/&amp;gt;', components: { App } }) 4.3. App.vue &amp;lt;template&amp;gt; &amp;lt;div id=&quot;app&quot;&amp;gt; &amp;lt;img src=&quot;./assets/logo.png&quot;&amp;gt; &amp;lt;router-view&amp;gt;&amp;lt;/router-view&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; &amp;lt;script&amp;gt; export default { name: 'app' } &amp;lt;/script&amp;gt; &amp;lt;style&amp;gt; #app { font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-align: center; color: #2c3e50; margin-top: 60px; } &amp;lt;/style&amp;gt; app.vue文件我们可以分成三部分解读， &amp;lt;template&amp;gt;&amp;lt;/template&amp;gt;标签包裹的内容：这是模板的HTMLDom结构，里边引入了一张图片和&amp;lt;router-view&amp;gt;&amp;lt;/router-view&amp;gt;标签，&amp;lt;router-view&amp;gt;标签说明使用了路由机制。 &amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;标签包括的js内容：你可以在这里些一些页面的动态效果和Vue的逻辑代码。 &amp;lt;style&amp;gt;&amp;lt;/style&amp;gt;标签包裹的css内容：这里就是你平时写的CSS样式，对页面样子进行装饰用的，需要特别说明的是你可以用 &amp;lt;style scoped&amp;gt;&amp;lt;/style&amp;gt;来声明这些css样式只在本模板中起作用。 4.4. router/index.js ``` import Vue from ‘vue’ import Router from ‘vue-router’ import Hello from ‘@/components/Hello’ Vue.use(Router) export default new Router({ routes: [ { path: ‘/’, name: ‘Hello’, component: Hello } ] }) ## 4.5. Hello.vue Essential Links Core Docs Forum Gitter Chat Twitter Docs for This Template Ecosystem vue-router vuex vue-loader awesome-vue ```</summary></entry><entry><title type="html">多线程常用实例</title><link href="https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html" rel="alternate" type="text/html" title="多线程常用实例" /><published>2018-04-09T22:05:39+08:00</published><updated>2018-04-09T22:05:39+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">&lt;!-- TOC --&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;#1-%E5%AE%9E%E4%BE%8B%E4%B8%80%E3%80%81%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%8F%A6%E5%A4%96%E5%87%A0%E4%B8%AA%E7%BA%BF%E7%A8%8B&quot;&gt;1. 实例一、一个线程依赖于另外几个线程&lt;/a&gt;
