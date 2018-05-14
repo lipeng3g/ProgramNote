@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T21:52:42+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T21:57:09+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
 </subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Vue-Router学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Router学习笔记" /><published>2018-05-14T21:04:48+08:00</published><updated>2018-05-14T21:04:48+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">&lt;h1 id=&quot;1-安装vue-router&quot;&gt;1. 安装vue-router&lt;/h1&gt;
 &lt;p&gt;安装命令&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install vue-router --save-dev&lt;/code&gt;&lt;/p&gt;
@@ -122,7 +122,8 @@ export default {
         &lt;p&gt;新闻标题：&lt;/p&gt;
     &lt;/div&gt;
 &lt;/template&gt;
-
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;script&gt;
 export default {
   name: 'params',
@@ -134,18 +135,21 @@ export default {
 }
 &lt;/script&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- `&amp;lt;router-link&amp;gt;`跳转  
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+- `&amp;lt;router-link&amp;gt;`跳转  
   `&amp;lt;router-link to=&quot;/params/198/jspang website is very good&quot;&amp;gt;params&amp;lt;/router-link&amp;gt; |`
 
 说明： `path` 支持正则表达式，例如`path:'/params/:newsId(\\d+)/:newsTitle',`，限制`newsId`为数字类型  
 
 # 6. 多路由区域
 - 创建多路由标签  
+  
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;router-view&gt;&lt;/router-view&gt;
 &lt;router-view name=&quot;left&quot; style=&quot;float:left;width:50%;background-color:#ccc;height:300px;&quot;&gt;&lt;/router-view&gt;
 &lt;router-view name=&quot;right&quot; style=&quot;float:right;width:50%;background-color:#c0c;height:300px;&quot;&gt;&lt;/router-view&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 路由配置样例  
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+- 路由配置样例     
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;import Vue from ‘vue’
 import Router from ‘vue-router’
@@ -176,7 +180,6 @@ import Hi2 from ‘@/components/Hi2’&lt;/p&gt;
 &lt;p&gt;]
 })&lt;/p&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-
 # 7. redirect
 ## 7.1. 基本用法  
 把原来的component换成redirect参数就可以  
