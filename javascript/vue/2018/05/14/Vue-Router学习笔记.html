@@ -2,7 +2,7 @@
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Vue-Router学习笔记 - lipeng's blog</title>
-<meta name="description" content="1. 安装vue-router安装命令npm install vue-router --save-dev2. router/index.jsindex.js文件基本介绍import Vue from 'vue'   //引入Vueimport Router from 'vue-router'  //引入vue-r...">
+<meta name="description" content="  1. 安装vue-router  2. router/index.js  3. 添加一个页面  4. 子路由  5. 参数传递          5.1. 使用name传值      5.2. 标签传值      5.3. URL传参        6. 多路由区域  7. redirect         ...">
 <link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
 <!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
 <!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
@@ -48,7 +48,51 @@
   </div>
 </div>
 </header>
-				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-安装vue-router">1. 安装vue-router</h1>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><!-- TOC -->
+
+<ul>
+  <li><a href="#1-vue-router">1. 安装vue-router</a></li>
+  <li><a href="#2-router-indexjs">2. router/index.js</a></li>
+  <li><a href="#3">3. 添加一个页面</a></li>
+  <li><a href="#4">4. 子路由</a></li>
+  <li><a href="#5">5. 参数传递</a>
+    <ul>
+      <li><a href="#51-name">5.1. 使用name传值</a></li>
+      <li><a href="#52">5.2. 标签传值</a></li>
+      <li><a href="#53-url">5.3. URL传参</a></li>
+    </ul>
+  </li>
+  <li><a href="#6">6. 多路由区域</a></li>
+  <li><a href="#7-redirect">7. redirect</a>
+    <ul>
+      <li><a href="#71">7.1. 基本用法</a></li>
+      <li><a href="#72">7.2. 重定向传递参数</a></li>
+    </ul>
+  </li>
+  <li><a href="#8-alias">8. 别名alias</a>
+    <ul>
+      <li><a href="#81">8.1. 基本用法</a></li>
+      <li><a href="#82-redirectalias">8.2. redirect和alias</a></li>
+    </ul>
+  </li>
+  <li><a href="#9">9. 过渡动画</a></li>
+  <li><a href="#10">10. 页面</a></li>
+  <li><a href="#11">11. 钩子函数</a>
+    <ul>
+      <li><a href="#111">11.1. 路由</a></li>
+      <li><a href="#112">11.2. 模板</a></li>
+    </ul>
+  </li>
+  <li><a href="#12">12. 编程式导航</a>
+    <ul>
+      <li><a href="#121-thisroutergo">12.1. this.$router.go</a></li>
+      <li><a href="#122-thisrouterpush">12.2. this.$router.push</a></li>
+    </ul>
+  </li>
+</ul>
+
+<!-- /TOC -->
+<h1 id="1-安装vue-router">1. 安装vue-router</h1>
 <p>安装命令<br />
 <code class="highlighter-rouge">npm install vue-router --save-dev</code></p>
 
