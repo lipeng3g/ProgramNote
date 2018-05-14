@@ -1,5 +1,369 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T16:36:41+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Vue-Cli学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Cli学习笔记" /><published>2018-05-14T15:29:40+08:00</published><updated>2018-05-14T15:29:40+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">&lt;h1 id=&quot;1-安装vue-cli&quot;&gt;1. 安装vue-cli&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-05-14T21:52:42+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Vue-Router学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Router学习笔记" /><published>2018-05-14T21:04:48+08:00</published><updated>2018-05-14T21:04:48+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">&lt;h1 id=&quot;1-安装vue-router&quot;&gt;1. 安装vue-router&lt;/h1&gt;
+&lt;p&gt;安装命令&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;npm install vue-router --save-dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;2-routerindexjs&quot;&gt;2. router/index.js&lt;/h1&gt;
+&lt;p&gt;index.js文件基本介绍&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import Vue from 'vue'   //引入Vue
+import Router from 'vue-router'  //引入vue-router
+import Hello from '@/components/Hello'  //引入根目录下的Hello.vue组件
+
+Vue.use(Router)  //Vue全局使用Router
+
+export default new Router({
+  routes: [              //配置路由，这里是个数组
+    {                    //每一个链接都是一个对象
+      path: '/',         //链接路径
+      name: 'Hello',     //路由名称，
+      component: Hello   //对应的组件模板
+    }
+  ]
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;3-添加一个页面&quot;&gt;3. 添加一个页面&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;在src/components目录下，新建 Hi.vue 文件
+```&lt;/li&gt;
+&lt;/ul&gt;
+&lt;template&gt;
+  &lt;div class=&quot;hello&quot;&gt;
+    &lt;h1&gt;&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'hi',
+  data () {
+    return {
+      msg: 'Hi, I am JSPang'
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style scoped=&quot;&quot;&gt;
+ 
+&lt;/style&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 引入 Hi组件：我们在router/index.js文件的上边引入Hi组件  
+`import Hi from '@/components/Hi'` 
+- 增加路由配置：在router/index.js文件的routes[]数组中，新增加一个对象   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+  path:’/hi’,
+  name:’Hi’,
+  component:Hi
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 页面导航链接   
+` &amp;lt;router-link to=&quot;/&quot;&amp;gt;[显示字段]&amp;lt;/router-link&amp;gt;`
+
+# 4. 子路由
+- 在父级页面增加`&amp;lt;router-view&amp;gt;`
+- 增加子页面
+- index.js中引入页面，修改路由  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+  path:'/hi',
+  component:Hi,
+  children:[
+    {path:'/',component:Hi},
+    {path:'hi1',component:Hi1},
+    {path:'hi2',component:Hi2},
+  ]
+} ```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;5-参数传递&quot;&gt;5. 参数传递&lt;/h1&gt;
+&lt;h2 id=&quot;51-使用name传值&quot;&gt;5.1. 使用name传值&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;index.js中增加name属性
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; routes: [
+  {
+    path: '/',
+    name: 'Hello',
+    component: Hello
+  }
+ ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$route.name&lt;/code&gt;接收参数值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;52-标签传值&quot;&gt;5.2. 标签传值&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;router-link&amp;gt;&lt;/code&gt; 标签&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;router-link :to=&quot;{name:xxx,params:{key:value}}&quot;&amp;gt;valueString&amp;lt;/router-link&amp;gt;&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;name：就是我们在路由配置文件中起的name值&lt;/li&gt;
+      &lt;li&gt;params：就是我们要传的参数，它也是对象形势，在对象里可以传递多个值&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;`` 接收参数值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;53-url传参&quot;&gt;5.3. URL传参&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;路由配置
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+  path:'/params/:newsId/:newsTitle',
+  component:Params
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;创建组件&lt;br /&gt;
+```&lt;/li&gt;
+&lt;/ul&gt;
+&lt;template&gt;
+    &lt;div&gt;
+        &lt;h2&gt;&lt;/h2&gt;
+        &lt;p&gt;新闻ID：&lt;/p&gt;
+        &lt;p&gt;新闻标题：&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'params',
+  data () {
+    return {
+      msg: 'params page'
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- `&amp;lt;router-link&amp;gt;`跳转  
+  `&amp;lt;router-link to=&quot;/params/198/jspang website is very good&quot;&amp;gt;params&amp;lt;/router-link&amp;gt; |`
+
+说明： `path` 支持正则表达式，例如`path:'/params/:newsId(\\d+)/:newsTitle',`，限制`newsId`为数字类型  
+
+# 6. 多路由区域
+- 创建多路由标签  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;router-view&gt;&lt;/router-view&gt;
+&lt;router-view name=&quot;left&quot; style=&quot;float:left;width:50%;background-color:#ccc;height:300px;&quot;&gt;&lt;/router-view&gt;
+&lt;router-view name=&quot;right&quot; style=&quot;float:right;width:50%;background-color:#c0c;height:300px;&quot;&gt;&lt;/router-view&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 路由配置样例  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;import Vue from ‘vue’
+import Router from ‘vue-router’
+import Hello from ‘@/components/Hello’
+import Hi1 from ‘@/components/Hi1’
+import Hi2 from ‘@/components/Hi2’&lt;/p&gt;
+
+&lt;p&gt;Vue.use(Router)&lt;/p&gt;
+
+&lt;p&gt;export default new Router({
+  routes: [
+    {
+      path: ‘/’,
+      components: {
+        default:Hello,
+        left:Hi1,
+        right:Hi2
+      }
+    },{
+      path: ‘/Hi’,
+      components: {
+        default:Hello,
+        left:Hi2,
+        right:Hi1
+      }
+    }&lt;/p&gt;
+
+&lt;p&gt;]
+})&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+
+# 7. redirect
+## 7.1. 基本用法  
+把原来的component换成redirect参数就可以  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;export default new Router({
+  routes: [
+    {
+      path: ‘/’,
+      component: Hello
+    },{
+      path:’/params/:newsId(\d+)/:newsTitle’,
+      component:Params
+    },{
+      path:’/goback’,
+      redirect:’/’
+    }&lt;/p&gt;
+
+&lt;p&gt;]
+})&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+## 7.2. 重定向传递参数
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+  path:’/params/:newsId(\d+)/:newsTitle’,
+  component:Params
+},{
+  path:’/goParams/:newsId(\d+)/:newsTitle’,
+  redirect:’/params/:newsId(\d+)/:newsTitle’
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+# 8. 别名alias
+## 8.1. 基本用法  
+- 路由增加`alias`属性 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+    path: ‘/hi1’,
+    component: Hi1,
+    alias:’/hello’
+ }&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 使用`&amp;lt;router-link&amp;gt;`跳转   
+  `&amp;lt;router-link to=&quot;/jspang&quot;&amp;gt;jspang&amp;lt;/router-link&amp;gt;`  
+
+## 8.2. redirect和alias
+- redirect：仔细观察URL，redirect是直接改变了url的值，把url变成了真实的path路径。  
+- alias：URL路径没有别改变，这种情况更友好，让用户知道自己访问的路径，只是改变了&amp;lt;router-view&amp;gt;中的内容。  
+
+注意：别名请不要用在path为’/’中，如下代码的别名是不起作用的  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+  path: ‘/’,
+  component: Hello,
+  alias:’/home’
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+# 9. 过渡动画
+- 新增`&amp;lt;transition&amp;gt;`标签  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;transition name=&quot;fade&quot;&gt;
+  &lt;router-view&gt;&lt;/router-view&gt;
+&lt;/transition&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- css过渡类名    
+  组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name=”fade”,会有如下四个CSS类名
+  - fade-enter:进入过渡的开始状态，元素被插入时生效，只应用一帧后立刻删除。
+  - fade-enter-active:进入过渡的结束状态，元素被插入时就生效，在过渡过程完成后移除。
+  - fade-leave:离开过渡的开始状态，元素被删除时触发，只应用一帧后立刻删除。
+  - fade-leave-active:离开过渡的结束状态，元素被删除时生效，离开过渡完成后被删除。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;.fade-enter {
+  opacity:0;
+}
+.fade-leave{
+  opacity:1;
+}
+.fade-enter-active{
+  transition:opacity .5s;
+}
+.fade-leave-active{
+  opacity:0;
+  transition:opacity .5s;
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 过渡模式mode  
+  默认的mode模式in-out模式  
+  - in-out:新元素先进入过渡，完成之后当前元素过渡离开。
+  - out-in:当前元素先进行过渡离开，离开完成后新元素过渡进入。
+
+# 10. 页面
+- 路由配置  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+   path:’*’,
+   component:Error
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 新增`Error.vue`组件  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;template&gt;
+    &lt;div&gt;
+        &lt;h2&gt;&lt;/h2&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+export default {
+  data () {
+    return {
+      msg: 'Error:404'
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- `&amp;lt;router-link&amp;gt;`测试   
+`&amp;lt;router-link to=&quot;/bbbbbb&quot;&amp;gt;不存在的地址&amp;lt;/router-link&amp;gt; |`
+
+# 11. 钩子函数
+## 11.1. 路由
+可以直接在路由配置文件（`/src/router/index.js`）中写钩子函数。但是在路由文件中我们只能写一个beforeEnter,就是在进入此路由配置时。  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;{
+      path:’/params/:newsId(\d+)/:newsTitle’,
+      component:Params,
+      beforeEnter:(to,from,next)=&amp;gt;{
+        console.log(‘我进入了params模板’);
+        console.log(to);//路由将要跳转的路径信息，信息是包含在对像里边的
+        console.log(from);//路径跳转前的路径信息，也是一个对象的形式
+        next();//路由的控制参数，常用的有next(true)和next(false)
+}&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 11.2. 模板  
+在配置文件中的钩子函数，只有一个钩子`beforeEnter`，如果我们写在模板中就可以有两个钩子函数可以使用：
+
+- beforeRouteEnter：在路由进入前的钩子函数。
+- beforeRouteLeave：在路由离开前的钩子函数。
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;export default {
+  name: ‘params’,
+  data () {
+    return {
+      msg: ‘params page’
+    }
+  },
+  beforeRouteEnter:(to,from,next)=&amp;gt;{
+    console.log(“准备进入路由模板”);
+    next();
+  },
+  beforeRouteLeave: (to, from, next) =&amp;gt; {
+    console.log(“准备离开路由模板”);
+    next();
+  }
+}
+&amp;lt;/script&amp;gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+# 12. 编程式导航
+## 12.1. this.$router.go
+- this.$router.go(-1) 后退
+- this.$router.go(1) 前进
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&amp;lt;button @click=”goback”&amp;gt;后退&amp;lt;/button&amp;gt;&lt;/p&gt;
+
+&lt;script&gt;
+export default {
+  name: 'app',
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+## 12.2. this.$router.push
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&amp;lt;button @click=”goHome”&amp;gt;回到首页&amp;lt;/button&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;export default {
+  name: ‘app’,
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    },
+    goHome(){
+      this.$router.push(‘/’);
+    }
+  }
+}
+```&lt;/p&gt;</content><author><name>lipeng</name></author><category term="JavaScript" /><category term="Vue" /><summary type="html">1. 安装vue-router 安装命令 npm install vue-router --save-dev 2. router/index.js index.js文件基本介绍 import Vue from 'vue' //引入Vue import Router from 'vue-router' //引入vue-router import Hello from '@/components/Hello' //引入根目录下的Hello.vue组件 Vue.use(Router) //Vue全局使用Router export default new Router({ routes: [ //配置路由，这里是个数组 { //每一个链接都是一个对象 path: '/', //链接路径 name: 'Hello', //路由名称， component: Hello //对应的组件模板 } ] }) 3. 添加一个页面 在src/components目录下，新建 Hi.vue 文件 ``` - 引入 Hi组件：我们在router/index.js文件的上边引入Hi组件 `import Hi from '@/components/Hi'` - 增加路由配置：在router/index.js文件的routes[]数组中，新增加一个对象 { path:’/hi’, name:’Hi’, component:Hi } - 页面导航链接 ` &amp;lt;router-link to=&quot;/&quot;&amp;gt;[显示字段]&amp;lt;/router-link&amp;gt;` # 4. 子路由 - 在父级页面增加`&amp;lt;router-view&amp;gt;` - 增加子页面 - index.js中引入页面，修改路由 { path:'/hi', component:Hi, children:[ {path:'/',component:Hi}, {path:'hi1',component:Hi1}, {path:'hi2',component:Hi2}, ] } ``` 5. 参数传递 5.1. 使用name传值 index.js中增加name属性 routes: [ { path: '/', name: 'Hello', component: Hello } ] $route.name接收参数值 5.2. 标签传值 &amp;lt;router-link&amp;gt; 标签 &amp;lt;router-link :to=&quot;{name:xxx,params:{key:value}}&quot;&amp;gt;valueString&amp;lt;/router-link&amp;gt; name：就是我们在路由配置文件中起的name值 params：就是我们要传的参数，它也是对象形势，在对象里可以传递多个值 `` 接收参数值 5.3. URL传参 路由配置 { path:'/params/:newsId/:newsTitle', component:Params } 创建组件 ``` 新闻ID： 新闻标题： - `&amp;lt;router-link&amp;gt;`跳转 `&amp;lt;router-link to=&quot;/params/198/jspang website is very good&quot;&amp;gt;params&amp;lt;/router-link&amp;gt; |` 说明： `path` 支持正则表达式，例如`path:'/params/:newsId(\\d+)/:newsTitle',`，限制`newsId`为数字类型 # 6. 多路由区域 - 创建多路由标签 - 路由配置样例 import Vue from ‘vue’ import Router from ‘vue-router’ import Hello from ‘@/components/Hello’ import Hi1 from ‘@/components/Hi1’ import Hi2 from ‘@/components/Hi2’ Vue.use(Router) export default new Router({ routes: [ { path: ‘/’, components: { default:Hello, left:Hi1, right:Hi2 } },{ path: ‘/Hi’, components: { default:Hello, left:Hi2, right:Hi1 } } ] }) # 7. redirect ## 7.1. 基本用法 把原来的component换成redirect参数就可以 export default new Router({ routes: [ { path: ‘/’, component: Hello },{ path:’/params/:newsId(\d+)/:newsTitle’, component:Params },{ path:’/goback’, redirect:’/’ } ] }) ## 7.2. 重定向传递参数 { path:’/params/:newsId(\d+)/:newsTitle’, component:Params },{ path:’/goParams/:newsId(\d+)/:newsTitle’, redirect:’/params/:newsId(\d+)/:newsTitle’ } # 8. 别名alias ## 8.1. 基本用法 - 路由增加`alias`属性 { path: ‘/hi1’, component: Hi1, alias:’/hello’ } - 使用`&amp;lt;router-link&amp;gt;`跳转 `&amp;lt;router-link to=&quot;/jspang&quot;&amp;gt;jspang&amp;lt;/router-link&amp;gt;` ## 8.2. redirect和alias - redirect：仔细观察URL，redirect是直接改变了url的值，把url变成了真实的path路径。 - alias：URL路径没有别改变，这种情况更友好，让用户知道自己访问的路径，只是改变了&amp;lt;router-view&amp;gt;中的内容。 注意：别名请不要用在path为’/’中，如下代码的别名是不起作用的 { path: ‘/’, component: Hello, alias:’/home’ } # 9. 过渡动画 - 新增`&amp;lt;transition&amp;gt;`标签 - css过渡类名 组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name=”fade”,会有如下四个CSS类名 - fade-enter:进入过渡的开始状态，元素被插入时生效，只应用一帧后立刻删除。 - fade-enter-active:进入过渡的结束状态，元素被插入时就生效，在过渡过程完成后移除。 - fade-leave:离开过渡的开始状态，元素被删除时触发，只应用一帧后立刻删除。 - fade-leave-active:离开过渡的结束状态，元素被删除时生效，离开过渡完成后被删除。 .fade-enter { opacity:0; } .fade-leave{ opacity:1; } .fade-enter-active{ transition:opacity .5s; } .fade-leave-active{ opacity:0; transition:opacity .5s; } - 过渡模式mode 默认的mode模式in-out模式 - in-out:新元素先进入过渡，完成之后当前元素过渡离开。 - out-in:当前元素先进行过渡离开，离开完成后新元素过渡进入。 # 10. 页面 - 路由配置 { path:’*’, component:Error } - 新增`Error.vue`组件 - `&amp;lt;router-link&amp;gt;`测试 `&amp;lt;router-link to=&quot;/bbbbbb&quot;&amp;gt;不存在的地址&amp;lt;/router-link&amp;gt; |` # 11. 钩子函数 ## 11.1. 路由 可以直接在路由配置文件（`/src/router/index.js`）中写钩子函数。但是在路由文件中我们只能写一个beforeEnter,就是在进入此路由配置时。 { path:’/params/:newsId(\d+)/:newsTitle’, component:Params, beforeEnter:(to,from,next)=&amp;gt;{ console.log(‘我进入了params模板’); console.log(to);//路由将要跳转的路径信息，信息是包含在对像里边的 console.log(from);//路径跳转前的路径信息，也是一个对象的形式 next();//路由的控制参数，常用的有next(true)和next(false) } ## 11.2. 模板 在配置文件中的钩子函数，只有一个钩子`beforeEnter`，如果我们写在模板中就可以有两个钩子函数可以使用： - beforeRouteEnter：在路由进入前的钩子函数。 - beforeRouteLeave：在路由离开前的钩子函数。 export default { name: ‘params’, data () { return { msg: ‘params page’ } }, beforeRouteEnter:(to,from,next)=&amp;gt;{ console.log(“准备进入路由模板”); next(); }, beforeRouteLeave: (to, from, next) =&amp;gt; { console.log(“准备离开路由模板”); next(); } } &amp;lt;/script&amp;gt; # 12. 编程式导航 ## 12.1. this.$router.go - this.$router.go(-1) 后退 - this.$router.go(1) 前进 &amp;lt;button @click=”goback”&amp;gt;后退&amp;lt;/button&amp;gt; ## 12.2. this.$router.push &amp;lt;button @click=”goHome”&amp;gt;回到首页&amp;lt;/button&amp;gt; export default { name: ‘app’, methods:{ goback(){ this.$router.go(-1); }, goHome(){ this.$router.push(‘/’); } } } ```</summary></entry><entry><title type="html">Vue-Cli学习笔记</title><link href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" rel="alternate" type="text/html" title="Vue-Cli学习笔记" /><published>2018-05-14T15:29:40+08:00</published><updated>2018-05-14T15:29:40+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">&lt;h1 id=&quot;1-安装vue-cli&quot;&gt;1. 安装vue-cli&lt;/h1&gt;
 &lt;p&gt;安装命令 &lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install vue-cli -g&lt;/code&gt;   &lt;br /&gt;
 -g :代表全局安装&lt;br /&gt;
@@ -2559,398 +2923,4 @@ Channel模型：&lt;br /&gt;
     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;addFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。 这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。 下面简单的代码就可以说明链表的基本的实现结构： /** * 链表的节点数量 */ transient int size = 0; /** * 指向第一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (first.prev == null &amp;amp;&amp;amp; first.item != null) */ transient Node&amp;lt;E&amp;gt; first; /** * 指向最后一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (last.next == null &amp;amp;&amp;amp; last.item != null) */ transient Node&amp;lt;E&amp;gt; last; /** * 链表节点类，记录了自身和前后节点 */ private static class Node&amp;lt;E&amp;gt; { E item; Node&amp;lt;E&amp;gt; next; Node&amp;lt;E&amp;gt; prev; Node(Node&amp;lt;E&amp;gt; prev, E element, Node&amp;lt;E&amp;gt; next) { this.item = element; this.next = next; this.prev = prev; } } 2. 构造函数 构造方法有两个，而且非常简单，默认的构造方法没有任何实现，而使用集合构造时，只是调用了 addAll 方法进行实现。 public LinkedList() { } public LinkedList(Collection&amp;lt;? extends E&amp;gt; c) { this(); //这里有一点儿需要注意，初始化后的链表顺序是 c 原本的迭代顺序 addAll(c); } 3. 新增 3.1. add(E e) 把指定的元素追加到结尾，修改原来结尾元素的next指向。 元素个数加1。 /** * 将指定的元素追加到列表的末尾。 */ public boolean add(E e) { linkLast(e); return true; } /** * 把e作为最后一个元素 */ void linkLast(E e) { //取出最后一个节点 final Node&amp;lt;E&amp;gt; l = last; //定义新节点，l节点作为前一个，后一个为null final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(l, e, null); //给last赋值 last = newNode; if (l == null) //当最后一个为空，说明原来是空表，新元素为头 first = newNode; else //否则，旧元素的next指向新元素 l.next = newNode; //元素个数加1 size++; modCount++; } 3.2. add(int index, E element) /** * 将指定的元素插入该列表中的指定位置。将当前位置的元素(如果有)和任何后续元素移到右边(将一个元素添加到它们的索引中)。 * * @param index index at which the specified element is to be inserted * @param element element to be inserted * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //检测插入位置合法性 checkPositionIndex(index); //如果index == size， 插入到最后，否则，执行正常插入操作 if (index == size) linkLast(element); else linkBefore(element, node(index)); } private void checkPositionIndex(int index) { if (!isPositionIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isPositionIndex(int index) { //index不为负数，并且 index 不大于 size return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt;= size; } /** * 在非空节点succ之前插入元素e。 */ void linkBefore(E e, Node&amp;lt;E&amp;gt; succ) { // assert succ != null; //获取succ的前一个元素 final Node&amp;lt;E&amp;gt; pred = succ.prev; //构造新元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, succ); //succ的前一个指向新元素 succ.prev = newNode; // pred为空说明新元素时头，否则，succ原来的前一个元素的next指向新元素 if (pred == null) first = newNode; else pred.next = newNode; size++; modCount++; } 3.3. addAll /** * 将指定集合中的所有元素追加到该列表的末尾，按指定集合的迭代器返回的顺序排列。 * 请注意，这里需要注意并发的问题。 */ public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { return addAll(size, c); } /** * 将指定集合中的所有元素插入到列表中，从指定的位置开始。 将当前在该位置的元素（如果有的话）和随后的元素移到右侧（增加它们的索引）。 新元素将按照指定集合的迭代器返回的顺序出现在列表中。 */ public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //验证index合法性 checkPositionIndex(index); //集合转成数组 Object[] a = c.toArray(); int numNew = a.length; if (numNew == 0) return false; //获取插入点的前后元素 Node&amp;lt;E&amp;gt; pred, succ; if (index == size) { succ = null; pred = last; } else { succ = node(index); pred = succ.prev; } //依次插入元素 for (Object o : a) { @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o; Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, null); if (pred == null) first = newNode; else pred.next = newNode; pred = newNode; } //恢复插入点前后的链表结构 if (succ == null) { last = pred; } else { pred.next = succ; succ.prev = pred; } size += numNew; modCount++; return true; } 3.4. addFirst &amp;amp; addLast public void addFirst(E e) { linkFirst(e); } public void addLast(E e) { linkLast(e); } private void linkFirst(E e) { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //定义新的元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(null, e, f); //头元素赋值 first = newNode; if (f == null) //原先的头元素为空，说明表为空，last赋值为当前元素 last = newNode; else //否则原来的头元素的前元素指向新的头元素 f.prev = newNode; size++; modCount++; } 3.5. set set方法不添加新的值，使用当前元素覆盖原有的元素。这里和add有些许的区别，举例，当前链表长度时3，那么元素为[0],[1],[2],如果是add，index可以为3，但是如果是 set，index最大值只能是2，因为是覆盖。必须保证元素已存在。 /** * 用指定元素替换该列表中指定位置的元素。 * * @param index index of the element to replace * @param element element to be stored at the specified position * @return the element previously at the specified position * @throws IndexOutOfBoundsException {@inheritDoc} */ public E set(int index, E element) { checkElementIndex(index); Node&amp;lt;E&amp;gt; x = node(index); E oldVal = x.item; x.item = element; return oldVal; } private void checkElementIndex(int index) { if (!isElementIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isElementIndex(int index) { //请注意，这里和前面的判断有区别，这里 index 必须小于 size，否则溢出 return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt; size; } 4. 获取 4.1. node(int index) 首先说明，这不是LinkedList实例对象可以直接使用的方法，这是一个内部方法，是很多方法的基础，用来获取 链表的 第index个 元素，使用起来类似一个数组。 Node&amp;lt;E&amp;gt; node(int index) { // assert isElementIndex(index); if (index &amp;lt; (size &amp;gt;&amp;gt; 1)) { //如果index小于 size 的一半，那么从链表的开头开始找 Node&amp;lt;E&amp;gt; x = first; for (int i = 0; i &amp;lt; index; i++) x = x.next;//请注意，上面的条件没有等号，所以这里 next就是指的index位置的值，下面从后面查找也类似。 return x; } else { //如果超过size的一半，从结尾开始查找 Node&amp;lt;E&amp;gt; x = last; for (int i = size - 1; i &amp;gt; index; i--) x = x.prev; return x; } } 4.2. get public E get(int index) { //检查index的合法性 checkElementIndex(index); //返回元素的存储对象 return node(index).item; } 4.3. getFirst 返回链表的头元素的存储对象 public E getFirst() { final Node&amp;lt;E&amp;gt; f = first; if (f == null) throw new NoSuchElementException(); return f.item; } 4.4. getLast 返回链表的尾元素的存储对象 public E getLast() { final Node&amp;lt;E&amp;gt; l = last; if (l == null) throw new NoSuchElementException(); return l.item; } 5. 删除 remove &amp;amp; removeFirst 默认情况下，链表删除的时候从头元素开始删除，先进先出。 public E remove() { return removeFirst(); } public E removeFirst() { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //头元素为空，抛出异常（空链表不能remove） if (f == null) throw new NoSuchElementException(); return unlinkFirst(f); } /** * 移除非空的第一个元素 */ private E unlinkFirst(Node&amp;lt;E&amp;gt; f) { // assert f == first &amp;amp;&amp;amp; f != null; //取当前元素和下一个元素 final E element = f.item; final Node&amp;lt;E&amp;gt; next = f.next; f.item = null; f.next = null; // help GC //头元素赋值 first = next; if (next == null) last = null; else next.prev = null; //链表数量更新 size--; modCount++; return element; } 5.1. remove(int index) 删除指定位置的元素，先检测index的有效性，然后删除指定的元素，并恢复链表的结构。 public E remove(int index) { //检测index的合法性 checkElementIndex(index); return unlink(node(index)); } /** * 移除非空的元素 */ E unlink(Node&amp;lt;E&amp;gt; x) { // assert x != null; //记录当前元素，前一个元素，后一个元素 final E element = x.item; final Node&amp;lt;E&amp;gt; next = x.next; final Node&amp;lt;E&amp;gt; prev = x.prev; //前一个元素为空，说明当前为头元素 if (prev == null) { first = next; } else { prev.next = next; x.prev = null; } //后一个元素为空，说明当前为尾元素 if (next == null) { last = prev; } else { next.prev = prev; x.next = null; } //当前元素置空，更新元素数量 x.item = null; size--; modCount++; return element; } 5.2. remove(Object o) 这个方法其实和前面的方法是一样的，前面直接使用了 node(int index)方法取得了对象，这里直接给出了对象，不同的是这里如果对象为空的时候，需要进一步判断。 public boolean remove(Object o) { if (o == null) { //如果删除的对象为空，从头部开始，删除第一个item为空的元素 for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) { if (x.item == null) { unlink(x); return true; } } } else { //如果删除对象不为空，从头部开始，遍历，删除第一个和o相同的对象。 for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) { if (o.equals(x.item)) { unlink(x); return true; } } } return false; } 5.3. removeFirstOccurrence &amp;amp; removeLastOccurrence 删除第一个指定元素 &amp;amp; 删除最后一个指定元素，这两个方法基本相同，前一个方法就是上面我们分析的，从头部开始，删除第一个相等的元素，至于后一个方法，也是一样的，只不过时从面开始查找，删除从后面开始的第一次出现的元素。同样判断了是否为空。 /** * 删除该列表中指定元素的第一次出现(当从头到尾遍历列表时)。如果列表中不包含元素，那么它是不变的。 */ public boolean removeFirstOccurrence(Object o) { return remove(o); } public boolean removeLastOccurrence(Object o) { if (o == null) { //指定元素为空的时候，从后面开始遍历，找到item为空的对象进行删除 for (Node&amp;lt;E&amp;gt; x = last; x != null; x = x.prev) { if (x.item == null) { unlink(x); return true; } } } else { //指定元素不为空的时候，从后面开始遍历，找到item和指定元素相同时删除对象 for (Node&amp;lt;E&amp;gt; x = last; x != null; x = x.prev) { if (o.equals(x.item)) { unlink(x); return true; } } } return false; } removeFirst &amp;amp; removeLast 不在具体分析了，前面这两个方法已经介绍过了。 public E removeFirst() { final Node&amp;lt;E&amp;gt; f = first; if (f == null) throw new NoSuchElementException(); return unlinkFirst(f); } public E removeLast() { final Node&amp;lt;E&amp;gt; l = last; if (l == null) throw new NoSuchElementException(); return unlinkLast(l); } 6. 复制 和之前的几个集合的clone基本类似。 返回此LinkedList的浅表副本。 （元素本身没有被克隆。） public Object clone() { LinkedList&amp;lt;E&amp;gt; clone = superClone(); // Put clone into &quot;virgin&quot; state clone.first = clone.last = null; clone.size = 0; clone.modCount = 0; // Initialize clone with our elements for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) clone.add(x.item); return clone; } 7. 扩容 由于一个链表，每次添加的时候默认添加在结尾，然后size++，所以，扩容基本就是靠size++来完成的，或者说不需要扩容 8. 迭代 关于迭代，这里有一个示例程序，可以看下一执行的效率 import java.io.*; import java.util.*; class test { /** * LinkedList链表的遍历 */ public static void main(String[] args) { LinkedList&amp;lt;Student&amp;gt; link = new LinkedList&amp;lt;Student&amp;gt;(); for (int k = 1; k &amp;lt;= 34567; k++) { link.add(new Student(&quot;i am&quot;, k)); } Iterator&amp;lt;Student&amp;gt; it = link.iterator(); long time1 = System.currentTimeMillis(); while (it.hasNext()) { Student s = it.next(); } long time2 = System.currentTimeMillis(); sop(&quot;使用迭代器遍历用时：&quot;+(time2-time1)+&quot;毫秒&quot;); time1 = System.currentTimeMillis(); for (int i = 0; i &amp;lt; link.size(); i++) { Student s2 = link.get(i); } time2 = System.currentTimeMillis(); sop(&quot;使用get遍历用时：&quot;+(time2-time1)+&quot;毫秒&quot;); } public static void sop(Object obj) { System.out.println(obj); } } class Student { String name; int number; Student(String name, int number) { this.name = name; this.number = number; } } 执行结果，差距很大，所以，尽量使用迭代器，get代价巨大，至于原因，可以看一下前面的代码。 使用迭代器遍历用时：7毫秒 使用get遍历用时：676毫秒 9. 双端队列 前面介绍的方法大部分都是集合的方法，像是 add、get、remove等，由于LinkedList还是一个双向链表，实现了 Deque 接口，所以，它还实现了很多双端队列的方法。 前面已经介绍过几个了，像是addFirst、addLast等都是，这里不在每一个都分析了，简单分析几个，由于底层实现前面都介绍了，所以队列的很多方法的实现大都时类似的。 9.1. offer(E e) /** * 将指定的元素添加为该列表的尾部(最后一个元素)。 */ public boolean offer(E e) { return add(e); } 9.2. peek() /** * 检索，但不删除该列表的头(第一个元素)。 */ public E peek() { final Node&amp;lt;E&amp;gt; f = first; return (f == null) ? null : f.item; } 9.3. poll() /** * 检索并删除该列表的头(第一个元素)。 */ public E poll() { final Node&amp;lt;E&amp;gt; f = first; return (f == null) ? null : unlinkFirst(f); } 9.4. pop() /** * 从该列表表示的堆栈中弹出一个元素。 * 换句话说，删除并返回此列表的第一个元素。 * 这个方法相当于removeFirst（）。 */ public E pop() { return removeFirst(); } 9.5. push(E e) /** * 将元素推送到由此列表表示的堆栈上。 * 换句话说，插入元素在这个列表的前面。 * 这个方法相当于addFirst。 */ public void push(E e) { addFirst(e); }</summary></entry><entry><title type="html">ArrayList源码解析(JDK1.8.0_131)</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html" rel="alternate" type="text/html" title="ArrayList源码解析(JDK1.8.0_131)" /><published>2018-01-12T20:29:18+08:00</published><updated>2018-01-12T20:29:18+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131)</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/01/12/ArrayList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">&lt;h1 id=&quot;1-数据结构&quot;&gt;1. 数据结构&lt;/h1&gt;
-&lt;p&gt;ArrayList 的实现是依靠数组来完成的。&lt;br /&gt;
-List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。）&lt;br /&gt;
-Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。&lt;/p&gt;
-
-&lt;h1 id=&quot;2-构造函数&quot;&gt;2. 构造函数&lt;/h1&gt;
-&lt;h2 id=&quot;21-成员变量&quot;&gt;2.1. 成员变量&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 默认的初始化容量
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEFAULT_CAPACITY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 用于空实例的共享空数组实例。（比如，初始化的容量为0时，初始化对象就会直接被赋值成 EMPTY_ELEMENTDATA）
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EMPTY_ELEMENTDATA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{};&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 共享空数组实例，用于默认大小的空实例。我们将其与空的ELEMENTDATA区分开来，以便在添加第一个元素时知道要膨胀多少。
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEFAULTCAPACITY_EMPTY_ELEMENTDATA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{};&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 存储数组列表元素的数组缓冲区。
-     * 数组列表的容量是这个数组缓冲区的长度。
-     * 空的ArrayList（elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA），当添加第一个元素时，将会被扩展成 DEFAULT_CAPACITY。
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// non-private to simplify nested class access&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 数组列表的大小(它包含的元素的数量)。
-     *
-     * @serial
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;22-构造函数&quot;&gt;2.2. 构造函数&lt;/h2&gt;
-&lt;h3 id=&quot;221-arraylist&quot;&gt;2.2.1. ArrayList()&lt;/h3&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 使用默认的空对象初始化
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEFAULTCAPACITY_EMPTY_ELEMENTDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;222-arraylistint-initialcapacity&quot;&gt;2.2.2. ArrayList(int initialCapacity)&lt;/h3&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 使用指定的大小初始化对象
-     *
-     * @param  initialCapacity  list的初始化大小
-     * @throws IllegalArgumentException 如果指定的初始容量为负。
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//如果初始化大小大于0，那么生成一个Object数组，大小为 initialCapacity&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//如果初始化大小为0，使用 EMPTY_ELEMENTDATA 初始化&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EMPTY_ELEMENTDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//如果为负数，抛出异常&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IllegalArgumentException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Illegal Capacity: &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-                                               &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;223-arraylistcollection-extends-e-c&quot;&gt;2.2.3. ArrayList(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h3&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 构造一个包含初始化元素的list。
-     * 元素的顺序是由初始化元素的迭代顺序来决定的。
-     * @param c 将被放置到这个列表中的集合。
-     * @throws NullPointerException 集合为空时抛出异常
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//传入参数，转成新的数组对象，赋值给 elementData&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// c.toArray might (incorrectly) not return Object[] (see 6260652)&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 关于上面这个6260652bug，大体的意思是，如果集合元素是Object的子类，如String,toArray返回的数组也是String,而不是Object,所以这里需要进一步的转成Object类型&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 数组长度为0，使用默认的空对象代替&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EMPTY_ELEMENTDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这里需要看一下toArray方法，这是所有实现Collection接口的集合中都存在的方法，ArrayList实现了List接口，List继承了Collection接口，所以不例外的ArrayList中也实现了toArray方法，我们这里看一下ArrayList具体的实现方法。简单的说就是返回了一个新的数组对象。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
-* 以适当的顺序（从第一个元素到最后一个元素）返回包含此列表中所有元素的数组。
-* 返回的数组将是“安全的”，因为这个列表没有引用它。 （换句话说，这个方法必须分配一个新的数组）。 调用者可以自由修改返回的数组。
-* 此方法充当基于数组和基于集合的API之间的桥梁。 
-*/&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;3-新增&quot;&gt;3. 新增&lt;/h1&gt;
-
-&lt;h2 id=&quot;31-adde-e&quot;&gt;3.1. add(E e)&lt;/h2&gt;
-
-&lt;p&gt;add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。&lt;br /&gt;
-添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 将指定的元素附加到此列表的末尾。
-     *
-     * @param e 将要添加的元素
-     * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; (as specified by {@link Collection#add})
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//确保数组可以容纳新的元素（size是当前的数组大小，size + 1表示添加新元素需要的容量）&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ensureCapacityInternal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Increments modCount!!&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//把新元素放在数组的末尾&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ensureCapacityInternal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//如果当前是默认的空对象，重新定义最小值，最小值不应该小于默认值10&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEFAULTCAPACITY_EMPTY_ELEMENTDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DEFAULT_CAPACITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//扩展容量&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ensureExplicitCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ensureExplicitCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// overflow-conscious code&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//如果目标最小容量大于当前数组长度，进行扩容&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;grow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;grow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// overflow-conscious code&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 新的容量是当前的 1.5 倍&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oldCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 如果新容量小于目标最小容量，那么直接把最小目标容量赋值给新容量&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;如果超过最大容量&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAX_ARRAY_SIZE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hugeCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// minCapacity is usually close to size, so this is a win:&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 请注意，执行Arrays.copyOf后，对象成了一个新的对象，和原来的对象没有引用关系&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hugeCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//如果目标最小容量为负值，说明溢出了，超过了2^31-1以后为负值，抛出异常&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// overflow&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;OutOfMemoryError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//如果只是大于默认的最大值，赋值为Int的最大值（注意，这里JavaDoc中描述，有些虚拟机在超过 2^31 - 8 会出现OutOfMemoryError）&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAX_ARRAY_SIZE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;MAX_ARRAY_SIZE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;32-addint-index-e-element&quot;&gt;3.2. add(int index, E element)&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。
-     *
-     * @param index 指定元素将要被插入的位置
-     * @param element 将要插入的元素
-     * @throws IndexOutOfBoundsException {@inheritDoc}
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//保证index是有效值&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;rangeCheckForAdd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//确保数组的容量足够容纳 size + 1 个元素，否则进行扩展&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ensureCapacityInternal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Increments modCount!!&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 复制，下面依次是参数的含义&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 源数组&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 需要复制的源数组数据的index开始值&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 目标数组&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 复制数据到目标数组的index开始值&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 需要复制大目标数据的元素数量&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                         &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;复制以后，&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;位置直接赋值&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 用于添加和添加所有内容的范围检查的版本。
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rangeCheckForAdd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//保证插入的index值是有效的&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexOutOfBoundsException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outOfBoundsMsg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;33-addallcollection-extends-e-c&quot;&gt;3.3. addAll(Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//源集合转换成数组&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//确保目标容量，如果不足，进行扩容&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ensureCapacityInternal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Increments modCount&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//同上，复制数组&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//元素数量更新&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;34-addallint-index-collection-extends-e-c&quot;&gt;3.4. addAll(int index, Collection&amp;lt;? extends E&amp;gt; c)&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//检测插入的index目标值有效&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;rangeCheckForAdd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        
-        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ensureCapacityInternal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Increments modCount&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//计算需要移动的数组元素数量，如果需要，进行元素移动&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                             &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//把新插入元素复制到目标位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numNew&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;4-获取&quot;&gt;4. 获取&lt;/h1&gt;
-&lt;p&gt;ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//校验index值有效&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;rangeCheck&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//直接返回数组元素&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;5-删除&quot;&gt;5. 删除&lt;/h1&gt;
-&lt;h2 id=&quot;51-removeint-index&quot;&gt;5.1. remove(int index)&lt;/h2&gt;
-&lt;p&gt;删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
-     * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。
-     *
-     * @param index the index of the element to be removed
-     * @return the element that was removed from the list
-     * @throws IndexOutOfBoundsException {@inheritDoc}
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;rangeCheck&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                             &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// clear to let GC do its work&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;52-removeobject-o&quot;&gt;5.2. remove(Object o)&lt;/h2&gt;
-&lt;p&gt;如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;fastRemove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;fastRemove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/*
-     * 私有删除方法，跳过边界检查，不返回删除的值。（这里基本类似上上面的 remove(index)方法 ）
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fastRemove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-                             &lt;span class=&quot;n&quot;&gt;numMoved&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// clear to let GC do its work&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;6-复制&quot;&gt;6. 复制&lt;/h1&gt;
-&lt;p&gt;从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 返回这个&amp;lt; tt &amp;gt;数组列表&amp;lt;/ tt &amp;gt;实例的一个浅拷贝。(这些元素本身并没有被复制。)
-     *
-     * @return a clone of this &amp;lt;tt&amp;gt;ArrayList&amp;lt;/tt&amp;gt; instance
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;clone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;clone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CloneNotSupportedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// this shouldn't happen, since we are Cloneable&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InternalError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;7-扩容&quot;&gt;7. 扩容&lt;/h1&gt;
-&lt;p&gt;这里不再重复介绍了，前面已经在&lt;code class=&quot;highlighter-rouge&quot;&gt;add&lt;/code&gt;方法中进行了介绍。&lt;/p&gt;
-
-&lt;h1 id=&quot;8-迭代&quot;&gt;8. 迭代&lt;/h1&gt;
-
-&lt;h2 id=&quot;81-foreachconsumer-super-e-action&quot;&gt;8.1. forEach(Consumer&amp;lt;? super E&amp;gt; action)&lt;/h2&gt;
-&lt;p&gt;这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requireNonNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@SuppressWarnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;unchecked&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这里有一个例子：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.function.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyConsumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;{&lt;/span&gt;
- &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Processing Task &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
- &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
-   &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;MyConsumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mcons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-  
-  &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;mcons&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyConsumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-  
-  &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  
-  &lt;span class=&quot;n&quot;&gt;myList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mcons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
- &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;结果：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Processing Task 100
-Processing Task 200
-Processing Task 300
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h1 id=&quot;9-其他&quot;&gt;9. 其他&lt;/h1&gt;
-
-&lt;h2 id=&quot;91-线程安全&quot;&gt;9.1. 线程安全&lt;/h2&gt;
-&lt;p&gt;ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;synchronizedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...));&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;92-fail-fast&quot;&gt;9.2. fail-fast&lt;/h2&gt;
-&lt;p&gt;这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。&lt;/p&gt;
-
-&lt;p&gt;因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。&lt;/p&gt;
-
-&lt;p&gt;请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 ArrayList 的实现是依靠数组来完成的。 List接口的可调整大小的实现。实现List的所有可选操作，并允许所有元素，包括null。除了实现List接口之外，该类还提供了一些方法来处理内部用来存储列表的数组的大小。 （这个类大致相当于Vector，除了它是不同步的。） Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。 add操作以分摊的恒定时间运行，即添加n个元素需要O（n）个时间。所有其他的操作都在线性时间内运行（粗略地说）。与LinkedList实现相比，常数因子较低。 2. 构造函数 2.1. 成员变量 /** * 默认的初始化容量 */ private static final int DEFAULT_CAPACITY = 10; /** * 用于空实例的共享空数组实例。（比如，初始化的容量为0时，初始化对象就会直接被赋值成 EMPTY_ELEMENTDATA） */ private static final Object[] EMPTY_ELEMENTDATA = {}; /** * 共享空数组实例，用于默认大小的空实例。我们将其与空的ELEMENTDATA区分开来，以便在添加第一个元素时知道要膨胀多少。 */ private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {}; /** * 存储数组列表元素的数组缓冲区。 * 数组列表的容量是这个数组缓冲区的长度。 * 空的ArrayList（elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA），当添加第一个元素时，将会被扩展成 DEFAULT_CAPACITY。 */ transient Object[] elementData; // non-private to simplify nested class access /** * 数组列表的大小(它包含的元素的数量)。 * * @serial */ private int size; 2.2. 构造函数 2.2.1. ArrayList() /** * 使用默认的空对象初始化 */ public ArrayList() { this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA; } 2.2.2. ArrayList(int initialCapacity) /** * 使用指定的大小初始化对象 * * @param initialCapacity list的初始化大小 * @throws IllegalArgumentException 如果指定的初始容量为负。 */ public ArrayList(int initialCapacity) { if (initialCapacity &amp;gt; 0) { //如果初始化大小大于0，那么生成一个Object数组，大小为 initialCapacity this.elementData = new Object[initialCapacity]; } else if (initialCapacity == 0) { //如果初始化大小为0，使用 EMPTY_ELEMENTDATA 初始化 this.elementData = EMPTY_ELEMENTDATA; } else { //如果为负数，抛出异常 throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+ initialCapacity); } } 2.2.3. ArrayList(Collection&amp;lt;? extends E&amp;gt; c) /** * 构造一个包含初始化元素的list。 * 元素的顺序是由初始化元素的迭代顺序来决定的。 * @param c 将被放置到这个列表中的集合。 * @throws NullPointerException 集合为空时抛出异常 */ public ArrayList(Collection&amp;lt;? extends E&amp;gt; c) { //传入参数，转成新的数组对象，赋值给 elementData elementData = c.toArray(); if ((size = elementData.length) != 0) { // c.toArray might (incorrectly) not return Object[] (see 6260652) // 关于上面这个6260652bug，大体的意思是，如果集合元素是Object的子类，如String,toArray返回的数组也是String,而不是Object,所以这里需要进一步的转成Object类型 if (elementData.getClass() != Object[].class) elementData = Arrays.copyOf(elementData, size, Object[].class); } else { // 数组长度为0，使用默认的空对象代替 this.elementData = EMPTY_ELEMENTDATA; } } 这里需要看一下toArray方法，这是所有实现Collection接口的集合中都存在的方法，ArrayList实现了List接口，List继承了Collection接口，所以不例外的ArrayList中也实现了toArray方法，我们这里看一下ArrayList具体的实现方法。简单的说就是返回了一个新的数组对象。 /** * 以适当的顺序（从第一个元素到最后一个元素）返回包含此列表中所有元素的数组。 * 返回的数组将是“安全的”，因为这个列表没有引用它。 （换句话说，这个方法必须分配一个新的数组）。 调用者可以自由修改返回的数组。 * 此方法充当基于数组和基于集合的API之间的桥梁。 */ public Object[] toArray() { return Arrays.copyOf(elementData, size); } 3. 新增 3.1. add(E e) add方法是最常用的方法，简单说就是每次把新元素放在数组的结尾。 添加之前先判断数组容量，如果容量不足就扩展，扩展时会比较当前容量的1.5倍和当前对象数量+1,然后根据容量生成一下新的数组并且返回，返回后真正执行添加在末尾的操作。 /** * 将指定的元素附加到此列表的末尾。 * * @param e 将要添加的元素 * @return &amp;lt;tt&amp;gt;true&amp;lt;/tt&amp;gt; (as specified by {@link Collection#add}) */ public boolean add(E e) { //确保数组可以容纳新的元素（size是当前的数组大小，size + 1表示添加新元素需要的容量） ensureCapacityInternal(size + 1); // Increments modCount!! //把新元素放在数组的末尾 elementData[size++] = e; return true; } private void ensureCapacityInternal(int minCapacity) { //如果当前是默认的空对象，重新定义最小值，最小值不应该小于默认值10 if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) { minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity); } //扩展容量 ensureExplicitCapacity(minCapacity); } private void ensureExplicitCapacity(int minCapacity) { modCount++; // overflow-conscious code //如果目标最小容量大于当前数组长度，进行扩容 if (minCapacity - elementData.length &amp;gt; 0) grow(minCapacity); } private void grow(int minCapacity) { // overflow-conscious code int oldCapacity = elementData.length; // 新的容量是当前的 1.5 倍 int newCapacity = oldCapacity + (oldCapacity &amp;gt;&amp;gt; 1); // 如果新容量小于目标最小容量，那么直接把最小目标容量赋值给新容量 if (newCapacity - minCapacity &amp;lt; 0) newCapacity = minCapacity; 如果超过最大容量 2^31 - 8 if (newCapacity - MAX_ARRAY_SIZE &amp;gt; 0) newCapacity = hugeCapacity(minCapacity); // minCapacity is usually close to size, so this is a win: // 请注意，执行Arrays.copyOf后，对象成了一个新的对象，和原来的对象没有引用关系 elementData = Arrays.copyOf(elementData, newCapacity); } private static int hugeCapacity(int minCapacity) { //如果目标最小容量为负值，说明溢出了，超过了2^31-1以后为负值，抛出异常 if (minCapacity &amp;lt; 0) // overflow throw new OutOfMemoryError(); //如果只是大于默认的最大值，赋值为Int的最大值（注意，这里JavaDoc中描述，有些虚拟机在超过 2^31 - 8 会出现OutOfMemoryError） return (minCapacity &amp;gt; MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE; } 3.2. add(int index, E element) /** * 将指定的元素插入此列表中的指定位置。 将当前位置的元素（如果有的话）和任何随后的元素移到右侧（在其索引中增加一个）。 * * @param index 指定元素将要被插入的位置 * @param element 将要插入的元素 * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //保证index是有效值 rangeCheckForAdd(index); //确保数组的容量足够容纳 size + 1 个元素，否则进行扩展 ensureCapacityInternal(size + 1); // Increments modCount!! // 复制，下面依次是参数的含义 // 源数组 // 需要复制的源数组数据的index开始值 // 目标数组 // 复制数据到目标数组的index开始值 // 需要复制大目标数据的元素数量 System.arraycopy(elementData, index, elementData, index + 1, size - index); 复制以后，index位置直接赋值 elementData[index] = element; size++; } /** * 用于添加和添加所有内容的范围检查的版本。 */ private void rangeCheckForAdd(int index) { //保证插入的index值是有效的 if (index &amp;gt; size || index &amp;lt; 0) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } 3.3. addAll(Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { //源集合转换成数组 Object[] a = c.toArray(); int numNew = a.length; //确保目标容量，如果不足，进行扩容 ensureCapacityInternal(size + numNew); // Increments modCount //同上，复制数组 System.arraycopy(a, 0, elementData, size, numNew); //元素数量更新 size += numNew; return numNew != 0; } 3.4. addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //检测插入的index目标值有效 rangeCheckForAdd(index); Object[] a = c.toArray(); int numNew = a.length; ensureCapacityInternal(size + numNew); // Increments modCount //计算需要移动的数组元素数量，如果需要，进行元素移动 int numMoved = size - index; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index, elementData, index + numNew, numMoved); //把新插入元素复制到目标位置 System.arraycopy(a, 0, elementData, index, numNew); size += numNew; return numNew != 0; } 4. 获取 ArrayList只有一个获取元素的方法， 方法也很简单，校验有效性，然后直接返回数据 public E get(int index) { //校验index值有效 rangeCheck(index); //直接返回数组元素 return elementData(index); } 5. 删除 5.1. remove(int index) 删除方法很简单，校验index有效性，把后续元素复制到前一个位置，然后，数组数量-1，数组的最后一个位置置空。最后返回旧值。 /** * 在这个列表中删除指定位置的元素。将任何后续元素移到左边(从它们的索引中减去一个)。 * * @param index the index of the element to be removed * @return the element that was removed from the list * @throws IndexOutOfBoundsException {@inheritDoc} */ public E remove(int index) { rangeCheck(index); modCount++; E oldValue = elementData(index); int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work return oldValue; } 5.2. remove(Object o) 如果指定的元素存在，那么删除这个元素在List中第一次出现的位置元素，如果不存在，不进行删除操作。 public boolean remove(Object o) { if (o == null) { for (int index = 0; index &amp;lt; size; index++) if (elementData[index] == null) { fastRemove(index); return true; } } else { for (int index = 0; index &amp;lt; size; index++) if (o.equals(elementData[index])) { fastRemove(index); return true; } } return false; } /* * 私有删除方法，跳过边界检查，不返回删除的值。（这里基本类似上上面的 remove(index)方法 ） */ private void fastRemove(int index) { modCount++; int numMoved = size - index - 1; if (numMoved &amp;gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work } 6. 复制 从JavaDoc可以看出，这是一个浅拷贝。实现也很简单，复制一个新的对象，给每个元素赋值。 /** * 返回这个&amp;lt; tt &amp;gt;数组列表&amp;lt;/ tt &amp;gt;实例的一个浅拷贝。(这些元素本身并没有被复制。) * * @return a clone of this &amp;lt;tt&amp;gt;ArrayList&amp;lt;/tt&amp;gt; instance */ public Object clone() { try { ArrayList&amp;lt;?&amp;gt; v = (ArrayList&amp;lt;?&amp;gt;) super.clone(); v.elementData = Arrays.copyOf(elementData, size); v.modCount = 0; return v; } catch (CloneNotSupportedException e) { // this shouldn't happen, since we are Cloneable throw new InternalError(e); } } 7. 扩容 这里不再重复介绍了，前面已经在add方法中进行了介绍。 8. 迭代 8.1. forEach(Consumer&amp;lt;? super E&amp;gt; action) 这个方法比较特殊，通常我们遍历使用 fori, foreach等，这里有一个特殊的 forEach， 比如我们有一个对象，实现了 java.util.function.Consumer ，然后在对ArrayList进行遍历的时候，会对数组中的对象主动调用 accept 方法，直到结束或者抛出异常。 public void forEach(Consumer&amp;lt;? super E&amp;gt; action) { Objects.requireNonNull(action); final int expectedModCount = modCount; @SuppressWarnings(&quot;unchecked&quot;) final E[] elementData = (E[]) this.elementData; final int size = this.size; for (int i=0; modCount == expectedModCount &amp;amp;&amp;amp; i &amp;lt; size; i++) { action.accept(elementData[i]); } if (modCount != expectedModCount) { throw new ConcurrentModificationException(); } } 这里有一个例子： import java.util.*; import java.util.function.*; class MyConsumer&amp;lt;T&amp;gt; implements Consumer&amp;lt;T&amp;gt;{ public void accept(T ctask){ System.out.println(&quot;Processing Task &quot; + ctask); } } import java.util.*; public class test { public static void main(String[] args) { ArrayList&amp;lt;Integer&amp;gt; myList; MyConsumer&amp;lt;Integer&amp;gt; mcons; myList = new ArrayList&amp;lt;&amp;gt; (); mcons = new MyConsumer&amp;lt;Integer&amp;gt;(); myList.add(100); myList.add(200); myList.add(300); myList.forEach(mcons); } } 结果： Processing Task 100 Processing Task 200 Processing Task 300 9. 其他 9.1. 线程安全 ArrayList不是线程安全的，如果需要，请使用下面的方式获取安全实例 List list = Collections.synchronizedList(new ArrayList(...)); 9.2. fail-fast 这个类的迭代器和listIterator方法返回的迭代器是快速失败的：如果在迭代器被创建之后，在任何时候结构上修改了列表，除了通过迭代器自己的remove或add方法以外，迭代器将抛出一个ConcurrentModificationException异常。 因此，在并发修改的情况下，迭代器快速而干净地失败，而不是在未来的未定的时间冒着任意的，不确定的行为冒险。 请注意，迭代器的故障快速行为无法得到保证，因为一般来说，不可能在存在非同步并发修改的情况下做出任何硬性保证。 失败快速迭代器尽最大努力抛出ConcurrentModificationException。 因此，编写一个依赖于这个异常的程序是正确的：迭代器的快速失败行为只能用来检测错误。</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 数据结构 LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。 这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。 下面简单的代码就可以说明链表的基本的实现结构： /** * 链表的节点数量 */ transient int size = 0; /** * 指向第一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (first.prev == null &amp;amp;&amp;amp; first.item != null) */ transient Node&amp;lt;E&amp;gt; first; /** * 指向最后一个节点的指针。 * Invariant: (first == null &amp;amp;&amp;amp; last == null) || * (last.next == null &amp;amp;&amp;amp; last.item != null) */ transient Node&amp;lt;E&amp;gt; last; /** * 链表节点类，记录了自身和前后节点 */ private static class Node&amp;lt;E&amp;gt; { E item; Node&amp;lt;E&amp;gt; next; Node&amp;lt;E&amp;gt; prev; Node(Node&amp;lt;E&amp;gt; prev, E element, Node&amp;lt;E&amp;gt; next) { this.item = element; this.next = next; this.prev = prev; } } 2. 构造函数 构造方法有两个，而且非常简单，默认的构造方法没有任何实现，而使用集合构造时，只是调用了 addAll 方法进行实现。 public LinkedList() { } public LinkedList(Collection&amp;lt;? extends E&amp;gt; c) { this(); //这里有一点儿需要注意，初始化后的链表顺序是 c 原本的迭代顺序 addAll(c); } 3. 新增 3.1. add(E e) 把指定的元素追加到结尾，修改原来结尾元素的next指向。 元素个数加1。 /** * 将指定的元素追加到列表的末尾。 */ public boolean add(E e) { linkLast(e); return true; } /** * 把e作为最后一个元素 */ void linkLast(E e) { //取出最后一个节点 final Node&amp;lt;E&amp;gt; l = last; //定义新节点，l节点作为前一个，后一个为null final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(l, e, null); //给last赋值 last = newNode; if (l == null) //当最后一个为空，说明原来是空表，新元素为头 first = newNode; else //否则，旧元素的next指向新元素 l.next = newNode; //元素个数加1 size++; modCount++; } 3.2. add(int index, E element) /** * 将指定的元素插入该列表中的指定位置。将当前位置的元素(如果有)和任何后续元素移到右边(将一个元素添加到它们的索引中)。 * * @param index index at which the specified element is to be inserted * @param element element to be inserted * @throws IndexOutOfBoundsException {@inheritDoc} */ public void add(int index, E element) { //检测插入位置合法性 checkPositionIndex(index); //如果index == size， 插入到最后，否则，执行正常插入操作 if (index == size) linkLast(element); else linkBefore(element, node(index)); } private void checkPositionIndex(int index) { if (!isPositionIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isPositionIndex(int index) { //index不为负数，并且 index 不大于 size return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt;= size; } /** * 在非空节点succ之前插入元素e。 */ void linkBefore(E e, Node&amp;lt;E&amp;gt; succ) { // assert succ != null; //获取succ的前一个元素 final Node&amp;lt;E&amp;gt; pred = succ.prev; //构造新元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, succ); //succ的前一个指向新元素 succ.prev = newNode; // pred为空说明新元素时头，否则，succ原来的前一个元素的next指向新元素 if (pred == null) first = newNode; else pred.next = newNode; size++; modCount++; } 3.3. addAll /** * 将指定集合中的所有元素追加到该列表的末尾，按指定集合的迭代器返回的顺序排列。 * 请注意，这里需要注意并发的问题。 */ public boolean addAll(Collection&amp;lt;? extends E&amp;gt; c) { return addAll(size, c); } /** * 将指定集合中的所有元素插入到列表中，从指定的位置开始。 将当前在该位置的元素（如果有的话）和随后的元素移到右侧（增加它们的索引）。 新元素将按照指定集合的迭代器返回的顺序出现在列表中。 */ public boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c) { //验证index合法性 checkPositionIndex(index); //集合转成数组 Object[] a = c.toArray(); int numNew = a.length; if (numNew == 0) return false; //获取插入点的前后元素 Node&amp;lt;E&amp;gt; pred, succ; if (index == size) { succ = null; pred = last; } else { succ = node(index); pred = succ.prev; } //依次插入元素 for (Object o : a) { @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o; Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(pred, e, null); if (pred == null) first = newNode; else pred.next = newNode; pred = newNode; } //恢复插入点前后的链表结构 if (succ == null) { last = pred; } else { pred.next = succ; succ.prev = pred; } size += numNew; modCount++; return true; } 3.4. addFirst &amp;amp; addLast public void addFirst(E e) { linkFirst(e); } public void addLast(E e) { linkLast(e); } private void linkFirst(E e) { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //定义新的元素 final Node&amp;lt;E&amp;gt; newNode = new Node&amp;lt;&amp;gt;(null, e, f); //头元素赋值 first = newNode; if (f == null) //原先的头元素为空，说明表为空，last赋值为当前元素 last = newNode; else //否则原来的头元素的前元素指向新的头元素 f.prev = newNode; size++; modCount++; } 3.5. set set方法不添加新的值，使用当前元素覆盖原有的元素。这里和add有些许的区别，举例，当前链表长度时3，那么元素为[0],[1],[2],如果是add，index可以为3，但是如果是 set，index最大值只能是2，因为是覆盖。必须保证元素已存在。 /** * 用指定元素替换该列表中指定位置的元素。 * * @param index index of the element to replace * @param element element to be stored at the specified position * @return the element previously at the specified position * @throws IndexOutOfBoundsException {@inheritDoc} */ public E set(int index, E element) { checkElementIndex(index); Node&amp;lt;E&amp;gt; x = node(index); E oldVal = x.item; x.item = element; return oldVal; } private void checkElementIndex(int index) { if (!isElementIndex(index)) throw new IndexOutOfBoundsException(outOfBoundsMsg(index)); } private boolean isElementIndex(int index) { //请注意，这里和前面的判断有区别，这里 index 必须小于 size，否则溢出 return index &amp;gt;= 0 &amp;amp;&amp;amp; index &amp;lt; size; } 4. 获取 4.1. node(int index) 首先说明，这不是LinkedList实例对象可以直接使用的方法，这是一个内部方法，是很多方法的基础，用来获取 链表的 第index个 元素，使用起来类似一个数组。 Node&amp;lt;E&amp;gt; node(int index) { // assert isElementIndex(index); if (index &amp;lt; (size &amp;gt;&amp;gt; 1)) { //如果index小于 size 的一半，那么从链表的开头开始找 Node&amp;lt;E&amp;gt; x = first; for (int i = 0; i &amp;lt; index; i++) x = x.next;//请注意，上面的条件没有等号，所以这里 next就是指的index位置的值，下面从后面查找也类似。 return x; } else { //如果超过size的一半，从结尾开始查找 Node&amp;lt;E&amp;gt; x = last; for (int i = size - 1; i &amp;gt; index; i--) x = x.prev; return x; } } 4.2. get public E get(int index) { //检查index的合法性 checkElementIndex(index); //返回元素的存储对象 return node(index).item; } 4.3. getFirst 返回链表的头元素的存储对象 public E getFirst() { final Node&amp;lt;E&amp;gt; f = first; if (f == null) throw new NoSuchElementException(); return f.item; } 4.4. getLast 返回链表的尾元素的存储对象 public E getLast() { final Node&amp;lt;E&amp;gt; l = last; if (l == null) throw new NoSuchElementException(); return l.item; } 5. 删除 remove &amp;amp; removeFirst 默认情况下，链表删除的时候从头元素开始删除，先进先出。 public E remove() { return removeFirst(); } public E removeFirst() { //获取头元素 final Node&amp;lt;E&amp;gt; f = first; //头元素为空，抛出异常（空链表不能remove） if (f == null) throw new NoSuchElementException(); return unlinkFirst(f); } /** * 移除非空的第一个元素 */ private E unlinkFirst(Node&amp;lt;E&amp;gt; f) { // assert f == first &amp;amp;&amp;amp; f != null; //取当前元素和下一个元素 final E element = f.item; final Node&amp;lt;E&amp;gt; next = f.next; f.item = null; f.next = null; // help GC //头元素赋值 first = next; if (next == null) last = null; else next.prev = null; //链表数量更新 size--; modCount++; return element; } 5.1. remove(int index) 删除指定位置的元素，先检测index的有效性，然后删除指定的元素，并恢复链表的结构。 public E remove(int index) { //检测index的合法性 checkElementIndex(index); return unlink(node(index)); } /** * 移除非空的元素 */ E unlink(Node&amp;lt;E&amp;gt; x) { // assert x != null; //记录当前元素，前一个元素，后一个元素 final E element = x.item; final Node&amp;lt;E&amp;gt; next = x.next; final Node&amp;lt;E&amp;gt; prev = x.prev; //前一个元素为空，说明当前为头元素 if (prev == null) { first = next; } else { prev.next = next; x.prev = null; } //后一个元素为空，说明当前为尾元素 if (next == null) { last = prev; } else { next.prev = prev; x.next = null; } //当前元素置空，更新元素数量 x.item = null; size--; modCount++; return element; } 5.2. remove(Object o) 这个方法其实和前面的方法是一样的，前面直接使用了 node(int index)方法取得了对象，这里直接给出了对象，不同的是这里如果对象为空的时候，需要进一步判断。 public boolean remove(Object o) { if (o == null) { //如果删除的对象为空，从头部开始，删除第一个item为空的元素 for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) { if (x.item == null) { unlink(x); return true; } } } else { //如果删除对象不为空，从头部开始，遍历，删除第一个和o相同的对象。 for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) { if (o.equals(x.item)) { unlink(x); return true; } } } return false; } 5.3. removeFirstOccurrence &amp;amp; removeLastOccurrence 删除第一个指定元素 &amp;amp; 删除最后一个指定元素，这两个方法基本相同，前一个方法就是上面我们分析的，从头部开始，删除第一个相等的元素，至于后一个方法，也是一样的，只不过时从面开始查找，删除从后面开始的第一次出现的元素。同样判断了是否为空。 /** * 删除该列表中指定元素的第一次出现(当从头到尾遍历列表时)。如果列表中不包含元素，那么它是不变的。 */ public boolean removeFirstOccurrence(Object o) { return remove(o); } public boolean removeLastOccurrence(Object o) { if (o == null) { //指定元素为空的时候，从后面开始遍历，找到item为空的对象进行删除 for (Node&amp;lt;E&amp;gt; x = last; x != null; x = x.prev) { if (x.item == null) { unlink(x); return true; } } } else { //指定元素不为空的时候，从后面开始遍历，找到item和指定元素相同时删除对象 for (Node&amp;lt;E&amp;gt; x = last; x != null; x = x.prev) { if (o.equals(x.item)) { unlink(x); return true; } } } return false; } removeFirst &amp;amp; removeLast 不在具体分析了，前面这两个方法已经介绍过了。 public E removeFirst() { final Node&amp;lt;E&amp;gt; f = first; if (f == null) throw new NoSuchElementException(); return unlinkFirst(f); } public E removeLast() { final Node&amp;lt;E&amp;gt; l = last; if (l == null) throw new NoSuchElementException(); return unlinkLast(l); } 6. 复制 和之前的几个集合的clone基本类似。 返回此LinkedList的浅表副本。 （元素本身没有被克隆。） public Object clone() { LinkedList&amp;lt;E&amp;gt; clone = superClone(); // Put clone into &quot;virgin&quot; state clone.first = clone.last = null; clone.size = 0; clone.modCount = 0; // Initialize clone with our elements for (Node&amp;lt;E&amp;gt; x = first; x != null; x = x.next) clone.add(x.item); return clone; } 7. 扩容 由于一个链表，每次添加的时候默认添加在结尾，然后size++，所以，扩容基本就是靠size++来完成的，或者说不需要扩容 8. 迭代 关于迭代，这里有一个示例程序，可以看下一执行的效率 import java.io.*; import java.util.*; class test { /** * LinkedList链表的遍历 */ public static void main(String[] args) { LinkedList&amp;lt;Student&amp;gt; link = new LinkedList&amp;lt;Student&amp;gt;(); for (int k = 1; k &amp;lt;= 34567; k++) { link.add(new Student(&quot;i am&quot;, k)); } Iterator&amp;lt;Student&amp;gt; it = link.iterator(); long time1 = System.currentTimeMillis(); while (it.hasNext()) { Student s = it.next(); } long time2 = System.currentTimeMillis(); sop(&quot;使用迭代器遍历用时：&quot;+(time2-time1)+&quot;毫秒&quot;); time1 = System.currentTimeMillis(); for (int i = 0; i &amp;lt; link.size(); i++) { Student s2 = link.get(i); } time2 = System.currentTimeMillis(); sop(&quot;使用get遍历用时：&quot;+(time2-time1)+&quot;毫秒&quot;); } public static void sop(Object obj) { System.out.println(obj); } } class Student { String name; int number; Student(String name, int number) { this.name = name; this.number = number; } } 执行结果，差距很大，所以，尽量使用迭代器，get代价巨大，至于原因，可以看一下前面的代码。 使用迭代器遍历用时：7毫秒 使用get遍历用时：676毫秒 9. 双端队列 前面介绍的方法大部分都是集合的方法，像是 add、get、remove等，由于LinkedList还是一个双向链表，实现了 Deque 接口，所以，它还实现了很多双端队列的方法。 前面已经介绍过几个了，像是addFirst、addLast等都是，这里不在每一个都分析了，简单分析几个，由于底层实现前面都介绍了，所以队列的很多方法的实现大都时类似的。 9.1. offer(E e) /** * 将指定的元素添加为该列表的尾部(最后一个元素)。 */ public boolean offer(E e) { return add(e); } 9.2. peek() /** * 检索，但不删除该列表的头(第一个元素)。 */ public E peek() { final Node&amp;lt;E&amp;gt; f = first; return (f == null) ? null : f.item; } 9.3. poll() /** * 检索并删除该列表的头(第一个元素)。 */ public E poll() { final Node&amp;lt;E&amp;gt; f = first; return (f == null) ? null : unlinkFirst(f); } 9.4. pop() /** * 从该列表表示的堆栈中弹出一个元素。 * 换句话说，删除并返回此列表的第一个元素。 * 这个方法相当于removeFirst（）。 */ public E pop() { return removeFirst(); } 9.5. push(E e) /** * 将元素推送到由此列表表示的堆栈上。 * 换句话说，插入元素在这个列表的前面。 * 这个方法相当于addFirst。 */ public void push(E e) { addFirst(e); }</summary></entry></feed>

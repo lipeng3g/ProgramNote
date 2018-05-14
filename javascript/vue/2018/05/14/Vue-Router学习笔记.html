@@ -1,0 +1,645 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Vue-Router学习笔记 - lipeng's blog</title>
+<meta name="description" content="1. 安装vue-router安装命令npm install vue-router --save-dev2. router/index.jsindex.js文件基本介绍import Vue from 'vue'   //引入Vueimport Router from 'vue-router'  //引入vue-r...">
+<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style>.m-article-content img:not(.emoji) {
+        box-shadow: 0 0 5px rgba(0, 0, 0, .4);
+      }</style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script type="text/javascript" async
+    src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Vue-Router学习笔记</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Vue">Vue</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-vue-router-note">0
+        </span> views
+      </div><div class="date-wrapper"><time class="article-meta" datetime="2018-05-14T21:04:48+08:00"
+          itemprop="datePublished">2018年 05月14日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><h1 id="1-安装vue-router">1. 安装vue-router</h1>
+<p>安装命令<br />
+<code class="highlighter-rouge">npm install vue-router --save-dev</code></p>
+
+<h1 id="2-routerindexjs">2. router/index.js</h1>
+<p>index.js文件基本介绍</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import Vue from 'vue'   //引入Vue
+import Router from 'vue-router'  //引入vue-router
+import Hello from '@/components/Hello'  //引入根目录下的Hello.vue组件
+
+Vue.use(Router)  //Vue全局使用Router
+
+export default new Router({
+  routes: [              //配置路由，这里是个数组
+    {                    //每一个链接都是一个对象
+      path: '/',         //链接路径
+      name: 'Hello',     //路由名称，
+      component: Hello   //对应的组件模板
+    }
+  ]
+})
+</code></pre></div></div>
+<h1 id="3-添加一个页面">3. 添加一个页面</h1>
+<ul>
+  <li>在src/components目录下，新建 Hi.vue 文件
+```</li>
+</ul>
+<template>
+  <div class="hello">
+    <h1></h1>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'hi',
+  data () {
+    return {
+      msg: 'Hi, I am JSPang'
+    }
+  }
+}
+</script>
+
+<style scoped="">
+ 
+</style>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 引入 Hi组件：我们在router/index.js文件的上边引入Hi组件  
+`import Hi from '@/components/Hi'` 
+- 增加路由配置：在router/index.js文件的routes[]数组中，新增加一个对象   
+</code></pre></div></div>
+<p>{
+  path:’/hi’,
+  name:’Hi’,
+  component:Hi
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 页面导航链接   
+` &lt;router-link to="/"&gt;[显示字段]&lt;/router-link&gt;`
+
+# 4. 子路由
+- 在父级页面增加`&lt;router-view&gt;`
+- 增加子页面
+- index.js中引入页面，修改路由  
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  path:'/hi',
+  component:Hi,
+  children:[
+    {path:'/',component:Hi},
+    {path:'hi1',component:Hi1},
+    {path:'hi2',component:Hi2},
+  ]
+} ```
+</code></pre></div></div>
+
+<h1 id="5-参数传递">5. 参数传递</h1>
+<h2 id="51-使用name传值">5.1. 使用name传值</h2>
+<ul>
+  <li>index.js中增加name属性
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> routes: [
+  {
+    path: '/',
+    name: 'Hello',
+    component: Hello
+  }
+ ]
+</code></pre></div>    </div>
+  </li>
+  <li><code class="highlighter-rouge">$route.name</code>接收参数值</li>
+</ul>
+
+<h2 id="52-标签传值">5.2. 标签传值</h2>
+<ul>
+  <li><code class="highlighter-rouge">&lt;router-link&gt;</code> 标签<br />
+<code class="highlighter-rouge">&lt;router-link :to="{name:xxx,params:{key:value}}"&gt;valueString&lt;/router-link&gt;</code>
+    <ul>
+      <li>name：就是我们在路由配置文件中起的name值</li>
+      <li>params：就是我们要传的参数，它也是对象形势，在对象里可以传递多个值</li>
+    </ul>
+  </li>
+  <li>`` 接收参数值</li>
+</ul>
+
+<h2 id="53-url传参">5.3. URL传参</h2>
+<ul>
+  <li>路由配置
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  path:'/params/:newsId/:newsTitle',
+  component:Params
+}
+</code></pre></div>    </div>
+  </li>
+  <li>创建组件<br />
+```</li>
+</ul>
+<template>
+    <div>
+        <h2></h2>
+        <p>新闻ID：</p>
+        <p>新闻标题：</p>
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'params',
+  data () {
+    return {
+      msg: 'params page'
+    }
+  }
+}
+</script>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- `&lt;router-link&gt;`跳转  
+  `&lt;router-link to="/params/198/jspang website is very good"&gt;params&lt;/router-link&gt; |`
+
+说明： `path` 支持正则表达式，例如`path:'/params/:newsId(\\d+)/:newsTitle',`，限制`newsId`为数字类型  
+
+# 6. 多路由区域
+- 创建多路由标签  
+</code></pre></div></div>
+<router-view></router-view>
+<router-view name="left" style="float:left;width:50%;background-color:#ccc;height:300px;"></router-view>
+<router-view name="right" style="float:right;width:50%;background-color:#c0c;height:300px;"></router-view>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 路由配置样例  
+</code></pre></div></div>
+<p>import Vue from ‘vue’
+import Router from ‘vue-router’
+import Hello from ‘@/components/Hello’
+import Hi1 from ‘@/components/Hi1’
+import Hi2 from ‘@/components/Hi2’</p>
+
+<p>Vue.use(Router)</p>
+
+<p>export default new Router({
+  routes: [
+    {
+      path: ‘/’,
+      components: {
+        default:Hello,
+        left:Hi1,
+        right:Hi2
+      }
+    },{
+      path: ‘/Hi’,
+      components: {
+        default:Hello,
+        left:Hi2,
+        right:Hi1
+      }
+    }</p>
+
+<p>]
+})</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+# 7. redirect
+## 7.1. 基本用法  
+把原来的component换成redirect参数就可以  
+</code></pre></div></div>
+<p>export default new Router({
+  routes: [
+    {
+      path: ‘/’,
+      component: Hello
+    },{
+      path:’/params/:newsId(\d+)/:newsTitle’,
+      component:Params
+    },{
+      path:’/goback’,
+      redirect:’/’
+    }</p>
+
+<p>]
+})</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+## 7.2. 重定向传递参数
+</code></pre></div></div>
+<p>{
+  path:’/params/:newsId(\d+)/:newsTitle’,
+  component:Params
+},{
+  path:’/goParams/:newsId(\d+)/:newsTitle’,
+  redirect:’/params/:newsId(\d+)/:newsTitle’
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+# 8. 别名alias
+## 8.1. 基本用法  
+- 路由增加`alias`属性 
+</code></pre></div></div>
+<p>{
+    path: ‘/hi1’,
+    component: Hi1,
+    alias:’/hello’
+ }</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 使用`&lt;router-link&gt;`跳转   
+  `&lt;router-link to="/jspang"&gt;jspang&lt;/router-link&gt;`  
+
+## 8.2. redirect和alias
+- redirect：仔细观察URL，redirect是直接改变了url的值，把url变成了真实的path路径。  
+- alias：URL路径没有别改变，这种情况更友好，让用户知道自己访问的路径，只是改变了&lt;router-view&gt;中的内容。  
+
+注意：别名请不要用在path为’/’中，如下代码的别名是不起作用的  
+</code></pre></div></div>
+<p>{
+  path: ‘/’,
+  component: Hello,
+  alias:’/home’
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+# 9. 过渡动画
+- 新增`&lt;transition&gt;`标签  
+</code></pre></div></div>
+<transition name="fade">
+  <router-view></router-view>
+</transition>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- css过渡类名    
+  组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name=”fade”,会有如下四个CSS类名
+  - fade-enter:进入过渡的开始状态，元素被插入时生效，只应用一帧后立刻删除。
+  - fade-enter-active:进入过渡的结束状态，元素被插入时就生效，在过渡过程完成后移除。
+  - fade-leave:离开过渡的开始状态，元素被删除时触发，只应用一帧后立刻删除。
+  - fade-leave-active:离开过渡的结束状态，元素被删除时生效，离开过渡完成后被删除。
+</code></pre></div></div>
+<p>.fade-enter {
+  opacity:0;
+}
+.fade-leave{
+  opacity:1;
+}
+.fade-enter-active{
+  transition:opacity .5s;
+}
+.fade-leave-active{
+  opacity:0;
+  transition:opacity .5s;
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 过渡模式mode  
+  默认的mode模式in-out模式  
+  - in-out:新元素先进入过渡，完成之后当前元素过渡离开。
+  - out-in:当前元素先进行过渡离开，离开完成后新元素过渡进入。
+
+# 10. 页面
+- 路由配置  
+</code></pre></div></div>
+<p>{
+   path:’*’,
+   component:Error
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 新增`Error.vue`组件  
+</code></pre></div></div>
+<template>
+    <div>
+        <h2></h2>
+    </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      msg: 'Error:404'
+    }
+  }
+}
+</script>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- `&lt;router-link&gt;`测试   
+`&lt;router-link to="/bbbbbb"&gt;不存在的地址&lt;/router-link&gt; |`
+
+# 11. 钩子函数
+## 11.1. 路由
+可以直接在路由配置文件（`/src/router/index.js`）中写钩子函数。但是在路由文件中我们只能写一个beforeEnter,就是在进入此路由配置时。  
+</code></pre></div></div>
+<p>{
+      path:’/params/:newsId(\d+)/:newsTitle’,
+      component:Params,
+      beforeEnter:(to,from,next)=&gt;{
+        console.log(‘我进入了params模板’);
+        console.log(to);//路由将要跳转的路径信息，信息是包含在对像里边的
+        console.log(from);//路径跳转前的路径信息，也是一个对象的形式
+        next();//路由的控制参数，常用的有next(true)和next(false)
+}</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 11.2. 模板  
+在配置文件中的钩子函数，只有一个钩子`beforeEnter`，如果我们写在模板中就可以有两个钩子函数可以使用：
+
+- beforeRouteEnter：在路由进入前的钩子函数。
+- beforeRouteLeave：在路由离开前的钩子函数。
+
+</code></pre></div></div>
+<p>export default {
+  name: ‘params’,
+  data () {
+    return {
+      msg: ‘params page’
+    }
+  },
+  beforeRouteEnter:(to,from,next)=&gt;{
+    console.log(“准备进入路由模板”);
+    next();
+  },
+  beforeRouteLeave: (to, from, next) =&gt; {
+    console.log(“准备离开路由模板”);
+    next();
+  }
+}
+&lt;/script&gt;</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+# 12. 编程式导航
+## 12.1. this.$router.go
+- this.$router.go(-1) 后退
+- this.$router.go(1) 前进
+
+</code></pre></div></div>
+<p>&lt;button @click=”goback”&gt;后退&lt;/button&gt;</p>
+
+<script>
+export default {
+  name: 'app',
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    }
+  }
+}
+</script>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+## 12.2. this.$router.push
+
+</code></pre></div></div>
+<p>&lt;button @click=”goHome”&gt;回到首页&lt;/button&gt;</p>
+
+<p>export default {
+  name: ‘app’,
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    },
+    goHome(){
+      this.$router.push(‘/’);
+    }
+  }
+}
+```</p>
+</div>
+				<footer><meta itemprop="dateModified" content="2018-05-14T21:04:48+08:00"><div class="article-license"><div class="m-license"><div class="clearfix">
+    <!--<a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/02-Javascript/01-Vue/2018-05-14-Vue-Router学习笔记.md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/02-Javascript/01-Vue/2018-05-14-Vue-Router学习笔记.md">在 Github 上查阅此文。</a></p>--><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section><div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+        this.page.url = 'https://lipeng3g.github.io/ProgramNote/javascript/vue/2018/05/14/Vue-Router%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html';
+        this.page.identifier = 'vue-router-note';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://https-lipeng3g-github-io-programnote.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script><script src="https://cdn1.lncld.net/static/js/3.4.1/av-min.js"></script>
+  <script type="text/javascript">
+		$(function() {
+			// 初始化
+			AV.init({
+				appId: 'Vg4CDT3raC2rXnQ1QkQARVP7-gzGzoHsz',
+				appKey: '5J0nOQP5ng1xVl8oUFwUC3OT'
+			});
+			// 查询
+			var query = new AV.Query('WMCiMSk0m4BjqiUFfg8HeVwN');
+			query.equalTo('key', 'vue-router-note');
+			query.first().then(function(result) {
+				if (result) {
+					addOne(result)
+				} else {
+					//新建
+					var Blog = AV.Object.extend('WMCiMSk0m4BjqiUFfg8HeVwN');
+					var blog = new Blog();
+					blog.set('title', 'Vue-Router学习笔记');
+					blog.set('key', 'vue-router-note');
+					blog.set('views', 0);
+					blog.save().then(function(page) {
+						addOne(page)
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+
+				function addOne(page) {
+					page.increment('views', 1);
+					page.fetchWhenSave(true);
+					page.save().then(function(page) {
+						$("#post-key-vue-router-note").text(page.attributes.views);
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+			}, function(error) {
+				if (error) {
+					throw error;
+				}
+			});
+		});
+	</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="https://lipeng3g.github.io/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li><li title="在 Linkedin 上关注我。">
+        <div class="round-button linkedin">
+          <a itemprop="sameAs" href="https://www.linkedin.com/in/朋-李-3396a7a5" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
+</svg></div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>
