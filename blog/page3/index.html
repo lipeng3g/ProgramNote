@@ -31,7 +31,32 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedList源码解析(JDK1.8.0_131)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7.html">Java多线程和并发性</a></h1>
+          <div class="m-article-content">1. 多任务和多线程
+1.1. 多任务
+在单CPU时代，一个时间点只能执行一个单一程序，后续发展为多任务，同一时间执行多个任务，但是这不是真正的同一时间，是操作系统分时调度cpu来完成多任务切换，每个任务都获得一定的运行时间。
+
+1.2. 多线程
+计算机发展到现在，一个程序内部可以有多个线程并行执行，一个线程可以认为是一个CPU在执行该程序。
+
+从单任务到多任务，程序不再独享cpu时间、内存等资源，需要合理的使用和释放资源。从多任务到多线程，由于同一个程序内部并行执行，因此会有更多的问题，例如内存的并发读写操作。这也引发了更多的问题。
+
+2. 多线程的优点&amp;代价
+
+2.1. 优点
+
+  
+    资源利用率高
+
+      例如：读取文件需要5秒，处理文件需要2秒，那么通常情况...</div><a href="/ProgramNote/concurrency/2018/02/10/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91%E6%80%A7.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Concurrency">Concurrency</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java-concurrency-overview">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 02月10日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/16/LinkedList%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedList源码解析(JDK1.8.0_131)</a></h1>
           <div class="m-article-content">1. 数据结构
 LinkedList通过实现List和Deque成为一个双向链表。所有元素可以为空（null）。
 这是一个纯粹的链表结构，每一个节点记录了上一个和下一个节点，然后整个链表会记录头和尾，这就是LinkedList的基本数据结构。
@@ -115,25 +140,7 @@ LinkedHashMap实现了Map接口，继承了HashMap，所以说，LinkedHashMap�
       </div><div class="date-wrapper"><span class="article-meta">2018年 01月11日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/09/HashTable%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">HashTable源码解析(JDK1.8.0_131)</a></h1>
-          <div class="m-article-content">1. 数据结构
-JavaDoc中这样描述 这个类实现了一个哈希表，它将键映射到值。任何非空对象都可以用作键或值。要成功地从哈希表中存储和检索对象，用作键的对象必须实现hashCode方法和equals方法。
-HashTable依然是一个散列表，和HashMap（JDK1.7，在1.8里面HashMap中包含红黑树）类似，底层实现都是数组 + 链表，同时都要求 存储对象实现hashCode方法和equals方法。
-注意，和HashMap不同的是，HashTable不允许 key 或者 value 为空，否则会抛出异常。
-
-2. 构造函数
-HashTable一共有四个构造函数，先从简单的看起
-
-    /**
-     * 创建一个新的、空的HashTable，初始化的大小是 11， 负载...</div><a href="/ProgramNote/java/2018/01/09/HashTable%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-hashtable_source_jdk8">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月09日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 49 篇文章, 10 页。</p>
+</article></div><nav class="m-pagination"><p>共计 50 篇文章, 10 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page2">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

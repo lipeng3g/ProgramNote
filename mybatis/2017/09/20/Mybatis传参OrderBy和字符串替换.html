@@ -48,10 +48,10 @@
 <!-- TOC -->
 
 <ul>
-  <li><a href="#1-mybatis-传参orderby和字符串替换">1. Mybatis 传参OrderBy和字符串替换</a>
+  <li><a href="#1-mybatis-orderby">1. Mybatis 传参OrderBy和字符串替换</a>
     <ul>
-      <li><a href="#11-mybatis-使用动态-order-by">1.1. Mybatis 使用动态 Order By</a></li>
-      <li><a href="#12-字符串替换">1.2. 字符串替换</a></li>
+      <li><a href="#11-mybatis--order-by">1.1. Mybatis 使用动态 Order By</a></li>
+      <li><a href="#12">1.2. 字符串替换</a></li>
     </ul>
   </li>
 </ul>
@@ -60,7 +60,7 @@
 <h2 id="11-mybatis-使用动态-order-by">1.1. Mybatis 使用动态 Order By</h2>
 
 <blockquote>
-  <p>默认情况下，mybatis使用 <code class="highlighter-rouge">#{  }</code> 格式解析用户传递的变量， 但是使用该种方式解析普通变量时， Mybatis会对变量进行<code class="highlighter-rouge">转义</code>操作，如果我们传入的参数时用来 <code class="highlighter-rouge">order by name desc</code> 的话，那么该变量在<code class="highlighter-rouge">转义</code>以后无法表达排序的意思，这时候，我们需要使用 <code class="highlighter-rouge">#{  }</code> 来解析</p>
+  <p>默认情况下，mybatis使用 <code class="highlighter-rouge">#{  }</code> 格式解析用户传递的变量， 但是使用该种方式解析普通变量时， Mybatis会对变量进行<code class="highlighter-rouge">转义</code>操作，如果我们传入的参数时用来 <code class="highlighter-rouge">order by name desc</code> 的话，那么该变量在<code class="highlighter-rouge">转义</code>以后无法表达排序的意思，这时候，我们需要使用 <code class="highlighter-rouge">${  }</code> 来解析</p>
 </blockquote>
 
 <h2 id="12-字符串替换">1.2. 字符串替换</h2>

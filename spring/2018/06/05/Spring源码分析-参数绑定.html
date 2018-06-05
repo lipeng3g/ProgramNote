@@ -1,0 +1,619 @@
+<!DOCTYPE html><html lang="zh">
+  <head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>SpringMVC源码分析——参数绑定 - lipeng's blog</title>
+<meta name="description" content="// 待分析：XXXXXXXXXXXXX// DispatcherServlet// Actually invoke the handler.mv = ha.handle(processedRequest, response, mappedHandler.getHandler());AnnotationMetho...">
+<link rel="canonical" href="https://lipeng3g.github.io/ProgramNote/spring/2018/06/05/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A.html"><link rel="alternate" type="application/rss+xml" title="lipeng's blog" href="https://lipeng3g.github.io/ProgramNote/feed.xml">
+<!-- for Safari on iOS https://developer.apple.com/ios/human-interface-guidelines/icons-and-images/app-icon/ --><link rel="apple-touch-icon" sizes="180x180" href="/ProgramNote/assets/images/logo/icon-180x180.png"><link rel="apple-touch-icon" sizes="167x167" href="/ProgramNote/assets/images/logo/icon-167x167.png"><link rel="apple-touch-icon" sizes="152x152" href="/ProgramNote/assets/images/logo/icon-152x152.png"><link rel="apple-touch-icon" sizes="120x120" href="/ProgramNote/assets/images/logo/icon-120x120.png"><link rel="shortcut icon" href="/ProgramNote/assets/images/logo/icon-120x120.png">
+<!-- for Chrome on Android https://developer.chrome.com/multidevice/android/installtohomescreen -->
+<meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
+<!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
+<meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
+    <style></style>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script type="text/javascript" async
+    src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script></head>
+  <body>
+    <div class="m-page-stage js-page-stage"><div class="m-page-content"><header class="m-page-header main clearfix"><a class="site-title" title="lipeng's Blog
+" href="/ProgramNote/">lipeng's blog</a><div class="site-logo"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#666666;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+</svg></div>
+  <nav>
+    <ul class="inline-list"><li><a href="/ProgramNote/">主页</a></li><li><a href="/ProgramNote/all.html">归档</a></li><li><a href="/ProgramNote/about.html">关于</a></li><li><a type="application/rss+xml" href="/ProgramNote/feed.xml">RSS</a></li>
+    </ul>
+  </nav>
+</header>
+<div class="m-page-main"><div class="m-post">
+	<div class="main js-main">
+		<div class="col-1">
+			<article itemscope itemtype="http://schema.org/BlogPosting">
+				<meta itemprop="mainEntityOfPage" itemscope itemType="https://schema.org/WebPage"/>
+				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">SpringMVC源码分析——参数绑定</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><time class="article-meta" datetime="2018-06-05T10:10:03+08:00"
+          itemprop="datePublished">2018年 06月05日
+        </time></div>
+  </div>
+</div>
+</header>
+				<div class="m-article-content js-article-content" itemprop="articleBody"><p>// 待分析：XXXXXXXXXXXXX</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// DispatcherServlet</span>
+<span class="c1">// Actually invoke the handler.</span>
+<span class="n">mv</span> <span class="o">=</span> <span class="n">ha</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">mappedHandler</span><span class="o">.</span><span class="na">getHandler</span><span class="o">());</span>
+</code></pre></div></div>
+
+<h2 id="annotationmethodhandleradapter">AnnotationMethodHandlerAdapter</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">handle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// 回给定实例的用户定义类:通常只是给定实例的类，但在cglib生成的子类的情况下是原始类。</span>
+		<span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">ClassUtils</span><span class="o">.</span><span class="na">getUserClass</span><span class="o">(</span><span class="n">handler</span><span class="o">);</span>
+        <span class="c1">// 处理@SessionAttributes</span>
+		<span class="c1">// 检测是否有sessionAttribute，如果缓存中没有，使用util重新获取，如果发现sessionAttribute，放入cache中</span>
+		<span class="n">Boolean</span> <span class="n">annotatedWithSessionAttributes</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">sessionAnnotatedClassesCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">annotatedWithSessionAttributes</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">annotatedWithSessionAttributes</span> <span class="o">=</span> <span class="o">(</span><span class="n">AnnotationUtils</span><span class="o">.</span><span class="na">findAnnotation</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">SessionAttributes</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">sessionAnnotatedClassesCache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">annotatedWithSessionAttributes</span><span class="o">);</span>
+		<span class="o">}</span>
+        <span class="c1">// check方法主要的用途是检查当前是否支持method（post get等）</span>
+        <span class="c1">// prepare方法主要是这是session cache相关的内容</span>
+		<span class="c1">// 待分析：checkAndPrepare</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">annotatedWithSessionAttributes</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">checkAndPrepare</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">cacheSecondsForSessionAttributeHandlers</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">else</span> <span class="o">{</span>
+			<span class="n">checkAndPrepare</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="c1">// 如果需要，在synchronized块中执行invokeHandlerMethod。</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">synchronizeOnSession</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">session</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c1">// 这里获取一个互斥变量，需要在web.xml中定义HttpSessionMutexListener，保证session线程安全</span>
+				<span class="n">Object</span> <span class="n">mutex</span> <span class="o">=</span> <span class="n">WebUtils</span><span class="o">.</span><span class="na">getSessionMutex</span><span class="o">(</span><span class="n">session</span><span class="o">);</span>
+				<span class="kd">synchronized</span> <span class="o">(</span><span class="n">mutex</span><span class="o">)</span> <span class="o">{</span>
+					<span class="c1">// 执行handler方法</span>
+					<span class="k">return</span> <span class="nf">invokeHandlerMethod</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="k">return</span> <span class="nf">invokeHandlerMethod</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">protected</span> <span class="n">ModelAndView</span> <span class="nf">invokeHandlerMethod</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// 获取方法处理器</span>
+		<span class="n">ServletHandlerMethodResolver</span> <span class="n">methodResolver</span> <span class="o">=</span> <span class="n">getMethodResolver</span><span class="o">(</span><span class="n">handler</span><span class="o">);</span>
+        <span class="c1">// 找到handler中url对应的方法</span>
+		<span class="c1">// 待分析：根据路径找到所对应的方法</span>
+		<span class="n">Method</span> <span class="n">handlerMethod</span> <span class="o">=</span> <span class="n">methodResolver</span><span class="o">.</span><span class="na">resolveHandlerMethod</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="c1">// 实例化方法调用者（主要用来调用上面的ServletHandlerMethodResolver，包含了处理参数、异常、执行方法等方法）</span>
+		<span class="n">ServletHandlerMethodInvoker</span> <span class="n">methodInvoker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServletHandlerMethodInvoker</span><span class="o">(</span><span class="n">methodResolver</span><span class="o">);</span>
+        <span class="c1">// 实例化ServletWebRequest</span>
+		<span class="n">ServletWebRequest</span> <span class="n">webRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServletWebRequest</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="c1">// 实例化数据模型ModelMap</span>
+		<span class="n">ExtendedModelMap</span> <span class="n">implicitModel</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BindingAwareModelMap</span><span class="o">();</span>
+        <span class="c1">// 调用Controller下的方法并且返回结果</span>
+		<span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">methodInvoker</span><span class="o">.</span><span class="na">invokeHandlerMethod</span><span class="o">(</span><span class="n">handlerMethod</span><span class="o">,</span> <span class="n">handler</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">implicitModel</span><span class="o">);</span>
+        <span class="c1">// 从返回结果（可能是ModelAndView）和传入的ModelMap中获取ModelView</span>
+		<span class="n">ModelAndView</span> <span class="n">mav</span> <span class="o">=</span>
+				<span class="n">methodInvoker</span><span class="o">.</span><span class="na">getModelAndView</span><span class="o">(</span><span class="n">handlerMethod</span><span class="o">,</span> <span class="n">handler</span><span class="o">.</span><span class="na">getClass</span><span class="o">(),</span> <span class="n">result</span><span class="o">,</span> <span class="n">implicitModel</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+		<span class="n">methodInvoker</span><span class="o">.</span><span class="na">updateModelAttributes</span><span class="o">(</span><span class="n">handler</span><span class="o">,</span> <span class="o">(</span><span class="n">mav</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">mav</span><span class="o">.</span><span class="na">getModel</span><span class="o">()</span> <span class="o">:</span> <span class="kc">null</span><span class="o">),</span> <span class="n">implicitModel</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">mav</span><span class="o">;</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="cm">/**
+	* 获取handler的resolver
+	* 首先获取class，然后从缓存中获取对应的resolver，如果没有就创建一个新的，然后放入cache中
+	* ServletHandlerMethodResolver主要用来处理 @RequestMapping, @InitBinder, @ModelAttribute and @SessionAttributes.
+	*/</span>
+	<span class="kd">private</span> <span class="n">ServletHandlerMethodResolver</span> <span class="nf">getMethodResolver</span><span class="o">(</span><span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">handlerClass</span> <span class="o">=</span> <span class="n">ClassUtils</span><span class="o">.</span><span class="na">getUserClass</span><span class="o">(</span><span class="n">handler</span><span class="o">);</span>
+		<span class="n">ServletHandlerMethodResolver</span> <span class="n">resolver</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">methodResolverCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">handlerClass</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">resolver</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">methodResolverCache</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">resolver</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">methodResolverCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">handlerClass</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">resolver</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">resolver</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServletHandlerMethodResolver</span><span class="o">(</span><span class="n">handlerClass</span><span class="o">);</span>
+					<span class="k">this</span><span class="o">.</span><span class="na">methodResolverCache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">handlerClass</span><span class="o">,</span> <span class="n">resolver</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">resolver</span><span class="o">;</span>
+	<span class="o">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">public</span> <span class="kd">final</span> <span class="n">Object</span> <span class="nf">invokeHandlerMethod</span><span class="o">(</span><span class="n">Method</span> <span class="n">handlerMethod</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span>
+			<span class="n">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">ExtendedModelMap</span> <span class="n">implicitModel</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// 获取桥接方法所对应的实际方法，实际上是对handlerMethod方法进行封装</span>
+		<span class="c1">// 关于桥接方法：一个子类在继承（或实现）一个父类（或接口）的泛型方法时，在子类中明确指定了泛型类型，那么在编译时编译器会自动生成桥接方法</span>
+		<span class="n">Method</span> <span class="n">handlerMethodToInvoke</span> <span class="o">=</span> <span class="n">BridgeMethodResolver</span><span class="o">.</span><span class="na">findBridgedMethod</span><span class="o">(</span><span class="n">handlerMethod</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="kt">boolean</span> <span class="n">debug</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="na">isDebugEnabled</span><span class="o">();</span>
+            <span class="c1">// 把methodResolver中的要存入session的属性（也就是带有@sessionAttributes）塞入NodeMap中</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">attrName</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">methodResolver</span><span class="o">.</span><span class="na">getActualSessionAttributeNames</span><span class="o">())</span> <span class="o">{</span>
+				<span class="n">Object</span> <span class="n">attrValue</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">sessionAttributeStore</span><span class="o">.</span><span class="na">retrieveAttribute</span><span class="o">(</span><span class="n">webRequest</span><span class="o">,</span> <span class="n">attrName</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">attrValue</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">implicitModel</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">,</span> <span class="n">attrValue</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+            <span class="c1">// 处理带有@ModelAttribute注解的方法，把他们的结果放到ModelMap中</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">Method</span> <span class="n">attributeMethod</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">methodResolver</span><span class="o">.</span><span class="na">getModelAttributeMethods</span><span class="o">())</span> <span class="o">{</span>
+				<span class="n">Method</span> <span class="n">attributeMethodToInvoke</span> <span class="o">=</span> <span class="n">BridgeMethodResolver</span><span class="o">.</span><span class="na">findBridgedMethod</span><span class="o">(</span><span class="n">attributeMethod</span><span class="o">);</span>
+				<span class="n">Object</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">resolveHandlerArguments</span><span class="o">(</span><span class="n">attributeMethodToInvoke</span><span class="o">,</span> <span class="n">handler</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">implicitModel</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">debug</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Invoking model attribute method: "</span> <span class="o">+</span> <span class="n">attributeMethodToInvoke</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="n">String</span> <span class="n">attrName</span> <span class="o">=</span> <span class="n">AnnotationUtils</span><span class="o">.</span><span class="na">findAnnotation</span><span class="o">(</span><span class="n">attributeMethod</span><span class="o">,</span> <span class="n">ModelAttribute</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">value</span><span class="o">();</span>
+				<span class="k">if</span> <span class="o">(!</span><span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">attrName</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">implicitModel</span><span class="o">.</span><span class="na">containsAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">))</span> <span class="o">{</span>
+					<span class="k">continue</span><span class="o">;</span>
+				<span class="o">}</span>
+				<span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">makeAccessible</span><span class="o">(</span><span class="n">attributeMethodToInvoke</span><span class="o">);</span>
+				<span class="n">Object</span> <span class="n">attrValue</span> <span class="o">=</span> <span class="n">attributeMethodToInvoke</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">handler</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">attrName</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">resolvedType</span> <span class="o">=</span> <span class="n">GenericTypeResolver</span><span class="o">.</span><span class="na">resolveReturnType</span><span class="o">(</span><span class="n">attributeMethodToInvoke</span><span class="o">,</span> <span class="n">handler</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+					<span class="n">attrName</span> <span class="o">=</span> <span class="n">Conventions</span><span class="o">.</span><span class="na">getVariableNameForReturnType</span><span class="o">(</span><span class="n">attributeMethodToInvoke</span><span class="o">,</span> <span class="n">resolvedType</span><span class="o">,</span> <span class="n">attrValue</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="k">if</span> <span class="o">(!</span><span class="n">implicitModel</span><span class="o">.</span><span class="na">containsAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">implicitModel</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">,</span> <span class="n">attrValue</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="n">Object</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">resolveHandlerArguments</span><span class="o">(</span><span class="n">handlerMethodToInvoke</span><span class="o">,</span> <span class="n">handler</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">implicitModel</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">debug</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Invoking request handler method: "</span> <span class="o">+</span> <span class="n">handlerMethodToInvoke</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">makeAccessible</span><span class="o">(</span><span class="n">handlerMethodToInvoke</span><span class="o">);</span>
+			<span class="k">return</span> <span class="n">handlerMethodToInvoke</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">handler</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">IllegalStateException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// Internal assertion failed (e.g. invalid signature):</span>
+			<span class="c1">// throw exception with full handler method context...</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">HandlerMethodInvocationException</span><span class="o">(</span><span class="n">handlerMethodToInvoke</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">InvocationTargetException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// User-defined @ModelAttribute/@InitBinder/@RequestMapping method threw an exception...</span>
+			<span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">rethrowException</span><span class="o">(</span><span class="n">ex</span><span class="o">.</span><span class="na">getTargetException</span><span class="o">());</span>
+			<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="n">Object</span><span class="o">[]</span> <span class="nf">resolveHandlerArguments</span><span class="o">(</span><span class="n">Method</span> <span class="n">handlerMethod</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span>
+			<span class="n">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">ExtendedModelMap</span> <span class="n">implicitModel</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// 获取参数类型</span>
+		<span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">paramTypes</span> <span class="o">=</span> <span class="n">handlerMethod</span><span class="o">.</span><span class="na">getParameterTypes</span><span class="o">();</span>
+        <span class="c1">// 根据参数长度构造数组</span>
+		<span class="n">Object</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="n">paramTypes</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+        <span class="c1">// 遍历参数成员</span>
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// 实例化方法的参数，SpringMvc的类，描述与该参数相联系的类、方法、参数名、注解等信息</span>
+			<span class="n">MethodParameter</span> <span class="n">methodParam</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SynthesizingMethodParameter</span><span class="o">(</span><span class="n">handlerMethod</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+			<span class="n">methodParam</span><span class="o">.</span><span class="na">initParameterNameDiscovery</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">parameterNameDiscoverer</span><span class="o">);</span>
+            <span class="c1">// 设置参数的所属类和参数类型等信息</span>
+			<span class="n">GenericTypeResolver</span><span class="o">.</span><span class="na">resolveParameterType</span><span class="o">(</span><span class="n">methodParam</span><span class="o">,</span> <span class="n">handler</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
+            <span class="c1">// 参数名</span>
+			<span class="n">String</span> <span class="n">paramName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// http头属性名</span>
+			<span class="n">String</span> <span class="n">headerName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// http是否有body部分</span>
+			<span class="kt">boolean</span> <span class="n">requestBodyFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="c1">// cookie属性名</span>
+			<span class="n">String</span> <span class="n">cookieName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// 路径变量</span>
+			<span class="n">String</span> <span class="n">pathVarName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// 属性名</span>
+			<span class="n">String</span> <span class="n">attrName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="kt">boolean</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="n">String</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="kt">boolean</span> <span class="n">validate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="n">Object</span><span class="o">[]</span> <span class="n">validationHints</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// 是否有注解</span>
+			<span class="kt">int</span> <span class="n">annotationsFound</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="c1">// 获取参数的注解</span>
+			<span class="n">Annotation</span><span class="o">[]</span> <span class="n">paramAnns</span> <span class="o">=</span> <span class="n">methodParam</span><span class="o">.</span><span class="na">getParameterAnnotations</span><span class="o">();</span>
+
+			<span class="k">for</span> <span class="o">(</span><span class="n">Annotation</span> <span class="n">paramAnn</span> <span class="o">:</span> <span class="n">paramAnns</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 处理带有@RequestParam注解的参数</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">RequestParam</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">RequestParam</span> <span class="n">requestParam</span> <span class="o">=</span> <span class="o">(</span><span class="n">RequestParam</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">;</span>
+                    <span class="c1">// @RequestParam的value属性</span>
+					<span class="n">paramName</span> <span class="o">=</span> <span class="n">requestParam</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+                    <span class="c1">// @RequestParam的required属性</span>
+					<span class="n">required</span> <span class="o">=</span> <span class="n">requestParam</span><span class="o">.</span><span class="na">required</span><span class="o">();</span>
+                    <span class="c1">// @RequestParam的defaultValue属性</span>
+					<span class="n">defaultValue</span> <span class="o">=</span> <span class="n">parseDefaultValueAttribute</span><span class="o">(</span><span class="n">requestParam</span><span class="o">.</span><span class="na">defaultValue</span><span class="o">());</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@RequestHeader注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">RequestHeader</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">RequestHeader</span> <span class="n">requestHeader</span> <span class="o">=</span> <span class="o">(</span><span class="n">RequestHeader</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">;</span>
+					<span class="n">headerName</span> <span class="o">=</span> <span class="n">requestHeader</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+					<span class="n">required</span> <span class="o">=</span> <span class="n">requestHeader</span><span class="o">.</span><span class="na">required</span><span class="o">();</span>
+					<span class="n">defaultValue</span> <span class="o">=</span> <span class="n">parseDefaultValueAttribute</span><span class="o">(</span><span class="n">requestHeader</span><span class="o">.</span><span class="na">defaultValue</span><span class="o">());</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@RequestBody注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">RequestBody</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">requestBodyFound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@CookieValue注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">CookieValue</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">CookieValue</span> <span class="n">cookieValue</span> <span class="o">=</span> <span class="o">(</span><span class="n">CookieValue</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">;</span>
+					<span class="n">cookieName</span> <span class="o">=</span> <span class="n">cookieValue</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+					<span class="n">required</span> <span class="o">=</span> <span class="n">cookieValue</span><span class="o">.</span><span class="na">required</span><span class="o">();</span>
+					<span class="n">defaultValue</span> <span class="o">=</span> <span class="n">parseDefaultValueAttribute</span><span class="o">(</span><span class="n">cookieValue</span><span class="o">.</span><span class="na">defaultValue</span><span class="o">());</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@PathVariable注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">PathVariable</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">PathVariable</span> <span class="n">pathVar</span> <span class="o">=</span> <span class="o">(</span><span class="n">PathVariable</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">;</span>
+					<span class="n">pathVarName</span> <span class="o">=</span> <span class="n">pathVar</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@ModelAttribute注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">ModelAttribute</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">ModelAttribute</span> <span class="n">attr</span> <span class="o">=</span> <span class="o">(</span><span class="n">ModelAttribute</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">;</span>
+					<span class="n">attrName</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+					<span class="n">annotationsFound</span><span class="o">++;</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理带有@Value注解的参数</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">Value</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isInstance</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">))</span> <span class="o">{</span>
+					<span class="n">defaultValue</span> <span class="o">=</span> <span class="o">((</span><span class="n">Value</span><span class="o">)</span> <span class="n">paramAnn</span><span class="o">).</span><span class="na">value</span><span class="o">();</span>
+				<span class="o">}</span>
+                <span class="c1">// 处理需要验证的参数</span>
+				<span class="k">else</span> <span class="o">{</span>
+					<span class="n">Validated</span> <span class="n">validatedAnn</span> <span class="o">=</span> <span class="n">AnnotationUtils</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">,</span> <span class="n">Validated</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+					<span class="k">if</span> <span class="o">(</span><span class="n">validatedAnn</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">paramAnn</span><span class="o">.</span><span class="na">annotationType</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"Valid"</span><span class="o">))</span> <span class="o">{</span>
+						<span class="n">validate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+						<span class="n">Object</span> <span class="n">hints</span> <span class="o">=</span> <span class="o">(</span><span class="n">validatedAnn</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">validatedAnn</span><span class="o">.</span><span class="na">value</span><span class="o">()</span> <span class="o">:</span> <span class="n">AnnotationUtils</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">paramAnn</span><span class="o">));</span>
+						<span class="n">validationHints</span> <span class="o">=</span> <span class="o">(</span><span class="n">hints</span> <span class="k">instanceof</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">?</span> <span class="o">(</span><span class="n">Object</span><span class="o">[])</span> <span class="n">hints</span> <span class="o">:</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">hints</span><span class="o">});</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+            <span class="c1">// 如果一个参数带有两个或者更多的参数注解，抛出异常</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">annotationsFound</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"Handler parameter annotations are exclusive choices - "</span> <span class="o">+</span>
+						<span class="s">"do not specify more than one such annotation on the same parameter: "</span> <span class="o">+</span> <span class="n">handlerMethod</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// 如果没有注解</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">annotationsFound</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">Object</span> <span class="n">argValue</span> <span class="o">=</span> <span class="n">resolveCommonArgument</span><span class="o">(</span><span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+                <span class="c1">// 如果是Request则赋给WebRequest实例</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">argValue</span> <span class="o">!=</span> <span class="n">WebArgumentResolver</span><span class="o">.</span><span class="na">UNRESOLVED</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">argValue</span><span class="o">;</span>
+				<span class="o">}</span>
+                <span class="c1">// 为参数赋予默认值</span>
+				<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">defaultValue</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveDefaultValue</span><span class="o">(</span><span class="n">defaultValue</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="k">else</span> <span class="o">{</span>
+					<span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">paramType</span> <span class="o">=</span> <span class="n">methodParam</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">();</span>
+                    <span class="c1">// 如果有Model或者Map类型的参数，直接把ModelMap实例复制给他们</span>
+					<span class="k">if</span> <span class="o">(</span><span class="n">Model</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramType</span><span class="o">)</span> <span class="o">||</span> <span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramType</span><span class="o">))</span> <span class="o">{</span>
+						<span class="k">if</span> <span class="o">(!</span><span class="n">paramType</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">implicitModel</span><span class="o">.</span><span class="na">getClass</span><span class="o">()))</span> <span class="o">{</span>
+							<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"Argument ["</span> <span class="o">+</span> <span class="n">paramType</span><span class="o">.</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"] is of type "</span> <span class="o">+</span>
+									<span class="s">"Model or Map but is not assignable from the actual model. You may need to switch "</span> <span class="o">+</span>
+									<span class="s">"newer MVC infrastructure classes to use this argument."</span><span class="o">);</span>
+						<span class="o">}</span>
+						<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">implicitModel</span><span class="o">;</span>
+					<span class="o">}</span>
+                    <span class="c1">// 如果是SessionStatus类型的参数，赋值给this.sessionStatus</span>
+					<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">SessionStatus</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramType</span><span class="o">))</span> <span class="o">{</span>
+						<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">sessionStatus</span><span class="o">;</span>
+					<span class="o">}</span>
+                    <span class="c1">// 如果是HttpEntity类型的参数单独处理</span>
+					<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">HttpEntity</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramType</span><span class="o">))</span> <span class="o">{</span>
+						<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveHttpEntityRequest</span><span class="o">(</span><span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+					<span class="o">}</span>
+                    <span class="c1">// 如果是Errors类型的参数，抛出异常状态异常</span>
+					<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">Errors</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramType</span><span class="o">))</span> <span class="o">{</span>
+						<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"Errors/BindingResult argument declared "</span> <span class="o">+</span>
+								<span class="s">"without preceding model attribute. Check your handler method signature!"</span><span class="o">);</span>
+					<span class="o">}</span>
+                    <span class="c1">// 如果是普通参数</span>
+					<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">BeanUtils</span><span class="o">.</span><span class="na">isSimpleProperty</span><span class="o">(</span><span class="n">paramType</span><span class="o">))</span> <span class="o">{</span>
+						<span class="n">paramName</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+					<span class="o">}</span>
+					<span class="k">else</span> <span class="o">{</span>
+						<span class="n">attrName</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+            <span class="c1">// 处理普通参数，包括MultipartFile参数，@initBinder注解处理，普通值处理</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">paramName</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveRequestParam</span><span class="o">(</span><span class="n">paramName</span><span class="o">,</span> <span class="n">required</span><span class="o">,</span> <span class="n">defaultValue</span><span class="o">,</span> <span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// http报文头信息处理</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">headerName</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveRequestHeader</span><span class="o">(</span><span class="n">headerName</span><span class="o">,</span> <span class="n">required</span><span class="o">,</span> <span class="n">defaultValue</span><span class="o">,</span> <span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// http报文body信息处理</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">requestBodyFound</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveRequestBody</span><span class="o">(</span><span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// http请求cookie处理</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">cookieName</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolveCookieValue</span><span class="o">(</span><span class="n">cookieName</span><span class="o">,</span> <span class="n">required</span><span class="o">,</span> <span class="n">defaultValue</span><span class="o">,</span> <span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// 路径变量处理</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">pathVarName</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">resolvePathVariable</span><span class="o">(</span><span class="n">pathVarName</span><span class="o">,</span> <span class="n">methodParam</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+			<span class="o">}</span>
+            <span class="c1">// 放入ModelMap的信息，一般是@ModelAttribute注解的信息</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">attrName</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">WebDataBinder</span> <span class="n">binder</span> <span class="o">=</span>
+						<span class="n">resolveModelAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">,</span> <span class="n">methodParam</span><span class="o">,</span> <span class="n">implicitModel</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
+				<span class="kt">boolean</span> <span class="n">assignBindingResult</span> <span class="o">=</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">Errors</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramTypes</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]));</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">doBind</span><span class="o">(</span><span class="n">binder</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">validate</span><span class="o">,</span> <span class="n">validationHints</span><span class="o">,</span> <span class="o">!</span><span class="n">assignBindingResult</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">();</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">assignBindingResult</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">args</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">();</span>
+					<span class="n">i</span><span class="o">++;</span>
+				<span class="o">}</span>
+				<span class="n">implicitModel</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">().</span><span class="na">getModel</span><span class="o">());</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="k">return</span> <span class="n">args</span><span class="o">;</span>
+	<span class="o">}</span>
+
+<span class="c1">//以上的代码完成了 request 参数到 controller 类下的函数的参数的绑定。resolveRequestParam 会调用 WebDataBinder 的 convertIfNecessary 方法，这个方法会搜索所有注册的 converter 并找到支持当前参数转化的对应 converter 进行参数转换。doBind() 方法会调用 WebDataBinder 的 validator 成员变量的 binder.validate(validationHints) 在绑定参数时对参数进行验证。</span>
+
+
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createDefaultEditors</span><span class="o">()</span> <span class="o">{</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;,</span> <span class="n">PropertyEditor</span><span class="o">&gt;(</span><span class="mi">64</span><span class="o">);</span>  
+  
+        <span class="c1">// Simple editors, without parameterization capabilities.  </span>
+        <span class="c1">// The JDK does not contain a default editor for any of these target types.  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Charset</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CharsetEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Class</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ClassEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Class</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ClassArrayEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Currency</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CurrencyEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">File</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">FileEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">InputStream</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">InputStreamEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">InputSource</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">InputSourceEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Locale</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">LocaleEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Pattern</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">PatternEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Properties</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">PropertiesEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Resource</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ResourceArrayPropertyEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">TimeZone</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">TimeZoneEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">URI</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">URIEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">URL</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">URLEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">UUID</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">UUIDEditor</span><span class="o">());</span>  
+        <span class="k">if</span> <span class="o">(</span><span class="n">zoneIdClass</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+            <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">zoneIdClass</span><span class="o">,</span> <span class="k">new</span> <span class="n">ZoneIdEditor</span><span class="o">());</span>  
+        <span class="o">}</span>  
+  
+        <span class="c1">// Default instances of collection editors.  </span>
+        <span class="c1">// Can be overridden by registering custom instances of those as custom editors.  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomCollectionEditor</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Set</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomCollectionEditor</span><span class="o">(</span><span class="n">Set</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">SortedSet</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomCollectionEditor</span><span class="o">(</span><span class="n">SortedSet</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomCollectionEditor</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">SortedMap</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomMapEditor</span><span class="o">(</span><span class="n">SortedMap</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>  
+  
+        <span class="c1">// Default editors for primitive arrays.  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">byte</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">ByteArrayPropertyEditor</span><span class="o">());</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">char</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CharArrayPropertyEditor</span><span class="o">());</span>  
+  
+        <span class="c1">// The JDK does not contain a default editor for char!  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">char</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CharacterEditor</span><span class="o">(</span><span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Character</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CharacterEditor</span><span class="o">(</span><span class="kc">true</span><span class="o">));</span>  
+  
+        <span class="c1">// Spring's CustomBooleanEditor accepts more flag values than the JDK's default editor.  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomBooleanEditor</span><span class="o">(</span><span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomBooleanEditor</span><span class="o">(</span><span class="kc">true</span><span class="o">));</span>  
+  
+        <span class="c1">// The JDK does not contain default editors for number wrapper types!  </span>
+        <span class="c1">// Override JDK primitive number editors with our own CustomNumberEditor.  </span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">byte</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Byte</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Byte</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Byte</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">short</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Short</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Short</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Short</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">false</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomNumberEditor</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>  
+  
+        <span class="c1">// Only register config value editors if explicitly requested.  </span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">configValueEditorsActive</span><span class="o">)</span> <span class="o">{</span>  
+            <span class="n">StringArrayPropertyEditor</span> <span class="n">sae</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringArrayPropertyEditor</span><span class="o">();</span>  
+            <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">String</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">sae</span><span class="o">);</span>  
+            <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">short</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">sae</span><span class="o">);</span>  
+            <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">int</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">sae</span><span class="o">);</span>  
+            <span class="k">this</span><span class="o">.</span><span class="na">defaultEditors</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kt">long</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">sae</span><span class="o">);</span>  
+        <span class="o">}</span>  
+    <span class="o">}</span>  
+</code></pre></div></div>
+</div>
+				<footer><meta itemprop="dateModified" content="2018-06-05T10:10:03+08:00"><div class="article-license"><div class="m-license"><div class="clearfix">
+    <!--<a class="octocat" href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/07-Spring/2018-06-05-Spring源码分析——参数绑定.md">
+        <img alt="View on Github" src="/ProgramNote/assets/images/octocat.jpg" />
+      </a><p><a href="https://github.com/https://github.com/lipeng3g/ProgramNote/tree/master/_posts/07-Spring/2018-06-05-Spring源码分析——参数绑定.md">在 Github 上查阅此文。</a></p>--><p>本文遵守 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 许可协议。</p><a class="license" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+      <img alt="Creative Commons License" src="/ProgramNote/assets/images/license-cc4.png" />
+    </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
+  </div>
+</div></div>
+				</footer><section></section></article>
+		</div>
+		<div class="col-2">
+			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+<script type="text/javascript">
+	window.throttle = function(func, wait) {
+	  var args, result, thisArg, timeoutId, lastCalled = 0;
+
+	  function trailingCall() {
+	    lastCalled = new Date;
+	    timeoutId = null;
+	    result = func.apply(thisArg, args);
+	  }
+	  return function() {
+	    var now = new Date,
+	      remaining = wait - (now - lastCalled);
+
+	    args = arguments;
+	    thisArg = this;
+
+	    if (remaining <= 0) {
+	      clearTimeout(timeoutId);
+	      timeoutId = null;
+	      lastCalled = now;
+	      result = func.apply(thisArg, args);
+	    } else if (!timeoutId) {
+	      timeoutId = setTimeout(trailingCall, remaining);
+	    }
+	    return result;
+	  };
+	}
+	$(function() {
+	  var $window = $(window);
+	  var $pageStage = $('.js-page-stage');
+	  var $pageMain = $('.js-main');
+	  var $pageFooter = $('.js-page-footer');
+	  var $articleContent = $('.js-article-content');
+	  var $articleAside = $('.js-article-aside');
+	  var $toc = $('.js-toc');
+	  var hasTitle = $articleContent.find('h1, h2, h3').length > 0;
+
+	  function asideSticky() {
+	    return $window.outerWidth() > 1150 && $pageStage.hasClass('has-toc');
+	  }
+
+	  function setTocClass() {
+	    if (hasTitle) {
+	      !$pageStage.hasClass('has-toc') && $pageStage.addClass('has-toc');
+	    }
+	  }
+
+	  setTocClass();
+
+	  function setAsideTOC() {
+	    var asideTop, asideLeft, scrollBottom, asideBottomTop, lastScrollTop;
+
+	    function init() {
+	      var asideOffset = $articleAside.offset();
+	      var footerOffset = $pageFooter.offset();
+	      var mainOffset = $pageMain.offset();
+	      asideTop = mainOffset.top;
+	      asideHeight = $toc.outerHeight() + parseInt($articleAside.css('padding-top'), 10) + parseInt($articleAside.css('padding-bottom'), 10);
+	      asideLeft = mainOffset.left + $pageMain.outerWidth() - $articleAside.outerWidth() - parseInt($pageMain.css('padding-right'), 10);
+	      scrollBottom = footerOffset.top - asideHeight;
+	      asideBottomTop = scrollBottom - mainOffset.top;
+	    }
+
+	    function setAside(force) {
+	      force !== true && (force = false);
+	      var scrollTop = $window.scrollTop();
+	      if (scrollTop >= asideTop && scrollTop <= scrollBottom) {
+	        (!force && lastScrollTop >= asideTop && lastScrollTop <= scrollBottom) ||
+	        $articleAside.addClass('fixed').css({
+	          left: asideLeft + 'px',
+	          top: 0
+	        });
+	      } else if (scrollTop < asideTop) {
+	        (!force && lastScrollTop < asideTop) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: 0
+	        });
+	      } else {
+	        (!force && lastScrollTop > scrollBottom) ||
+	        $articleAside.removeClass('fixed').css({
+	          left: 0,
+	          top: asideBottomTop + 'px'
+	        });
+	      }
+	      lastScrollTop = scrollTop;
+	    }
+	    asideSticky() && (init(), setAside());
+	    $window.on('scroll', function() {
+	      asideSticky() && setAside();
+	    });
+	    $window.on('resize', throttle(function() {
+	      setTocClass();
+	      asideSticky() && (init(), setAside(true));
+	    }, 100));
+	    setTimeout(init, 4000);
+	  }
+	  setTimeout(setAsideTOC, 1000);
+
+	  $toc.toc({
+	    'selectors': 'h1,h2,h3',
+	    'container': '.js-article-content',
+	  });
+	});
+</script></div>
+</div>
+</div><div class="m-page-footer js-page-footer">
+  <div class="main">
+    <aside><div class="follow-me"><ul class="inline-list" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lipeng">
+    <link itemprop="url" href="https://lipeng3g.github.io/"><li title="在 Github 上关注我。">
+        <div class="round-button github">
+          <a itemprop="sameAs" href="https://github.com/lipeng3g" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+          </a>
+        </div>
+      </li><li title="在 Linkedin 上关注我。">
+        <div class="round-button linkedin">
+          <a itemprop="sameAs" href="https://www.linkedin.com/in/朋-李-3396a7a5" target="_blank">
+            <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
+</svg></div>
+          </a>
+        </div>
+      </li></ul><p class="email">
+      <a title="给我发邮件。" href="mailto:lipeng3g@gmail.com" target="_self">lipeng3g@gmail.com</a>
+    </p></div>
+</aside>
+    <footer class="site-info">
+      <p>© lipeng's blog 2015 - 2017</p>
+      <p>Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a succinct theme for blogging." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.</p>
+    </footer>
+  </div>
+</div><script>
+      $(function() {
+        // display coding language
+        $(".highlight").each(function() {
+          $(this).attr("data-lang", $(this).find("code").attr("data-lang"));
+        });
+      });
+    </script></body>
+</html>
