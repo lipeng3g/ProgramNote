@@ -31,7 +31,38 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis二级缓存</a></h1>
+          <div class="m-article-content">
+
+
+  1. Mybatis缓存机制整体设计
+  2. 二级缓存的基本原理
+  3. 二级缓存的划分
+    
+      3.1. 为每一个Mapper分配一个Cache缓存对象（使用&lt;cache&gt;节点配置）
+      3.2. 多个Mapper共用一个Cache缓存对象（使用&lt;cache-ref&gt;节点配置）
+    
+  
+  4. 开启二级缓存的条件
+  5. 缓存使用顺序
+  6. 二级缓存的实现方式
+  7. Mybatis自身提供的二级缓存实现
+
+
+
+1. Mybatis缓存机制整体设计
+
+
+
+  当开一个会话时，一个SqlSession对象会使用一个Executor对象来完成会话操作，MyBatis的二级缓存机制的关键就是对这个Executor...</div><a href="/ProgramNote/mybatis/2017/12/19/Mybatis%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月19日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2017/12/19/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3.html">装饰者模式简单理解</a></h1>
           <div class="m-article-content">装饰者模式
 
 
@@ -173,28 +204,7 @@ SqlSession将它的工作交给了Executor执行器这个角色来完成，负�
       </div><div class="date-wrapper"><span class="article-meta">2017年 12月15日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
-          <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
-
-
-
-当web项目启动的时候，执行初始化操作，初始化配置存在于Web.xml中
-
-配置如下
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;spring&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;contextConfigLocation&lt;/pa...</div><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-spring-dispatcherservlet-ex">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月14日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 50 篇文章, 10 页。</p>
+</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page5">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -220,6 +230,8 @@ SqlSession将它的工作交给了Executor执行器这个角色来完成，负�
                 <a class="round-button" href="/ProgramNote/blog/page9"><span>9</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page10"><span>10</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page11"><span>11</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page7">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">

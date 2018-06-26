@@ -31,7 +31,34 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/spring/2018/06/05/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A.html">SpringMVC源码分析——参数绑定</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/06/26/Java%E4%BC%A0%E9%80%92%E6%80%A7.html">Java对象传递</a></h1>
+          <div class="m-article-content">Part1
+
+  本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/xiangwanpeng/article/details/52454479
+
+
+前言
+
+　　在 Java 中，当对象作为参数传递时，究竟传递的是对象的值，还是对象的引用，这是一个饱受争议的话题。若传的是值，那么函数接收的只是实参的一个副本，函数对形参的操作并不会对实参产生影响；若传的是引用，那么此时对形参的操作则会影响到实参。
+　　首先我们来看一句代码：
+
+Object obj = new Object();
+
+
+
+　　这句话的意思是：创建一个 Object 对象，再创建一个名为 obj 的引用，让这个引用指向这个对象，如下图所示：
+
+　　
+
+在有了上面的基础之后，我们便来看...</div><a href="/ProgramNote/java/2018/06/26/Java%E4%BC%A0%E9%80%92%E6%80%A7.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java_object_send_xing">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 06月26日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/spring/2018/06/05/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A.html">SpringMVC源码分析——参数绑定</a></h1>
           <div class="m-article-content">// 待分析：XXXXXXXXXXXXX
 
 // DispatcherServlet
@@ -172,44 +199,7 @@ vue init &lt;template-name&gt; &lt;project-name&gt;
       </div><div class="date-wrapper"><span class="article-meta">2018年 05月14日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">多线程常用实例</a></h1>
-          <div class="m-article-content">
-
-
-  1. 实例一、一个线程依赖于另外几个线程
-    
-      1.1. 原始实现
-      1.2. 使用FutureTask
-      1.3. 使用CyclicBarrier
-    
-  
-  2. 实例二、火车票售卖
-  3. 实例三、ATM取钱
-  4. 实例四、龟兔赛跑
-  5. 实例五、生产者–消费者模式
-
-
-
-`
-1. 实例一、一个线程依赖于另外几个线程
-
-只有当所依赖的线程执行完毕后，当前线程才会继续执行。
-
-
-1.1. 原始实现
-public class ThreadEndWait {
-
-    private int flag = 0;
-
-    public static void main(String[] args) throws Inter...</div><a href="/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Concurrency">Concurrency</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-java-concurrency-common-example">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 04月09日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 50 篇文章, 10 页。</p>
+</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -235,6 +225,8 @@ public class ThreadEndWait {
                 <a class="round-button" href="/ProgramNote/blog/page9"><span>9</span></a>
               </li><li>
                 <a class="round-button" href="/ProgramNote/blog/page10"><span>10</span></a>
+              </li><li>
+                <a class="round-button" href="/ProgramNote/blog/page11"><span>11</span></a>
               </li><li>
               <a class="round-button" href="/ProgramNote/blog/page2">
                 <div class="icon icon--next"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
