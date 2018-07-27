@@ -31,7 +31,40 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/06/26/Java%E4%BC%A0%E9%80%92%E6%80%A7.html">Java对象传递</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/07/27/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86.html">Lambda表达式异常处理</a></h1>
+          <div class="m-article-content">
+
+
+  1. 概览
+  2. 处理未经检查的异常
+  3. 处理检查异常
+    
+      3.1. 从Lambda表达式抛出检查异常
+      3.2. 在Lambda中处理检查异常
+    
+  
+  4. 总结
+
+
+
+1. 概览
+在Java 8中，Lambda Expressions通过提供表达行为的简洁方式开始促进函数式编程。但是，JDK提供的功能接口不能很好地处理异常 - 在处理异常时代码变得冗长和繁琐。
+
+在本文中，我们将探讨在编写lambda表达式时处理异常的一些方法。
+
+2. 处理未经检查的异常
+首先，我们用一个例子来理解这个问题。
+当前有个List&lt;Integer&gt;，我们用一个常量，比如50来除以每个元素，并打印结果：
+
+List&lt;Integ...</div><a href="/ProgramNote/java/2018/07/27/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java_lambda_handle_exception">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 07月27日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/06/26/Java%E4%BC%A0%E9%80%92%E6%80%A7.html">Java对象传递</a></h1>
           <div class="m-article-content">Part1
 
   本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/xiangwanpeng/article/details/52454479
@@ -167,39 +200,7 @@ npm install vuex --save
       </div><div class="date-wrapper"><span class="article-meta">2018年 05月14日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">Vue-Cli学习笔记</a></h1>
-          <div class="m-article-content">1. 安装vue-cli
-安装命令 
-npm install vue-cli -g   
--g :代表全局安装
-查看版本号   
-vue -V
-注意： V是大写。
-
-2. 初始化项目
-2.1. 初始化命令
-vue init &lt;template-name&gt; &lt;project-name&gt;
-
-
-  
-    init：表示我要用vue-cli来初始化项目
-  
-  
-    &lt;template-name&gt;：表示模板名称，vue-cli官方为我们提供了5种模板，
-
-    webpack-一个全面的webpack+vue-loader的模板，功能包括热加载，linting,检测和CSS扩展。
-
-    webpack-simple-一个简单webpack+v...</div><a href="/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Vue">Vue</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-vue-cli-note">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 05月14日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

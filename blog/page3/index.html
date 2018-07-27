@@ -31,7 +31,35 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html">Java创建并且运行线程</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/concurrency/2018/03/02/%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8.html">竞态条件和线程安全</a></h1>
+          <div class="m-article-content">1. 竞态条件
+多线程运行时如果同时访问了相同的资源（变量、数组、对象、文件等），并且有写的操作发生，通常情况下会存在线程安全的问题。
+
+下面的代码在多线程运行时候可能会出现异常：
+public class Counter {
+  protected long count = 0;
+  public void add(long value){
+      this.count = this.count + value;  
+  }
+}
+
+JVM在执行上面的代码时候，会编译成单条指令运行：
+`
+从内存获取 this.count 的值放到寄存器
+将寄存器中的值增加value
+将寄存器中的值写回内存
+`
+非多线程运行时是按照上面的的顺序，但是在多线程中可能出现下面的情况：
+`
+	 this....</div><a href="/ProgramNote/concurrency/2018/03/02/%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Concurrency">Concurrency</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java-concurrency-race-condition">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 03月02日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/concurrency/2018/02/22/Java%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%B8%94%E8%BF%90%E8%A1%8C%E7%BA%BF%E7%A8%8B.html">Java创建并且运行线程</a></h1>
           <div class="m-article-content">Java线程类也是一个object类,它的实例都继承自java.lang.Thread或其子类。 可以用如下方式用java中创建并且执行一个线程：
 
 Tread thread = new Thread();
@@ -122,29 +150,7 @@ Size, isEmpty, get, set, iterator, listIterator运行时间是一定的。   add
       </div><div class="date-wrapper"><span class="article-meta">2018年 01月12日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashSet源码解析(JDK1.8.0_131)</a></h1>
-          <div class="m-article-content">1. 数据结构
-
-
-
-LinkedHashSet继承了HashSet，也就是说从基本的方法上来说，他首先是一个HashSet，那么他就具有了HashSet的所有特性，存储的每个对象中，只是用了key，value都是相同的对象，不对map有具体影响。
-
-那么两者有哪些不同呢，我们需要从具体方法进行分析。
-
-2. 构造函数
-构造方法基本都是一个套路，调用了HashSet的私有的构造器，之前有一个私有的HashSet构造函数一直没有具体分析，在这里具体看一下
-
-    public LinkedHashSet(int initialCapacity, float loadFactor) {
-        super(initialCapacity, loadFactor, true);
- ...</div><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-linkedhashset_source_jdk8">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月12日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page2">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

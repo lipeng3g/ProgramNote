@@ -31,7 +31,39 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">多线程常用实例</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">Vue-Cli学习笔记</a></h1>
+          <div class="m-article-content">1. 安装vue-cli
+安装命令 
+npm install vue-cli -g   
+-g :代表全局安装
+查看版本号   
+vue -V
+注意： V是大写。
+
+2. 初始化项目
+2.1. 初始化命令
+vue init &lt;template-name&gt; &lt;project-name&gt;
+
+
+  
+    init：表示我要用vue-cli来初始化项目
+  
+  
+    &lt;template-name&gt;：表示模板名称，vue-cli官方为我们提供了5种模板，
+
+    webpack-一个全面的webpack+vue-loader的模板，功能包括热加载，linting,检测和CSS扩展。
+
+    webpack-simple-一个简单webpack+v...</div><a href="/ProgramNote/javascript/vue/2018/05/14/Vue-Cli%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
+        </li><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Vue">Vue</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-vue-cli-note">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 05月14日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/concurrency/2018/04/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B.html">多线程常用实例</a></h1>
           <div class="m-article-content">
 
 
@@ -133,35 +165,7 @@ Java实...</div><a href="/ProgramNote/concurrency/2018/03/09/Java%E5%90%8C%E6%AD
       </div><div class="date-wrapper"><span class="article-meta">2018年 03月09日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/concurrency/2018/03/02/%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8.html">竞态条件和线程安全</a></h1>
-          <div class="m-article-content">1. 竞态条件
-多线程运行时如果同时访问了相同的资源（变量、数组、对象、文件等），并且有写的操作发生，通常情况下会存在线程安全的问题。
-
-下面的代码在多线程运行时候可能会出现异常：
-public class Counter {
-  protected long count = 0;
-  public void add(long value){
-      this.count = this.count + value;  
-  }
-}
-
-JVM在执行上面的代码时候，会编译成单条指令运行：
-`
-从内存获取 this.count 的值放到寄存器
-将寄存器中的值增加value
-将寄存器中的值写回内存
-`
-非多线程运行时是按照上面的的顺序，但是在多线程中可能出现下面的情况：
-`
-	 this....</div><a href="/ProgramNote/concurrency/2018/03/02/%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Concurrency">Concurrency</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-java-concurrency-race-condition">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 03月02日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

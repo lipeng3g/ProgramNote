@@ -31,7 +31,29 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/11/LinkedHashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashMap源码解析(JDK1.8.0_131)</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashSet源码解析(JDK1.8.0_131)</a></h1>
+          <div class="m-article-content">1. 数据结构
+
+
+
+LinkedHashSet继承了HashSet，也就是说从基本的方法上来说，他首先是一个HashSet，那么他就具有了HashSet的所有特性，存储的每个对象中，只是用了key，value都是相同的对象，不对map有具体影响。
+
+那么两者有哪些不同呢，我们需要从具体方法进行分析。
+
+2. 构造函数
+构造方法基本都是一个套路，调用了HashSet的私有的构造器，之前有一个私有的HashSet构造函数一直没有具体分析，在这里具体看一下
+
+    public LinkedHashSet(int initialCapacity, float loadFactor) {
+        super(initialCapacity, loadFactor, true);
+ ...</div><a href="/ProgramNote/java/2018/01/12/LinkedHashSet%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-linkedhashset_source_jdk8">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 01月12日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/01/11/LinkedHashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.8.0_131).html">LinkedHashMap源码解析(JDK1.8.0_131)</a></h1>
           <div class="m-article-content">1. 数据结构
 LinkedHashMap底层实现是HashMap，和HashMap比较起来，增加了一个类似全局的链表。
 
@@ -118,30 +140,7 @@ HashSet其实就是一个HashMap，不同的地方在于，HashSet只是用了Ha
       </div><div class="date-wrapper"><span class="article-meta">2018年 01月07日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">HashMap源码解析(JDK1.7.0_80)</a></h1>
-          <div class="m-article-content">写在最前面：HashMap的实现在JDK不同版本中是有差别的，在JDK1.7和1.8中差距挺大，这里以JDK1.7.0_80为例，后续会有关于1.8的记录
-
-1. 数据存储结构
-采用双表结构：数组+单向链表
-
-
-    /**
-     * 一个空的表实例，用于在表未膨胀时共享。
-     */
-    static final Entry&lt;?,?&gt;[] EMPTY_TABLE = {};
-    /**
-     * 该表根据需要调整大小。长度必须始终是2的幂。
-     * 用户储存元素的数组，最初定义为空，实例化的时候会调用下面的膨胀表的方法，对Table进行赋值操作
-     */
-    transient Entry&lt;K,V&gt;[] table = (...</div><a href="/ProgramNote/java/2018/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90(JDK1.7.0_80).html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-hashmap_source_jdk7">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 01月06日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page3">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

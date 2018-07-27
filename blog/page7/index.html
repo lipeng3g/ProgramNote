@@ -31,7 +31,44 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">Mybatis一级缓存</a></h1>
+          <div class="m-article-content">
+
+
+  1. 一级缓存的作用
+  2. 一级缓存的依赖关系
+  3. 一级缓存的生命周期
+  4. 一级缓存的实现
+  5. Cache接口
+  6. 性能问题
+
+
+
+1. 一级缓存的作用
+
+每开启一次Mybatis数据库会话，Mybatis会创建一个SqlSession对象。
+
+肯多时候，可能多次执行的查询语句是一样的，为了减少资源浪费，Mybatis在sqlse对象建立一个缓存，查询结果先缓存，在下次查询时先从缓存中取。
+
+
+
+SqlSession级别的数据缓存，称为一级缓存
+
+2. 一级缓存的依赖关系
+
+一级缓存由SqlSession控制。
+
+
+
+SqlSession将它的工作交给了Executor执行器这个角色来完成，负责完成对数据库的各种操作。当创建了一个SqlSessio...</div><a href="/ProgramNote/mybatis/2017/12/15/Mybatis%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月15日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/spring/2017/12/14/DispatcherServlet%E6%8E%A2%E7%A9%B6.html">DispatcherServlet探究</a></h1>
           <div class="m-article-content">DispatcherServlet是SpringMVC的前置控制器，配置在web.xml中，所有请求由它统一分发。
 
 
@@ -132,42 +169,7 @@ Mybatis事务管理分为JdbcTransaction和ManagedTransaction：
       </div><div class="date-wrapper"><span class="article-meta">2017年 12月08日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Mybatis数据源和连接池</a></h1>
-          <div class="m-article-content">对于ORM框架而言，数据源的组织是一个非常重要的一部分，这直接影响到框架的性能问题。
-
-
-
-  1. MyBatis数据源DataSource分类
-  2. DataSource的创建过程
-    
-      2.1. 文件解析
-      2.2. 创建模式
-      2.3. 存储
-    
-  
-  3. DataSource什么时候创建Connection对象
-  4. UnpooledDataSource
-    
-      4.1. 创建Connection过程
-    
-  
-  5. 使用连接池
-    
-      5.1. 分析
-    
-  
-  6. PooledDataSource
-    
-      6.1. 基本原理
-      6.2. 获取ja...</div><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 12月07日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 51 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page6">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
