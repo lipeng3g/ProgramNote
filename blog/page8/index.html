@@ -31,7 +31,39 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Mybatis数据源和连接池</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/mybatis/2017/12/08/Mybatis%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.html">Mybatis事务管理</a></h1>
+          <div class="m-article-content">
+
+
+  1. Mybatis事务
+  2. 事务的配置、创建、使用
+    
+      2.1. 事务的配置
+      2.2. 事务的创建
+      2.3. TransactionFactory
+      2.4. Transaction的创建
+      2.5. JdbcTransaction
+      2.6. ManagedTransaction
+    
+  
+
+
+
+1. Mybatis事务
+数据库的事务具有 创建、提交、回滚、关闭功能。
+
+
+Mybatis事务管理分为JdbcTransaction和ManagedTransaction：
+
+  JdbcTransaction : 使用java.sql.Connection对象完成对事务的commit、roll...</div><a href="/ProgramNote/mybatis/2017/12/08/Mybatis%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Mybatis">Mybatis</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2017年 12月08日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/mybatis/2017/12/07/Mybatis%E6%95%B0%E6%8D%AE%E6%BA%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%B1%A0.html">Mybatis数据源和连接池</a></h1>
           <div class="m-article-content">对于ORM框架而言，数据源的组织是一个非常重要的一部分，这直接影响到框架的性能问题。
 
 
@@ -157,40 +189,7 @@ CREATE USER 'username'@'host' IDENTIFIED ...</div><a href="/ProgramNote/mysql/20
       </div><div class="date-wrapper"><span class="article-meta">2017年 11月15日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">关于scrollHeight和scrollTop取值为0的问题</a></h1>
-          <div class="m-article-content">关于scrollHeight和scrollTop取值为0的问题
-
-
-
-  关于scrollHeight和scrollTop取值为0的问题
-  1. 基础
-    
-      1.1. offsetTop与style.top的区别
-    
-  
-  2. 问题及解决
-  3. 总结
-
-
-
-
-原文地址–简书
-
-1. 基础
-
-
-  obj.offsetTop 指 obj 距离上方或上层控件的位置，整型，单位像素。
-  obj.offsetLeft 指 obj 距离左方或上层控件的位置，整型，单位像素。
-  obj.offsetWidth 指 obj 控件自身的宽度，整型，单位像素。
-  obj.offsetHeight 指 obj 控件自身的高度，整型，单位像素。（clientHeigh...</div><a href="/ProgramNote/javascript/2017/11/07/scrollHeight%E5%92%8CscrollTop%E5%8F%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E9%97%AE%E9%A2%98.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2017年 11月07日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 52 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 53 篇文章, 11 页。</p>
           <ul class="inline-list"><li><a class="round-button" href="/ProgramNote/blog/page7">
               <div class="icon icon--previous"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
