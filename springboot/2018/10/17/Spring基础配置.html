@@ -181,6 +181,8 @@ Process finished with exit code 0
   <li>拦截方式有两种 <code class="highlighter-rouge">注解式</code>和<code class="highlighter-rouge">方法式</code></li>
 </ol>
 
+<p>Spring在事务处理（@Transcational）和数据缓存（@Cacheable）等处理中都采用AOP拦截。</p>
+
 <h3 id="示例-1">示例</h3>
 <ul>
   <li>添加Maven依赖</li>
@@ -234,6 +236,11 @@ Process finished with exit code 0
     <span class="n">String</span> <span class="nf">name</span><span class="o">();</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<blockquote>
+  <p>注解配置和xml实现的功能是一样的，注解和xml一样都是一种元数据，用来解释Spring的配置。</p>
+</blockquote>
+
 <ul>
   <li>注解式被拦截类</li>
 </ul>
@@ -285,6 +292,13 @@ Process finished with exit code 0
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<blockquote>
+  <p>@Aspect注解声明一个切面，@Component使切面成为受Spring管理的Bean
+@Pointcut声明切点
+@After @Before声明Advice，</p>
+</blockquote>
+
 <ul>
   <li>配置类</li>
 </ul>
@@ -295,6 +309,11 @@ Process finished with exit code 0
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AopConfig</span> <span class="o">{</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<blockquote>
+  <p>@EnableAspectJAutoProxy开启Spring对AspectJ的支持</p>
+</blockquote>
+
 <ul>
   <li>运行类</li>
 </ul>
