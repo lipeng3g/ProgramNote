@@ -9,7 +9,9 @@
 <meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="192x192" href="/ProgramNote/assets/images/logo/icon-192x192.png">
 <!-- for Edge on Windows 10 https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx --><meta name="msapplication-TileImage" content="/ProgramNote/assets/images/logo/icon-144x144.png"><meta name="msapplication-square310x310logo" content="/ProgramNote/assets/images/logo/icon-310x310.png"><meta name="msapplication-wide310x150logo" content="/ProgramNote/assets/images/logo/icon-310x150.png"><meta name="msapplication-square150x150logo" content="/ProgramNote/assets/images/logo/icon-150x150.png"><meta name="msapplication-square70x70logo" content="/ProgramNote/assets/images/logo/icon-70x70.png">
 <meta name="msapplication-TileColor" content="#eeeeee"><link rel="stylesheet" href="/ProgramNote/assets/css/blog.css">
-    <style></style>
+    <style>.m-article-content img:not(.emoji) {
+        box-shadow: 0 0 5px rgba(0, 0, 0, .4);
+      }</style>
     <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><script type="text/javascript" async
     src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
 </script></head>
@@ -36,7 +38,7 @@
 				<header class="article-header"><h1 itemprop="headline" itemprop="name headline">Spring基础配置</h1><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
           <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringBoot">SpringBoot</a>
         </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-">0
+        <span class="article-view" id="post-key-SpringBoot-basic-01">0
         </span> views
       </div><div class="date-wrapper"><time class="article-meta" datetime="2018-10-17T22:00:20+08:00"
           itemprop="datePublished">2018年 10月17日
@@ -354,7 +356,26 @@ Process finished with exit code 0
     </a><p>欢迎转载，转载需注明出处，且禁止用于商业目的。</p>
   </div>
 </div></div>
-				</footer><section></section></article>
+				</footer><section><div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+        this.page.url = 'https://lipeng3g.github.io/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE.html';
+        this.page.identifier = 'SpringBoot-basic-01';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://https-lipeng3g-github-io-programnote.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></section></article>
 		</div>
 		<div class="col-2">
 			<aside class="js-article-aside"><div class="m-toc js-toc"></div></aside>
@@ -467,7 +488,54 @@ Process finished with exit code 0
 	    'container': '.js-article-content',
 	  });
 	});
-</script></div>
+</script><script src="https://cdn1.lncld.net/static/js/3.4.1/av-min.js"></script>
+  <script type="text/javascript">
+		$(function() {
+			// 初始化
+			AV.init({
+				appId: 'Vg4CDT3raC2rXnQ1QkQARVP7-gzGzoHsz',
+				appKey: '5J0nOQP5ng1xVl8oUFwUC3OT'
+			});
+			// 查询
+			var query = new AV.Query('WMCiMSk0m4BjqiUFfg8HeVwN');
+			query.equalTo('key', 'SpringBoot-basic-01');
+			query.first().then(function(result) {
+				if (result) {
+					addOne(result)
+				} else {
+					//新建
+					var Blog = AV.Object.extend('WMCiMSk0m4BjqiUFfg8HeVwN');
+					var blog = new Blog();
+					blog.set('title', 'Spring基础配置');
+					blog.set('key', 'SpringBoot-basic-01');
+					blog.set('views', 0);
+					blog.save().then(function(page) {
+						addOne(page)
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+
+				function addOne(page) {
+					page.increment('views', 1);
+					page.fetchWhenSave(true);
+					page.save().then(function(page) {
+						$("#post-key-SpringBoot-basic-01").text(page.attributes.views);
+					}, function(error) {
+						if (error) {
+							throw error;
+						}
+					});
+				}
+			}, function(error) {
+				if (error) {
+					throw error;
+				}
+			});
+		});
+	</script></div>
 </div>
 </div><div class="m-page-footer js-page-footer">
   <div class="main">
