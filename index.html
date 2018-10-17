@@ -31,7 +31,53 @@
 </header>
 <div class="m-page-main"><div class="m-home">
   <div class="main">
-    <div class="m-post-list"><article><h1><a href="/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html">ArrayDeque双端队列</a></h1>
+    <div class="m-post-list"><article><h1><a href="/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE.html">Spring基础配置</a></h1>
+          <div class="m-article-content">Spring基础配置
+Spring框架本身的四大原则：
+
+  使用POJO进行轻量级和最小侵入开发
+  通过依赖注入和基于接口松耦合
+  通过AOP和默认习惯声明式编程
+  使用AOP和模板减少模式化代码
+
+
+依赖注入
+知识点
+控制翻转和依赖注入在Spring中是相同的概念，控制翻转是通过依赖注入实现的。依赖注入的主要目的是为了解耦。
+
+Spring IoC容器负责创建bean，通过容器把bean注入到目标bean中。Spring可以通过xml、java、groovy实现bean的创建和注入。xml配置、java配置、groovy配置被称为元数据配置。元数据用来描述数据，不具备执行能力，但是可以被解析。
+
+声明Bean的注解：
+
+  @Component（泛指组件，无明确意义）
+  @...</div><a href="/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=SpringBoot">SpringBoot</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 10月17日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/08/08/Java%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97.html">Java移位运算</a></h1>
+          <div class="m-article-content">在阅读源码的过程中，经常会看到这些符号 «，»，»&gt;，这些符号在 Java 中叫移位运算符，在写代码的过程中，虽然我们基本上不会去写这些符号，但需要明白这些符号的运算原理，比如 HashMap 中有以下代码：
+
+static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4;//左移
+static final int hash(Object key) {
+     int h;
+     return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);//无符号右移
+}
+
+
+
+上段代码中就包含左移运算符 «，无符号右移运算符»&gt;。这篇文章详细说一下这...</div><a href="/ProgramNote/java/2018/08/08/Java%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
+          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Java">Java</a>
+        </li></ul><div class="other-wrapper"><div class="view-wrapper">
+        <span class="article-view" id="post-key-java_wei_calc">0
+        </span> views
+      </div><div class="date-wrapper"><span class="article-meta">2018年 08月08日</span></div>
+  </div>
+</div>
+</article><article><h1><a href="/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html">ArrayDeque双端队列</a></h1>
           <div class="m-article-content">基本介绍
 ArrayDeque是Resizable-array的实现。最多可以存储2^31 - 1 个元素。不支持多线程访问，不支持空元素操作。
 
@@ -107,72 +153,7 @@ Object obj = new Object();
       </div><div class="date-wrapper"><span class="article-meta">2018年 06月26日</span></div>
   </div>
 </div>
-</article><article><h1><a href="/ProgramNote/spring/2018/06/05/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A.html">SpringMVC源码分析——参数绑定</a></h1>
-          <div class="m-article-content">// 待分析：XXXXXXXXXXXXX
-
-// DispatcherServlet
-// Actually invoke the handler.
-mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
-
-
-AnnotationMethodHandlerAdapter
-
-	@Override
-	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
-        // 回给定实例的用户定义类:通常只是给定实例...</div><a href="/ProgramNote/spring/2018/06/05/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Spring">Spring</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-spring-source-bind-param">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 06月05日</span></div>
-  </div>
-</div>
-</article><article><h1><a href="/ProgramNote/javascript/vue/2018/05/15/Vuex%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">Vuex学习笔记</a></h1>
-          <div class="m-article-content">
-
-
-  1. 安装vuex
-  2. 使用vuex
-  3. State
-    
-      3.1. 在 Vue 组件中获得 Vuex 状态
-      3.2. mapState 辅助函数
-    
-  
-  4. Mutations
-    
-      4.1. $store.commit
-      4.2. 传递参数
-      4.3. 模板获取Mutations
-    
-  
-  5. Getter
-    
-      5.1. 基本用法
-      5.2. mapGetters
-    
-  
-  6. Action
-  7. Module
-
-
-
-1. 安装vuex
-npm install vuex --save
-2. 使用vuex
-
-  src目录下新建v...</div><a href="/ProgramNote/javascript/vue/2018/05/15/Vuex%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html">点我阅读更多...</a><div class="m-article-data clearfix"><meta itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="lipeng"/></meta><ul class="inline-list tag-wrapper"><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=JavaScript">JavaScript</a>
-        </li><li>
-          <a class="round-rect-button" href="/ProgramNote/all.html?tag=Vue">Vue</a>
-        </li></ul><div class="other-wrapper"><div class="view-wrapper">
-        <span class="article-view" id="post-key-vue-x">0
-        </span> views
-      </div><div class="date-wrapper"><span class="article-meta">2018年 05月15日</span></div>
-  </div>
-</div>
-</article></div><nav class="m-pagination"><p>共计 53 篇文章, 11 页。</p>
+</article></div><nav class="m-pagination"><p>共计 55 篇文章, 11 页。</p>
           <ul class="inline-list"><li><div class="round-button inactive">
               <div class="icon icon--prrevious"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>

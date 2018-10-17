@@ -1,5 +1,411 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-08-07T17:04:05+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
-</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">ArrayDeque双端队列</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html" rel="alternate" type="text/html" title="ArrayDeque双端队列" /><published>2018-07-30T21:45:14+08:00</published><updated>2018-07-30T21:45:14+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html">&lt;h1 id=&quot;基本介绍&quot;&gt;基本介绍&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh"><generator uri="https://jekyllrb.com/" version="3.7.0">Jekyll</generator><link href="https://lipeng3g.github.io/ProgramNote/feed.xml" rel="self" type="application/atom+xml" /><link href="https://lipeng3g.github.io/ProgramNote/" rel="alternate" type="text/html" hreflang="zh" /><updated>2018-10-17T22:00:48+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/</id><title type="html">lipeng’s blog</title><subtitle>lipeng's Blog
+</subtitle><author><name>lipeng</name><email>lipeng3g@gmail.com</email></author><entry><title type="html">Spring基础配置</title><link href="https://lipeng3g.github.io/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE.html" rel="alternate" type="text/html" title="Spring基础配置" /><published>2018-10-17T22:00:20+08:00</published><updated>2018-10-17T22:00:20+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/springboot/2018/10/17/Spring%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE.html">&lt;h1 id=&quot;spring基础配置&quot;&gt;Spring基础配置&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;框架本身的四大原则：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;POJO&lt;/code&gt;进行轻量级和最小侵入开发&lt;/li&gt;
+  &lt;li&gt;通过依赖注入和基于接口松耦合&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;和默认习惯声明式编程&lt;/li&gt;
+  &lt;li&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;和模板减少模式化代码&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;依赖注入&quot;&gt;依赖注入&lt;/h2&gt;
+&lt;h3 id=&quot;知识点&quot;&gt;知识点&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;控制翻转&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;依赖注入&lt;/code&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中是相同的概念，&lt;code class=&quot;highlighter-rouge&quot;&gt;控制翻转&lt;/code&gt;是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;依赖注入&lt;/code&gt;实现的。&lt;code class=&quot;highlighter-rouge&quot;&gt;依赖注入&lt;/code&gt;的主要目的是为了解耦。&lt;/p&gt;
+
+&lt;p&gt;Spring IoC容器负责创建bean，通过容器把bean注入到目标bean中。Spring可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;groovy&lt;/code&gt;实现bean的创建和注入。&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;配置、&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;配置、&lt;code class=&quot;highlighter-rouge&quot;&gt;groovy&lt;/code&gt;配置被称为元数据配置。&lt;code class=&quot;highlighter-rouge&quot;&gt;元数据&lt;/code&gt;用来描述数据，不具备执行能力，但是可以被解析。&lt;/p&gt;
+
+&lt;p&gt;声明&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的注解：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt;（泛指组件，无明确意义）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Service&lt;/code&gt;（业务逻辑层）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Repository&lt;/code&gt;（数据访问层）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Controller&lt;/code&gt;（展现层）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注入&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的注解：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Autowire&lt;/code&gt;（Spring提供的注解）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Inject&lt;/code&gt;（JSR-330提供的注解）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Resource&lt;/code&gt;（JSR-250提供的注解）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;注解可以注解在set方法或者属性上&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Autowire&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;@Inject&lt;/code&gt;默认情况下可以互换，两者默认的首选注入方式是&lt;code class=&quot;highlighter-rouge&quot;&gt;按照类型注入&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;@Resource&lt;/code&gt;默认的首选注入方式是&lt;code class=&quot;highlighter-rouge&quot;&gt;按照名称注入&lt;/code&gt;（详细请参考Bean的初始化过程）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;示例&quot;&gt;示例&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;添加&lt;code class=&quot;highlighter-rouge&quot;&gt;maven&lt;/code&gt;依赖&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;spring-framework.version&amp;gt;&lt;/span&gt;5.1.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/spring-framework.version&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-core&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${spring-framework.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-webmvc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${spring-framework.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;功能类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FunctionService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; !&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;功能类的调用类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FunctionUse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FunctionService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functionService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setFunctionService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FunctionService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functionService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;functionService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functionService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;saySomething&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functionService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;配置类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ComponentScan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.ponzio.platform&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DiConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DiConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;FunctionUse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;functionUse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FunctionUse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;functionUse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;saySomething&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Spring&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;运行结果&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hello Spring !
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;aop&quot;&gt;AOP&lt;/h2&gt;
+&lt;h3 id=&quot;知识点-1&quot;&gt;知识点&lt;/h3&gt;
+&lt;p&gt;相对于&lt;code class=&quot;highlighter-rouge&quot;&gt;OOP&lt;/code&gt;面向对象的编程，&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;主要用于面向切面编程。&lt;/p&gt;
+
+&lt;p&gt;Spring的&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;存在的目的是为了解耦，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;可以让一组类共享相同的方法和行为，&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;弥补了&lt;code class=&quot;highlighter-rouge&quot;&gt;OOP&lt;/code&gt;中通过继承和实现接口来使代码耦合度增强的不足。&lt;/p&gt;
+
+&lt;p&gt;Spring支持&lt;code class=&quot;highlighter-rouge&quot;&gt;AspectJ&lt;/code&gt;的注解式切面编程：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Aspect&lt;/code&gt;声明一个切面&lt;/li&gt;
+  &lt;li&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@After&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;@Before&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;@Around&lt;/code&gt; 定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Advice&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@PointCut&lt;/code&gt;是拦截规则的切点&lt;/li&gt;
+  &lt;li&gt;拦截位置被称为连接点&lt;code class=&quot;highlighter-rouge&quot;&gt;JoinPoint&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;拦截方式有两种 &lt;code class=&quot;highlighter-rouge&quot;&gt;注解式&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;方法式&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;示例-1&quot;&gt;示例&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;添加Maven依赖&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;spring-framework.version&amp;gt;&lt;/span&gt;5.1.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/spring-framework.version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;org.aspecjt.version&amp;gt;&lt;/span&gt;1.9.1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/org.aspecjt.version&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--BASIC--&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-core&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${spring-framework.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-webmvc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${spring-framework.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--AOP--&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-aop&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${spring-framework.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.aspectj&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;aspectjweaver&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${org.aspecjt.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.aspectj&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;aspectjrt&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${org.aspecjt.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;自定义拦截方法的注解&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;METHOD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;RUNTIME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Documented&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@interface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;注解式被拦截类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DemoAnnotationService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;注解式拦截Add操作&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;DemoAnnotationService add 方法执行。。。&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;方法规则拦截类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DemoMethodService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;DemoMethodService add 方法执行。。。&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;拦截切面&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LogAspect&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@annotation(com.ponzio.platform.aop.Action)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;annotationPointCut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@After&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;annotationPointCut()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinpoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;MethodSignature&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;signature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MethodSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinpoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;signature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Action&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;注解式拦截 &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(* com.ponzio.platform.service.DemoMethodService.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;MethodSignature&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;signature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MethodSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;signature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;方法式拦截 &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;配置类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ComponentScan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.ponzio.platform&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableAspectJAutoProxy&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AopConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;运行类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MainAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotationConfigApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AopConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;DemoAnnotationService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotationService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DemoAnnotationService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;DemoMethodService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;methodService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DemoMethodService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;annotationService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;methodService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;运行结果&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Connected to the target VM, address: '127.0.0.1:61591', transport: 'socket'
+DemoAnnotationService add 方法执行。。。
+方法式拦截 add
+DemoMethodService add 方法执行。。。
+Disconnected from the target VM, address: '127.0.0.1:61591', transport: 'socket'
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="SpringBoot" /><summary type="html">Spring基础配置 Spring框架本身的四大原则： 使用POJO进行轻量级和最小侵入开发 通过依赖注入和基于接口松耦合 通过AOP和默认习惯声明式编程 使用AOP和模板减少模式化代码 依赖注入 知识点 控制翻转和依赖注入在Spring中是相同的概念，控制翻转是通过依赖注入实现的。依赖注入的主要目的是为了解耦。 Spring IoC容器负责创建bean，通过容器把bean注入到目标bean中。Spring可以通过xml、java、groovy实现bean的创建和注入。xml配置、java配置、groovy配置被称为元数据配置。元数据用来描述数据，不具备执行能力，但是可以被解析。 声明Bean的注解： @Component（泛指组件，无明确意义） @Service（业务逻辑层） @Repository（数据访问层） @Controller（展现层） 注入Bean的注解： @Autowire（Spring提供的注解） @Inject（JSR-330提供的注解） @Resource（JSR-250提供的注解） 说明： Bean注解可以注解在set方法或者属性上 @Autowire 和 @Inject默认情况下可以互换，两者默认的首选注入方式是按照类型注入，@Resource默认的首选注入方式是按照名称注入（详细请参考Bean的初始化过程） 示例 添加maven依赖 &amp;lt;properties&amp;gt; &amp;lt;spring-framework.version&amp;gt;5.1.1.RELEASE&amp;lt;/spring-framework.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${spring-framework.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${spring-framework.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; 功能类 @Service public class FunctionService { public String sayHello(String word) { return &quot;Hello &quot; + word + &quot; !&quot;; } } 功能类的调用类 @Service public class FunctionUse { @Autowired private FunctionService functionService; public void setFunctionService(FunctionService functionService) { this.functionService = functionService; } public String saySomething(String word) { return functionService.sayHello(word); } } 配置类 @Configuration @ComponentScan(&quot;com.ponzio.platform&quot;) public class DiConfig { } 启动类 public class Main { public static void main(String[] args) { AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DiConfig.class); FunctionUse functionUse = context.getBean(FunctionUse.class); System.out.println(functionUse.saySomething(&quot;Spring&quot;)); context.close(); } } 运行结果 Hello Spring ! Process finished with exit code 0 AOP 知识点 相对于OOP面向对象的编程，AOP主要用于面向切面编程。 Spring的AOP存在的目的是为了解耦，使用AOP可以让一组类共享相同的方法和行为，AOP弥补了OOP中通过继承和实现接口来使代码耦合度增强的不足。 Spring支持AspectJ的注解式切面编程： 使用@Aspect声明一个切面 使用@After @Before @Around 定义Advice @PointCut是拦截规则的切点 拦截位置被称为连接点JoinPoint 拦截方式有两种 注解式和方法式 示例 添加Maven依赖 &amp;lt;properties&amp;gt; &amp;lt;spring-framework.version&amp;gt;5.1.1.RELEASE&amp;lt;/spring-framework.version&amp;gt; &amp;lt;org.aspecjt.version&amp;gt;1.9.1&amp;lt;/org.aspecjt.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;!--BASIC--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${spring-framework.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${spring-framework.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!--AOP--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-aop&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${spring-framework.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.aspectj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;aspectjweaver&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${org.aspecjt.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.aspectj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;aspectjrt&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${org.aspecjt.version}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; 自定义拦截方法的注解 @Target(ElementType.METHOD) @Retention(RetentionPolicy.RUNTIME) @Documented public @interface Action { String name(); } 注解式被拦截类 @Service public class DemoAnnotationService { @Action(name = &quot;注解式拦截Add操作&quot;) public void add() { System.out.println(&quot;DemoAnnotationService add 方法执行。。。&quot;); } } 方法规则拦截类 @Service public class DemoMethodService { public void add() { System.out.println(&quot;DemoMethodService add 方法执行。。。&quot;); } } 拦截切面 @Aspect @Component public class LogAspect { @Pointcut(&quot;@annotation(com.ponzio.platform.aop.Action)&quot;) public void annotationPointCut() { } @After(&quot;annotationPointCut()&quot;) public void after(JoinPoint joinpoint) { MethodSignature signature = (MethodSignature) joinpoint.getSignature(); Method method = signature.getMethod(); Action annotation = method.getAnnotation(Action.class); System.out.println(&quot;注解式拦截 &quot; + annotation.name()); } @Before(&quot;execution(* com.ponzio.platform.service.DemoMethodService.*(..))&quot;) public void before(JoinPoint joinPoint) { MethodSignature signature = (MethodSignature) joinPoint.getSignature(); Method method = signature.getMethod(); System.out.println(&quot;方法式拦截 &quot; + method.getName()); } } 配置类 @Configuration @ComponentScan(&quot;com.ponzio.platform&quot;) @EnableAspectJAutoProxy public class AopConfig { } 运行类 public class MainAop { public static void main(String[] args) { AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AopConfig.class); DemoAnnotationService annotationService = context.getBean(DemoAnnotationService.class); DemoMethodService methodService = context.getBean(DemoMethodService.class); annotationService.add(); methodService.add(); context.close(); } } 运行结果 Connected to the target VM, address: '127.0.0.1:61591', transport: 'socket' DemoAnnotationService add 方法执行。。。 方法式拦截 add DemoMethodService add 方法执行。。。 Disconnected from the target VM, address: '127.0.0.1:61591', transport: 'socket' Process finished with exit code 0</summary></entry><entry><title type="html">Java移位运算</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/08/08/Java%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97.html" rel="alternate" type="text/html" title="Java移位运算" /><published>2018-08-08T16:56:54+08:00</published><updated>2018-08-08T16:56:54+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/08/08/Java%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/08/08/Java%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97.html">&lt;p&gt;在阅读源码的过程中，经常会看到这些符号 «，»，»&amp;gt;，这些符号在 Java 中叫移位运算符，在写代码的过程中，虽然我们基本上不会去写这些符号，但需要明白这些符号的运算原理，比如 HashMap 中有以下代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;static final int DEFAULT_INITIAL_CAPACITY = 1 &amp;lt;&amp;lt; 4;//左移
+static final int hash(Object key) {
+     int h;
+     return (key == null) ? 0 : (h = key.hashCode()) ^ (h &amp;gt;&amp;gt;&amp;gt; 16);//无符号右移
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上段代码中就包含左移运算符 «，无符号右移运算符»&amp;gt;。这篇文章详细说一下这三个符号：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1、左移运算符：«&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;先随便定义一个 int 类型的数 int，十进制的 value = 733183670，转换成二进制在计算机中的表示如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-20435c47cd9edba5421abf91947141e6_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-20435c47cd9edba5421abf91947141e6_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;value « 1，左移 1 位&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-e2c197a26575ee3b068e4f5c45e8c438_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-e2c197a26575ee3b068e4f5c45e8c438_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;左移 1 位后换算成十进制的值为：1466367340，刚好是 733183670 的两倍， 有些人在乘 2 操作时喜欢用左移运算符来替代。&lt;/p&gt;
+
+&lt;p&gt;value « 8，左移 8 位看一下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-f3df959bbf54d0c7fdfedd522d3b389d_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-f3df959bbf54d0c7fdfedd522d3b389d_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;左移 8 位后变成了十进制的值为：-1283541504，移动 8 位后，由于首位变成了 1，也就是说成了负数，在使用中要考虑变成负数的情况。&lt;/p&gt;
+
+&lt;p&gt;根据这个规则，左移 32 位后，右边补上 32 个 0 值是不是就变成了十进制的 0 了？&lt;strong&gt;答案是 NO，&lt;/strong&gt;当 int 类型进行左移操作时，&lt;strong&gt;左移位数大于等于 32 位操作时，会先求余（%）后再进行左移操作。&lt;/strong&gt;也就是说左移 32 位相当于不进行移位操作，左移 40 位相当于左移 8 位（40%32=8）。当 long 类型进行左移操作时，long 类型在二进制中的体现是 64 位的，因此求余操作的基数也变成了 64，也就是说左移 64 位相当于没有移位，左移 72 位相当于左移 8 位（72%64=8），写一段代码来测试一下&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int intValue = 733183670;//随意写一个数	
+System.out.println(&quot;intValue：&quot; + (intValue));//打印intValue
+System.out.println(&quot;intValue左移1位：&quot; + (intValue &amp;lt;&amp;lt; 1));//左移1位
+System.out.println(&quot;intValue左移8位：&quot; + (intValue &amp;lt;&amp;lt; 8));//左移8位
+//当int类型左移位数大于等于32位操作时，会先求余后再进行移位操作
+System.out.println(&quot;intValue左移32位：&quot; + (intValue &amp;lt;&amp;lt; 32));//求余为32%32=0，相当于左移0位（不移位）
+System.out.println(&quot;intValue左移40位：&quot; + (intValue &amp;lt;&amp;lt; 40));//求余为40%32=8，相当于左移8位
+System.out.println(&quot;intValue左移64位：&quot; + (intValue &amp;lt;&amp;lt; 64));//求余为64%32=0，相当于左移0位（不移位）
+
+long longValue = 733183670L;
+System.out.println(&quot;longValue：&quot; + (longValue));//打印longValue
+System.out.println(&quot;longValue左移1位：&quot; + (longValue &amp;lt;&amp;lt; 1));//左移1位
+System.out.println(&quot;longValue左移8位：&quot; + (longValue &amp;lt;&amp;lt; 8));//左移8位
+//当long类型左移位数大于等于64位操作时，会先求余后再进行移位操作
+System.out.println(&quot;longValue左移64位：&quot; + (longValue &amp;lt;&amp;lt; 64));//求余为64%64=0，相当于左移0位（不移位）
+System.out.println(&quot;longValue左移72位：&quot; + (longValue &amp;lt;&amp;lt; 72));//求余为72%64=8，相当于左移8位
+System.out.println(&quot;longValue左移128位：&quot; + (longValue &amp;lt;&amp;lt; 128));//求余为128%64=0，相当于左移0位（不移位）
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;看一下结果：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-1b9abfb28fa6df7f24435f67c07a58c0_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-1b9abfb28fa6df7f24435f67c07a58c0_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;由于 double，float 在二进制中的表现比较特殊，因此不能来进行移位操作，报错，编译不过，如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-3bb380f0d6d02940f881e23a6d0a40ed_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-3bb380f0d6d02940f881e23a6d0a40ed_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注意：其它几种整形 byte，short 移位前会先转换为 int 类型（32 位）再进行移位，这里就不写代码测试了，大家有兴趣可自行测试。&lt;/p&gt;
+
+&lt;p&gt;综上所述：左移 « 其实很简单，也就是说&lt;strong&gt;丢弃左边指定位数，右边补 0。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2、右移运算符：»&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;还是这个数：&lt;strong&gt;733183670&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-79f1822698ccf0cd8ff3f01c47563e2d_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic2.zhimg.com/v2-79f1822698ccf0cd8ff3f01c47563e2d_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;value » 1，右移 1 位&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-1d486928138576e4c9e8bc8cc9cd32a8_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic1.zhimg.com/v2-1d486928138576e4c9e8bc8cc9cd32a8_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;右移 1 位后换算成十进制的值为：366591835，刚好是 733183670 的 1 半， 有些人在除 2 操作时喜欢用右移运算符来替代&lt;/p&gt;
+
+&lt;p&gt;value » 8，右移 8 位看一下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-cfec4fd211f71a1508b47be0af91ff59_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-cfec4fd211f71a1508b47be0af91ff59_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;写一段代码测试一下&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int intValue = 733183670;//随意写一个数
+System.out.println(&quot;intValue：&quot; + (intValue));//打印intValue
+System.out.println(&quot;intValue右移1位：&quot; + (intValue &amp;gt;&amp;gt; 1));//右移1位
+System.out.println(&quot;intValue右移8位：&quot; + (intValue &amp;gt;&amp;gt; 8));//右移8位
+//当int类型右移位数大于等于32位操作时，会先求余后再进行移位操作
+System.out.println(&quot;intValue右移32位：&quot; + (intValue &amp;gt;&amp;gt; 32));//求余为32%32=0，相当于右移0位（不移位）
+System.out.println(&quot;intValue右移40位：&quot; + (intValue &amp;gt;&amp;gt; 40));//求余为40%32=8，相当于右移8位
+System.out.println(&quot;intValue右移64位：&quot; + (intValue &amp;gt;&amp;gt; 64));//求余为64%32=0，相当于右移0位（不移位）
+
+long longValue = 733183670L;
+System.out.println(&quot;longValue：&quot; + (longValue));//打印longValue
+System.out.println(&quot;longValue右移1位：&quot; + (longValue &amp;gt;&amp;gt; 1));//右移1位
+System.out.println(&quot;longValue右移8位：&quot; + (longValue &amp;gt;&amp;gt; 8));//右移8位
+//当long类型右移位数大于等于64位操作时，会先求余后再进行移位操作
+System.out.println(&quot;longValue右移64位：&quot; + (longValue &amp;gt;&amp;gt; 64));//求余为64%64=0，相当于右移0位（不移位）
+System.out.println(&quot;longValue右移72位：&quot; + (longValue &amp;gt;&amp;gt; 72));//求余为72%64=8，相当于右移8位
+System.out.println(&quot;longValue右移128位：&quot; + (longValue &amp;gt;&amp;gt; 128));//求余为128%64=0，相当于右移0位（不移位）
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;结果：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-c6d40540206b1c6226cd274ab84ddfaf_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-c6d40540206b1c6226cd274ab84ddfaf_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;和左移一样，int 类型移位大于等于 32 位时，long 类型大于等于 64 位时，会先做求余处理再位移处理，byte，short 移位前会先转换为 int 类型（32 位）再进行移位。以上是正数的位移，我们再来看看负数的右移运算，如图，负数 intValue：-733183670 的二进制表现如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-101d3af5378adbffa1cdbe4ce3ab305d_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-101d3af5378adbffa1cdbe4ce3ab305d_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;右移 8 位，intValue » 8&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-6b1405fb7c545ac5f48a8113ec370fe4_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-6b1405fb7c545ac5f48a8113ec370fe4_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;综上所述：右移运算符 » 的运算规则也很简单，&lt;strong&gt;丢弃右边指定位数，左边补上符号位。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3、无符号右移运算符：»&amp;gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;无符号右移运算符 »&amp;gt; 和右移运算符 » 是一样的，只不过右移时左边是补上符号位，而无符号右移运算符是补上 0，也就是说，对于正数移位来说等同于：»，负数通过此移位运算符能移位成正数。以 - 733183670»&amp;gt;8 为例来画一下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-5f04c1742597fa88030212c3b1fbfa54_b.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;https://pic4.zhimg.com/v2-5f04c1742597fa88030212c3b1fbfa54_r.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;无符号右移运算符 » 的运算规则也很简单，&lt;strong&gt;丢弃右边指定位数，左边补上 0。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/30108890&quot;&gt;原文地址 ==&amp;gt; 知乎专栏《Java 那些事儿》&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">在阅读源码的过程中，经常会看到这些符号 «，»，»&amp;gt;，这些符号在 Java 中叫移位运算符，在写代码的过程中，虽然我们基本上不会去写这些符号，但需要明白这些符号的运算原理，比如 HashMap 中有以下代码： static final int DEFAULT_INITIAL_CAPACITY = 1 &amp;lt;&amp;lt; 4;//左移 static final int hash(Object key) { int h; return (key == null) ? 0 : (h = key.hashCode()) ^ (h &amp;gt;&amp;gt;&amp;gt; 16);//无符号右移 } 上段代码中就包含左移运算符 «，无符号右移运算符»&amp;gt;。这篇文章详细说一下这三个符号： 1、左移运算符：« 先随便定义一个 int 类型的数 int，十进制的 value = 733183670，转换成二进制在计算机中的表示如下： value « 1，左移 1 位 左移 1 位后换算成十进制的值为：1466367340，刚好是 733183670 的两倍， 有些人在乘 2 操作时喜欢用左移运算符来替代。 value « 8，左移 8 位看一下： 左移 8 位后变成了十进制的值为：-1283541504，移动 8 位后，由于首位变成了 1，也就是说成了负数，在使用中要考虑变成负数的情况。 根据这个规则，左移 32 位后，右边补上 32 个 0 值是不是就变成了十进制的 0 了？答案是 NO，当 int 类型进行左移操作时，左移位数大于等于 32 位操作时，会先求余（%）后再进行左移操作。也就是说左移 32 位相当于不进行移位操作，左移 40 位相当于左移 8 位（40%32=8）。当 long 类型进行左移操作时，long 类型在二进制中的体现是 64 位的，因此求余操作的基数也变成了 64，也就是说左移 64 位相当于没有移位，左移 72 位相当于左移 8 位（72%64=8），写一段代码来测试一下 int intValue = 733183670;//随意写一个数 System.out.println(&quot;intValue：&quot; + (intValue));//打印intValue System.out.println(&quot;intValue左移1位：&quot; + (intValue &amp;lt;&amp;lt; 1));//左移1位 System.out.println(&quot;intValue左移8位：&quot; + (intValue &amp;lt;&amp;lt; 8));//左移8位 //当int类型左移位数大于等于32位操作时，会先求余后再进行移位操作 System.out.println(&quot;intValue左移32位：&quot; + (intValue &amp;lt;&amp;lt; 32));//求余为32%32=0，相当于左移0位（不移位） System.out.println(&quot;intValue左移40位：&quot; + (intValue &amp;lt;&amp;lt; 40));//求余为40%32=8，相当于左移8位 System.out.println(&quot;intValue左移64位：&quot; + (intValue &amp;lt;&amp;lt; 64));//求余为64%32=0，相当于左移0位（不移位） long longValue = 733183670L; System.out.println(&quot;longValue：&quot; + (longValue));//打印longValue System.out.println(&quot;longValue左移1位：&quot; + (longValue &amp;lt;&amp;lt; 1));//左移1位 System.out.println(&quot;longValue左移8位：&quot; + (longValue &amp;lt;&amp;lt; 8));//左移8位 //当long类型左移位数大于等于64位操作时，会先求余后再进行移位操作 System.out.println(&quot;longValue左移64位：&quot; + (longValue &amp;lt;&amp;lt; 64));//求余为64%64=0，相当于左移0位（不移位） System.out.println(&quot;longValue左移72位：&quot; + (longValue &amp;lt;&amp;lt; 72));//求余为72%64=8，相当于左移8位 System.out.println(&quot;longValue左移128位：&quot; + (longValue &amp;lt;&amp;lt; 128));//求余为128%64=0，相当于左移0位（不移位） 看一下结果： 由于 double，float 在二进制中的表现比较特殊，因此不能来进行移位操作，报错，编译不过，如下图： 注意：其它几种整形 byte，short 移位前会先转换为 int 类型（32 位）再进行移位，这里就不写代码测试了，大家有兴趣可自行测试。 综上所述：左移 « 其实很简单，也就是说丢弃左边指定位数，右边补 0。 2、右移运算符：» 还是这个数：733183670 value » 1，右移 1 位 右移 1 位后换算成十进制的值为：366591835，刚好是 733183670 的 1 半， 有些人在除 2 操作时喜欢用右移运算符来替代 value » 8，右移 8 位看一下 写一段代码测试一下 int intValue = 733183670;//随意写一个数 System.out.println(&quot;intValue：&quot; + (intValue));//打印intValue System.out.println(&quot;intValue右移1位：&quot; + (intValue &amp;gt;&amp;gt; 1));//右移1位 System.out.println(&quot;intValue右移8位：&quot; + (intValue &amp;gt;&amp;gt; 8));//右移8位 //当int类型右移位数大于等于32位操作时，会先求余后再进行移位操作 System.out.println(&quot;intValue右移32位：&quot; + (intValue &amp;gt;&amp;gt; 32));//求余为32%32=0，相当于右移0位（不移位） System.out.println(&quot;intValue右移40位：&quot; + (intValue &amp;gt;&amp;gt; 40));//求余为40%32=8，相当于右移8位 System.out.println(&quot;intValue右移64位：&quot; + (intValue &amp;gt;&amp;gt; 64));//求余为64%32=0，相当于右移0位（不移位） long longValue = 733183670L; System.out.println(&quot;longValue：&quot; + (longValue));//打印longValue System.out.println(&quot;longValue右移1位：&quot; + (longValue &amp;gt;&amp;gt; 1));//右移1位 System.out.println(&quot;longValue右移8位：&quot; + (longValue &amp;gt;&amp;gt; 8));//右移8位 //当long类型右移位数大于等于64位操作时，会先求余后再进行移位操作 System.out.println(&quot;longValue右移64位：&quot; + (longValue &amp;gt;&amp;gt; 64));//求余为64%64=0，相当于右移0位（不移位） System.out.println(&quot;longValue右移72位：&quot; + (longValue &amp;gt;&amp;gt; 72));//求余为72%64=8，相当于右移8位 System.out.println(&quot;longValue右移128位：&quot; + (longValue &amp;gt;&amp;gt; 128));//求余为128%64=0，相当于右移0位（不移位） 结果： 和左移一样，int 类型移位大于等于 32 位时，long 类型大于等于 64 位时，会先做求余处理再位移处理，byte，short 移位前会先转换为 int 类型（32 位）再进行移位。以上是正数的位移，我们再来看看负数的右移运算，如图，负数 intValue：-733183670 的二进制表现如下图： 右移 8 位，intValue » 8 综上所述：右移运算符 » 的运算规则也很简单，丢弃右边指定位数，左边补上符号位。 3、无符号右移运算符：»&amp;gt; 无符号右移运算符 »&amp;gt; 和右移运算符 » 是一样的，只不过右移时左边是补上符号位，而无符号右移运算符是补上 0，也就是说，对于正数移位来说等同于：»，负数通过此移位运算符能移位成正数。以 - 733183670»&amp;gt;8 为例来画一下图 无符号右移运算符 » 的运算规则也很简单，丢弃右边指定位数，左边补上 0。 原文地址 ==&amp;gt; 知乎专栏《Java 那些事儿》</summary></entry><entry><title type="html">ArrayDeque双端队列</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html" rel="alternate" type="text/html" title="ArrayDeque双端队列" /><published>2018-07-30T21:45:14+08:00</published><updated>2018-07-30T21:45:14+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/07/30/ArrayDeque%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97.html">&lt;h1 id=&quot;基本介绍&quot;&gt;基本介绍&lt;/h1&gt;
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ArrayDeque&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;Resizable-array&lt;/code&gt;的实现。最多可以存储&lt;code class=&quot;highlighter-rouge&quot;&gt;2^31 - 1&lt;/code&gt; 个元素。不支持多线程访问，不支持空元素操作。&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ArrayDeque&lt;/code&gt;既可以实现堆栈的基本功能，也可以实现队列的基本功能。同时，当用作堆栈时，这个类的速度可能比堆栈快，当用作队列时，它比LinkedList更快。 大多数ArrayDeque操作都是在平摊的常数时间内运行的。&lt;/p&gt;
@@ -2944,615 +3350,4 @@ a {
         &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;drop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Concurrency" /><summary type="html">1. 实例一、一个线程依赖于另外几个线程 1.1. 原始实现 1.2. 使用FutureTask 1.3. 使用CyclicBarrier 2. 实例二、火车票售卖 3. 实例三、ATM取钱 4. 实例四、龟兔赛跑 5. 实例五、生产者–消费者模式 ` 1. 实例一、一个线程依赖于另外几个线程 只有当所依赖的线程执行完毕后，当前线程才会继续执行。 1.1. 原始实现 public class ThreadEndWait { private int flag = 0; public static void main(String[] args) throws InterruptedException { ThreadEndWait threadEndWait = new ThreadEndWait(); final int threadNum = 10; for (int i = 0; i &amp;lt; threadNum; i++) { new Thread(new MyRunnable(i, threadEndWait)).start(); } while (true) { if (threadEndWait.flag &amp;gt;= threadNum) { System.out.println(&quot;所有的线程都执行完毕&quot;); break; } Thread.sleep(10); } } static class MyRunnable implements Runnable { int threadIndex; ThreadEndWait threadEndWait; public MyRunnable(int index, ThreadEndWait threadEndWait) { this.threadIndex = index; this.threadEndWait = threadEndWait; } public void run() { try { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); System.out.println(&quot;线程&quot; + threadIndex + &quot;执行完毕，耗时&quot; + nextLong + &quot;毫秒&quot;); synchronized (threadEndWait) { threadEndWait.flag++; } System.out.println(&quot;线程 &quot; + threadIndex + &quot; =&amp;gt; &quot; + threadEndWait.flag); } catch (InterruptedException e) { e.printStackTrace(); } } } } 1.2. 使用FutureTask public class FutureTaskEndWait { public static void main(String[] args) throws ExecutionException, InterruptedException { FutureTask&amp;lt;String&amp;gt;[] tasks = new FutureTask[10]; for (int i = 0; i &amp;lt; tasks.length; i++) { final int j = i; tasks[i] = new FutureTask&amp;lt;String&amp;gt;(new Callable&amp;lt;String&amp;gt;() { public String call() throws Exception { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); return &quot;线程&quot; + j + &quot;执行完毕，耗时&quot; + nextLong + &quot;毫秒&quot;; } }); new Thread(tasks[i]).start(); } for (int i = 0; i &amp;lt; tasks.length; i++) { System.out.println(tasks[i].get()); } System.out.println(&quot;所有的任务执行完成&quot;); } } 1.3. 使用CyclicBarrier public class CyclicBarrierEndWait { public static void main(String[] args) throws Exception { final int threadNum = 10; //注意：10个子线程 + 1个主线程 CyclicBarrier cb = new CyclicBarrier(threadNum + 1); for (int i = 0; i &amp;lt; threadNum; i++) { new Thread(new MyRunable(cb, i)).start(); } cb.await(); System.out.println(&quot;-----------\n所有thread执行完成！&quot;); } static class MyRunable implements Runnable { CyclicBarrier _cb; int _i; public MyRunable(CyclicBarrier cb, int i) { this._cb = cb; this._i = i; } public void run() { try { Thread.sleep((long) (Math.random() * 100)); System.out.println(&quot;thread &quot; + _i + &quot; done，正在等候其它线程完成...&quot;); _cb.await(); } catch (Exception e) { e.printStackTrace(); } } } } 2. 实例二、火车票售卖 火车票资源类 public class Resource { int ticketNum = 100; Boolean ticketEmpty = false; public Resource() {} public Resource(int ticketNum) { this.ticketNum = ticketNum; } public synchronized void sellTicket(Seller seller) { if (ticketNum &amp;gt; 0) { System.out.println(&quot;第&quot; + seller.sellerIndex + &quot;售票点卖出了第&quot; + ticketNum + &quot;张票……&quot;); ticketNum--; } else { ticketEmpty = true; } } } 火车站窗口类 public class Seller implements Runnable{ int sellerIndex; Resource resource; public Seller(int sellerIndex, Resource resource) { this.sellerIndex = sellerIndex; this.resource = resource; } public void run() { while (!resource.ticketEmpty) { resource.sellTicket(this); try { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); } catch (InterruptedException e) { e.printStackTrace(); } } } } 启动类 public class SellTicket { public static void main(String[] args) { Resource resource = new Resource(10); for (int i = 1; i &amp;lt; 11; i++) { new Thread(new Seller(i, resource)).start(); } } } 3. 实例三、ATM取钱 银行账号类 public class Account { private Integer accountNum; private Double balance; public Account(Integer accountNum, Double balance) { this.accountNum = accountNum; this.balance = balance; } public Account() { } public Integer getAccountNum() { return accountNum; } public void setAccountNum(Integer accountNum) { this.accountNum = accountNum; } public Double getBalance() { return balance; } public void setBalance(Double balance) { this.balance = balance; } } 取钱操作类 public class WithDrawAction implements Runnable { private String name; private Account account; private Double withDrawBalance; public WithDrawAction(String name, Account account, Double withDrawBalance) { this.name = name; this.account = account; this.withDrawBalance = withDrawBalance; } public void run() { synchronized (account) { if (withDrawBalance &amp;lt;= account.getBalance()) { System.out.println(name + &quot;从&quot; + account.getAccountNum() + &quot;中成功取走&quot; + withDrawBalance + &quot;元&quot;); account.setBalance(account.getBalance() - withDrawBalance); } else { System.out.println(name + &quot;从&quot; + account.getAccountNum() + &quot;中取&quot; + withDrawBalance + &quot;元失败，余额不足！&quot;); } } } } 模拟取钱 public class BankATM { public static void main(String[] args) { Account account = new Account(9999, 1000.0); new WithDrawAction(&quot;Tom&quot;, account, 600.0).run(); new WithDrawAction(&quot;Jerry&quot;, account, 600.0).run(); } } 4. 实例四、龟兔赛跑 动物抽象类 public abstract class Animal extends Thread { /** * 比赛长度 */ public double raceLength = 20.0; /** * 回调 */ public RaceCallback raceCallback; /** * 跑 */ public abstract void running(); @Override public void run() { super.run(); while (raceLength &amp;gt; 0) { running(); } } } 回调接口 public interface RaceCallback { void win(Animal animal) throws InterruptedException; } 兔子 public class Rabbit extends Animal { public Rabbit() { setName(&quot;Rabbit&quot;); } @Override public void running() { try { while (!Thread.currentThread().isInterrupted()) { System.out.println(this.getName() + Thread.currentThread().isInterrupted()); double stepLength = 0.5; raceLength = raceLength - stepLength; if (raceLength &amp;lt;= 0) { System.out.println(this.getName() + &quot;到终点了&quot;); if (raceCallback != null) { raceCallback.win(this); } } System.out.println(this.getName() + &quot;跑了&quot; + stepLength + &quot;米，还剩&quot; + raceLength + &quot;米&quot;); if (raceLength % 2 == 0) { Thread.sleep(1000); } } } catch (InterruptedException e) { e.printStackTrace(); } finally { } } } 乌龟 public class Tortoise extends Animal { public Tortoise() { setName(&quot;Tortoise&quot;); } @Override public void running() { try { while (!Thread.currentThread().isInterrupted()) { System.out.println(this.getName() + Thread.currentThread().isInterrupted()); double stepLength = 0.1; raceLength = raceLength - stepLength; if (raceLength &amp;lt;= 0) { System.out.println(this.getName() + &quot;到终点了&quot;); if (raceCallback != null) { raceCallback.win(this); } } System.out.println(this.getName() + &quot;跑了&quot; + stepLength + &quot;米，还剩&quot; + raceLength + &quot;米&quot;); Thread.sleep(100); } } catch (InterruptedException e) { e.printStackTrace(); } finally { } } } 冠军回调类 public class StopOtherCallback implements RaceCallback { List&amp;lt;Animal&amp;gt; animals; public StopOtherCallback() { animals = new ArrayList&amp;lt;Animal&amp;gt;(); } public StopOtherCallback addAnimals(Animal animal) { animals.add(animal); return this; } public void win(Animal winer) throws InterruptedException { for (Animal animal : animals) { if (animal.equals(winer)) {// 请注意，这里需要把冠军放在最后结束，否则冠军自己结束线程之后无法通知其他赛跑人员 continue; } //animal.interrupt(); //请注意，这里使用interrupt是无法停止线程的，因为线程可能处于sleep子线程中 animal.stop(); } //winer.interrupt(); winer.stop(); } } 开始赛跑 public class Race { public static void main(String[] args) { Rabbit rabbit = new Rabbit(); Tortoise tortoise = new Tortoise(); StopOtherCallback stopOtherCallback = new StopOtherCallback(); stopOtherCallback.addAnimals(rabbit).addAnimals(tortoise); rabbit.raceCallback = stopOtherCallback; tortoise.raceCallback = stopOtherCallback; rabbit.start(); tortoise.start(); } } 5. 实例五、生产者–消费者模式 public class ProducerConsumer { /** * 管道保存一条消息，并且有标志确定管道是否有消息。 * 管道有两种方法，分别是 take() and put(). * put()在没有消息时放置消息, take()在有消息时接收消息. */ public static class Pipe { private String message; private boolean empty = true; public synchronized void put(String message) { while (!empty) { try { wait(); } catch (InterruptedException e) { System.out.println(e); } } empty = false; this.message = message; notifyAll(); } public synchronized String take() { while (empty) { try { wait(); } catch (InterruptedException e) { System.out.println(e); } } empty = true; notifyAll(); return this.message; } } /** * 生产者向管道发送消息，并在消耗前一消息时放入下一个消息。 */ public static class Producer implements Runnable { private Pipe pipe; public Producer(Pipe pipe) { this.pipe = pipe; } public void run() { String importantInfo[] = { &quot;A baby girl was born.&quot;, &quot;The baby girl was named Mary.&quot;, &quot;Mary learned how to walk at age 1.&quot;, &quot;Mary learned how to speak at age 2.&quot;, &quot;Mary went to kindergarden at the age 3.&quot; }; Random random = new Random(); for (int i = 0; i &amp;lt; importantInfo.length; i++) { pipe.put(importantInfo[i]); try { Thread.sleep(random.nextInt(5000)); } catch (InterruptedException e) { System.out.println(e); } } pipe.put(&quot;DONE&quot;); } } /** * 消费者在管道中存在消息时消费该消息。 */ public static class Consumer implements Runnable { private Pipe pipe; public Consumer(Pipe pipe) { this.pipe = pipe; } public void run() { Random random = new Random(); for (String message = pipe.take(); !message.equals(&quot;DONE&quot;); message = pipe.take()) { System.out.println(&quot;MESSAGE: &quot; + message); try { Thread.sleep(random.nextInt(5000)); } catch (InterruptedException e) { System.out.println(e); } } } } /** * 开始制作人和消费者演示 * @param args */ public static void main(String[] args) { Pipe drop = new Pipe(); (new Thread(new Producer(drop))).start(); (new Thread(new Consumer(drop))).start(); } }</summary></entry><entry><title type="html">Java Fail-fast</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/03/17/Fail-Fast.html" rel="alternate" type="text/html" title="Java Fail-fast" /><published>2018-03-17T10:35:16+08:00</published><updated>2018-03-17T10:35:16+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/03/17/Fail-Fast</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/03/17/Fail-Fast.html">&lt;h1 id=&quot;什么是-fail-fast&quot;&gt;什么是 fail-fast&lt;/h1&gt;
-&lt;p&gt;ArrayList的java-doc文档中有下面的描述（已翻译为中文）：&lt;/p&gt;
-
-&lt;p&gt;这个类返回的迭代器和 listIterator方法 是快速失败的（fail-fast）:如果列表结构修改创建迭代器后,任何时候以任何方式（除非通过迭代器的删除或添加方法）,迭代器将抛出ConcurrentModificationException。&lt;br /&gt;
-在并发修改的情况下，迭代器会快速而干净地失败，而不是在将来某个未确定的时间冒任意的、不确定的行为。 &lt;br /&gt;
-请注意，迭代器的fail-fast行为不能得到保证，一般来说，在不同步的并发修改存在的情况下，不可能做出任何硬的保证。快速失败迭代器尽最大可能抛出ConcurrentModificationException。因此，编写一个依赖于此异常的程序是错误的:迭代器的fail-fast行为应该只用于检测错误。&lt;/p&gt;
-
-&lt;p&gt;更形象的说法是，如果两个线程同时访问并修改两个集合，一个线程修改了集合，而另一个就会发现，自己修改的次数和当前集合修改的次数不一致了，这时候就会抛出 ConcurrentModificationException。这只是一种可能的情况，还有很多种原因可能引起异常。但抛出该异常的原因大都是一样的，记录的修改次数和预期的次数不一致，单线程也有可能出现该异常。&lt;/p&gt;
-
-&lt;h1 id=&quot;简单实例&quot;&gt;简单实例&lt;/h1&gt;
-&lt;p&gt;创建两个线程，线程一对集合进行遍历，线程二同样对集合进行遍历，但是在遍历中对集合进行了remove操作，线程启动以后，就会抛出异常。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;threadOne&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ThreadOne 遍历:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;threadTwo&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ThreadTwo run：&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;threadOne&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;threadTwo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;执行结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ThreadOne 遍历:0
-Exception in thread &quot;Thread-0&quot; java.util.ConcurrentModificationException
-ThreadTwo run：0
-	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)
-ThreadTwo run：1
-	at java.util.ArrayList$Itr.next(ArrayList.java:851)
-ThreadTwo run：2
-ThreadTwo run：3
-	at com.test.elwin.ThreadTest$threadOne.run(ThreadTest.java:23)
-ThreadTwo run：4
-ThreadTwo run：5
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;fail-fast产生的原因&quot;&gt;fail-fast产生的原因&lt;/h1&gt;
-
-&lt;p&gt;先看 ArrayList 中迭代器的实现（代码取自jdk1.8）：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Itr&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// index of next element to return&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// index of last element returned; -1 if no such&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 注意，这里在每次实例化的时候创建了一个新的变量 expectedModCount，期望的修改次数，并使用当前的修改次数进行初始化赋值。&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@SuppressWarnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;unchecked&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 这里每次获取下一个元素的时候检查是否需要 fail-fast&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;checkForComodification&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NoSuchElementException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 如果游标值超过数据长度，也会抛出 fail-fast&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 删除元素，检查是否抛出 fail-fast&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;checkForComodification&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IndexOutOfBoundsException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 删除元素时，index值超过实际长度，抛出 fail-fast异常&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@SuppressWarnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;unchecked&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;forEachRemaining&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requireNonNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 遍历时，元素长度异常抛出 fail-fast异常&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;accept&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elementData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++]);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// update once at end of iteration to reduce heap write traffic&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;lastRet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 遍历时检测是否需要抛出 fail-fast异常&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;checkForComodification&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkForComodification&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 抛出 fail-fast的一个异常条件（也是主要条件），当前修改次数和预期的修改次数不一致！！&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;上面的代码中，请主要看中文注释中标记抛出异常的部分代码， ArrayList集合在进行迭代操作时，会修改 modCount并同步expectedModCount，但是如果多个线程或者单个线程本身在迭代中对集合进行了修改导致了修改次数不一致就会抛出异常。&lt;/p&gt;
-
-&lt;p&gt;可以详细查看ArrayList源码来查看具体哪些地方修改了 modCount。&lt;/p&gt;
-
-&lt;h1 id=&quot;解决方法&quot;&gt;解决方法&lt;/h1&gt;
-&lt;h2 id=&quot;方案一&quot;&gt;方案一&lt;/h2&gt;
-&lt;p&gt;java-doc中有下面的描述：&lt;/p&gt;
-
-&lt;p&gt;注意，此实现不同步。如果多个线程并发访问ArrayList实例，并且至少有一个线程在结构上修改了列表，那么它必须在外部同步。(结构修改是任何添加或删除一个或多个元素，或显式调整支持数组的操作;仅仅设置元素的值不是结构修改。）&lt;/p&gt;
-
-&lt;p&gt;同时，给出了下面的解决方法：&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;synchronizedList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(...));&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;方案二&quot;&gt;方案二&lt;/h2&gt;
-&lt;p&gt;使用 CopyOnWriteArrayList ，关于 CopyOnWriteArrayList 的详细介绍将在并发系列中介绍。&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">什么是 fail-fast ArrayList的java-doc文档中有下面的描述（已翻译为中文）： 这个类返回的迭代器和 listIterator方法 是快速失败的（fail-fast）:如果列表结构修改创建迭代器后,任何时候以任何方式（除非通过迭代器的删除或添加方法）,迭代器将抛出ConcurrentModificationException。 在并发修改的情况下，迭代器会快速而干净地失败，而不是在将来某个未确定的时间冒任意的、不确定的行为。 请注意，迭代器的fail-fast行为不能得到保证，一般来说，在不同步的并发修改存在的情况下，不可能做出任何硬的保证。快速失败迭代器尽最大可能抛出ConcurrentModificationException。因此，编写一个依赖于此异常的程序是错误的:迭代器的fail-fast行为应该只用于检测错误。 更形象的说法是，如果两个线程同时访问并修改两个集合，一个线程修改了集合，而另一个就会发现，自己修改的次数和当前集合修改的次数不一致了，这时候就会抛出 ConcurrentModificationException。这只是一种可能的情况，还有很多种原因可能引起异常。但抛出该异常的原因大都是一样的，记录的修改次数和预期的次数不一致，单线程也有可能出现该异常。 简单实例 创建两个线程，线程一对集合进行遍历，线程二同样对集合进行遍历，但是在遍历中对集合进行了remove操作，线程启动以后，就会抛出异常。 public class ThreadTest { private static List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;&amp;gt;(); private static class threadOne extends Thread{ public void run() { Iterator&amp;lt;Integer&amp;gt; iterator = list.iterator(); while(iterator.hasNext()){ int i = iterator.next(); System.out.println(&quot;ThreadOne 遍历:&quot; + i); try { Thread.sleep(10); } catch (InterruptedException e) { e.printStackTrace(); } } } } private static class threadTwo extends Thread{ public void run(){ int i = 0 ; while(i &amp;lt; 6){ System.out.println(&quot;ThreadTwo run：&quot; + i); if(i == 3){ list.remove(i); } i++; } } } public static void main(String[] args) { for(int i = 0 ; i &amp;lt; 10;i++){ list.add(i); } new threadOne().start(); new threadTwo().start(); } } 执行结果： ThreadOne 遍历:0 Exception in thread &quot;Thread-0&quot; java.util.ConcurrentModificationException ThreadTwo run：0 at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901) ThreadTwo run：1 at java.util.ArrayList$Itr.next(ArrayList.java:851) ThreadTwo run：2 ThreadTwo run：3 at com.test.elwin.ThreadTest$threadOne.run(ThreadTest.java:23) ThreadTwo run：4 ThreadTwo run：5 fail-fast产生的原因 先看 ArrayList 中迭代器的实现（代码取自jdk1.8）： private class Itr implements Iterator&amp;lt;E&amp;gt; { int cursor; // index of next element to return int lastRet = -1; // index of last element returned; -1 if no such // 注意，这里在每次实例化的时候创建了一个新的变量 expectedModCount，期望的修改次数，并使用当前的修改次数进行初始化赋值。 int expectedModCount = modCount; public boolean hasNext() { return cursor != size; } @SuppressWarnings(&quot;unchecked&quot;) public E next() { // 这里每次获取下一个元素的时候检查是否需要 fail-fast checkForComodification(); int i = cursor; if (i &amp;gt;= size) throw new NoSuchElementException(); Object[] elementData = ArrayList.this.elementData; // 如果游标值超过数据长度，也会抛出 fail-fast if (i &amp;gt;= elementData.length) throw new ConcurrentModificationException(); cursor = i + 1; return (E) elementData[lastRet = i]; } public void remove() { if (lastRet &amp;lt; 0) throw new IllegalStateException(); // 删除元素，检查是否抛出 fail-fast checkForComodification(); try { ArrayList.this.remove(lastRet); cursor = lastRet; lastRet = -1; expectedModCount = modCount; } catch (IndexOutOfBoundsException ex) { // 删除元素时，index值超过实际长度，抛出 fail-fast异常 throw new ConcurrentModificationException(); } } @Override @SuppressWarnings(&quot;unchecked&quot;) public void forEachRemaining(Consumer&amp;lt;? super E&amp;gt; consumer) { Objects.requireNonNull(consumer); final int size = ArrayList.this.size; int i = cursor; if (i &amp;gt;= size) { return; } final Object[] elementData = ArrayList.this.elementData; if (i &amp;gt;= elementData.length) { // 遍历时，元素长度异常抛出 fail-fast异常 throw new ConcurrentModificationException(); } while (i != size &amp;amp;&amp;amp; modCount == expectedModCount) { consumer.accept((E) elementData[i++]); } // update once at end of iteration to reduce heap write traffic cursor = i; lastRet = i - 1; // 遍历时检测是否需要抛出 fail-fast异常 checkForComodification(); } final void checkForComodification() { // 抛出 fail-fast的一个异常条件（也是主要条件），当前修改次数和预期的修改次数不一致！！ if (modCount != expectedModCount) throw new ConcurrentModificationException(); } } 上面的代码中，请主要看中文注释中标记抛出异常的部分代码， ArrayList集合在进行迭代操作时，会修改 modCount并同步expectedModCount，但是如果多个线程或者单个线程本身在迭代中对集合进行了修改导致了修改次数不一致就会抛出异常。 可以详细查看ArrayList源码来查看具体哪些地方修改了 modCount。 解决方法 方案一 java-doc中有下面的描述： 注意，此实现不同步。如果多个线程并发访问ArrayList实例，并且至少有一个线程在结构上修改了列表，那么它必须在外部同步。(结构修改是任何添加或删除一个或多个元素，或显式调整支持数组的操作;仅仅设置元素的值不是结构修改。） 同时，给出了下面的解决方法： List list = Collections.synchronizedList(new ArrayList(...)); 方案二 使用 CopyOnWriteArrayList ，关于 CopyOnWriteArrayList 的详细介绍将在并发系列中介绍。</summary></entry><entry><title type="html">Java泛型</title><link href="https://lipeng3g.github.io/ProgramNote/java/2018/03/16/Java%E6%B3%9B%E5%9E%8B.html" rel="alternate" type="text/html" title="Java泛型" /><published>2018-03-16T10:35:18+08:00</published><updated>2018-03-16T10:35:18+08:00</updated><id>https://lipeng3g.github.io/ProgramNote/java/2018/03/16/Java%E6%B3%9B%E5%9E%8B</id><content type="html" xml:base="https://lipeng3g.github.io/ProgramNote/java/2018/03/16/Java%E6%B3%9B%E5%9E%8B.html">&lt;h1 id=&quot;1-概述&quot;&gt;1. 概述&lt;/h1&gt;
-&lt;h2 id=&quot;11-什么是泛型&quot;&gt;1.1. 什么是泛型？&lt;/h2&gt;
-
-&lt;p&gt;泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。&lt;/p&gt;
-
-&lt;h2 id=&quot;12-为什么使用泛型&quot;&gt;1.2. 为什么使用泛型？&lt;/h2&gt;
-&lt;p&gt;泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。&lt;/p&gt;
-
-&lt;h2 id=&quot;13-栗子&quot;&gt;1.3. 栗子&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;aaaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;item = &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;执行上面的程序后会出现异常：&lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;ArrayList可以存放任意类型，例子中添加了一个String类型，添加了一个Integer类型，再使用时都以String的方式使用，因此程序崩溃了。为了解决类似这样的问题（&lt;strong&gt;在编译阶段就可以解决&lt;/strong&gt;），泛型应运而生。&lt;/p&gt;
-
-&lt;p&gt;我们将第一行声明初始化list的代码更改一下，编译器会在编译阶段就能够帮我们发现类似这样的问题。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//arrayList.add(100); 在编译阶段，编译器就会报错&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;14-特性&quot;&gt;1.4. 特性&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;泛型只在编译阶段有效&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringArrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;integerArrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classStringArrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classIntegerArrayList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;integerArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classStringArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classIntegerArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classStringArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classIntegerArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试 ==&amp;gt; 类型相同&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;测试结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class java.util.ArrayList
-class java.util.ArrayList
-泛型测试 ==&amp;gt; 类型相同
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;通过上面的例子可以证明，在编译之后程序会采取去泛型化的措施。也就是说Java中的泛型，只在编译阶段有效。在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦出，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。&lt;/p&gt;
-
-&lt;p&gt;泛型类型在逻辑上看以看成是多个不同的类型，实际上都是相同的类型。&lt;/p&gt;
-
-&lt;h1 id=&quot;2-泛型类&quot;&gt;2. 泛型类&lt;/h1&gt;
-&lt;p&gt;泛型类型用于类的定义中，被称为泛型类。通过泛型可以完成对一组类的操作对外开放相同的接口。最典型的就是各种容器类，如：List、Set、Map。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//在实例化泛型类时，必须指定T的具体类型&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;{&lt;/span&gt; 
-    &lt;span class=&quot;c1&quot;&gt;//key这个成员变量的类型为T,T的类型由外部指定  &lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//泛型构造方法形参key的类型也为T，T的类型由外部指定&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//泛型方法getKey的返回值类型为T，T的类型由外部指定&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//泛型的类型参数只能是类类型（包括自定义类），不能是简单类型&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//传入的实参类型需与泛型的类型参数类型相同，即为Integer.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;genericInteger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;123456&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;//传入的实参类型需与泛型的类型参数类型相同，即为String.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;genericString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key_vlaue&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;genericInteger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;genericString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;12-27 09:20:04.432 13063-13063/? D/泛型测试: key is 123456
-12-27 09:20:04.432 13063-13063/? D/泛型测试: key is key_vlaue
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;定义的泛型类，就一定要传入泛型类型实参么？并不是这样，在使用泛型的时候如果传入泛型实参，则会根据传入的泛型实参做相应的限制，此时泛型才会起到本应起到的限制作用。如果不传入泛型类型实参的话，在泛型类中使用泛型的方法或成员变量定义的类型可以为任何的类型。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;111111&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4444&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;55.55&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generic3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D/泛型测试: key is 111111
-D/泛型测试: key is 4444
-D/泛型测试: key is 55.55
-D/泛型测试: key is false
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Warning：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;泛型的类型参数只能是类类型，不能是简单类型。&lt;/li&gt;
-  &lt;li&gt;不能对确切的泛型类型使用instanceof操作。如下面的操作是非法的，编译时会出错。
-  **if(ex_num instanceof Generic&lt;Number&gt;){   }**
-&lt;/Number&gt;    &lt;h1 id=&quot;3-泛型接口&quot;&gt;3. 泛型接口&lt;/h1&gt;
-    &lt;p&gt;泛型接口与泛型类的定义及使用基本相同。泛型接口常被用在各种类的生产器中，可以看一个例子&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//定义一个泛型接口&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Generator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;当实现泛型接口的类，未传入泛型实参时：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
- * 未传入泛型实参时，与泛型类的定义相同，在声明类的时候，需将泛型的声明也一起加到类中
- * 即：class FruitGenerator&amp;lt;T&amp;gt; implements Generator&amp;lt;T&amp;gt;{
- * 如果不声明泛型，如：class FruitGenerator implements Generator&amp;lt;T&amp;gt;，编译器会报错：&quot;Unknown class&quot;
- */&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FruitGenerator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;当实现泛型接口的类，传入泛型实参时：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
- * 传入泛型实参时：
- * 定义一个生产器实现这个接口,虽然我们只创建了一个泛型接口Generator&amp;lt;T&amp;gt;
- * 但是我们可以为T传入无数个实参，形成无数种类型的Generator接口。
- * 在实现类实现泛型接口时，如已将泛型类型传入实参类型，则所有使用泛型的地方都要替换成传入的实参类型
- * 即：Generator&amp;lt;T&amp;gt;，public T next();中的的T都要替换成传入的String类型。
- */&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FruitGenerator&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Apple&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Banana&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Pear&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Random&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)];&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;4-泛型方法&quot;&gt;4. 泛型方法&lt;/h1&gt;
-&lt;p&gt;泛型类，是在实例化类的时候指明泛型的具体类型；泛型方法，是在调用方法的时候指明泛型的具体类型 。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
- * 泛型方法的基本介绍
- * @param tClass 传入的泛型实参
- * @return T 返回值为T类型
- * 说明：
- *     1）public 与 返回值中间&amp;lt;T&amp;gt;非常重要，可以理解为声明此方法为泛型方法。
- *     2）只有声明了&amp;lt;T&amp;gt;的方法才是泛型方法，泛型类中的使用了泛型的成员方法并不是泛型方法。
- *     3）&amp;lt;T&amp;gt;表明该方法将使用泛型类型T，此时才可以在方法中使用泛型类型T。
- *     4）与泛型类的定义一样，此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型。
- */&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;genericMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InstantiationException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IllegalAccessException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;41-基本用法&quot;&gt;4.1. 基本用法&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GenericTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;c1&quot;&gt;//这个类是个泛型类，在上面已经介绍过&lt;/span&gt;
-   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;{&lt;/span&gt;     
-        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//我想说的其实是这个，虽然在方法中使用了泛型，但是这并不是一个泛型方法。&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//这只是类中一个普通的成员方法，只不过他的返回值是在声明泛型类已经声明过的泛型。&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//所以在这个方法中才可以继续使用 T 这个泛型。&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;cm&quot;&gt;/**
-         * 这个方法显然是有问题的，在编译器会给我们提示这样的错误信息&quot;cannot reslove symbol E&quot;
-         * 因为在类的声明中并未声明泛型E，所以在使用E做形参和返回值类型时，编译器会无法识别。
-        public E setKey(E key){
-             this.key = keu
-        }
-        */&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/** 
-     * 这才是一个真正的泛型方法。
-     * 首先在public与返回值之间的&amp;lt;T&amp;gt;必不可少，这表明这是一个泛型方法，并且声明了一个泛型T
-     * 这个T可以出现在这个泛型方法的任意位置.
-     * 泛型的数量也可以为任意多个 
-     *    如：public &amp;lt;T,K&amp;gt; K showKeyName(Generic&amp;lt;T&amp;gt; container){
-     *        ...
-     *        }
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;showKeyName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;container key :&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//当然这个例子举的不太合适，只是为了说明泛型方法的特性。&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//这也不是一个泛型方法，这就是一个普通的方法，只是使用了Generic&amp;lt;Number&amp;gt;这个泛型类做形参而已。&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;showKeyValue1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key value is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//这也不是一个泛型方法，这也是一个普通的方法，只不过使用了泛型通配符?&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//同时这也印证了泛型通配符章节所描述的，?是一种类型实参，可以看做为Number等所有类的父类&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;showKeyValue2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key value is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-     &lt;span class=&quot;cm&quot;&gt;/**
-     * 这个方法是有问题的，编译器会为我们提示错误信息：&quot;UnKnown class 'E' &quot;
-     * 虽然我们声明了&amp;lt;T&amp;gt;,也表明了这是一个可以处理泛型的类型的泛型方法。
-     * 但是只声明了泛型类型T，并未声明泛型类型E，因此编译器并不知道该如何处理E这个类型。
-    public &amp;lt;T&amp;gt; T showKeyName(Generic&amp;lt;E&amp;gt; container){
-        ...
-    }  
-    */&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 这个方法也是有问题的，编译器会为我们提示错误信息：&quot;UnKnown class 'T' &quot;
-     * 对于编译器来说T这个类型并未项目中声明过，因此编译也不知道该如何编译这个类。
-     * 所以这也不是一个正确的泛型方法声明。
-    public void showkey(T genericObj){
-
-    }
-    */&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;42-类中的泛型方法&quot;&gt;4.2. 类中的泛型方法&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GenericFruit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;fruit&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Apple&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;apple&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Person&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GenerateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show_1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//在泛型类中声明了一个泛型方法，使用泛型E，这种泛型E可以为任意类型。可以类型与T相同，也可以不同。&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//由于泛型方法在声明的时候会声明泛型&amp;lt;E&amp;gt;，因此即使在泛型类中并未声明泛型，编译器也能够正确识别泛型方法中识别的泛型。&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show_3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//在泛型类中声明了一个泛型方法，使用泛型T，注意这个T是一种全新的类型，可以与泛型类中声明的T不是同一种类型。&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show_2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apple&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;GenerateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GenerateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//apple是Fruit的子类，所以这里可以&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show_1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//编译器会报错，因为泛型类型实参指定的是Fruit，而传入的实参类是Person&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//generateTest.show_1(person);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//使用这两个方法都可以成功&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show_2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show_2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;//使用这两个方法也都可以成功&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show_3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;generateTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show_3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;43-可变参数&quot;&gt;4.3. 可变参数&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;printMsg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;t is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;printMsg(&quot;111&quot;,222,&quot;aaaa&quot;,&quot;2323.4&quot;,55.55);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;44-静态方法&quot;&gt;4.4. 静态方法&lt;/h2&gt;
-&lt;p&gt;静态方法有一种情况需要注意一下，那就是在类中的静态方法使用泛型：静态方法无法访问类上定义的泛型；如果静态方法操作的引用数据类型不确定的时候，必须要将泛型定义在方法上。&lt;/p&gt;
-
-&lt;p&gt;即：&lt;strong&gt;如果静态方法要使用泛型的话，必须将静态方法也定义成泛型方法 。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StaticGenerator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;....&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;....&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 如果在类中定义使用泛型的静态方法，需要添加额外的泛型声明（将这个方法定义成泛型方法）
-     * 即使静态方法要使用泛型类中已经声明过的泛型也不可以。
-     * 如：public static void show(T t){..},此时编译器会提示错误信息：
-          &quot;StaticGenerator cannot be refrenced from static context&quot;
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;5-泛型通配符&quot;&gt;5. 泛型通配符&lt;/h1&gt;
-&lt;p&gt;我们知道&lt;strong&gt;Ingeter&lt;/strong&gt;是&lt;strong&gt;Number&lt;/strong&gt;的一个子类，同时在特性章节中我们也验证过**Generic&lt;Ingeter&gt;**与**Generic&lt;Number&gt;**实际上是相同的一种基本类型。那么问题来了，在使用**Generic&lt;Number&gt;**作为形参的方法中，能否使用**Generic&lt;Ingeter&gt;**的实例传入呢？在逻辑上类似于**Generic&lt;Number&gt;**和**Generic&lt;Ingeter&gt;**是否可以看成具有父子关系的泛型类型呢？&lt;/Ingeter&gt;&lt;/Number&gt;&lt;/Ingeter&gt;&lt;/Number&gt;&lt;/Number&gt;&lt;/Ingeter&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;showKeyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key value is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gInteger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;123&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gNumber&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;456&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;showKeyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// showKeyValue这个方法编译器会为我们报错：Generic&amp;lt;java.lang.Integer&amp;gt; &lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// cannot be applied to Generic&amp;lt;java.lang.Number&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// showKeyValue(gInteger);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;通过提示信息我们可以看到**Generic&lt;Integer&gt;**不能被看作为**Generic&lt;Number&gt;**的子类。由此可以看出:`同一种泛型可以对应多个版本（因为参数类型是不确定的），不同版本的泛型类实例是不兼容的。`&lt;/Number&gt;&lt;/Integer&gt;&lt;/p&gt;
-
-&lt;p&gt;我们可以将上面的方法改一下：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;showKeyValue1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Generic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;泛型测试&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key value is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;类型通配符一般是使用&lt;strong&gt;？&lt;/strong&gt;代替具体的类型实参，注意了，此处&lt;strong&gt;？&lt;/strong&gt;是类型实参，而不是类型形参 。重要说三遍！此处&lt;strong&gt;？&lt;/strong&gt;是类型实参，而不是类型形参 ！ 此处&lt;strong&gt;？&lt;/strong&gt;是类型实参，而不是类型形参 ！再直白点的意思就是，此处的&lt;strong&gt;？&lt;/strong&gt;和&lt;strong&gt;Number&lt;/strong&gt;、&lt;strong&gt;String&lt;/strong&gt;、&lt;strong&gt;Integer&lt;/strong&gt;一样都是一种实际的类型，可以把&lt;strong&gt;？&lt;/strong&gt;看成所有类型的父类。是一种真实的类型。&lt;/p&gt;
-
-&lt;p&gt;可以解决&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;当具体类型不确定的时候，这个通配符就是 &lt;strong&gt;?&lt;/strong&gt;；&lt;/li&gt;
-  &lt;li&gt;当操作类型时，不需要使用类型的具体功能时，只使用Object类中的功能。那么可以用 &lt;strong&gt;?&lt;/strong&gt; 通配符来表未知类型。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;6-泛型数组&quot;&gt;6. 泛型数组&lt;/h1&gt;
-&lt;p&gt;看到了很多文章中都会提起泛型数组，经过查看sun的说明文档，在java中是”&lt;strong&gt;不能创建一个确切的泛型类型的数组&lt;/strong&gt;”的。&lt;/p&gt;
-
-&lt;p&gt;也就是说下面的这个例子是不可以的：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;List&amp;lt;String&amp;gt;[] ls = new ArrayList&amp;lt;String&amp;gt;[10]; &lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;而使用通配符创建泛型数组是可以的，如下面这个例子：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;List&amp;lt;?&amp;gt;[] ls = new ArrayList&amp;lt;?&amp;gt;[10]; &lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;这样也是可以的：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;List&amp;lt;String&amp;gt;[] ls = new ArrayList[10];&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;下面使用Sun的一篇文档的一个例子来说明这个问题：&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Not really allowed.    &lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[])&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;oa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Unsound, but passes run time store check    &lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Run-time error: ClassCastException.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这种情况下，由于JVM泛型的擦除机制，在运行时JVM是不知道泛型信息的，所以可以给oa[1]赋上一个ArrayList而不会出现异常，但是在取出数据的时候却要做一次类型转换，所以就会出现ClassCastException，如果可以进行泛型数组的声明，上面说的这种情况在编译期将不会出现任何的警告和错误，只有在运行时才会出错。&lt;/p&gt;
-
-&lt;p&gt;而对泛型数组的声明进行限制，对于这样的情况，可以在编译期提示代码有类型安全问题，比没有任何提示要强很多。&lt;/p&gt;
-
-&lt;p&gt;下面采用通配符的方式是被允许的:数组的类型不可以是类型变量，除非是采用通配符的方式，因为对于通配符的方式，最后取出数据是要做显式的类型转换的。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// OK, array of unbounded wildcard type.    &lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[])&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;    
-&lt;span class=&quot;n&quot;&gt;oa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Correct.    &lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// OK &lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h1 id=&quot;pecs法则&quot;&gt;PECS法则&lt;/h1&gt;
-&lt;h2 id=&quot;-extends&quot;&gt;? extends&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apples&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//works, apple is a subclass of Fruit.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Strawberry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;//compile error&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;fruits是一个Fruit的子类的List,由于Apple是Fruit的子类，因此将apples赋给fruits是合法的，但是编译器会阻止将Strawberry加入fruits。因为编译器只知道fruits是Fruit的某个子类的List，但并不知道究竟是哪个子类，为了类型安全，只好阻止向其中加入任何子类。那么可不可以加入Fruit呢？很遗憾，也不可以。事实上，不能够往一个使用了? extends的数据结构里写入任何的值。&lt;/p&gt;
-
-&lt;p&gt;但是，由于编译器知道它总是Fruit的子类型，因此我们总可以从中读取出Fruit对象：&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Fruit fruit = fruits.get(0);&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;61--super&quot;&gt;6.1. ? super&lt;/h2&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;                 &lt;span class=&quot;c1&quot;&gt;//work&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RedApple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;//work&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fruit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;                 &lt;span class=&quot;c1&quot;&gt;//compile error &lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fruits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;//compile error&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;这里的fruits是一个Apple的超类（父类,superclass）的List。同样地，出于对类型安全的考虑，我们可以加入Apple对象或者其任何子类（如RedApple）对象，但由于编译器并不知道List的内容究竟是Apple的哪个超类，因此不允许加入特定的任何超类型。&lt;/p&gt;
-
-&lt;p&gt;而当我们读取的时候，编译器在不知道是什么类型的情况下只能返回Object对象，因为Object是任何Java类的最终祖先类。&lt;/p&gt;
-
-&lt;h2 id=&quot;62-pecs原则总结&quot;&gt;6.2. PECS原则总结&lt;/h2&gt;
-
-&lt;p&gt;如果要从集合中读取类型T的数据，并且不能写入，可以使用 ? extends 通配符；(Producer Extends)&lt;/p&gt;
-
-&lt;p&gt;如果要从集合中写入类型T的数据，并且不需要读取，可以使用 ? super 通配符；(Consumer Super)&lt;/p&gt;
-
-&lt;p&gt;如果既要存又要取，那么就不要使用任何通配符。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;参考:  &lt;br /&gt;
-&lt;a href=&quot;http://blog.csdn.net/s10461/article/details/53941091&quot;&gt;java泛型详解&lt;/a&gt;&lt;br /&gt;
-&lt;a href=&quot;http://www.mamicode.com/info-detail-491367.html&quot;&gt;Java泛型中的PECS原则&lt;/a&gt;&lt;/p&gt;</content><author><name>lipeng</name></author><category term="Java" /><summary type="html">1. 概述 1.1. 什么是泛型？ 泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。 1.2. 为什么使用泛型？ 泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。 1.3. 栗子 List arrayList = new ArrayList(); arrayList.add(&quot;aaaa&quot;); arrayList.add(100); for(int i = 0; i&amp;lt; arrayList.size();i++){ String item = (String)arrayList.get(i); Log.d(&quot;泛型测试&quot;,&quot;item = &quot; + item); } 执行上面的程序后会出现异常：java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String ArrayList可以存放任意类型，例子中添加了一个String类型，添加了一个Integer类型，再使用时都以String的方式使用，因此程序崩溃了。为了解决类似这样的问题（在编译阶段就可以解决），泛型应运而生。 我们将第一行声明初始化list的代码更改一下，编译器会在编译阶段就能够帮我们发现类似这样的问题。 List&amp;lt;String&amp;gt; arrayList = new ArrayList&amp;lt;String&amp;gt;(); //arrayList.add(100); 在编译阶段，编译器就会报错 1.4. 特性 泛型只在编译阶段有效 List&amp;lt;String&amp;gt; stringArrayList = new ArrayList&amp;lt;String&amp;gt;(); List&amp;lt;Integer&amp;gt; integerArrayList = new ArrayList&amp;lt;Integer&amp;gt;(); Class classStringArrayList = stringArrayList.getClass(); Class classIntegerArrayList = integerArrayList.getClass(); System.out.println(classStringArrayList); System.out.println(classIntegerArrayList); if(classStringArrayList.equals(classIntegerArrayList)){ System.out.println(&quot;泛型测试 ==&amp;gt; 类型相同&quot;); } 测试结果： class java.util.ArrayList class java.util.ArrayList 泛型测试 ==&amp;gt; 类型相同 通过上面的例子可以证明，在编译之后程序会采取去泛型化的措施。也就是说Java中的泛型，只在编译阶段有效。在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦出，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。 泛型类型在逻辑上看以看成是多个不同的类型，实际上都是相同的类型。 2. 泛型类 泛型类型用于类的定义中，被称为泛型类。通过泛型可以完成对一组类的操作对外开放相同的接口。最典型的就是各种容器类，如：List、Set、Map。 //此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型 //在实例化泛型类时，必须指定T的具体类型 public class Generic&amp;lt;T&amp;gt;{ //key这个成员变量的类型为T,T的类型由外部指定 private T key; public Generic(T key) { //泛型构造方法形参key的类型也为T，T的类型由外部指定 this.key = key; } public T getKey(){ //泛型方法getKey的返回值类型为T，T的类型由外部指定 return key; } } //泛型的类型参数只能是类类型（包括自定义类），不能是简单类型 //传入的实参类型需与泛型的类型参数类型相同，即为Integer. Generic&amp;lt;Integer&amp;gt; genericInteger = new Generic&amp;lt;Integer&amp;gt;(123456); //传入的实参类型需与泛型的类型参数类型相同，即为String. Generic&amp;lt;String&amp;gt; genericString = new Generic&amp;lt;String&amp;gt;(&quot;key_vlaue&quot;); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + genericInteger.getKey()); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + genericString.getKey()); 12-27 09:20:04.432 13063-13063/? D/泛型测试: key is 123456 12-27 09:20:04.432 13063-13063/? D/泛型测试: key is key_vlaue 定义的泛型类，就一定要传入泛型类型实参么？并不是这样，在使用泛型的时候如果传入泛型实参，则会根据传入的泛型实参做相应的限制，此时泛型才会起到本应起到的限制作用。如果不传入泛型类型实参的话，在泛型类中使用泛型的方法或成员变量定义的类型可以为任何的类型。 Generic generic = new Generic(&quot;111111&quot;); Generic generic1 = new Generic(4444); Generic generic2 = new Generic(55.55); Generic generic3 = new Generic(false); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + generic.getKey()); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + generic1.getKey()); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + generic2.getKey()); Log.d(&quot;泛型测试&quot;,&quot;key is &quot; + generic3.getKey()); D/泛型测试: key is 111111 D/泛型测试: key is 4444 D/泛型测试: key is 55.55 D/泛型测试: key is false Warning： 泛型的类型参数只能是类类型，不能是简单类型。 不能对确切的泛型类型使用instanceof操作。如下面的操作是非法的，编译时会出错。 **if(ex_num instanceof Generic){ }** 3. 泛型接口 泛型接口与泛型类的定义及使用基本相同。泛型接口常被用在各种类的生产器中，可以看一个例子 //定义一个泛型接口 public interface Generator&amp;lt;T&amp;gt; { public T next(); } 当实现泛型接口的类，未传入泛型实参时： /** * 未传入泛型实参时，与泛型类的定义相同，在声明类的时候，需将泛型的声明也一起加到类中 * 即：class FruitGenerator&amp;lt;T&amp;gt; implements Generator&amp;lt;T&amp;gt;{ * 如果不声明泛型，如：class FruitGenerator implements Generator&amp;lt;T&amp;gt;，编译器会报错：&quot;Unknown class&quot; */ class FruitGenerator&amp;lt;T&amp;gt; implements Generator&amp;lt;T&amp;gt;{ @Override public T next() { return null; } } 当实现泛型接口的类，传入泛型实参时： /** * 传入泛型实参时： * 定义一个生产器实现这个接口,虽然我们只创建了一个泛型接口Generator&amp;lt;T&amp;gt; * 但是我们可以为T传入无数个实参，形成无数种类型的Generator接口。 * 在实现类实现泛型接口时，如已将泛型类型传入实参类型，则所有使用泛型的地方都要替换成传入的实参类型 * 即：Generator&amp;lt;T&amp;gt;，public T next();中的的T都要替换成传入的String类型。 */ public class FruitGenerator implements Generator&amp;lt;String&amp;gt; { private String[] fruits = new String[]{&quot;Apple&quot;, &quot;Banana&quot;, &quot;Pear&quot;}; @Override public String next() { Random rand = new Random(); return fruits[rand.nextInt(3)]; } } 4. 泛型方法 泛型类，是在实例化类的时候指明泛型的具体类型；泛型方法，是在调用方法的时候指明泛型的具体类型 。 /** * 泛型方法的基本介绍 * @param tClass 传入的泛型实参 * @return T 返回值为T类型 * 说明： * 1）public 与 返回值中间&amp;lt;T&amp;gt;非常重要，可以理解为声明此方法为泛型方法。 * 2）只有声明了&amp;lt;T&amp;gt;的方法才是泛型方法，泛型类中的使用了泛型的成员方法并不是泛型方法。 * 3）&amp;lt;T&amp;gt;表明该方法将使用泛型类型T，此时才可以在方法中使用泛型类型T。 * 4）与泛型类的定义一样，此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型。 */ public &amp;lt;T&amp;gt; T genericMethod(Class&amp;lt;T&amp;gt; tClass)throws InstantiationException , IllegalAccessException{ T instance = tClass.newInstance(); return instance; } 4.1. 基本用法 public class GenericTest { //这个类是个泛型类，在上面已经介绍过 public class Generic&amp;lt;T&amp;gt;{ private T key; public Generic(T key) { this.key = key; } //我想说的其实是这个，虽然在方法中使用了泛型，但是这并不是一个泛型方法。 //这只是类中一个普通的成员方法，只不过他的返回值是在声明泛型类已经声明过的泛型。 //所以在这个方法中才可以继续使用 T 这个泛型。 public T getKey(){ return key; } /** * 这个方法显然是有问题的，在编译器会给我们提示这样的错误信息&quot;cannot reslove symbol E&quot; * 因为在类的声明中并未声明泛型E，所以在使用E做形参和返回值类型时，编译器会无法识别。 public E setKey(E key){ this.key = keu } */ } /** * 这才是一个真正的泛型方法。 * 首先在public与返回值之间的&amp;lt;T&amp;gt;必不可少，这表明这是一个泛型方法，并且声明了一个泛型T * 这个T可以出现在这个泛型方法的任意位置. * 泛型的数量也可以为任意多个 * 如：public &amp;lt;T,K&amp;gt; K showKeyName(Generic&amp;lt;T&amp;gt; container){ * ... * } */ public &amp;lt;T&amp;gt; T showKeyName(Generic&amp;lt;T&amp;gt; container){ System.out.println(&quot;container key :&quot; + container.getKey()); //当然这个例子举的不太合适，只是为了说明泛型方法的特性。 T test = container.getKey(); return test; } //这也不是一个泛型方法，这就是一个普通的方法，只是使用了Generic&amp;lt;Number&amp;gt;这个泛型类做形参而已。 public void showKeyValue1(Generic&amp;lt;Number&amp;gt; obj){ Log.d(&quot;泛型测试&quot;,&quot;key value is &quot; + obj.getKey()); } //这也不是一个泛型方法，这也是一个普通的方法，只不过使用了泛型通配符? //同时这也印证了泛型通配符章节所描述的，?是一种类型实参，可以看做为Number等所有类的父类 public void showKeyValue2(Generic&amp;lt;?&amp;gt; obj){ Log.d(&quot;泛型测试&quot;,&quot;key value is &quot; + obj.getKey()); } /** * 这个方法是有问题的，编译器会为我们提示错误信息：&quot;UnKnown class 'E' &quot; * 虽然我们声明了&amp;lt;T&amp;gt;,也表明了这是一个可以处理泛型的类型的泛型方法。 * 但是只声明了泛型类型T，并未声明泛型类型E，因此编译器并不知道该如何处理E这个类型。 public &amp;lt;T&amp;gt; T showKeyName(Generic&amp;lt;E&amp;gt; container){ ... } */ /** * 这个方法也是有问题的，编译器会为我们提示错误信息：&quot;UnKnown class 'T' &quot; * 对于编译器来说T这个类型并未项目中声明过，因此编译也不知道该如何编译这个类。 * 所以这也不是一个正确的泛型方法声明。 public void showkey(T genericObj){ } */ public static void main(String[] args) { } } 4.2. 类中的泛型方法 public class GenericFruit { class Fruit{ @Override public String toString() { return &quot;fruit&quot;; } } class Apple extends Fruit{ @Override public String toString() { return &quot;apple&quot;; } } class Person{ @Override public String toString() { return &quot;Person&quot;; } } class GenerateTest&amp;lt;T&amp;gt;{ public void show_1(T t){ System.out.println(t.toString()); } //在泛型类中声明了一个泛型方法，使用泛型E，这种泛型E可以为任意类型。可以类型与T相同，也可以不同。 //由于泛型方法在声明的时候会声明泛型&amp;lt;E&amp;gt;，因此即使在泛型类中并未声明泛型，编译器也能够正确识别泛型方法中识别的泛型。 public &amp;lt;E&amp;gt; void show_3(E t){ System.out.println(t.toString()); } //在泛型类中声明了一个泛型方法，使用泛型T，注意这个T是一种全新的类型，可以与泛型类中声明的T不是同一种类型。 public &amp;lt;T&amp;gt; void show_2(T t){ System.out.println(t.toString()); } } public static void main(String[] args) { Apple apple = new Apple(); Person person = new Person(); GenerateTest&amp;lt;Fruit&amp;gt; generateTest = new GenerateTest&amp;lt;Fruit&amp;gt;(); //apple是Fruit的子类，所以这里可以 generateTest.show_1(apple); //编译器会报错，因为泛型类型实参指定的是Fruit，而传入的实参类是Person //generateTest.show_1(person); //使用这两个方法都可以成功 generateTest.show_2(apple); generateTest.show_2(person); //使用这两个方法也都可以成功 generateTest.show_3(apple); generateTest.show_3(person); } } 4.3. 可变参数 public &amp;lt;T&amp;gt; void printMsg( T... args){ for(T t : args){ Log.d(&quot;泛型测试&quot;,&quot;t is &quot; + t); } } printMsg(&quot;111&quot;,222,&quot;aaaa&quot;,&quot;2323.4&quot;,55.55); 4.4. 静态方法 静态方法有一种情况需要注意一下，那就是在类中的静态方法使用泛型：静态方法无法访问类上定义的泛型；如果静态方法操作的引用数据类型不确定的时候，必须要将泛型定义在方法上。 即：如果静态方法要使用泛型的话，必须将静态方法也定义成泛型方法 。 public class StaticGenerator&amp;lt;T&amp;gt; { .... .... /** * 如果在类中定义使用泛型的静态方法，需要添加额外的泛型声明（将这个方法定义成泛型方法） * 即使静态方法要使用泛型类中已经声明过的泛型也不可以。 * 如：public static void show(T t){..},此时编译器会提示错误信息： &quot;StaticGenerator cannot be refrenced from static context&quot; */ public static &amp;lt;T&amp;gt; void show(T t){ } } 5. 泛型通配符 我们知道Ingeter是Number的一个子类，同时在特性章节中我们也验证过**Generic**与**Generic**实际上是相同的一种基本类型。那么问题来了，在使用**Generic**作为形参的方法中，能否使用**Generic**的实例传入呢？在逻辑上类似于**Generic**和**Generic**是否可以看成具有父子关系的泛型类型呢？ public void showKeyValue(Generic&amp;lt;Number&amp;gt; obj){ Log.d(&quot;泛型测试&quot;,&quot;key value is &quot; + obj.getKey()); } Generic&amp;lt;Integer&amp;gt; gInteger = new Generic&amp;lt;Integer&amp;gt;(123); Generic&amp;lt;Number&amp;gt; gNumber = new Generic&amp;lt;Number&amp;gt;(456); showKeyValue(gNumber); // showKeyValue这个方法编译器会为我们报错：Generic&amp;lt;java.lang.Integer&amp;gt; // cannot be applied to Generic&amp;lt;java.lang.Number&amp;gt; // showKeyValue(gInteger); 通过提示信息我们可以看到**Generic**不能被看作为**Generic**的子类。由此可以看出:`同一种泛型可以对应多个版本（因为参数类型是不确定的），不同版本的泛型类实例是不兼容的。` 我们可以将上面的方法改一下： public void showKeyValue1(Generic&amp;lt;?&amp;gt; obj){ Log.d(&quot;泛型测试&quot;,&quot;key value is &quot; + obj.getKey()); } 类型通配符一般是使用？代替具体的类型实参，注意了，此处？是类型实参，而不是类型形参 。重要说三遍！此处？是类型实参，而不是类型形参 ！ 此处？是类型实参，而不是类型形参 ！再直白点的意思就是，此处的？和Number、String、Integer一样都是一种实际的类型，可以把？看成所有类型的父类。是一种真实的类型。 可以解决 当具体类型不确定的时候，这个通配符就是 ?； 当操作类型时，不需要使用类型的具体功能时，只使用Object类中的功能。那么可以用 ? 通配符来表未知类型。 6. 泛型数组 看到了很多文章中都会提起泛型数组，经过查看sun的说明文档，在java中是”不能创建一个确切的泛型类型的数组”的。 也就是说下面的这个例子是不可以的： List&amp;lt;String&amp;gt;[] ls = new ArrayList&amp;lt;String&amp;gt;[10]; 而使用通配符创建泛型数组是可以的，如下面这个例子： List&amp;lt;?&amp;gt;[] ls = new ArrayList&amp;lt;?&amp;gt;[10]; 这样也是可以的： List&amp;lt;String&amp;gt;[] ls = new ArrayList[10]; 下面使用Sun的一篇文档的一个例子来说明这个问题： List&amp;lt;String&amp;gt;[] lsa = new List&amp;lt;String&amp;gt;[10]; // Not really allowed. Object o = lsa; Object[] oa = (Object[]) o; List&amp;lt;Integer&amp;gt; li = new ArrayList&amp;lt;Integer&amp;gt;(); li.add(new Integer(3)); oa[1] = li; // Unsound, but passes run time store check String s = lsa[1].get(0); // Run-time error: ClassCastException. 这种情况下，由于JVM泛型的擦除机制，在运行时JVM是不知道泛型信息的，所以可以给oa[1]赋上一个ArrayList而不会出现异常，但是在取出数据的时候却要做一次类型转换，所以就会出现ClassCastException，如果可以进行泛型数组的声明，上面说的这种情况在编译期将不会出现任何的警告和错误，只有在运行时才会出错。 而对泛型数组的声明进行限制，对于这样的情况，可以在编译期提示代码有类型安全问题，比没有任何提示要强很多。 下面采用通配符的方式是被允许的:数组的类型不可以是类型变量，除非是采用通配符的方式，因为对于通配符的方式，最后取出数据是要做显式的类型转换的。 List&amp;lt;?&amp;gt;[] lsa = new List&amp;lt;?&amp;gt;[10]; // OK, array of unbounded wildcard type. Object o = lsa; Object[] oa = (Object[]) o; List&amp;lt;Integer&amp;gt; li = new ArrayList&amp;lt;Integer&amp;gt;(); li.add(new Integer(3)); oa[1] = li; // Correct. Integer i = (Integer) lsa[1].get(0); // OK PECS法则 ? extends List&amp;lt;Apple&amp;gt; apples = new ArrayList&amp;lt;Apple&amp;gt;(); List&amp;lt;? extends Fruit&amp;gt; fruits = apples; //works, apple is a subclass of Fruit. fruits.add(new Strawberry()); //compile error fruits是一个Fruit的子类的List,由于Apple是Fruit的子类，因此将apples赋给fruits是合法的，但是编译器会阻止将Strawberry加入fruits。因为编译器只知道fruits是Fruit的某个子类的List，但并不知道究竟是哪个子类，为了类型安全，只好阻止向其中加入任何子类。那么可不可以加入Fruit呢？很遗憾，也不可以。事实上，不能够往一个使用了? extends的数据结构里写入任何的值。 但是，由于编译器知道它总是Fruit的子类型，因此我们总可以从中读取出Fruit对象： Fruit fruit = fruits.get(0); 6.1. ? super List&amp;lt;Fruit&amp;gt; fruits = new ArrayList&amp;lt;Fruit&amp;gt;(); List&amp;lt;? super Apple&amp;gt; = fruits; fruits.add(new Apple()); //work fruits.add(new RedApple()); //work fruits.add(new Fruit()); //compile error fruits.add(new Object()); //compile error 这里的fruits是一个Apple的超类（父类,superclass）的List。同样地，出于对类型安全的考虑，我们可以加入Apple对象或者其任何子类（如RedApple）对象，但由于编译器并不知道List的内容究竟是Apple的哪个超类，因此不允许加入特定的任何超类型。 而当我们读取的时候，编译器在不知道是什么类型的情况下只能返回Object对象，因为Object是任何Java类的最终祖先类。 6.2. PECS原则总结 如果要从集合中读取类型T的数据，并且不能写入，可以使用 ? extends 通配符；(Producer Extends) 如果要从集合中写入类型T的数据，并且不需要读取，可以使用 ? super 通配符；(Consumer Super) 如果既要存又要取，那么就不要使用任何通配符。 参考: java泛型详解 Java泛型中的PECS原则</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>lipeng</name></author><category term="Concurrency" /><summary type="html">1. 实例一、一个线程依赖于另外几个线程 1.1. 原始实现 1.2. 使用FutureTask 1.3. 使用CyclicBarrier 2. 实例二、火车票售卖 3. 实例三、ATM取钱 4. 实例四、龟兔赛跑 5. 实例五、生产者–消费者模式 ` 1. 实例一、一个线程依赖于另外几个线程 只有当所依赖的线程执行完毕后，当前线程才会继续执行。 1.1. 原始实现 public class ThreadEndWait { private int flag = 0; public static void main(String[] args) throws InterruptedException { ThreadEndWait threadEndWait = new ThreadEndWait(); final int threadNum = 10; for (int i = 0; i &amp;lt; threadNum; i++) { new Thread(new MyRunnable(i, threadEndWait)).start(); } while (true) { if (threadEndWait.flag &amp;gt;= threadNum) { System.out.println(&quot;所有的线程都执行完毕&quot;); break; } Thread.sleep(10); } } static class MyRunnable implements Runnable { int threadIndex; ThreadEndWait threadEndWait; public MyRunnable(int index, ThreadEndWait threadEndWait) { this.threadIndex = index; this.threadEndWait = threadEndWait; } public void run() { try { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); System.out.println(&quot;线程&quot; + threadIndex + &quot;执行完毕，耗时&quot; + nextLong + &quot;毫秒&quot;); synchronized (threadEndWait) { threadEndWait.flag++; } System.out.println(&quot;线程 &quot; + threadIndex + &quot; =&amp;gt; &quot; + threadEndWait.flag); } catch (InterruptedException e) { e.printStackTrace(); } } } } 1.2. 使用FutureTask public class FutureTaskEndWait { public static void main(String[] args) throws ExecutionException, InterruptedException { FutureTask&amp;lt;String&amp;gt;[] tasks = new FutureTask[10]; for (int i = 0; i &amp;lt; tasks.length; i++) { final int j = i; tasks[i] = new FutureTask&amp;lt;String&amp;gt;(new Callable&amp;lt;String&amp;gt;() { public String call() throws Exception { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); return &quot;线程&quot; + j + &quot;执行完毕，耗时&quot; + nextLong + &quot;毫秒&quot;; } }); new Thread(tasks[i]).start(); } for (int i = 0; i &amp;lt; tasks.length; i++) { System.out.println(tasks[i].get()); } System.out.println(&quot;所有的任务执行完成&quot;); } } 1.3. 使用CyclicBarrier public class CyclicBarrierEndWait { public static void main(String[] args) throws Exception { final int threadNum = 10; //注意：10个子线程 + 1个主线程 CyclicBarrier cb = new CyclicBarrier(threadNum + 1); for (int i = 0; i &amp;lt; threadNum; i++) { new Thread(new MyRunable(cb, i)).start(); } cb.await(); System.out.println(&quot;-----------\n所有thread执行完成！&quot;); } static class MyRunable implements Runnable { CyclicBarrier _cb; int _i; public MyRunable(CyclicBarrier cb, int i) { this._cb = cb; this._i = i; } public void run() { try { Thread.sleep((long) (Math.random() * 100)); System.out.println(&quot;thread &quot; + _i + &quot; done，正在等候其它线程完成...&quot;); _cb.await(); } catch (Exception e) { e.printStackTrace(); } } } } 2. 实例二、火车票售卖 火车票资源类 public class Resource { int ticketNum = 100; Boolean ticketEmpty = false; public Resource() {} public Resource(int ticketNum) { this.ticketNum = ticketNum; } public synchronized void sellTicket(Seller seller) { if (ticketNum &amp;gt; 0) { System.out.println(&quot;第&quot; + seller.sellerIndex + &quot;售票点卖出了第&quot; + ticketNum + &quot;张票……&quot;); ticketNum--; } else { ticketEmpty = true; } } } 火车站窗口类 public class Seller implements Runnable{ int sellerIndex; Resource resource; public Seller(int sellerIndex, Resource resource) { this.sellerIndex = sellerIndex; this.resource = resource; } public void run() { while (!resource.ticketEmpty) { resource.sellTicket(this); try { long nextLong = new Random().nextInt(999); Thread.sleep(nextLong); } catch (InterruptedException e) { e.printStackTrace(); } } } } 启动类 public class SellTicket { public static void main(String[] args) { Resource resource = new Resource(10); for (int i = 1; i &amp;lt; 11; i++) { new Thread(new Seller(i, resource)).start(); } } } 3. 实例三、ATM取钱 银行账号类 public class Account { private Integer accountNum; private Double balance; public Account(Integer accountNum, Double balance) { this.accountNum = accountNum; this.balance = balance; } public Account() { } public Integer getAccountNum() { return accountNum; } public void setAccountNum(Integer accountNum) { this.accountNum = accountNum; } public Double getBalance() { return balance; } public void setBalance(Double balance) { this.balance = balance; } } 取钱操作类 public class WithDrawAction implements Runnable { private String name; private Account account; private Double withDrawBalance; public WithDrawAction(String name, Account account, Double withDrawBalance) { this.name = name; this.account = account; this.withDrawBalance = withDrawBalance; } public void run() { synchronized (account) { if (withDrawBalance &amp;lt;= account.getBalance()) { System.out.println(name + &quot;从&quot; + account.getAccountNum() + &quot;中成功取走&quot; + withDrawBalance + &quot;元&quot;); account.setBalance(account.getBalance() - withDrawBalance); } else { System.out.println(name + &quot;从&quot; + account.getAccountNum() + &quot;中取&quot; + withDrawBalance + &quot;元失败，余额不足！&quot;); } } } } 模拟取钱 public class BankATM { public static void main(String[] args) { Account account = new Account(9999, 1000.0); new WithDrawAction(&quot;Tom&quot;, account, 600.0).run(); new WithDrawAction(&quot;Jerry&quot;, account, 600.0).run(); } } 4. 实例四、龟兔赛跑 动物抽象类 public abstract class Animal extends Thread { /** * 比赛长度 */ public double raceLength = 20.0; /** * 回调 */ public RaceCallback raceCallback; /** * 跑 */ public abstract void running(); @Override public void run() { super.run(); while (raceLength &amp;gt; 0) { running(); } } } 回调接口 public interface RaceCallback { void win(Animal animal) throws InterruptedException; } 兔子 public class Rabbit extends Animal { public Rabbit() { setName(&quot;Rabbit&quot;); } @Override public void running() { try { while (!Thread.currentThread().isInterrupted()) { System.out.println(this.getName() + Thread.currentThread().isInterrupted()); double stepLength = 0.5; raceLength = raceLength - stepLength; if (raceLength &amp;lt;= 0) { System.out.println(this.getName() + &quot;到终点了&quot;); if (raceCallback != null) { raceCallback.win(this); } } System.out.println(this.getName() + &quot;跑了&quot; + stepLength + &quot;米，还剩&quot; + raceLength + &quot;米&quot;); if (raceLength % 2 == 0) { Thread.sleep(1000); } } } catch (InterruptedException e) { e.printStackTrace(); } finally { } } } 乌龟 public class Tortoise extends Animal { public Tortoise() { setName(&quot;Tortoise&quot;); } @Override public void running() { try { while (!Thread.currentThread().isInterrupted()) { System.out.println(this.getName() + Thread.currentThread().isInterrupted()); double stepLength = 0.1; raceLength = raceLength - stepLength; if (raceLength &amp;lt;= 0) { System.out.println(this.getName() + &quot;到终点了&quot;); if (raceCallback != null) { raceCallback.win(this); } } System.out.println(this.getName() + &quot;跑了&quot; + stepLength + &quot;米，还剩&quot; + raceLength + &quot;米&quot;); Thread.sleep(100); } } catch (InterruptedException e) { e.printStackTrace(); } finally { } } } 冠军回调类 public class StopOtherCallback implements RaceCallback { List&amp;lt;Animal&amp;gt; animals; public StopOtherCallback() { animals = new ArrayList&amp;lt;Animal&amp;gt;(); } public StopOtherCallback addAnimals(Animal animal) { animals.add(animal); return this; } public void win(Animal winer) throws InterruptedException { for (Animal animal : animals) { if (animal.equals(winer)) {// 请注意，这里需要把冠军放在最后结束，否则冠军自己结束线程之后无法通知其他赛跑人员 continue; } //animal.interrupt(); //请注意，这里使用interrupt是无法停止线程的，因为线程可能处于sleep子线程中 animal.stop(); } //winer.interrupt(); winer.stop(); } } 开始赛跑 public class Race { public static void main(String[] args) { Rabbit rabbit = new Rabbit(); Tortoise tortoise = new Tortoise(); StopOtherCallback stopOtherCallback = new StopOtherCallback(); stopOtherCallback.addAnimals(rabbit).addAnimals(tortoise); rabbit.raceCallback = stopOtherCallback; tortoise.raceCallback = stopOtherCallback; rabbit.start(); tortoise.start(); } } 5. 实例五、生产者–消费者模式 public class ProducerConsumer { /** * 管道保存一条消息，并且有标志确定管道是否有消息。 * 管道有两种方法，分别是 take() and put(). * put()在没有消息时放置消息, take()在有消息时接收消息. */ public static class Pipe { private String message; private boolean empty = true; public synchronized void put(String message) { while (!empty) { try { wait(); } catch (InterruptedException e) { System.out.println(e); } } empty = false; this.message = message; notifyAll(); } public synchronized String take() { while (empty) { try { wait(); } catch (InterruptedException e) { System.out.println(e); } } empty = true; notifyAll(); return this.message; } } /** * 生产者向管道发送消息，并在消耗前一消息时放入下一个消息。 */ public static class Producer implements Runnable { private Pipe pipe; public Producer(Pipe pipe) { this.pipe = pipe; } public void run() { String importantInfo[] = { &quot;A baby girl was born.&quot;, &quot;The baby girl was named Mary.&quot;, &quot;Mary learned how to walk at age 1.&quot;, &quot;Mary learned how to speak at age 2.&quot;, &quot;Mary went to kindergarden at the age 3.&quot; }; Random random = new Random(); for (int i = 0; i &amp;lt; importantInfo.length; i++) { pipe.put(importantInfo[i]); try { Thread.sleep(random.nextInt(5000)); } catch (InterruptedException e) { System.out.println(e); } } pipe.put(&quot;DONE&quot;); } } /** * 消费者在管道中存在消息时消费该消息。 */ public static class Consumer implements Runnable { private Pipe pipe; public Consumer(Pipe pipe) { this.pipe = pipe; } public void run() { Random random = new Random(); for (String message = pipe.take(); !message.equals(&quot;DONE&quot;); message = pipe.take()) { System.out.println(&quot;MESSAGE: &quot; + message); try { Thread.sleep(random.nextInt(5000)); } catch (InterruptedException e) { System.out.println(e); } } } } /** * 开始制作人和消费者演示 * @param args */ public static void main(String[] args) { Pipe drop = new Pipe(); (new Thread(new Producer(drop))).start(); (new Thread(new Consumer(drop))).start(); } }</summary></entry></feed>
